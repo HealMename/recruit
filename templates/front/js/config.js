@@ -1,5 +1,5 @@
 
-var projectName = '网上求职招聘系统';
+var projectName = '面霸网';
 /**
  * 轮播图配置
  */

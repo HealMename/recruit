@@ -4,7 +4,7 @@
 
       <div :class="2 == 1 ? 'left' : 2 == 2 ? 'left center' : 'left right'">
         <el-form class="login-form" label-position="left" :label-width="3 == 3 || 3 == 2 ? '60px': '0px'">
-          <div class="title-container"><h3 class="title">网上求职招聘系统登录</h3></div>
+          <div class="title-container"><h3 class="title">面霸王登录</h3></div>
           <el-form-item :style='{"padding":"0","boxShadow":"0 0 6px rgba(0,0,0,0)","margin":"0 0 12px 0","borderColor":"rgba(0,0,0,0)","backgroundColor":"rgba(0,0,0,0)","borderRadius":"0","borderWidth":"0","width":"100%","borderStyle":"solid","height":"auto"}' :label="3 == 3 ? '用户名' : ''" :class="'style'+3">
             <span v-if="3 != 3" class="svg-container" style="
 			color:rgba(136, 154, 164, 1);

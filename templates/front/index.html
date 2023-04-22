@@ -60,7 +60,7 @@
 
     #header .nav-top-title {
         line-height: 40px;
-        font-size: 30px;
+        font-size: 20px;
         color: rgba(255, 251, 240, 1);
         padding: 0 10px;
         margin: 0 10px;
@@ -91,9 +91,10 @@
         align-items: center;
         box-sizing: border-box;
         height: 70px;
-        background: rgba(0, 85, 119, 1);
+        background: #009688;
         box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
         justify-content: flex-start;
+        margin-bottom: 10px;
     }
 
     #header .navs1 {
@@ -118,38 +119,30 @@
         flex-direction: column;
     }
 
+    .list{
+        width: 80%;
+    }
+    .list .right{
+        float: right;
+    }
+
     #header .navs .title {
         width: auto;
         line-height: 40px;
         font-size: 30px;
-        color: rgba(0, 85, 119, 1);
+        color: white;
         padding: 10px 10px 10px;
         margin: 50px;
-        border-radius: 6px;
-        border-width: 0;
-        border-style: solid;
-        border-color: rgba(0, 0, 0, .3);
-        background-color: rgba(255, 255, 255, 1);
-        box-shadow: 0 0 6px rgba(0, 0, 0, 0);
+
     }
 
     #header .navs li {
         display: inline-block;
-        width: auto;
         line-height: 66px;
         padding: 0 10px;
         margin: 10px;
         color: rgba(255, 255, 255, 1);
-        font-size: 22px;
-        border-radius: 4px;
-        border-width: 0;
-        border-style: solid;
-        border-color: rgba(6, 82, 121, 1);
-        background-color: rgba(0, 85, 119, 1);
-        box-shadow: 1px 0 3px rgba(0, 85, 119, 1);
-        text-align: center;
-        box-sizing: border-box;
-        cursor: pointer;
+        font-size: 20px;
     }
 
     #header .navs li a {
@@ -165,25 +158,18 @@
     }
 
     #header .navs li.current {
-        color: rgba(255, 255, 255, 1);
-        font-size: 22px;
-        border-radius: 0px;
-        border-width: 0px;
-        border-style: solid;
-        border-color: rgba(255, 255, 255, 1);
-        background-color: rgba(0, 85, 119, 1);
-        box-shadow: 0px 3px 0px #ffffff;
+        box-shadow: 0 3px 0 rgba(0, 85, 119, 1);
     }
 
     #header .navs li:hover {
         color: #fff;
-        font-size: 22px;
-        border-radius: 0px;
+        font-size: 20px;
+        border-radius: 0;
         border-width: 0;
         border-style: solid;
         border-color: rgba(255, 255, 255, 1);
         background-color: rgba(0, 85, 119, 1);
-        box-shadow: 0px 3px 0px #ffffff;
+        box-shadow: 0 3px 0 #ffffff;
     }
 </style>
 <body>
@@ -199,19 +185,41 @@
         <div class="title" v-if="true" v-text="projectName"></div>
         <div class="list">
             <ul>
-                <li class='current'><a href="javascript:navPage('./pages/home/home.html')" class="menumain"><i
-                        v-if="false" class="layui-icon layui-icon-home"></i>首页</a></li>
-                <li v-for="(item,index) in indexNav" v-bind:key="index"><a
-                        :href="'javascript:navPage(\''+item.url+'\')'" class="menumain" style="cursor: pointer;"><i
-                        v-if="false" class="layui-icon" :class="iconArr[index]"></i>{{ item.name }}</a></li>
-                <li><a href="javascript:centerPage();" class="menumain"><i v-if="false"
-                                                                           class="layui-icon layui-icon-username"></i>个人中心</a>
+                <li class='current'>
+                    <a href="javascript:navPage('./pages/home/home.html')" class="menumain">
+                        <i v-if="false" class="layui-icon layui-icon-home"></i>
+                        首页
+                    </a>
                 </li>
-                <li><a :href="adminurl" target="_blank" class="menumain" style="cursor: pointer;"><i v-if="false"
-                                                                                                     class="layui-icon layui-icon-link"></i>后台管理</a>
+
+                <li class='current'><a href="javascript:" class="menumain"><i v-if="false" class="layui-icon layui-icon-home"></i>
+                    练习平台</a></li>
                 </li>
-                <li v-if="chatFlag"><a href="javascript:chatTap()" class="menumain"><i v-if="false" class="layui-icon">&#xe677;</i>客服咨询</a>
+                <li class='current'><a href="javascript:" class="menumain"><i v-if="false" class="layui-icon layui-icon-home"></i>
+                    考试平台</a></li>
                 </li>
+                <li class='current'><a href="javascript:" class="menumain"><i v-if="false" class="layui-icon layui-icon-home"></i>
+                    企业</a></li>
+                </li>
+                <li class='current'><a href="javascript:" class="menumain"><i v-if="false" class="layui-icon layui-icon-home"></i>
+                    新闻资讯</a></li>
+                </li>
+                <li class='current right'><a href="javascript:" class="menumain"><i v-if="false" class="layui-icon layui-icon-home"></i>
+                    登录</a></li>
+                </li>
+
+
+                <li class='current right'><a href="javascript:" class="menumain"><i v-if="false" class="layui-icon layui-icon-home"></i>
+                    个人注册</a></li>
+                </li>
+                <li class='current right'><a href="javascript:" class="menumain"><i v-if="false" class="layui-icon layui-icon-home"></i>
+                    教师注册</a></li>
+                </li>
+                <li class='current right'><a href="javascript:" class="menumain"><i v-if="false" class="layui-icon layui-icon-home"></i>
+                    企业注册</a></li>
+                </li>
+
+
             </ul>
         </div>
     </div>
@@ -221,14 +229,14 @@
 <iframe src="./pages/home/home.html" id="iframe" frameborder="0" scrolling="no" width="100%"
         onload="changeFrameHeight"></iframe>
 <div id="tabbar" class="tabbar"
-     :style='{"padding":"30px 0","boxShadow":"0 0 6px ","margin":"30px 0 0 0","borderColor":"rgba(255, 255, 255, 0.3)","backgroundColor":"rgba(6, 82, 121, 1)","borderRadius":"0","borderWidth":"0","borderStyle":"solid"}'
+     :style='{"padding":"30px 0","boxShadow":"0 0 6px ","margin":"30px 0 0 0","borderColor":"rgba(255, 255, 255, 0.3)","backgroundColor":"#009688","borderRadius":"0","borderWidth":"0","borderStyle":"solid"}'
      style="position: relative;">
-    <div :style='{"padding":"0 10px","boxShadow":"0 0 0px 0","margin":"10px auto","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"rgba(6, 82, 121, 1)","color":"#fff","textAlign":"center","borderRadius":"0","borderWidth":"0","width":"100%","lineHeight":"32px","fontSize":"14px","borderStyle":"solid"}'
+    <div :style='{"padding":"0 10px","boxShadow":"0 0 0px 0","margin":"10px auto","borderColor":"#009688","backgroundColor":"#009688","color":"#fff","textAlign":"center","borderRadius":"0","borderWidth":"0","width":"100%","lineHeight":"32px","fontSize":"14px","borderStyle":"solid"}'
          class="company">毕业设计
     </div>
     <div :style='{"padding":"0 10px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"10px auto","borderColor":"rgba(0,0,0,1)","backgroundColor":"#000","color":"#fff","textAlign":"center","borderRadius":"0","borderWidth":"0","width":"100%","lineHeight":"32px","fontSize":"14px","borderStyle":"solid"}'
          class="record"></div>
-    <div :style='{"padding":"0 10px","boxShadow":"0 0 0px ","margin":"10px auto 30px auto","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"rgba(6, 82, 121, 1)","color":"#fff","textAlign":"center","borderRadius":"0","borderWidth":"1px 0","width":"40%","lineHeight":"32px","fontSize":"14px","borderStyle":"solid"}'
+    <div :style='{"padding":"0 10px","boxShadow":"0 0 0px ","margin":"10px auto 30px auto","borderColor":"#009688","backgroundColor":"#009688","color":"#fff","textAlign":"center","borderRadius":"0","borderWidth":"1px 0","width":"40%","lineHeight":"32px","fontSize":"14px","borderStyle":"solid"}'
          class="desc"></div>
 </div>
 
@@ -311,7 +319,7 @@
     }
 
     var iframeUrl = localStorage.getItem('iframeUrl');
-    document.getElementById('iframe').src = iframeUrl || './pages/home/home.html';
+    document.getElementById('iframe').src = './pages/zhaopinxinxi/list.html';
 
     let list = document.getElementsByTagName("li");
     for (var i = 0; i < list.length; i++) {

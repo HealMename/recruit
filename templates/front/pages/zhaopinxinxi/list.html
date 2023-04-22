@@ -15,6 +15,7 @@
 <script type="text/javascript" src="../../xznstatic/js/jquery.SuperSlide.2.1.1.js"></script>
 </head>
 <style>
+
 	html::after {
 		position: fixed;
 		top: 0;
@@ -80,11 +81,14 @@
 	.recommend .box .filter {
 		padding: 0 10px;
 		display: flex;
-		align-items: center;
-		box-sizing: border-box;
-		width: 100%;
-		flex-wrap: wrap;
 	}
+    .filter>input, .filter>button{
+        border-radius: 36px;
+    }
+    .filter>button{
+        width: 100px;
+        margin-left: 20px;
+    }
 	.recommend .box .filter .item-list {
 		display: flex;
 		align-items: center;
@@ -258,42 +262,18 @@ width: 100%;
       		  </div>
       		</div>
     </div>
-	<div class="recommend index-pv1" :style='{"padding":"10px 0 10px 0","boxShadow":"0 0 0px ","margin":"0px 0 0 0","borderColor":"rgba(0,0,0,.3)","backgroundColor":"rgba(255, 255, 255, 1)","borderRadius":"0","borderWidth":"0","background":"white","borderStyle":"solid"}'>
+	<div class="recommend index-pv1" :style='{"padding":"10px 0 10px 0","boxShadow":"0 0 0px ","margin":"0px 0 0 0","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#009688","borderRadius":"0","borderWidth":"0","background":"white","borderStyle":"solid"}'>
 		<div class="box" style='width:80%'>
 			<div :style='{"padding":"3px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"10px","borderColor":"rgba(0,0,0,1)","backgroundColor":"rgba(0,0,0,0)","borderRadius":"0","borderWidth":"0","width":"100%","borderStyle":"solid","height":"auto"}'>
-				<div style="display: inline-block;text-align: center;cursor: pointer;" class="category-search" :index="-1" :style='swiperIndex==-1?{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"rgba(46, 78, 126, 1)","color":"#fff","borderRadius":"2px","borderWidth":"0","width":"84px","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}:{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#fff","color":"#333","borderRadius":"2px","borderWidth":"0","width":"100px","lineHeight":"40px","fontSize":"15px","borderStyle":"solid"}'>全部</div>
-				<div class="category-search" :index="index" :style='swiperIndex==index?{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"rgba(46, 78, 126, 1)","color":"#fff","borderRadius":"2px","borderWidth":"0","width":"84px","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}:{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#fff","color":"#333","borderRadius":"2px","borderWidth":"0","width":"100px","lineHeight":"40px","fontSize":"15px","borderStyle":"solid"}' v-for="(item,index) in categoryList" :key="index" style="display: inline-block;text-align: center;cursor: pointer;">
+				<div style="display: inline-block;text-align: center;cursor: pointer;" class="category-search" :index="-1" :style='swiperIndex==-1?{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#009688","color":"#fff","borderRadius":"2px","borderWidth":"0","width":"84px","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}:{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#fff","color":"#333","borderRadius":"2px","borderWidth":"0","width":"99px","lineHeight":"40px","fontSize":"15px","borderStyle":"solid"}'>全部</div>
+				<div class="category-search" :index="index" :style='swiperIndex==index?{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#009688","color":"#fff","borderRadius":"2px","borderWidth":"0","width":"84px","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}:{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#fff","color":"#333","borderRadius":"2px","borderWidth":"0","width":"99px","lineHeight":"40px","fontSize":"15px","borderStyle":"solid"}' v-for="(item,index) in categoryList" :key="index" style="display: inline-block;text-align: center;cursor: pointer;">
 					{{categoryList[index]}}
 				</div>
 			</div>
-	    <div class="title" :style='{"padding":"10px 0 10px 0","boxShadow":"6px 0 2px #e0f0e9","margin":"10px 0 10px 0","borderColor":"rgba(0, 0, 0, 0.21)","backgroundColor":"rgba(6, 82, 121, 1)","borderRadius":"3px","borderWidth":"0px","borderStyle":"solid","justifyContent":"space-between","height":"70px"}'>
-	      <span :style='{"padding":"0 10px","boxShadow":"0 0 0px ","borderColor":"rgba(255,0,0,1)","backgroundColor":"rgba(0,0,0,0)","color":"rgba(255, 255, 255, 1)","borderRadius":"0 0 2px 0","borderWidth":"0","fontSize":"25px","borderStyle":"solid"}'>招聘信息</span><span :style='{"padding":"0 10px","boxShadow":"0 0 6px rgba(255,0,0,0)","borderColor":"rgba(0,0,0,0)","backgroundColor":"rgba(0,0,0,0)","color":"rgba(235, 72, 145, 1)","borderRadius":"0","borderWidth":"0","fontSize":"20px","borderStyle":"solid"}'>您现在的位置：招聘信息</span>
-	    </div>
-		<form class="layui-form filter" :style='{"padding":"0 10px","boxShadow":"0 0 0px rgba(255,0,0,.8)","margin":"0px 0 0px 0","borderColor":"rgba(0,0,0,.3)","backgroundColor":"rgba(255, 255, 255, 1)","borderRadius":"4px","borderWidth":"0","borderStyle":"solid","justifyContent":"flex-end","height":"64px"}'>
-			<div class="item-list">
-				<div class="lable" :style='{"padding":"0 0px","boxShadow":"0 0 0px ","margin":"0","borderColor":"rgba(152, 102, 102, 0)","backgroundColor":"transparent","color":"rgba(0, 0, 0, 1)","borderRadius":"0","textAlign":"left","borderWidth":"0","width":"auto","fontSize":"17px","borderStyle":"solid"}'>城市</div>
-			 	<select :style='{"boxShadow":"0 0 6px rgba(255,0,0,0)","borderColor":"rgba(102, 93, 93, 1)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"center","borderWidth":"1px","width":"150px","fontSize":"14px","borderStyle":"solid","height":"40px"}' style="display:block" name="chengshi" id="chengshi" lay-filter="chengshi">
-                               		<option value="">请选择</option>
-                                	<option v-for="(item,index) in chengshiOptions" v-bind:key="index" :value="item">{{item}}</option>
-                            	</select>
-			</div>
-			<div class="item-list">
-				<div class="lable" :style='{"padding":"0 0px","boxShadow":"0 0 0px ","margin":"0","borderColor":"rgba(152, 102, 102, 0)","backgroundColor":"transparent","color":"rgba(0, 0, 0, 1)","borderRadius":"0","textAlign":"left","borderWidth":"0","width":"auto","fontSize":"17px","borderStyle":"solid"}'>公司名称</div>
-				<input type="text" :style='{"boxShadow":"0 0 6px rgba(255,0,0,0)","borderColor":"rgba(102, 93, 93, 1)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"center","borderWidth":"1px","width":"150px","fontSize":"14px","borderStyle":"solid","height":"40px"}' name="gongsimingcheng" id="gongsimingcheng" placeholder="公司名称" autocomplete="off" class="layui-input">
-			</div>
-			<div class="item-list">
-				<div class="lable" :style='{"padding":"0 0px","boxShadow":"0 0 0px ","margin":"0","borderColor":"rgba(152, 102, 102, 0)","backgroundColor":"transparent","color":"rgba(0, 0, 0, 1)","borderRadius":"0","textAlign":"left","borderWidth":"0","width":"auto","fontSize":"17px","borderStyle":"solid"}'>招聘岗位</div>
-				<input type="text" :style='{"boxShadow":"0 0 6px rgba(255,0,0,0)","borderColor":"rgba(102, 93, 93, 1)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"center","borderWidth":"1px","width":"150px","fontSize":"14px","borderStyle":"solid","height":"40px"}' name="zhaopingangwei" id="zhaopingangwei" placeholder="招聘岗位" autocomplete="off" class="layui-input">
-			</div>
-			<div class="item-list">
-				<div class="lable" :style='{"padding":"0 0px","boxShadow":"0 0 0px ","margin":"0","borderColor":"rgba(152, 102, 102, 0)","backgroundColor":"transparent","color":"rgba(0, 0, 0, 1)","borderRadius":"0","textAlign":"left","borderWidth":"0","width":"auto","fontSize":"17px","borderStyle":"solid"}'>岗位类型</div>
-			 	<select :style='{"boxShadow":"0 0 6px rgba(255,0,0,0)","borderColor":"rgba(102, 93, 93, 1)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"center","borderWidth":"1px","width":"150px","fontSize":"14px","borderStyle":"solid","height":"40px"}' style="display:block" name="gangweileixing" id="gangweileixing" lay-filter="gangweileixing">
-                               		<option value="">请选择</option>
-                                	<option v-for="(item,index) in gangweileixingOptions" v-bind:key="index" :value="item">{{item}}</option>
-                            	</select>
-			</div>
-			<button :style='{"padding":"0 15px","boxShadow":"0 0 8px rgba(0,0,0,0)","margin":"0 0 0 10px","borderColor":"#409EFF","backgroundColor":"rgba(23, 124, 176, 1)","color":"#fff","borderRadius":"6px","borderWidth":"0","width":"auto","fontSize":"18px","borderStyle":"solid","height":"40px"}' id="btn-search" type="button" class="layui-btn layui-btn-normal">
-			  <i v-if="true" class="layui-icon layui-icon-search"></i>搜索
+
+		<form class="layui-form filter">
+              <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="搜索职位公司" class="layui-input">
+			<button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">搜索</button>
 			</button>
 			<button :style='{"padding":"0 15px","boxShadow":"0 0 8px rgba(0,0,0,0)","margin":"0 0 0 10px","borderColor":"#409EFF","backgroundColor":"rgba(23, 124, 176, 1)","color":"#fff","borderRadius":"6px","borderWidth":"0","width":"auto","fontSize":"18px","borderStyle":"solid","height":"40px"}' v-if="isAuth('zhaopinxinxi','新增')" @click="jump('../zhaopinxinxi/add.html')" type="button" class="layui-btn btn-theme">
 			  <i v-if="true" class="layui-icon">&#xe654;</i>添加
@@ -302,9 +282,9 @@ width: 100%;
 	    <!-- 样式一 -->
 	    <div class="list" style="position: relative;">
 		<div v-if="2 == 1" style="position: absolute;left: 0;top: 0;transform: translate3d(-100%, 0, 0);" :style='{"padding":"3px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"10px","borderColor":"rgba(0,0,0,1)","backgroundColor":"rgba(0,0,0,0)","borderRadius":"0","borderWidth":"0","width":"100%","borderStyle":"solid","height":"auto"}'>
-	    		<div style="text-align: center;cursor: pointer;" class="category-search" :index="-1" :style='swiperIndex==-1?{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"rgba(46, 78, 126, 1)","color":"#fff","borderRadius":"2px","borderWidth":"0","width":"84px","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}:{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#fff","color":"#333","borderRadius":"2px","borderWidth":"0","width":"100px","lineHeight":"40px","fontSize":"15px","borderStyle":"solid"}'>全部</div>
+	    		<div style="text-align: center;cursor: pointer;" class="category-search" :index="-1" :style='swiperIndex==-1?{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#009688","color":"#fff","borderRadius":"2px","borderWidth":"0","width":"84px","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}:{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#fff","color":"#333","borderRadius":"2px","borderWidth":"0","width":"90px","lineHeight":"40px","fontSize":"15px","borderStyle":"solid"}'>全部</div>
 			<div v-for="(item,index) in categoryList" :key="index" >
-				<div style="text-align: center;cursor: pointer;" :style='swiperIndex==index?{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"rgba(46, 78, 126, 1)","color":"#fff","borderRadius":"2px","borderWidth":"0","width":"84px","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}:{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#fff","color":"#333","borderRadius":"2px","borderWidth":"0","width":"100px","lineHeight":"40px","fontSize":"15px","borderStyle":"solid"}' :index="index" class="category-search">{{categoryList[index]}}</div>
+				<div style="text-align: center;cursor: pointer;" :style='swiperIndex==index?{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#009688","color":"#fff","borderRadius":"2px","borderWidth":"0","width":"84px","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}:{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#fff","color":"#333","borderRadius":"2px","borderWidth":"0","width":"90px","lineHeight":"40px","fontSize":"15px","borderStyle":"solid"}' :index="index" class="category-search">{{categoryList[index]}}</div>
 			</div>
 		</div>
 	      <div @click="jump('../zhaopinxinxi/detail.html?id='+item.id)" v-for="(item,index) in dataList" :key="index" class="list-item" :class="4=='3'?'list-item3':4=='5'?'list-item5':''">
@@ -496,7 +476,7 @@ width: 100%;
             limit: limit,
             groups: 3,
             layout: ["prev","page","next"],
-            theme: '#065279',
+            theme: '#009688',
             jump: function(obj, first) {
             	param.page = obj.curr;
               //首次不执行

@@ -2,8 +2,10 @@
 @charset "utf-8";
 .banner {
 	position: relative;
-	 left: 10%;
-	 width: 974px;
+	text-align:center;
+	width: 80%;
+	margin: 0 auto;
+
 }
 .banner .bd li {
 	width: 100%;

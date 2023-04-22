@@ -9,7 +9,7 @@ const base = {
     },
     getProjectName(){
         return {
-            projectName: "网上求职招聘系统"
+            projectName: "面霸王"
         } 
     }
 }
