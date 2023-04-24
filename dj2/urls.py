@@ -47,11 +47,7 @@ urlpatterns = [
     re_path(r'{}/front/(?P<p1>.*)/(?P<p2>.*)$'.format(schemaName), views.schema_front2),
     re_path(r'{}/front/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)$'.format(schemaName), views.schema_front3),
     re_path(r'{}/front/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)/(?P<p4>.*)$'.format(schemaName), views.schema_front4),
-    # re_path(r'assets/(?P<p1>.*)$', views.assets1),
-    # re_path(r'assets/(?P<p1>.*)/(?P<p2>.*)$',  views.assets2),
-    # re_path(r'assets/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)$',  views.assets3),
-    # re_path(r'assets/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)/(?P<p4>.*)$',  views.assets4),
-    #re_path(r'admin/(?P<p1>.*)$', views.admin_file1),
+
     re_path(r'admin/(?P<p1>.*)/(?P<p2>.*)$', views.admin_file2),
     re_path(r'admin/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)$', views.admin_file3),
     re_path(r'admin/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)/(?P<p4>.*)$', views.admin_file4),
@@ -61,8 +57,6 @@ urlpatterns = [
     re_path(r'layui/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)/(?P<p4>.*)$',  views.layui4),
     re_path(r'pages/(?P<p1>.*)$', views.front_pages),
     re_path(r'pages/(?P<p1>.*)/(?P<p2>.*)$',  views.front_pages2),
-    # re_path(r'pages/(?P<p1>.*)$',  views.front_file1),
-    # re_path(r'(?P<p1>css|jss|img|image|iamges|font|fonts)/(?P<p2>.*)$', views.front_file2),
     re_path(r'modules/(?P<p1>.*)$', views.front_modules),
     re_path(r'css/(?P<p1>.*)$', views.css1),
     re_path(r'js/(?P<p1>.*)$', views.js1),
@@ -103,3 +97,11 @@ if os.path.isfile(os.path.join(os.getcwd(),"templates/front/index.html")):
      path(r'{}/front/index.html'.format(schemaName), TemplateView.as_view(template_name='front/index.html')),
     path(r'', TemplateView.as_view(template_name='front/index.html')),
     ])
+
+
+
+
+urlpatterns += [
+    url(r'tea/', include('tea.urls')),
+
+]
