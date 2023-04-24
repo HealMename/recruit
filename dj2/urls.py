@@ -19,12 +19,16 @@ from django.urls import path,include,re_path
 from django.conf.urls import url
 from django.views.static import serve
 from django.views.generic import TemplateView
+from django.conf import settings
 
 
 from . import views
 from dj2.settings import dbName as schemaName
 
 urlpatterns = [
+
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_SITE}),  # 静态文件路径
+
     path('xadmin/', admin.site.urls),
     path(r'index/',views.index),
     re_path(r'admin/lib/(?P<p1>.*)/(?P<p2>.*)$', views.admin_lib2),

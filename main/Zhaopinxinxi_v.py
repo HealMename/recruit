@@ -133,7 +133,6 @@ def zhaopinxinxi_page(request):
     if request.method in ["POST", "GET"]:
         msg = {"code": normal_code, "msg": mes.normal_code,  "data":{"currPage":1,"totalPage":1,"total":1,"pageSize":10,"list":[]}}
         req_dict = request.session.get("req_dict")
-
         #获取全部列名
         columns=  zhaopinxinxi.getallcolumn( zhaopinxinxi, zhaopinxinxi)
 
@@ -217,7 +216,7 @@ def zhaopinxinxi_page(request):
                     break
         msg['data']['list'], msg['data']['currPage'], msg['data']['totalPage'], msg['data']['total'], \
         msg['data']['pageSize']  =zhaopinxinxi.page(zhaopinxinxi, zhaopinxinxi, req_dict, request)
-
+        print(1, msg)
         return JsonResponse(msg)
 
 def zhaopinxinxi_autoSort(request):
@@ -235,7 +234,7 @@ def zhaopinxinxi_autoSort(request):
         req_dict['order']='desc'
         msg['data']['list'], msg['data']['currPage'], msg['data']['totalPage'], msg['data']['total'], \
         msg['data']['pageSize']  = zhaopinxinxi.page(zhaopinxinxi,zhaopinxinxi, req_dict)
-
+        print(2, msg)
         return JsonResponse(msg)
 
 
@@ -332,9 +331,10 @@ def zhaopinxinxi_list(request):
 
 
         msg['data']['list'], msg['data']['currPage'], msg['data']['totalPage'], msg['data']['total'], \
-        msg['data']['pageSize']  = zhaopinxinxi.page(zhaopinxinxi, zhaopinxinxi, req_dict)
-
+        msg['data']['pageSize'] = zhaopinxinxi.page(zhaopinxinxi, zhaopinxinxi, req_dict)
+        msg['data']['list'] += msg['data']['list']
         return JsonResponse(msg)
+
 
 def zhaopinxinxi_save(request):
     '''

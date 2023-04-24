@@ -55,7 +55,6 @@ for i in os.listdir(mainDir):
     if i not in excludeList and i[-5:] == "_v.py":
         tableName = i[:-5]
         tableName = tableName.replace(" ", "").strip()
-
         urlpatterns.extend(
             [
                 path(r'{}/register'.format(tableName.lower()),

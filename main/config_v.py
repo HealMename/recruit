@@ -34,7 +34,6 @@ def config_list(request):
 
         msg['data']['list'], msg['data']['currPage'], msg['data']['totalPage'], msg['data']['total'], \
         msg['data']['pageSize'] = config.page(config, config, req_dict)
-
         return JsonResponse(msg)
 
 
