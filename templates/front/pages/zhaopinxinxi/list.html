@@ -316,7 +316,7 @@ width: 100%;
 	<div class="recommend index-pv1" :style='{"padding":"10px 0 10px 0","boxShadow":"0 0 0px ","margin":"0px 0 0 0","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#009688","borderRadius":"0","borderWidth":"0","background":"white","borderStyle":"solid"}'>
 		<div class="box" style='width:80%'>
 			<div :style='{"padding":"3px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"10px","borderColor":"rgba(0,0,0,1)","backgroundColor":"rgba(0,0,0,0)","borderRadius":"0","borderWidth":"0","width":"100%","borderStyle":"solid","height":"auto"}'>
-				<div style="display: inline-block;text-align: center;cursor: pointer;" class="category-search" :index="-1" :style='swiperIndex==-1?{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.1)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#009688","color":"#fff","borderRadius":"2px","borderWidth":"0","width":"84px","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}:{"padding":"0 10px","boxShadow":"0 0 3px rgba(0,0,0,.1)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#fff","color":"#333","borderRadius":"2px","borderWidth":"0","width":"99px","lineHeight":"40px","fontSize":"15px","borderStyle":"solid"}'>全部</div>
+				<div style="display: inline-block;text-align: center;cursor: pointer;" class="category-search" :index="-1" :style='swiperIndex==-1?{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.1)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#009688","color":"#fff","borderRadius":"2px","borderWidth":"0","width":"84px","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}:{"padding":"0 10px","boxShadow":"0 0 3px rgba(0,0,0,.1)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#fff","color":"#333","borderRadius":"2px","borderWidth":"0","width":"99px","lineHeight":"40px","fontSize":"15px","borderStyle":"solid"}'>热门城市</div>
 				<div class="category-search" :index="index" :style='swiperIndex==index?{"padding":"0 10px","boxShadow":"0 0 3px rgba(0,0,0,.1)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#009688","color":"#fff","borderRadius":"2px","borderWidth":"0","width":"84px","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}:{"padding":"0 10px","boxShadow":"0 0 3px rgba(0,0,0,.1)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"#fff","color":"#333","borderRadius":"2px","borderWidth":"0","width":"99px","lineHeight":"40px","fontSize":"15px","borderStyle":"solid"}' v-for="(item,index) in categoryList" :key="index" style="display: inline-block;text-align: center;cursor: pointer;">
 					{{categoryList[index]}}
 				</div>
@@ -485,7 +485,7 @@ width: 100%;
           page: 1,
           limit: limit
         }
-	if(category!=null && category!='全部') {
+	if(category!=null && category!='热门城市') {
         	vCategory = category;
    	     if (jquery('#chengshi').val()) {
        	  	 param['chengshi'] = '';
@@ -500,7 +500,7 @@ width: 100%;
        	  	 param['gangweileixing'] = '';
              }
         }
-        if(vCategory!='' && category!='全部') {
+        if(vCategory!='' && category!='热门城市') {
         	param['chengshi'] = category;
         }
 

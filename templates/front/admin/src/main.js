@@ -40,6 +40,7 @@ import JsonExcel from 'vue-json-excel'
 import printJS from 'print-js'
 //MD5
 import md5 from 'js-md5';
+import GlobalTools from './plugins/globalTools'
 
 // 后台地图
 Vue.use(VueAMap)
@@ -72,6 +73,8 @@ Vue.component('editor', Editor)
 Vue.component('downloadExcel', JsonExcel)
 //MD5
 Vue.prototype.$md5 = md5;
+Vue.use(GlobalTools, router);
+
 new Vue({
   render: h => h(App),
   router

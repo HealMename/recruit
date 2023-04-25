@@ -9,13 +9,17 @@ https://docs.djangoproject.com/en/2.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
-
+import json
 import os
 from util.configread import config_read
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+# 读取数据库配置文件
+config_file = os.path.join(BASE_DIR, '.env')
+with open(config_file) as f:
+    config = f.read()
+    DATABASES_CONFIG = json.loads(config)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
@@ -54,7 +58,8 @@ MIDDLEWARE = [
 
 ]
 MEDIA_SITE = os.path.join(BASE_DIR, 'media/')
-
+DB_WAIT_TIMEOUT = 20  # 单个连接最长维持时间
+DB_POOL_SIZE = 2  # 连接池最大连接数
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_COOKIE_NAME  = "sessionid"
 SESSION_COOKIE_PATH  = "/"
@@ -96,12 +101,18 @@ EMAIL_HOST_PASSWORD = 'mhbrkuayvkkgbijd'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
+DB_ENGINE = 'django.db.backends.mysql'
+
+DATABASES = {
+    'default': {
+        'ENGINE': DB_ENGINE,
+        'NAME': 'django7681v',
+        'USER': DATABASES_CONFIG["BASE_USER"],
+        'PASSWORD': DATABASES_CONFIG["BASE_PASSWORD"],
+        'HOST': DATABASES_CONFIG["BASE_HOST"],
+        'PORT': DATABASES_CONFIG["BASE_PORT"],
+    },
+}
 
 dbtype, host, port, user, passwd, dbName, charset = config_read("config.ini")
 dbName=dbName.replace(" ","").strip()

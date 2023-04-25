@@ -13,7 +13,7 @@ def users_login(request):
     if request.method in ["POST", "GET"]:
         msg = {'code': normal_code, "msg": mes.normal_code}
         req_dict = request.session.get("req_dict")
-        if req_dict.get('role')!=None:
+        if req_dict.get('role') != None:
             del req_dict['role']
         datas = users.getbyparams(users, users, req_dict)
         if not datas:
@@ -41,7 +41,7 @@ def users_session(request):
     '''
     '''
     if request.method in ["POST", "GET"]:
-        msg = {"code": normal_code,"msg":mes.normal_code, "data": {}}
+        msg = {"code": normal_code, "msg": mes.normal_code, "data": {}}
 
         req_dict = {"id": request.session.get('params').get("id")}
         msg['data'] = users.getbyparams(users, users, req_dict)[0]
@@ -80,7 +80,7 @@ def users_page(request):
             msg['data']['pageSize'] = users.page(users, users, req_dict)
         else:
             msg['data']['list'], msg['data']['currPage'], msg['data']['totalPage'], msg['data']['total'], \
-            msg['data']['pageSize'] = [],1,0,0,10
+            msg['data']['pageSize'] = [], 1, 0, 0, 10
 
         return JsonResponse(msg)
 
@@ -129,9 +129,9 @@ def users_update(request):
         msg = {"code": normal_code, "msg": mes.normal_code, "data": {}}
         req_dict = request.session.get("req_dict")
         if req_dict.get("mima") and req_dict.get("password"):
-            if "mima" not in users.getallcolumn(users,users):
+            if "mima" not in users.getallcolumn(users, users):
                 del req_dict["mima"]
-            if "password" not in users.getallcolumn(users,users):
+            if "password" not in users.getallcolumn(users, users):
                 del req_dict["password"]
         try:
             del req_dict["clicknum"]
@@ -152,9 +152,9 @@ def users_delete(request):
         req_dict = request.session.get("req_dict")
 
         error = users.deletes(users,
-            users,
-            req_dict.get("ids")
-        )
+                              users,
+                              req_dict.get("ids")
+                              )
         if error != None:
             msg['code'] = crud_error_code
             msg['msg'] = error

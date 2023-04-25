@@ -59,6 +59,7 @@ class Xauth(MiddlewareMixin):
                  "/{}/remind/".format(schemaName),
                   "/{}/option/".format(schemaName),
                 "resetPass",
+                "/tea/add/"
             ]
 
             allModels = apps.get_app_config('main').get_models()
@@ -94,6 +95,7 @@ class Xauth(MiddlewareMixin):
                 '/{}/users/login'.format(schemaName),
                 "/{}/examusers/login".format(schemaName),
                 "/{}/examusers/register".format(schemaName),
+                "/tea/add/"
             ]  # 免认证list
             if fullPath not in post_list and "register" not in fullPath and "login" not in fullPath:  # 注册时不检测token。
                 result = Auth.identify(Auth, request)
