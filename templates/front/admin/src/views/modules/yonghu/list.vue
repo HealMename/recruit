@@ -58,11 +58,6 @@
               type="danger"
               @click="deleteHandler()"
             >{{ contents.btnAdAllFont == 1?'删除':'' }}</el-button>
-
-
-
-
-
           </el-form-item>
         </el-row>
       </el-form>

@@ -1,5 +1,6 @@
 # coding:utf-8
 __author__ = "ila"
+from libs.utils import ajax, db, auth_token
 
 from django.http import JsonResponse
 
@@ -15,12 +16,16 @@ def users_login(request):
         req_dict = request.session.get("req_dict")
         if req_dict.get('role') != None:
             del req_dict['role']
+        password = req_dict.pop('password')
         datas = users.getbyparams(users, users, req_dict)
         if not datas:
             msg['code'] = password_error_code
             msg['msg'] = mes.password_error_code
             return JsonResponse(msg)
-
+        if not auth_token.verify_password(password, datas[0]['password']):
+            msg['code'] = password_error_code
+            msg['msg'] = mes.password_error_code
+            return JsonResponse(msg)
         req_dict['id'] = datas[0].get('id')
         return Auth.authenticate(Auth, users, req_dict)
 
@@ -42,7 +47,7 @@ def users_session(request):
     '''
     if request.method in ["POST", "GET"]:
         msg = {"code": normal_code, "msg": mes.normal_code, "data": {}}
-
+        print(request.session)
         req_dict = {"id": request.session.get('params').get("id")}
         msg['data'] = users.getbyparams(users, users, req_dict)[0]
 

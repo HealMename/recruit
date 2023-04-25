@@ -87,7 +87,7 @@ tools.install = function (Vue, router) {
             if (request.url.startsWith("/wx/") || request.url.startsWith("/qywx/")) {
                 request.url = config.apiServer + "/api" + request.url;
             } else {
-                request.url = config.apiServer + "/api/admin" + request.url;
+                request.url = config.apiServer + "/django7681v/" + request.url;
             }
             // 删除POST请求中值为空的字段
             for (let key in request.data) {

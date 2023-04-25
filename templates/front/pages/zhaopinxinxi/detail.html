@@ -48,8 +48,9 @@
 		border-style: solid;
 		border-color: rgba(0,0,0,.3);
 		border-radius: 6px;
-		background-color: red;
+		background-color: #009688;
 		box-shadow: 0 0 6px rgba(255,0,0,.8);
+
 	}
 
 	input#buynumber::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; }
@@ -58,9 +59,9 @@
 	.message-container {width: 100%}
 
 	.detail-tab .layui-tab-card>.layui-tab-title .layui-this {
-		background-color: rgba(250, 255, 114, 1);
-		color: rgba(155, 68, 0, 1);
-		font-size: 19px;
+		color: white;
+        background-color: #009688;
+		font-size: 15px;
 	}
 
 .data-detail {
@@ -76,10 +77,10 @@ color: rgba(214, 236, 240, 1) !important;
 	<div id="app">
 
 		<div class="data-detail" style="padding:0">
-			<div class="data-detail-breadcrumb" :style='{"padding":"0 10px","boxShadow":"6px 2px 6px rgba(46, 78, 126, 1)","margin":"20px auto","borderColor":"rgba(255,0,0,.3)","backgroundColor":"rgba(46, 78, 126, 1)","borderRadius":"4px","borderWidth":"0","borderStyle":"solid","height":"80px"}'>
+			<div class="data-detail-breadcrumb" :style='{"padding":"0 10px","margin":"20px auto","borderColor":"rgba(255,0,0,.3)","backgroundColor":"rgb(46 126 115)","borderRadius":"4px","borderWidth":"0","borderStyle":"solid","height":"80px"}'>
 				<span class="layui-breadcrumb">
-					<a class="first" :style='{"padding":"8px 10px","boxShadow":"0 0 0px ","margin":"0 15px","borderColor":"rgba(255,0,0,.3)","backgroundColor":"rgba(46, 78, 126, 1)","color":"rgba(214, 236, 240, 1)","borderRadius":"0","borderWidth":"0","fontSize":"20px","borderStyle":"solid"}' href="../home/home.html">首页</a>
-					<a><cite :style='{"padding":"8px 15px","boxShadow":"0 0 0px rgba(46, 78, 126, 1)","margin":"0 15px","borderColor":"rgba(255,0,0,.3)","backgroundColor":"rgba(46, 78, 126, 1)","color":"rgba(255, 251, 240, 1)","borderRadius":"4px","borderWidth":"0","fontSize":"20px","borderStyle":"solid"}'>{{title}}</cite></a>
+					<a class="first" :style='{"padding":"8px 10px","boxShadow":"0 0 0px ","margin":"0 15px","borderColor":"rgba(255,0,0,.3)","backgroundColor":"rgb(46, 126, 115)","color":"rgba(214, 236, 240, 1)","borderRadius":"0","borderWidth":"0","fontSize":"20px","borderStyle":"solid"}' href="javascript:navPage('./pages/zhaopinxinxi/list.html')">首页</a>
+					<a><cite :style='{"padding":"8px 15px","boxShadow":"0 0 0px rgba(46, 78, 126, 1)","margin":"0 15px","borderColor":"rgba(255,0,0,.3)","backgroundColor":"rgb(46, 126, 115)","color":"rgba(255, 251, 240, 1)","borderRadius":"4px","borderWidth":"0","fontSize":"20px","borderStyle":"solid"}'>{{title}}</cite></a>
 				</span>
 				
 	     <a v-if='storeupFlag' :style='{"padding":"0 12px","boxShadow":"0 0 6px rgba(255,0,0,.3)","borderColor":"rgba(255,0,0,.3)","backgroundColor":"rgba(240, 252, 255, 1)","color":"rgba(0, 188, 18, 1)","borderRadius":"4px","borderWidth":"0","fontSize":"17px","lineHeight":"40px","borderStyle":"solid"}' @click="storeUp()" href="javascript:void(0)">
@@ -93,7 +94,75 @@ color: rgba(214, 236, 240, 1) !important;
 		</div>	
 		<div class="data-detail" style="padding:0;width:100%;" :style='{"padding":"0","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(0,0,0,.3)","borderRadius":"0","borderWidth":"0","background":"white","borderStyle":"solid"}'>
 			<div class="layui-row" style="display: flex;width:980px;margin: 0 auto;">
-				<div class="layui-col-md5" style="width:500px">
+
+				<div class="layui-col-md7" style="padding-left: 20px;flex: 1;" :style='{"padding":"0","margin":"0px 40px","borderColor":"rgba(46, 78, 126, 1)","borderRadius":"4px 4px 4px 4px","borderWidth":"1px","borderStyle":"solid"}'>
+					<h1 style="position: relative;" :style='{"padding":"20px 30px","boxShadow":"0 0 0px #009688","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","color":"rgba(179, 92, 68, 1)","borderRadius":"0","textAlign":"center","borderWidth":"0","fontSize":"20px","borderStyle":"solid"}' class="title">{{title}}</h1>
+					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}' class="detail-item">
+						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>城市：</span>
+						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
+							{{detail.chengshi}}
+						</span>
+					</div>
+					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}' class="detail-item">
+						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>发布时间：</span>
+						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
+							{{detail.fabushijian}}
+						</span>
+					</div>
+					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}' class="detail-item">
+						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>公司账号：</span>
+						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
+							{{detail.gongsizhanghao}}
+						</span>
+					</div>
+					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}' class="detail-item">
+						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>公司名称：</span>
+						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
+							{{detail.gongsimingcheng}}
+						</span>
+					</div>
+					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}' class="detail-item">
+						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>注册编号：</span>
+						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
+							{{detail.zhucebianhao}}
+						</span>
+					</div>
+					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}' class="detail-item">
+						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>岗位类型：</span>
+						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
+							{{detail.gangweileixing}}
+						</span>
+					</div>
+					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}' class="detail-item">
+						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>招聘人数：</span>
+						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
+							{{detail.zhaopinrenshu}}
+						</span>
+					</div>
+					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}' class="detail-item">
+						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>岗位待遇：</span>
+						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
+							{{detail.gangweidaiyu}}
+						</span>
+					</div>
+                    <div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}' class="detail-item">
+						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>截止时间：</span>
+						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
+							2023-04-29
+						</span>
+					</div>
+					<div class="detail-item" :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 0 0","borderStyle":"solid"}' style="text-align: right;">
+						<button :style='{"padding":"0 10px","boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"0 5px","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#009688","borderRadius":"6px","borderWidth":"0","width":"auto","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}' @click="onAcrossTap('toudijilu','','','')" type="button" class="layui-btn">
+							投递简历
+						</button>
+                        <!--
+						<button :style='{"padding":"0 10px","boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"0 5px","borderColor":"rgba(0,0,0,.3)","backgroundColor":"rgba(23, 124, 176, 1)","color":"rgba(255, 255, 255, 1)","borderRadius":"6px","borderWidth":"0","width":"auto","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}'  @click="onAcrossTap('liaotianjilu','','','')" type="button" class="layui-btn">
+							咨询
+						</button>
+						-->
+					</div>
+				</div>
+			    <div class="layui-col-md5" style="width:500px">
 					<!-- <div class="layui-carousel" id="swiper">
 						<div carousel-item id="swiper-item">
 							<div v-for="(item,index) in swiperList" v-bind:key="index">
@@ -101,103 +170,16 @@ color: rgba(214, 236, 240, 1) !important;
 							</div>
 						</div>
 					</div> -->
-					<div class="layui-carousel" id="swiper" :style='{"boxShadow":"8px 6px 10px #009688","margin":"0 auto","borderColor":"rgba(0,0,0,.3)","borderRadius":"6px","borderWidth":"0","width":"500px","borderStyle":"solid","height":"400px"}'>
+					<div class="layui-carousel" id="swiper" :style='{"margin":"0 auto","borderColor":"rgba(0,0,0,.3)","borderRadius":"6px","borderWidth":"0","width":"500px","borderStyle":"solid","height":"468px"}'>
 					  <div carousel-item>
-						<div v-if="swiperList.length" v-for="(item,index) in swiperList" :key="index">
-							<img style="width: 100%;height: 100%;object-fit:cover;" :src="baseurl+item" />
-						</div>
+						<img style="width: 100%;height: 100%" src="/media/img/gagnwei.png" />
 					  </div>
 					</div>
 
-					
-		
+
+
 				</div>
-				<div class="layui-col-md7" style="padding-left: 20px;flex: 1;" :style='{"padding":"0","boxShadow":"6px 6px 2px  #a1afc9","margin":"0px 40px","borderColor":"rgba(46, 78, 126, 1)","backgroundColor":"rgba(240, 252, 255, 1)","borderRadius":"2px 2px 2px 2px","borderWidth":"1px","borderStyle":"dashed"}'>
-					<h1 style="position: relative;" :style='{"padding":"20px 30px","boxShadow":"0 0 0px #009688","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","color":"rgba(179, 92, 68, 1)","borderRadius":"0","textAlign":"center","borderWidth":"0","fontSize":"20px","borderStyle":"solid"}' class="title">{{title}}</h1>
-					
-
-
-					
-					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"dotted"}' class="detail-item">
-						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>城市：</span>
-						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
-							{{detail.chengshi}}
-						</span>
-					</div>
-					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"dotted"}' class="detail-item">
-						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>发布时间：</span>
-						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
-							{{detail.fabushijian}}
-						</span>
-					</div>
-					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"dotted"}' class="detail-item">
-						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>公司账号：</span>
-						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
-							{{detail.gongsizhanghao}}
-						</span>
-					</div>
-					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"dotted"}' class="detail-item">
-						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>公司名称：</span>
-						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
-							{{detail.gongsimingcheng}}
-						</span>
-					</div>
-					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"dotted"}' class="detail-item">
-						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>注册编号：</span>
-						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
-							{{detail.zhucebianhao}}
-						</span>
-					</div>
-					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"dotted"}' class="detail-item">
-						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>岗位类型：</span>
-						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
-							{{detail.gangweileixing}}
-						</span>
-					</div>
-					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"dotted"}' class="detail-item">
-						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>招聘人数：</span>
-						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
-							{{detail.zhaopinrenshu}}
-						</span>
-					</div>
-					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"dotted"}' class="detail-item">
-						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>岗位待遇：</span>
-						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
-							{{detail.gangweidaiyu}}
-						</span>
-					</div>
-					<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"dotted"}' class="detail-item">
-						<span :style='{"padding":"0 12px 0 0","minWidth":"110px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>岗位要求：</span>
-						<span  style="word-break: break-all" :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}' class="desc">
-							{{detail.gangweiyaoqiu}}
-						</span>
-					</div>
-					
-
-					
-					
-
-					<div class="detail-item" :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"dotted"}' style="text-align: right;">
-
-
-						
-						<button :style='{"padding":"0 10px","boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"0 5px","borderColor":"rgba(0,0,0,.3)","backgroundColor":"rgba(23, 124, 176, 1)","color":"rgba(255, 255, 255, 1)","borderRadius":"6px","borderWidth":"0","width":"auto","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}' v-if="isAuth('zhaopinxinxi','投递简历')" @click="onAcrossTap('toudijilu','','','')" type="button" class="layui-btn">
-							投递简历
-						</button>
-						<button :style='{"padding":"0 10px","boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"0 5px","borderColor":"rgba(0,0,0,.3)","backgroundColor":"rgba(23, 124, 176, 1)","color":"rgba(255, 255, 255, 1)","borderRadius":"6px","borderWidth":"0","width":"auto","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}' v-if="isAuth('zhaopinxinxi','公司打分')" @click="onAcrossTap('dafenjilu','','','')" type="button" class="layui-btn">
-							公司打分
-						</button>
-						<button :style='{"padding":"0 10px","boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"0 5px","borderColor":"rgba(0,0,0,.3)","backgroundColor":"rgba(23, 124, 176, 1)","color":"rgba(255, 255, 255, 1)","borderRadius":"6px","borderWidth":"0","width":"auto","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}' v-if="isAuth('zhaopinxinxi','投诉')" @click="onAcrossTap('tousujilu','','','')" type="button" class="layui-btn">
-							投诉
-						</button>
-						<button :style='{"padding":"0 10px","boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"0 5px","borderColor":"rgba(0,0,0,.3)","backgroundColor":"rgba(23, 124, 176, 1)","color":"rgba(255, 255, 255, 1)","borderRadius":"6px","borderWidth":"0","width":"auto","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}' v-if="isAuth('zhaopinxinxi','咨询')" @click="onAcrossTap('liaotianjilu','','','')" type="button" class="layui-btn">
-							咨询
-						</button>
-						
-
-					</div>
-				</div>
-			</div>
+            </div>
 		</div>
 		<div class="data-detail">
 			
@@ -209,17 +191,8 @@ color: rgba(214, 236, 240, 1) !important;
 					<ul class="layui-tab-title" :style='{"color":"rgba(23, 124, 176, 1)","backgroundColor":"rgba(233, 241, 246, 1)","fontSize":"18px"}'>
 						
 						<li class="layui-this">公司介绍</li>
-						
-
-						
-						<li>评论</li>
-						
-
-
-
-
-						
-						
+						<li class="gs_det">岗位要求</li>
+						<li class="gs_det">职责描述</li>
 
 					</ul>
 
@@ -232,43 +205,24 @@ color: rgba(214, 236, 240, 1) !important;
 
 						
 						<div class="layui-tab-item">
-							<div class="message-container">
-								<form class="layui-form message-form" :style='{"padding":"20px","boxShadow":"0 0 0px #e0f0e9","margin":"0 0 20px 0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"rgba(224, 240, 233, 1)","borderRadius":"6px","borderWidth":"0","borderStyle":"solid"}'>
-									<div class="layui-form-item layui-form-text" style="display: flex;align-items: center;margin:0">
-										<label style="width: auto;" :style='{"padding":"0","minWidth":"60px","fontSize":"16px","color":"#333","textAlign":"left"}' class="layui-form-label">评论</label>
-										<div class="layui-input-block" style="margin:0;flex:1;">
-											<textarea :style='{"padding":"10px","boxShadow":"0px 0 4px #1685a9","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"rgba(219, 90, 107, 1)","borderRadius":"4px","borderWidth":"0","fontSize":"16px","borderStyle":"solid","height":"120px"}' name="content" required lay-verify="required" placeholder="请输入内容" class="layui-textarea"></textarea>
-										</div>
-									</div>
-									<div class="layui-form-item">
-										<div class="layui-input-block">
-											<button :style='{"padding":"0 10px","boxShadow":"2px 3px 6px #808080","margin":"10px 5px 0","borderColor":"rgba(0,0,0,.3)","backgroundColor":"red","color":"#fff","borderRadius":"6px","borderWidth":"0","width":"auto","lineHeight":"40px","fontSize":"14px","borderStyle":"solid"}' class="layui-btn btn-submit" lay-submit lay-filter="*">立即提交</button>
-											<button :style='{"padding":"0 10px","boxShadow":"2px 2px 6px #808080","margin":"10px 5px 0","borderColor":"rgba(0,0,0,.3)","backgroundColor":"rgba(249, 144, 111, 1)","color":"rgba(255, 251, 240, 1)","borderRadius":"6px","borderWidth":"0","width":"auto","lineHeight":"40px","fontSize":"14px","borderStyle":"solid"}' type="reset" class="layui-btn layui-btn-primary">重置</button>
-										</div>
-									</div>
-								</form>
-								<div class="message-list" :style='{"padding":"0 20px 20px","boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"0","borderColor":"rgba(255,0,0,.3)","backgroundColor":"#fff","borderRadius":"4px","borderWidth":"0","borderStyle":"solid"}'>
-									<div :style='{"padding":"20px 0","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}' class="message-item" v-for="(item,index) in dataList" v-bind:key="index">
-										<div class="username-container">
-											<img :style='{"boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"0 10px 0 0","borderColor":"rgba(0,0,0,.3)","borderRadius":"100%","borderWidth":"0","width":"50px","borderStyle":"solid","height":"50px"}' class="avator" src="http://codegen.caihongy.cn/20210112/de962481c19445bcaf7ef2d62f301eaf.jpg">
-											<span style="display: inline-block;" :style='{"padding":"0 10px","boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"0","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"rgba(128, 128, 128, 1)","borderRadius":"4px","borderWidth":"0","width":"auto","lineHeight":"28px","fontSize":"15px","borderStyle":"solid"}' class="username">{{item.nickname}}</span>
-										</div>
-										<div class="content" style="margin: 0;flex: 1;">
-											<span style="display: inline-block;" :style='{"padding":"8px","boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"8px 0 0 50px","borderColor":"rgba(0,0,0,.3)","backgroundColor":"rgba(255, 0, 0, 0)","color":"rgba(219, 90, 107, 1)","borderRadius":"4px","borderWidth":"0","fontSize":"15px","borderStyle":"solid"}' class="message">
-												{{item.content}}
-											</span>
-										</div>
-										<div v-if="item.reply" class="content" style="margin: 0;flex: 1;">
-											<span style="display: inline-block;" :style='{"padding":"8px","boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"8px 0 0 50px","borderColor":"rgba(0,0,0,.3)","backgroundColor":"rgba(255, 0, 0, 0)","color":"rgba(219, 90, 107, 1)","borderRadius":"4px","borderWidth":"0","fontSize":"15px","borderStyle":"solid"}' class="message">
-												回复:{{item.reply}}
-											</span>
-										</div>
-									</div>
-								</div>
-								<div class="pager" id="pager"></div>
-							</div>
+
+							<p>1、硬性要求：3年以上系统运维经验，2年以上大规模Docker运维经验，熟悉Docker的部署实施，有devops相关落地经验；</p>
+                            <p>2、硬性要求：熟悉Kurbernetes集群管理系统；</p>
+                            <p>3、硬性要求：计算机科学及相关专业本科及以上学历；</p>
+                            <p>4、熟悉shell/python/go至少一种脚本语言；</p>
+                            <p>5、有责任心，能够承担压力，善于分享。</p>
+
 						</div>
-						
+						<div class="layui-tab-item">
+
+                                <p>1、调研云原生相关技术以及落地</p>
+                                <p>2、负责实现云平台基于Kurbernetes的部署、配置及维护，为研发团队提供技术支持，以及相关devops工具开发；</p>
+                                <p>3、负责云平台的监控、应急响应等，及时定位及解决性能瓶颈和疑难问题；</p>
+                                <p>4、负责提升云产品整体稳定、安全、高可用等，优化平台性能。</p>
+                                <p>5、有k8s维护经验者优先/有golang项目经验优先</p>
+
+
+						</div>
 
 
 
@@ -419,6 +373,9 @@ color: rgba(214, 236, 240, 1) !important;
 				},
 				// 跨表
 				onAcrossTap(acrossTable,crossOptAudit,statusColumnName,tips,statusColumnValue){
+
+                    layer.msg("请先做题，让BOSS重点关注你！", {icon: 2, time: 1500})
+				    return;
 					localStorage.setItem('crossTable',`zhaopinxinxi`);
 					localStorage.setItem('crossObj', JSON.stringify(this.detail));
 					localStorage.setItem('statusColumnName',statusColumnName);
@@ -525,7 +482,7 @@ color: rgba(214, 236, 240, 1) !important;
 				  carousel.render({
 					elem: '#swiper',
 					width: '500px',
-					height: '450px',
+					height: '511px',
 					arrow: 'hover',
 					anim: 'default',
 					autoplay: 'true',

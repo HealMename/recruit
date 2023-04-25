@@ -241,37 +241,16 @@ def admin_pages2(request, p1, p2):
 def admin_file1(request, p1):
     if request.method in ["GET", "POST"]:
         fullPath = request.get_full_path()
-        path1 = os.path.join(os.getcwd(), "templates/front/admin/", p1)
-
+        path1 = os.path.join(os.getcwd(), "templates/front/admin/dist/static/", p1)
+        print(1, p1, path1)
         return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
 
-        # try:
-        #     image_data = open(path1, "rb").read()
-        # except:
-        #     image_data="no file"
-        # if '.js' in p1:
-        #     return HttpResponse(image_data, content_type="application/javascript")
-        # elif '.jpg' in p1 or '.jpeg' in p1 or '.png' in p1 or '.gif' in p1:
-        #     return HttpResponse(image_data, content_type="image/png")
-        # elif '.css' in p1:
-        #     return HttpResponse(image_data, content_type="text/css")
-        # elif '.ttf' in p1 or '.woff' in p1:
-        #     return HttpResponse(image_data, content_type="application/octet-stream")
-        # elif '.mp4' in p1:
-        #     return HttpResponse(image_data, content_type="video/mp4")
-        # elif '.mp3' in p1:
-        #     return HttpResponse(image_data, content_type="audio/mp3")
-        # else:
-        #     return HttpResponse(image_data, content_type="text/html")
 
 
 def admin_file2(request, p1, p2):
     if request.method in ["GET", "POST"]:
         fullPath = request.get_full_path()
-        path1 = os.path.join(os.getcwd(), "templates/front/admin/", p1, p2)
-        if not  os.path.isfile(path1):
-            path1 = os.path.join(os.getcwd(), "templates/front/admin/dist/", p1, p2)
-
+        path1 = os.path.join(os.getcwd(), "templates/front/admin/dist/", p1, p2)
         return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
         # try:
         #     image_data = open(path1, "rb").read()

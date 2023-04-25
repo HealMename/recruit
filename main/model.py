@@ -327,16 +327,13 @@ class BaseModel(models.Model):
             if params.get('password'):
                 params['mima'] = copy.deepcopy(params.get('password'))
                 del params['password']
-
         # 前端传了无用参数和传错参数名，在这里修改
         paramss = {}
         columnList = self.getallcolumn(model, model)
         for k, v in params.items():
             if k in columnList:
                 paramss[k] = v
-
         datas_ = model.objects.filter(**paramss).all()
-
         return self.to_list(datas_, datas_)
 
     def getbyparams(self, model, params):

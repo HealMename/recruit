@@ -31,6 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 import logging
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -61,8 +62,8 @@ MEDIA_SITE = os.path.join(BASE_DIR, 'media/')
 DB_WAIT_TIMEOUT = 20  # 单个连接最长维持时间
 DB_POOL_SIZE = 2  # 连接池最大连接数
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-SESSION_COOKIE_NAME  = "sessionid"
-SESSION_COOKIE_PATH  = "/"
+SESSION_COOKIE_NAME = "sessionid"
+SESSION_COOKIE_PATH = "/"
 SESSION_COOKIE_DOMAIN = None
 SESSION_COOKIE_SECURE = False
 SESSION_COOKIE_HTTPONLY = True
@@ -113,9 +114,9 @@ DATABASES = {
         'PORT': DATABASES_CONFIG["BASE_PORT"],
     },
 }
-
+APPEND_SLASH = False
 dbtype, host, port, user, passwd, dbName, charset = config_read("config.ini")
-dbName=dbName.replace(" ","").strip()
+dbName = dbName.replace(" ", "").strip()
 
 if dbtype == 'mysql':
     DATABASES = {
@@ -137,7 +138,7 @@ if dbtype == 'mysql':
                 'CHARSET': charset,
                 'COLLATION': 'utf8_general_ci',
             },
-            'CONN_MAX_AGE':60
+            'CONN_MAX_AGE': 60
         },
     }
 else:
@@ -178,10 +179,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 
-
 STATIC_URL = '/assets/'
-STATICFILES_DIRS =[
-os.path.join(BASE_DIR, "templates/front/assets"),
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "templates/front/assets"),
 ]
 
 # media

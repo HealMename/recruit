@@ -5,59 +5,30 @@
       <div :class="2 == 1 ? 'left' : 2 == 2 ? 'left center' : 'left right'">
         <el-form class="login-form" label-position="left" :label-width="3 == 3 || 3 == 2 ? '60px': '0px'">
           <div class="title-container"><h3 class="title">面霸王登录</h3></div>
-          <el-form-item
-              :style='{"padding":"0","boxShadow":"0 0 6px rgba(0,0,0,0)","margin":"0 0 12px 0","borderColor":"rgba(0,0,0,0)","backgroundColor":"rgba(0,0,0,0)","borderRadius":"0","borderWidth":"0","width":"100%","borderStyle":"solid","height":"auto"}'
-              :label="3 == 3 ? '用户名' : ''" :class="'style'+3">
-            <span v-if="3 != 3" class="svg-container" style="
-			color:rgba(136, 154, 164, 1);
-			line-height:30px;
-			font-size:14px;
-			width:60px;
-			padding:0;
-			margin:0;
-			radius:0;
-			border-width:0;
-			border-style:solid;
-			border-color:rgba(0,0,0,0);
-			background-color:rgba(0,0,0,0);
-			box-shadow:0 0 6px rgba(0,0,0,0);
-			}"><svg-icon icon-class="user"/></span>
-            <el-input placeholder="请输入用户名" name="username" type="text" v-model="rulesForm.username"/>
+          <el-form-item label="">
+            <el-input placeholder="账号" name="username" type="text" v-model="rulesForm.username"/>
           </el-form-item>
-          <el-form-item
-              :style='{"padding":"0","boxShadow":"0 0 6px rgba(0,0,0,0)","margin":"0 0 12px 0","borderColor":"rgba(0,0,0,0)","backgroundColor":"rgba(0,0,0,0)","borderRadius":"0","borderWidth":"0","width":"100%","borderStyle":"solid","height":"auto"}'
-              :label="3 == 3 ? '密码' : ''" :class="'style'+3">
-            <span v-if="3 != 3" class="svg-container" style="color:rgba(136, 154, 164, 1);
-			line-height:30px;
-			font-size:14px;
-			width:60px;
-			padding:0;
-			margin:0;
-			radius:0;
-			border-width:0;
-			border-style:solid;
-			border-color:rgba(0,0,0,0);
-			background-color:rgba(0,0,0,0);
-			box-shadow:0 0 6px rgba(0,0,0,0);"><svg-icon icon-class="password"/></span>
-            <el-input placeholder="请输入密码" name="password" type="password" v-model="rulesForm.password"/>
+          <el-form-item label="">
+            <el-input placeholder="密码" name="password" type="password" v-model="rulesForm.password"/>
           </el-form-item>
-          <el-form-item v-if="roles.length>1" label="角色" prop="loginInRole" class="role"
-                        style="display: flex;align-items: center;">
-            <el-radio
-                v-for="item in roles"
-                v-bind:key="item.roleName"
-                v-model="rulesForm.role"
-                :label="item.roleName"
-            >{{ item.roleName }}
-            </el-radio>
+          <el-form-item label="">
+            <el-radio-group v-model="rulesForm.role">
+              <el-radio
+                  v-for="item in roles"
+                  v-bind:key="item.roleName"
+                  v-model="rulesForm.role"
+                  :label="item.roleName"
+              >{{ item.roleName }}
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
           </el-form-item>
           <el-form-item v-if="roles.length==1" label=" " prop="loginInRole" class="role"
                         style="display: flex;align-items: center;">
           </el-form-item>
-          <el-button type="primary" @click="login()" class="loginInBt">{{ '2' == '1' ? '登录' : 'login' }}</el-button>
+          <el-button type="primary" @click="login()" class="loginInBt"><i class="glyphicon glyphicon-ok"></i>
+          </el-button>
           <el-form-item class="setting">
-            <div class="register" @click="register('gongsi')">注册公司</div>
-            <!-- <div style="color:rgba(101, 126, 253, 1)" class="reset">修改密码</div> -->
           </el-form-item>
         </el-form>
       </div>
@@ -115,7 +86,6 @@ export default {
   },
   created() {
     this.getRandCode()
-
   },
   methods: {
     register(tableName) {
@@ -148,7 +118,7 @@ export default {
         this.rulesForm.role = this.roles[0].roleName;
       }
 
-      this.$http.post(`${DOMAIN_API_SYS}/${this.tableName}/login?username=${this.rulesForm.username}&password=${this.rulesForm.password}`).then(({data}) => {
+      this.$http.post(`${DOMAIN_API_SYS}/django7681v/${this.tableName}/login?username=${this.rulesForm.username}&password=${this.rulesForm.password}`).then(({data}) => {
         if (data && data.code === 0) {
           this.$storage.set("Token", data.token);
           this.$storage.set("role", this.rulesForm.role);
@@ -205,10 +175,10 @@ export default {
   min-height: 100vh;
   position: relative;
   background-repeat: no-repeat;
-  background-position: center center;
   background-size: cover;
-  background-image: url(http://codegen.caihongy.cn/20201210/33376c4437f2492bbc71c4e7f33393f0.jpg);
-
+  width: 100%;
+  height: 100%;
+  background-image: url(https://yujing.uhongedu.com/static/img/login-bg.jpg);
 
   .loginInBt {
     width: 100%;
@@ -218,12 +188,20 @@ export default {
     padding: 0;
     color: rgba(255, 255, 255, 1);
     font-size: 16px;
-    border-radius: 15px;
+    border-radius: 5px;
     border-width: 0;
     border-style: solid;
-    border-color: rgba(64, 158, 255, 1);
-    background-color: rgba(101, 126, 253, 1);
+    border-color: #6bc5a4;
+    background-color: #6bc5a4;
     box-shadow: 0 0 6px rgba(255, 0, 0, .1);
+    font-size: 23px;
+  }
+
+  .loginInBt:hover {
+    background: #688ac2;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
   }
 
   .register {
@@ -254,7 +232,7 @@ export default {
     border-radius: 0;
     border-width: 0;
     border-style: solid;
-    border-color: rgba(64, 158, 255, 1);
+    border-color: rgb(247, 247, 247);
     background-color: rgba(255, 255, 255, 0);
     box-shadow: 0 0 6px rgba(255, 0, 0, 0);
   }
@@ -273,8 +251,7 @@ export default {
     border-width: 0;
     border-style: solid;
     border-color: rgba(0, 0, 0, .3);
-    background-color: rgba(216, 214, 214, 1);
-    box-shadow: 0 0 6px rgba(30, 144, 255, .8);
+    background-color: #fff;
 
     .login-form {
       background-color: transparent;
@@ -296,7 +273,6 @@ export default {
         width: 100%;
         margin: 50px auto;
         padding: 0;
-        color: rgba(101, 126, 253, 1);
         font-size: 24px;
         border-radius: 0;
         border-width: 0;
@@ -312,6 +288,16 @@ export default {
 
       & /deep/ .el-form-item__content {
         line-height: initial;
+        margin-left: 0 !important;
+      }
+
+      & /deep/ .el-form-item__content input[type="text"], & /deep/ .el-form-item__content input[type="password"] {
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border: 1px solid #eaeaec;
+        background: #eaeaec;
+        box-shadow: none;
+        font-size: 12px;
       }
 
       & /deep/ .el-radio__label {
@@ -320,7 +306,6 @@ export default {
         line-height: 14px;
         margin: 0;
         padding: 0 0 0 10px;
-        color: #fff;
         font-size: 14px;
         border-radius: 0;
         border-width: 0;
@@ -395,26 +380,26 @@ export default {
         width: 100%;
 
         & /deep/ input {
-          background: transparent;
-          border: 0px;
-          -webkit-appearance: none;
-          padding: 0 15px 0 30px;
-          color: #fff;
-          height: 40px;
-
-          width: 100%;
-          height: 50px;
-          line-height: 50px;
-          margin: 0;
-          padding: 0 30px;
-          color: rgba(33, 30, 30, 1);
-          font-size: 16px;
-          border-radius: 15px;
-          border-width: 0;
-          border-style: solid;
-          border-color: rgba(0, 0, 0, 0);
-          background-color: rgba(73, 71, 71, 0.42);
-          box-shadow: 0 0 6px rgba(255, 0, 0, 0);
+          //background: transparent;
+          //border: 0px;
+          //-webkit-appearance: none;
+          //padding: 0 15px 0 30px;
+          //color: #fff;
+          //height: 40px;
+          //
+          //width: 100%;
+          //height: 50px;
+          //line-height: 50px;
+          //margin: 0;
+          //padding: 0 30px;
+          //color: rgba(33, 30, 30, 1);
+          //font-size: 16px;
+          //border-radius: 15px;
+          //border-width: 0;
+          //border-style: solid;
+          //border-color: rgba(0, 0, 0, 0);
+          //background-color: rgba(73, 71, 71, 0.42);
+          //box-shadow: 0 0 6px rgba(255, 0, 0, 0);
         }
       }
 
@@ -426,7 +411,8 @@ export default {
   .center {
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 30%;
+    -webkit-border-radius: 5px;
     transform: translate3d(-50%, -50%, 0);
   }
 

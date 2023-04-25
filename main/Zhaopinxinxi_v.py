@@ -469,7 +469,6 @@ def zhaopinxinxi_detail(request,id_):
     '''
     if request.method in ["POST", "GET"]:
         msg = {"code": normal_code, "msg": mes.normal_code, "data": {}}
-
         data =zhaopinxinxi.getbyid(zhaopinxinxi,zhaopinxinxi, int(id_))
         if len(data)>0:
             msg['data']=data[0]
@@ -491,6 +490,7 @@ def zhaopinxinxi_detail(request,id_):
             if ret!=None:
                 msg['code'] = crud_error_code
                 msg['msg'] = retfo
+        print(2, msg)
         return JsonResponse(msg)
 
 
