@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="utf-8">
+<title>招聘信息</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="/media/layui/css/layui.css">
+<link rel="stylesheet" href="/media/css/common.css"/>
+<link rel="stylesheet" href="/media/css/style.css"/>
+<script type="text/javascript" src="/media/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/media/js/jquery.SuperSlide.2.1.1.js"></script>
+</head>
+<style>
+
+	html::after {
+		position: fixed;
+		top: 0;
+		right: 0;
+		left: 0;
+		bottom: 0;
+		content: '';
+		display: block;
+		background-attachment: fixed;
+		background-size: cover;
+		background-position: center;
+	}
+	#test1 {
+		overflow: hidden;
+	}
+	#test1 .layui-carousel-ind li {
+		width: 16px;
+		height: 4px;
+		border-width: 0;
+		border-style: solid;
+		border-color: rgba(0,0,0,.3);
+		border-radius: 20px;
+		background-color: rgba(255, 255, 255, 1);
+		box-shadow: 0 0 0 rgba(255,0,0,.8);
+	}
+	#test1 .layui-carousel-ind li.layui-this {
+		width: 16px;
+		height: 4px;
+		border-width: 0;
+		border-style: solid;
+		border-color: rgba(0,0,0,.3);
+		border-radius: 20px;
+		background-color: #009688;
+		box-shadow: 0 0 0 #009688;
+	}
+
+	{#列表#}
+	.recommend {
+		padding: 10px 0;
+		display: flex;
+		justify-content: center;
+		background-repeat: no-repeat;
+		background-position: center center;
+		background-size: cover;
+	}
+	.recommend .box {
+	    width: 1002px;
+		margin: 0 auto;
+	}
+	.recommend .box .title {
+		padding: 10px 5px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		box-sizing: border-box;
+	}
+	.recommend .box .title span {
+		padding: 0 10px;
+		font-size: 16px;
+		line-height: 1.4;
+	}
+
+	.recommend .box .filter {
+		padding: 0 10px;
+		display: flex;
+	}
+    .filter>input, .filter>button{
+        border-radius: 36px;
+    }
+    .filter>button{
+        width: 100px;
+        margin-left: 20px;
+    }
+	.recommend .box .filter .item-list {
+		display: flex;
+		align-items: center;
+	}
+	.recommend .box .filter .item-list .lable {
+		font-size: 14px;
+		color: #333;
+		box-sizing: border-box;
+	}
+	.recommend .box .filter .item-list input {
+		padding: 0 10px;
+		box-sizing: border-box;
+		outline: none;
+	}
+	.recommend .box .filter button {
+		display: flex;
+		padding: 0 10px;
+		box-sizing: border-box;
+		align-items: center;
+		justify-content: center;
+		outline: none;
+	}
+	.recommend .box .filter button i {
+		margin-right: 4px;
+	}
+
+	.recommend .box .list {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	.recommend .box .list .list-item {
+		flex: 0 0 25%;
+		padding: 0 5px;
+		box-sizing: border-box;
+	}
+	.recommend .box .list .list-item .list-item-body {
+		cursor: pointer;
+		border: 1px solid rgba(0, 0, 0, 3);
+		padding: 5px;
+		box-sizing: border-box;
+	}
+
+
+	.recommend .box .list .list-item-body .info {
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.recommend .box .list .list-item-body .info .price {
+		padding-top: 5px;
+		color: red;
+		font-size: 14px;
+		text-align: center;
+		box-sizing: border-box;
+	}
+
+	.recommend .box .list .list-item-body .info .name {
+		padding-top: 5px;
+		color: red;
+		font-size: 14px;
+		text-align: center;
+		box-sizing: border-box;
+	}
+
+	.recommend .box .list .list-item3 {
+		flex: 0 0 33.33%;
+	}
+
+	.recommend .box .list .list-item5 {
+		flex: 0 0 20%;
+	}
+
+	.recommend .box .news {
+		display: flex;
+		flex-wrap: wrap;
+		padding: 0;
+width: 100%;
+	}
+
+	.recommend .box .news .list-item {
+		flex: 0 0 50%;
+		padding: 0 10px;
+		box-sizing: border-box;
+	}
+	.recommend .box .news .list-item .list-item-body {
+		cursor: pointer;
+		border: 1px solid rgba(0, 0, 0, 3);
+		padding: 10px;
+		box-sizing: border-box;
+		display: flex;
+	}
+
+	.recommend .box .news .list-item .list-item-body img {
+		width: 120px;
+		height: 100%;
+		display: block;
+		margin: 0 auto;
+	}
+
+	.recommend .box .news .list-item .list-item-body .item-info {
+		flex: 1;
+		display: flex;
+		justify-content: space-between;
+		flex-direction: column;
+		padding-left: 10px;
+		box-sizing: border-box;
+	}
+
+	.recommend .box .news .list-item .list-item-body .item-info .name {
+		padding-top: 5px;
+		color: red;
+		font-size: 14px;
+		box-sizing: border-box;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+	}
+
+	.recommend .box .news .list-item .list-item-body .item-info .time {
+		padding-top: 5px;
+		color: red;
+		font-size: 14px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+		box-sizing: border-box;
+	}
+
+	.recommend .box .news .list-item1 {
+		flex: 0 0 100%;
+	}
+
+	.recommend .box .news .list-item3 {
+		flex: 0 0 33.33%;
+	}
+
+	.index-pv1 .animation-box:hover {
+		transform: perspective(1000px) translate3d(0px, 0px, 0px) scale(1.05) rotate(0deg) skew(0deg, 0deg);
+		transition: all 0.1s;
+	}
+
+	.index-pv1 .animation-box img:hover {
+		transform: perspective(1000px) translate3d(0px, 0px, 0px) scale(1) rotate(0deg) skew(0deg, 0deg);
+		transition: all 0.3s;
+	}
+
+  .layui-laypage .layui-laypage-count {
+    padding: 0 10px;
+  }
+  .layui-laypage .layui-laypage-skip {
+    padding-left: 10px;
+  }
+  .list-item-body .station {
+      width: 100%;
+      border-color: rgba(0,0,0,0.1);
+      border-radius:6px 6px 6px 6px;
+      border-width:1px;
+      border-style:solid;
+      padding: 5px;
+      text-shadow:0 0 1px rgba(246, 246, 248, 0.1);;
+      background: rgba(246, 246, 248, 0.17);
+      box-shadow: rgba(0, 0, 0, 0.2) 0 0 3px;
+  }
+  .list-item-body p{
+      margin: 10px;
+  }
+  .list-item-body .st_name, .gs_name{
+        color: #222;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 22px;
+        transition: all .2s linear;
+}
+  .category-search{
+      box-shadow: rgba(0, 0, 0, 0.2) 0 0 3px!important;
+      border-color: rgba(0,0,0,0.1)!important;
+      border-radius:6px 6px 6px 6px!important;
+      border-width:1px!important;
+      border-style:solid!important;
+      width: 102px !important;
+  }
+  .category-search:hover{
+      background: rgba(246, 246, 248, 0.2);
+  }
+  .station .st_tag span, .gs_tag span{
+      display: inline-block;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 15px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    background: rgba(102, 102, 102, 0.1);
+      height: 18px;
+  }
+  .station .score{
+      float: right;
+      font-size: 20px;
+      color: darkred;
+      position: relative;
+    top: -142px;
+    left: -4px;
+  }
+  .gs_img{
+    width: 52px;
+    float: left;
+    margin: 0 10px 20px 10px;
+  }
+</style>
+<body>
+  <div id="app">
+
+	<div class="recommend index-pv1" :style='{"padding":"10px 0 10px 0","boxShadow":"0 0 0px ","margin":"0px 0 0 0","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#009688","borderRadius":"0","borderWidth":"0","background":"white","borderStyle":"solid"}'>
+		<div class="box" style='width:80%'>
+
+
+		<form class="layui-form filter">
+              <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="搜索题目" class="layui-input">
+			<button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">搜索</button>
+			</button>
+
+		</form>
+	    <!-- 样式一 -->
+	    <div class="list" style="position: relative;">
+	      <div @click="jump('../zhaopinxinxi/detail.html?id='+item.id)" v-for="(item,index) in dataList" :key="index" class="list-item" :class="4=='3'?'list-item3':4=='5'?'list-item5':''">
+              <div class="list-item-body animation-box" :style='{"padding":"10px","boxShadow":"0 0 0px ","margin":"0 0 10px 0","borderColor":"rgba(0,0,0,.1)","backgroundColor":"#fff","borderRadius":"4px","borderWidth":"0","borderStyle":"solid"}'>
+				<div class="station">
+                    <p class="st_name">发布工程师</p>
+                    <p class="st_sketch">北京/2年经验/本科</p>
+                    <p class="st_tag"> <span>世界</span> <span>原因</span></p>
+                    <div>
+                        <img class="gs_img" src="/media/upload/gs_img1.png" alt="">
+                        <p class="gs_name">郑州创恒实业有限公司</p>
+                        <p class="gs_tag"> <span>文化娱乐</span> <span>上市公司</span></p>
+                    </div>
+                    <div class="score">
+                        <span>17K</span> ~ <span>18K</span>
+                    </div>
+                </div>
+
+	        </div>
+	      </div>
+	    </div>
+		<div class="pager" id="pager" :style="{textAlign:1==1?'left':1==2?'center':'right'}"></div>
+	  </div>
+	</div>
+
+
+  </div>
+
+
+  <script src="/media/js/jquery-1.11.3.min.js"></script>
+<script src="/media/layui/layui.js"></script>
+<script src="/media/js/vue.js"></script>
+<script src="/media/js/config.js"></script>
+
+  <script src="/media/modules/config.js"></script>
+  <script src="/media/js/utils.js"></script>
+
+  <script type="text/javascript">
+    var vue = new Vue({
+      el: '#app',
+      data: {
+        swiperList: [],
+	categoryList: [],
+	chengshiOptions: [],
+	gangweileixingOptions: [],
+        dataList: [],
+	baseurl:'',
+	swiperIndex: '-1'
+      },
+      filters: {
+        newsDesc: function(val) {
+          if (val) {
+            if (val.length > 60) {
+              return val.substring(0, 60).replace(/<[^>]*>/g).replace(/undefined/g, '');
+            } else {
+              return val.replace(/<[^>]*>/g).replace(/undefined/g, '');
+            }
+          }
+          return '';
+        }
+      },
+      methods: {
+      	isAuth(tablename, button) {
+          return isFrontAuth(tablename, button)
+        },
+        jump(url) {
+          jump(url)
+        }
+      }
+    });
+
+    layui.use(['layer', 'element', 'carousel', 'laypage', 'http', 'jquery','laydate'], function() {
+	var layer = layui.layer;
+	var element = layui.element;
+	var carousel = layui.carousel;
+	var laypage = layui.laypage;
+	var http = layui.http;
+	var jquery = layui.jquery;
+	var laydate = layui.laydate;
+
+	var limit = 8;
+    limit = 4 * 3;
+	http.request(`option/chengshi/chengshi`,'get',{},(res)=>{
+		vue.chengshiOptions = res.data
+	});
+	http.request(`option/gangweifenlei/gangweileixing`,'get',{},(res)=>{
+		vue.gangweileixingOptions = res.data
+	});
+
+
+	//类型查询
+      categoryList();
+	//类型搜索
+      $(document).on("click", ".category-search", function(e){
+	  vue.swiperIndex = $(this).attr('index')
+    	  pageList(e.target.innerText);
+      });
+
+      function categoryList() {
+          // 获取列表数据
+          http.request('option/chengshi/chengshi', 'get', {}, function(res) {
+            vue.categoryList = res.data
+          })
+
+        }
+      var vCategory = '';
+
+      // 分页列表
+      pageList();
+
+      // 搜索按钮
+      jquery('#btn-search').click(function(e) {
+        pageList();
+      });
+
+      function pageList(category) {
+        var param = {
+          page: 1,
+          limit: limit
+        }
+	if(category!=null && category!='热门城市') {
+        	vCategory = category;
+   	     if (jquery('#chengshi').val()) {
+       	  	 param['chengshi'] = '';
+             }
+   	     if (jquery('#gongsimingcheng').val()) {
+       	  	 param['gongsimingcheng'] = '';
+             }
+   	     if (jquery('#zhaopingangwei').val()) {
+       	  	 param['zhaopingangwei'] = '';
+             }
+   	     if (jquery('#gangweileixing').val()) {
+       	  	 param['gangweileixing'] = '';
+             }
+        }
+        if(vCategory!='' && category!='热门城市') {
+        	param['chengshi'] = category;
+        }
+
+
+        if (jquery('#chengshi').val()) {
+          param['chengshi'] = jquery('#chengshi').val() ? jquery('#chengshi').val() : '';
+        }
+        if (jquery('#gongsimingcheng').val()) {
+          param['gongsimingcheng'] = jquery('#gongsimingcheng').val() ? '%' + jquery('#gongsimingcheng').val() + '%' : '';
+        }
+        if (jquery('#zhaopingangwei').val()) {
+          param['zhaopingangwei'] = jquery('#zhaopingangwei').val() ? '%' + jquery('#zhaopingangwei').val() + '%' : '';
+        }
+        if (jquery('#gangweileixing').val()) {
+          param['gangweileixing'] = jquery('#gangweileixing').val() ? jquery('#gangweileixing').val() : '';
+        }
+
+
+
+        // 获取列表数据
+        http.request('zhaopinxinxi/list', 'get', param, function(res) {
+          vue.dataList = res.data.list
+          // 分页
+          laypage.render({
+            elem: 'pager',
+            count: res.data.total,'id': 1,
+            limit: limit,
+            groups: 3,
+            layout: ["prev","page","next"],
+            theme: '#009688',
+            jump: function(obj, first) {
+            	param.page = obj.curr;
+              //首次不执行
+              if (!first) {
+                http.request('zhaopinxinxi/list', 'get', param, function(res) {
+                  vue.dataList = res.data.list
+                })
+              }
+            }
+          });
+        })
+      }
+    });
+
+    window.xznSlide = function() {
+      jQuery(".banner").slide({mainCell:".bd ul",autoPlay:true,interTime:5000});
+      jQuery("#ifocus").slide({ titCell:"#ifocus_btn li", mainCell:"#ifocus_piclist ul",effect:"leftLoop", delayTime:200, autoPlay:true,triggerTime:0});
+      jQuery("#ifocus").slide({ titCell:"#ifocus_btn li", mainCell:"#ifocus_tx ul",delayTime:0, autoPlay:true});
+      jQuery(".product_list").slide({mainCell:".bd ul",autoPage:true,effect:"leftLoop",autoPlay:true,vis:5,trigger:"click",interTime:4000});
+    };
+  </script>
+</body>
+</html>
