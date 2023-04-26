@@ -41,7 +41,7 @@
 		mounted() {
 			let sessionTable = this.$storage.get("sessionTable")
 			this.$http({
-				url: sessionTable + '/session',
+				url: sessionTable + `/session?id=${this.$storage.get('userId')}`,
 				method: "get"
 			}).then(({
 				data

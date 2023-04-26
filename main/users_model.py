@@ -12,6 +12,7 @@ class users(BaseModel):
     password = models.CharField(max_length=100, verbose_name=u'密码')
     role = models.CharField(max_length=100, verbose_name=u'角色')
     addtime = models.DateTimeField(auto_now_add=False, verbose_name=u'创建时间')
+    type = models.IntegerField(verbose_name=u'类型')
     __tablename__ = 'users'
 
     class Meta:

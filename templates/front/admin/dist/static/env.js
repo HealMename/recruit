@@ -1,3 +1,3 @@
 
 
-var DOMAIN_API_SYS = "http://192.168.6.4:8087";
+var DOMAIN_API_SYS = "http://127.0.0.1:8087";

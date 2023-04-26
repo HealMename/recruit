@@ -172,7 +172,7 @@ export default {
     var table = this.$storage.get("sessionTable");
     this.flag = table;
     this.$http({
-      url: `${this.$storage.get("sessionTable")}/session`,
+      url: `${this.$storage.get("sessionTable")}/session?id=${this.$storage.get('userId')}`,
       method: "get"
     }).then(({ data }) => {
       if (data && data.code === 0) {

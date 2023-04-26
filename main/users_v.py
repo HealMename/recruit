@@ -9,18 +9,22 @@ from util.codes import *
 from util.auth import Auth
 import util.message as mes
 
+USER_TYPE = {"管理员": 1, "用户": 4, "公司": 2}
+
 
 def users_login(request):
     if request.method in ["POST", "GET"]:
         msg = {'code': normal_code, "msg": mes.normal_code}
         req_dict = request.session.get("req_dict")
+        role = request.GET.get('role')
         if req_dict.get('role') != None:
             del req_dict['role']
         password = req_dict.pop('password')
+        req_dict['type'] = USER_TYPE[role]
         datas = users.getbyparams(users, users, req_dict)
         if not datas:
             msg['code'] = password_error_code
-            msg['msg'] = mes.password_error_code
+            msg['msg'] = "用户不存在"
             return JsonResponse(msg)
         if not auth_token.verify_password(password, datas[0]['password']):
             msg['code'] = password_error_code
@@ -47,8 +51,7 @@ def users_session(request):
     '''
     if request.method in ["POST", "GET"]:
         msg = {"code": normal_code, "msg": mes.normal_code, "data": {}}
-        print(request.session)
-        req_dict = {"id": request.session.get('params').get("id")}
+        req_dict = {"id": request.GET.get('id')}
         msg['data'] = users.getbyparams(users, users, req_dict)[0]
 
         return JsonResponse(msg)
