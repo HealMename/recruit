@@ -145,6 +145,14 @@ def users_update(request):
             del req_dict["clicknum"]
         except:
             pass
+        old_password = req_dict.pop('old_pass', '')
+        if old_password:
+            user = users.getbyparams(users, users, {"id": req_dict['id']})
+            if not auth_token.verify_password(old_password, user[0]['password']):
+                msg['code'] = crud_error_code
+                msg['msg'] = '两次密码不一致'
+        req_dict.pop('addtime')
+        req_dict['password'] = auth_token.sha1_encode_password(req_dict['password'])  # 加密密码
         error = users.updatebyparams(users, users, req_dict)
         if error != None:
             msg['code'] = crud_error_code

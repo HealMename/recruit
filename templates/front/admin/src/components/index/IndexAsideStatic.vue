@@ -1,26 +1,32 @@
 <template>
   <el-aside class="index-aside" width="210px">
     <div class="index-aside-inner menulist">
-      <div v-for="item in menuList" :key="item.roleName" v-if="role==item.roleName" class="menulist-item">
+      <div v-for="item in menuList" :key="item.roleName" v-if="role===item.roleName" class="menulist-item">
         <div class="menulistImg" v-if="false && 2 == 2">
-          <el-image :style='{"padding":"0","boxShadow":"0 0 6px rgba(0,0,0,0)","margin":"0","borderColor":"rgba(0,0,0,0)","borderRadius":"0","borderWidth":"0","width":"100%","borderStyle":"solid","height":"auto"}' v-if="'http://codegen.caihongy.cn/20201021/cc7d45d9c8164b58b18351764eba9be1.jpg'" src="http://codegen.caihongy.cn/20201021/cc7d45d9c8164b58b18351764eba9be1.jpg" fit="cover" />
+          <el-image
+              :style='{"padding":"0","boxShadow":"0 0 6px rgba(0,0,0,0)","margin":"0","borderColor":"rgba(0,0,0,0)","borderRadius":"0","borderWidth":"0","width":"100%","borderStyle":"solid","height":"auto"}'
+              v-if="'http://codegen.caihongy.cn/20201021/cc7d45d9c8164b58b18351764eba9be1.jpg'"
+              src="http://codegen.caihongy.cn/20201021/cc7d45d9c8164b58b18351764eba9be1.jpg" fit="cover"/>
         </div>
-		<el-menu :mode="2 == 1? 'horizontal':'vertical'" :unique-opened="true" class="el-menu-demo" default-active="0">
-          <el-menu-item index="0" @click="menuHandler('')"><i v-if="true" class="el-icon-menu el-icon-s-home" />首页</el-menu-item>
+        <el-menu :mode="2 == 1? 'horizontal':'vertical'" :unique-opened="true" class="el-menu-demo" default-active="0">
+          <el-menu-item index="0" @click="menuHandler('')"><i v-if="true" class="el-icon-menu el-icon-s-home"/>首页
+          </el-menu-item>
           <el-submenu :index="1+''">
             <template slot="title">
-				<i v-if="true" class="el-icon-menu el-icon-user-solid" />
-				<span>个人中心</span>
+              <i v-if="true" class="el-icon-menu el-icon-user-solid"/>
+              <span>个人中心</span>
             </template>
             <el-menu-item :index="1-1" @click="menuHandler('updatePassword')">修改密码</el-menu-item>
             <el-menu-item :index="1-2" @click="menuHandler('center')">个人信息</el-menu-item>
           </el-submenu>
           <el-submenu v-for=" (menu,index) in item.backMenu" :key="menu.menu" :index="index+2+''">
             <template slot="title">
-				<i v-if="true" class="el-icon-menu" :class="icons[index]" />
-				<span>{{ menu.menu }}</span>
+              <i v-if="true" class="el-icon-menu" :class="icons[index]"/>
+              <span>{{ menu.menu }}</span>
             </template>
-            <el-menu-item v-for=" (child,sort) in menu.child" :key="sort" :index="(index+2)+'-'+sort" @click="menuHandler(child.tableName)">{{ child.menu }}</el-menu-item>
+            <el-menu-item v-for=" (child,sort) in menu.child" :key="sort" :index="(index+2)+'-'+sort"
+                          @click="menuHandler(child.tableName)">{{ child.menu }}
+            </el-menu-item>
           </el-submenu>
         </el-menu>
       </div>
@@ -30,6 +36,7 @@
 
 <script>
 import menu from '@/utils/menu'
+
 export default {
   data() {
     return {
@@ -78,74 +85,75 @@ export default {
         'el-icon-stopwatch',
       ],
       menulistStyle: 'vertical',
-	  menulistBorderBottom: {},
+      menulistBorderBottom: {},
     }
   },
   mounted() {
     const menus = menu.list()
-    if(menus) {
-        this.menuList = menus
+    console.log(menus)
+    if (menus) {
+      this.menuList = menus
     } else {
-        let params = {
-            page: 1,
-            limit: 1,
-            sort: 'id',
+      let params = {
+        page: 1,
+        limit: 1,
+        sort: 'id',
+      }
+      this.$http({
+        url: "menu/list",
+        method: "get",
+        params: params
+      }).then(({
+                 data
+               }) => {
+        if (data && data.code === 0) {
+          this.menuList = JSON.parse(data.data.list[0].menujson);
+          this.$storage.set("menus", this.menuList);
         }
-        this.$http({
-            url: "menu/list",
-            method: "get",
-            params: params
-        }).then(({
-            data
-        }) => {
-            if (data && data.code === 0) {
-                this.menuList = JSON.parse(data.data.list[0].menujson);
-                this.$storage.set("menus", this.menuList);
-            }
-        })
+      })
     }
     this.role = this.$storage.get('role')
   },
-  created(){
-    setTimeout(()=>{
+  created() {
+    setTimeout(() => {
       this.menulistStyleChange()
-    },10)
-    this.icons.sort(()=>{
-      return (0.5-Math.random())
+    }, 10)
+    this.icons.sort(() => {
+      return (0.5 - Math.random())
     })
-	this.lineBorder()
+    this.lineBorder()
   },
   methods: {
-	lineBorder() {
-		let style = 'vertical'
-		let w = '1px'
-		let s = 'solid'
-		let c = '#ccc'
-		if(style == 'vertical') {
-			this.menulistBorderBottom = {
-				borderBottomWidth: w,
-				borderBottomStyle: s,
-				borderBottomColor: c
-			}
-		} else {
-			this.menulistBorderBottom = {
-				borderRightWidth: w,
-				borderRightStyle: s,
-				borderRightColor: c
-			}
-		}
-	},
+    lineBorder() {
+      let style = 'vertical'
+      let w = '1px'
+      let s = 'solid'
+      let c = '#ccc'
+      if (style == 'vertical') {
+        this.menulistBorderBottom = {
+          borderBottomWidth: w,
+          borderBottomStyle: s,
+          borderBottomColor: c
+        }
+      } else {
+        this.menulistBorderBottom = {
+          borderRightWidth: w,
+          borderRightStyle: s,
+          borderRightColor: c
+        }
+      }
+    },
     menuHandler(name) {
       let router = this.$router
-      name = '/'+name
+      name = '/' + name
       router.push(name)
     },
     // 菜单
-    setMenulistHoverColor(){
+    setMenulistHoverColor() {
       let that = this
-	  return;
-      this.$nextTick(()=>{
-        document.querySelectorAll('.menulist .el-menu-item').forEach(el=>{
+      return;
+      this.$nextTick(() => {
+        document.querySelectorAll('.menulist .el-menu-item').forEach(el => {
           el.addEventListener("mouseenter", e => {
             e.stopPropagation()
             el.style.backgroundColor = "rgba(101, 126, 253, 1)"
@@ -153,14 +161,14 @@ export default {
           el.addEventListener("mouseleave", e => {
             e.stopPropagation()
             // el.style.backgroundColor = "#343957"
-			el.style.background = "none"
+            el.style.background = "none"
           })
           el.addEventListener("focus", e => {
             e.stopPropagation()
             el.style.backgroundColor = "rgba(101, 126, 253, 1)"
           })
         })
-        document.querySelectorAll('.menulist .el-submenu__title').forEach(el=>{
+        document.querySelectorAll('.menulist .el-submenu__title').forEach(el => {
           el.addEventListener("mouseenter", e => {
             e.stopPropagation()
             el.style.backgroundColor = "rgba(101, 126, 253, 1)"
@@ -168,14 +176,14 @@ export default {
           el.addEventListener("mouseleave", e => {
             e.stopPropagation()
             // el.style.backgroundColor = "#343957"
-			el.style.background = "none"
+            el.style.background = "none"
           })
         })
       })
     },
     setMenulistIconColor() {
-      this.$nextTick(()=>{
-        document.querySelectorAll('.menulist .el-submenu__title .el-submenu__icon-arrow').forEach(el=>{
+      this.$nextTick(() => {
+        document.querySelectorAll('.menulist .el-submenu__title .el-submenu__icon-arrow').forEach(el => {
           el.style.color = "rgba(153, 153, 153, 1)"
         })
       })
@@ -185,39 +193,39 @@ export default {
       this.setMenulistHoverColor()
       this.setMenulistStyleHeightChange()
       let str = "2"
-      if(1 == str) {
-        this.$nextTick(()=>{
-          document.querySelectorAll('.el-container .el-container').forEach(el=>{
+      if (1 == str) {
+        this.$nextTick(() => {
+          document.querySelectorAll('.el-container .el-container').forEach(el => {
             el.style.display = "block"
             el.style.paddingTop = "60px" // header 高度
           })
-          document.querySelectorAll('.el-aside').forEach(el=>{
+          document.querySelectorAll('.el-aside').forEach(el => {
             el.style.width = "100%"
             el.style.height = "100%"
             el.style.paddingTop = '0'
           })
-          document.querySelectorAll('.index-aside .index-aside-inner').forEach(el=>{
+          document.querySelectorAll('.index-aside .index-aside-inner').forEach(el => {
             el.style.paddingTop = '0'
-			el.style.width = "100%"
+            el.style.width = "100%"
           })
         })
       }
-      if(2 === str) {
-        this.$nextTick(()=>{
-          document.querySelectorAll('.index-aside .index-aside-inner').forEach(el=>{
+      if (2 === str) {
+        this.$nextTick(() => {
+          document.querySelectorAll('.index-aside .index-aside-inner').forEach(el => {
             el.style.paddingTop = "60px"
           })
         })
       }
     },
     setMenulistStyleHeightChange() {
-		return;
-      this.$nextTick(()=>{
-        document.querySelectorAll('.menulist-item>.el-menu--horizontal>.el-menu-item').forEach(el=>{
+      return;
+      this.$nextTick(() => {
+        document.querySelectorAll('.menulist-item>.el-menu--horizontal>.el-menu-item').forEach(el => {
           el.style.height = "60px"
           el.style.lineHeight = "60px"
         })
-        document.querySelectorAll('.menulist-item>.el-menu--horizontal>.el-submenu>.el-submenu__title').forEach(el=>{
+        document.querySelectorAll('.menulist-item>.el-menu--horizontal>.el-submenu>.el-submenu__title').forEach(el => {
           el.style.height = "60px"
           el.style.lineHeight = "60px"
         })
@@ -227,275 +235,280 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-	.el-container {
-		display: block;
-	}
-  .index-aside {
-    position: relative;
-    overflow: hidden;
-	display: flex;
-	flex-wrap: wrap;
+.el-container {
+  display: block;
+}
 
-    .menulistImg {
-		font-size: 0;
-		box-sizing: border-box;
+.index-aside {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
 
-      .el-image {
-        margin: 0 auto;
-        width: 100px;
-        height: 100px;
-        border-radius: 100%;
+  .menulistImg {
+    font-size: 0;
+    box-sizing: border-box;
+
+    .el-image {
+      margin: 0 auto;
+      width: 100px;
+      height: 100px;
+      border-radius: 100%;
+      display: block;
+    }
+  }
+
+  .index-aside-inner {
+    height: 100%;
+    margin-right: -17px;
+    margin-bottom: -17px;
+    overflow: scroll;
+    overflow-x: hidden !important;
+    padding-top: 60px;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: none;
+    }
+
+    & /deep/ .el-menu {
+      border: 0;
+      background-color: transparent;
+    }
+  }
+
+  .index-aside .index-aside-inner.menulist {
+    height: 100% !important;
+  }
+
+  .menulist-item {
+    width: 210px;
+    padding: 15px 20px;
+    margin: 0;
+    border-radius: 0;
+    border-width: 0 0 0px 0 !important;
+    border-style: solid !important;
+    border-color: rgba(52, 57, 87, 1) !important;
+    background: rgb(52, 57, 87) !important;
+    box-shadow: 0 0 6px rgba(30, 144, 255, .2);
+    box-sizing: border-box;
+  }
+
+  .el-menu-demo {
+    box-sizing: border-box;
+    min-height: calc(100vh - 60px);
+
+    & > .el-menu-item {
+      width: auto;
+      height: auto !important;
+      line-height: 35px !important;
+      padding: 10px 22px 10px 10px;
+      margin: 0 10px 0 0;
+      color: rgba(255, 255, 255, 1);
+      font-size: 14px;
+      border-radius: 0;
+      border-width: 0 0 1px 0;
+      border-style: solid;
+      border-color: rgba(218, 218, 218, 1) !important;
+      background-color: rgba(52, 57, 87, 1) !important;
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0);
+      box-sizing: initial;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      box-sizing: border-box;
+
+      .el-icon-menu {
+        margin: 0 5px 0 0;
+        padding: 0;
+        width: 24px;
+        line-height: 24px;
+        color: rgba(144, 147, 153, 1);
+        font-size: 16px;
+        border-radius: 0;
+        border-width: 0;
+        border-style: solid;
+        border-color: #fff;
+        background-color: rgba(255, 255, 255, 0);
+        box-shadow: 0 0 6px rgba(255, 255, 255, 0);
+      }
+    }
+
+    .el-submenu {
+      margin: 0 10px 0 0;
+    }
+
+    & /deep/ .el-submenu__title {
+      width: auto;
+      height: auto !important;
+      line-height: 35px !important;
+      padding: 10px 22px 10px 10px;
+      color: rgba(255, 255, 255, 1);
+      font-size: 14px;
+      border-radius: 0;
+      border-width: 0 0 1px 0;
+      border-style: solid;
+      border-color: rgba(218, 218, 218, 1) !important;
+      background-color: rgba(52, 57, 87, 1) !important;
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0);
+      box-sizing: initial;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      box-sizing: border-box;
+
+      .el-icon-menu {
+        margin: 0 5px 0 0;
+        padding: 0;
+        width: 24px;
+        line-height: 24px;
+        color: rgba(144, 147, 153, 1);
+        font-size: 16px;
+        border-radius: 0;
+        border-width: 0;
+        border-style: solid;
+        border-color: #fff;
+        background-color: rgba(255, 255, 255, 0);
+        box-shadow: 0 0 6px rgba(255, 255, 255, 0);
+      }
+
+      .el-submenu__icon-arrow {
+        margin: 0 10px 0 0;
+        padding: 0;
+        width: 12px;
+        line-height: 12px;
+        color: rgba(144, 147, 153, 1) !important;
+        font-size: 12px;
+        border-radius: 0;
+        border-width: 0;
+        border-style: solid;
+        border-color: #fff;
+        background-color: rgba(255, 255, 255, 0);
+        box-shadow: 0 0 6px rgba(255, 255, 255, 0);
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        text-align: center;
         display: block;
       }
     }
-	
-	    .index-aside-inner {
-      height: 100%;
-      margin-right: -17px;
-      margin-bottom: -17px;
-      overflow: scroll;
-      overflow-x: hidden !important;
-      padding-top: 60px;
-      box-sizing: border-box;
 
-      &:focus {
-        outline: none;
-      }
+    & /deep/ .el-menu.el-menu--inline {
+      width: 150px;
+      height: auto;
+      padding: 0;
+      margin: 0;
+      border-radius: 0px;
+      border-width: 0;
+      border-style: solid;
+      border-color: rgba(0, 0, 0, .3);
+      background-color: rgba(52, 57, 87, 1);
+      box-shadow: 0 0 6px rgba(0, 0, 0, .3);
 
-      & /deep/ .el-menu {
-        border: 0;
-		background-color: transparent;
+      .el-menu-item {
+        width: 100%;
+        height: 44px;
+        line-height: 44px;
+        padding: 0 0 0 30px !important;
+        margin: 0;
+        color: rgba(255, 255, 255, 1) !important;
+        font-size: 14px;
+        border-radius: 0;
+        border-width: 0;
+        border-style: solid;
+        border-color: rgba(0, 0, 0, 0);
+        background-color: rgba(52, 57, 87, 1) !important;
+        box-shadow: 0 0 6px rgba(30, 144, 255, 0);
+        text-align: left;
+        min-width: auto;
+
+        &.is-active {
+          width: 100%;
+          height: 44px;
+          line-height: 44px;
+          padding: 0 0 0 30px !important;
+          margin: 0;
+          color: rgba(255, 255, 255, 1) !important;
+          font-size: 14px;
+          border-radius: 0;
+          border-width: 0;
+          border-style: solid;
+          border-color: rgba(0, 0, 0, 0);
+          background-color: rgba(101, 126, 253, 1) !important;
+          box-shadow: 0 0 6px rgba(30, 144, 255, 0);
+          text-align: left;
+        }
+
+        &:hover {
+          width: 100%;
+          height: 44px;
+          line-height: 44px;
+          padding: 0 0 0 30px !important;
+          margin: 0;
+          color: rgba(255, 255, 255, 1) !important;
+          font-size: 14px;
+          border-radius: 0;
+          border-width: 0;
+          border-style: solid;
+          border-color: rgba(0, 0, 0, 0);
+          background-color: rgba(101, 126, 253, 1) !important;
+          box-shadow: 0 0 6px rgba(30, 144, 255, 0);
+          text-align: left;
+        }
       }
     }
-		
-			.index-aside .index-aside-inner.menulist {
-		height: 100% !important;
-	}
-	.menulist-item {
-		width: 210px;
-		padding: 15px 20px;
-		margin: 0;
-		border-radius: 0;
-		border-width: 0 0 0px 0 !important;
-		border-style: solid !important;
-		border-color: rgba(52, 57, 87, 1) !important;
-		background: rgb(52, 57, 87) !important;
-		box-shadow: 0 0 6px rgba(30, 144, 255, .2);
-		box-sizing: border-box;
-	}
-			.el-menu-demo {
-		box-sizing: border-box;
-		min-height: calc(100vh - 60px);
-			
-		&>.el-menu-item {
-			width: auto;
-			height: auto !important;
-			line-height: 35px !important;
-			padding: 10px 22px 10px 10px;
-			margin: 0 10px 0 0;
-			color: rgba(255, 255, 255, 1);
-			font-size: 14px;
-			border-radius: 0;
-			border-width: 0 0 1px 0;
-			border-style: solid;
-			border-color: rgba(218, 218, 218, 1) !important;
-			background-color: rgba(52, 57, 87, 1) !important;
-			box-shadow: 0 0 6px rgba(255,255,255,0);
-			box-sizing: initial;
-			display: flex;
-			align-items: center;
-			justify-content: flex-start;
-			box-sizing: border-box;
-            
-            .el-icon-menu {
-            	margin: 0 5px 0 0;
-            	padding: 0;
-            	width: 24px;
-            	line-height: 24px;
-            	color: rgba(144, 147, 153, 1);
-            	font-size: 16px;
-            	border-radius: 0;
-            	border-width: 0;
-            	border-style: solid;
-            	border-color: #fff;
-            	background-color: rgba(255,255,255,0);
-            	box-shadow: 0 0 6px rgba(255,255,255,0);
-            }
-		}
-		
-		.el-submenu {
-			margin: 0 10px 0 0;
-		}
-		
-		& /deep/ .el-submenu__title {
-			width: auto;
-			height: auto !important;
-			line-height: 35px !important;
-			padding: 10px 22px 10px 10px;
-			color: rgba(255, 255, 255, 1);
-			font-size: 14px;
-			border-radius: 0;
-			border-width: 0 0 1px 0;
-			border-style: solid;
-			border-color: rgba(218, 218, 218, 1) !important;
-			background-color: rgba(52, 57, 87, 1) !important;
-			box-shadow: 0 0 6px rgba(255,255,255,0);
-			box-sizing: initial;
-			display: flex;
-			align-items: center;
-			justify-content: flex-start;
-			box-sizing: border-box;
-			
-			.el-icon-menu {
-				margin: 0 5px 0 0;
-				padding: 0;
-				width: 24px;
-				line-height: 24px;
-				color: rgba(144, 147, 153, 1);
-				font-size: 16px;
-				border-radius: 0;
-				border-width: 0;
-				border-style: solid;
-				border-color: #fff;
-				background-color: rgba(255,255,255,0);
-				box-shadow: 0 0 6px rgba(255,255,255,0);
-			}
-			
-			.el-submenu__icon-arrow {
-				margin: 0 10px 0 0;
-				padding: 0;
-				width: 12px;
-				line-height: 12px;
-				color: rgba(144, 147, 153, 1) !important;
-				font-size: 12px;
-				border-radius: 0;
-				border-width: 0;
-				border-style: solid;
-				border-color: #fff;
-				background-color: rgba(255,255,255,0);
-				box-shadow: 0 0 6px rgba(255,255,255,0);
-				position: absolute;
-				top: 50%;
-				right: 0;
-				transform: translateY(-50%);
-				text-align: center;
-								display: block;
-											}
-		}
-		
-		& /deep/ .el-menu.el-menu--inline {
-			width: 150px;
-			height: auto;
-			padding: 0;
-			margin: 0;
-			border-radius: 0px;
-			border-width: 0;
-			border-style: solid;
-			border-color: rgba(0,0,0,.3);
-			background-color: rgba(52, 57, 87, 1);
-			box-shadow: 0 0 6px rgba(0, 0, 0, .3);
-			
-			.el-menu-item {
-				width: 100%;
-				height: 44px;
-				line-height: 44px;
-				padding: 0 0 0 30px !important;
-				margin: 0;
-				color: rgba(255, 255, 255, 1) !important;
-				font-size: 14px;
-				border-radius: 0;
-				border-width: 0;
-				border-style: solid;
-				border-color: rgba(0, 0, 0, 0);
-				background-color: rgba(52, 57, 87, 1) !important;
-				box-shadow: 0 0 6px rgba(30, 144, 255, 0);
-				text-align: left;
-				min-width: auto;
-                
-                &.is-active {
-                    width: 100%;
-                    height: 44px;
-                    line-height: 44px;
-                    padding: 0 0 0 30px !important;
-                    margin: 0;
-                    color: rgba(255, 255, 255, 1) !important;
-                    font-size: 14px;
-                    border-radius: 0;
-                    border-width: 0;
-                    border-style: solid;
-                    border-color: rgba(0, 0, 0, 0);
-                    background-color: rgba(101, 126, 253, 1) !important;
-                    box-shadow: 0 0 6px rgba(30, 144, 255, 0);
-                    text-align: left;
-                }
-				 
-				&:hover {
-					width: 100%;
-					height: 44px;
-					line-height: 44px;
-					padding: 0 0 0 30px !important;
-					margin: 0;
-					color: rgba(255, 255, 255, 1) !important;
-					font-size: 14px;
-					border-radius: 0;
-					border-width: 0;
-					border-style: solid;
-					border-color: rgba(0, 0, 0, 0);
-					background-color: rgba(101, 126, 253, 1) !important;
-					box-shadow: 0 0 6px rgba(30, 144, 255, 0);
-					text-align: left;
-				}
-			}
-		}
-	}
   }
+}
 </style>
 <style>
 
 .el-menu--horizontal .el-menu--popup {
-		width: 150px;
-		height: auto;
-		padding: 0;
-		margin: 0;
-		border-radius: 0px;
-		border-width: 0;
-		border-style: solid;
-		border-color: rgba(0,0,0,.3);
-		background-color: rgba(52, 57, 87, 1);
-		box-shadow: 0 0 6px rgba(0, 0, 0, .3);
-		min-width: auto;
-		}
+  width: 150px;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  border-radius: 0px;
+  border-width: 0;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, .3);
+  background-color: rgba(52, 57, 87, 1);
+  box-shadow: 0 0 6px rgba(0, 0, 0, .3);
+  min-width: auto;
+}
+
 .el-menu--horizontal .el-menu--popup .el-menu-item {
-			width: 100%;
-			height: 44px;
-			line-height: 44px;
-			padding: 0 0 0 30px;
-			margin: 0;
-			color: rgba(255, 255, 255, 1) !important;
-			font-size: 14px;
-			border-radius: 0;
-			border-width: 0;
-			border-style: solid;
-			border-color: rgba(0, 0, 0, 0);
-			background-color: rgba(52, 57, 87, 1) !important;
-			box-shadow: 0 0 6px rgba(30, 144, 255, 0);
-			text-align: left;
-			min-width: auto;
-			} 
-	.el-menu--horizontal .el-menu--popup .el-menu-item:hover {
-				width: 100%;
-				height: 44px;
-				line-height: 44px;
-				padding: 0 0 0 30px;
-				margin: 0;
-				color: rgba(255, 255, 255, 1) !important;
-				font-size: 14px;
-				border-radius: 0;
-				border-width: 0;
-				border-style: solid;
-				border-color: rgba(0, 0, 0, 0);
-				background-color: rgba(101, 126, 253, 1) !important;
-				box-shadow: 0 0 6px rgba(30, 144, 255, 0);
-				text-align: left;
-			}
+  width: 100%;
+  height: 44px;
+  line-height: 44px;
+  padding: 0 0 0 30px;
+  margin: 0;
+  color: rgba(255, 255, 255, 1) !important;
+  font-size: 14px;
+  border-radius: 0;
+  border-width: 0;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0);
+  background-color: rgba(52, 57, 87, 1) !important;
+  box-shadow: 0 0 6px rgba(30, 144, 255, 0);
+  text-align: left;
+  min-width: auto;
+}
+
+.el-menu--horizontal .el-menu--popup .el-menu-item:hover {
+  width: 100%;
+  height: 44px;
+  line-height: 44px;
+  padding: 0 0 0 30px;
+  margin: 0;
+  color: rgba(255, 255, 255, 1) !important;
+  font-size: 14px;
+  border-radius: 0;
+  border-width: 0;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0);
+  background-color: rgba(101, 126, 253, 1) !important;
+  box-shadow: 0 0 6px rgba(30, 144, 255, 0);
+  text-align: left;
+}
 </style>

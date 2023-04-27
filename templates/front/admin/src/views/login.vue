@@ -20,7 +20,6 @@
                   :label="item.roleName"
               >{{ item.roleName }}
               </el-radio>
-              <el-radio v-model="rulesForm.role" label="教师">教师</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item v-if="roles.length==1" label=" " prop="loginInRole" class="role"
@@ -45,7 +44,7 @@ export default {
       rulesForm: {
         username: "",
         password: "",
-        role: "管理员",
+        role: "教师",
         code: '',
       },
       menus: [],
@@ -120,10 +119,11 @@ export default {
       if (this.rulesForm.role === '教师'){
         url = `${DOMAIN_API_SYS}/tea/login/?username=${this.rulesForm.username}&password=${this.rulesForm.password}`
         this.$http.post(url, {}).then(res => {
-                this.$storage.set("Token", res.token);
-                this.$storage.set("userId", res.id);
+          console.log(res)
+                this.$storage.set("Token", res.data.token);
+                this.$storage.set("userId", res.data.id);
               this.$storage.set("role", this.rulesForm.role);
-              this.$storage.set("sessionTable", this.tableName);
+              this.$storage.set("sessionTable", "users");
               this.$storage.set("adminName", this.rulesForm.username);
             this.$router.replace({path: "/index/"});
               }).catch((res) => {

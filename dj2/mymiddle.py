@@ -43,7 +43,7 @@ class CoreMiddle(MiddlewareMixin):
         response['Access-Control-Allow-Origin'] = origin
         response['Access-Control-Allow-Methods'] = 'GET,POST'
         response['Access-Control-Allow-Credentials'] = 'true'
-        response['Access-Control-Allow-Headers'] = 'x-requested-with,content-type,Token,App-Type,platform'
+        response['Access-Control-Allow-Headers'] = 'x-requested-with,content-type,HTTP_TOKEN,Token,App-Type,platform'
         response['Access-Control-Max-Age'] = '1728000'
         # response['X-Frame-Options'] = 'allow-from *'
         return response

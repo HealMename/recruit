@@ -35,21 +35,22 @@ class Auth(object):
 
         msg = {'code': normal_code, 'msg': mes.normal_code, 'data': {}}
         # django的header被处理过了
-        token = request.META.get('HTTP_TOKEN')
-
-        if token  and token !="null":
+        token = request.QUERY.get("token") \
+                or request.META.get('HTTP_TOKEN') \
+                or request.COOKIES.get('token')
+        if token and token != "null":
 
             auth_token = copy.deepcopy(token)
 
             decode_str = base64.b64decode(auth_token).decode("utf8")
-            decode_str=decode_str.replace('"null"','""').replace('null','""')
+            decode_str = decode_str.replace('"null"', '""').replace('null', '""')
             decode_dict = eval(decode_str)
 
             tablename2 = decode_dict.get("tablename")
 
-            params2 = decode_dict.get("params",{})
+            params2 = decode_dict.get("params", {})
 
-            datas=None
+            datas = None
             allModels = apps.get_app_config('main').get_models()
             for model in allModels:
                 if model.__tablename__ == tablename2:

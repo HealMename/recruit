@@ -155,9 +155,9 @@ tools.install = function (Vue, router) {
         return false
     };
     // 路由导航钩子
-    router.beforeEach((to, from, next) => {
-        next()
-    });
+    // router.beforeEach((to, from, next) => {
+    //     next()
+    // });
     // 下载压缩文件包
     Vue.prototype.downloadFileTar = function (url, name) {
         axios({
