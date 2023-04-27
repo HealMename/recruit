@@ -8,7 +8,7 @@ from libs.utils.common import Struct, render_template, num_to_ch
 
 def get_question_class(request):
     """
-    教师注册
+    题目分类列表
     """
     data = Struct()
     data.list = [
@@ -46,3 +46,24 @@ def get_question_class(request):
     return ajax.ajax_ok(data=data)
 
 
+def question_list(request):
+    """
+    题目列表
+    """
+    data = db.default.question.filter(status__in=[0, 1]).order_by('-id')[:]
+    for q in data:
+        q['status'] = {1: '已审核', 0: '未审核'}[q['status']]
+    return ajax.ajax_ok(data)
+
+
+def question_add(request):
+    """
+    添加编辑
+    """
+    data = Struct()
+    args = {k: v for k, v in request.QUERY.items()}
+    id_ = args.pop('id', 0)
+    now = int(time.time())
+    if not id_:
+        db.default.question.create(add_time=now, **args)
+    return ajax.ajax_ok(data)

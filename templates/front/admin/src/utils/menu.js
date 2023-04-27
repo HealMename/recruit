@@ -12,9 +12,18 @@ const menu = {
                         "buttons": [
 
                         ],
-                        "menu": "题库",
+                        "menu": "题目",
                         "menuJump": "列表",
                         "tableName": "question"
+                    },
+                    {
+                        "appFrontIcon": "cuIcon-list",
+                        "buttons": [
+
+                        ],
+                        "menu": "试卷",
+                        "menuJump": "列表",
+                        "tableName": "paper"
                     }
                 ],
                 "menu": "题库管理"

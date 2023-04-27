@@ -82,8 +82,10 @@ tools.install = function (Vue, router) {
     Vue.prototype.$config = config;
     // 请求拦截器
     axios.interceptors.request.use(request => {
-        if (!request.url.startsWith("http")) {
+                    console.log(request.url)
             request.headers['token'] = localStorage.getItem("Token");
+        if (!request.url.startsWith("http")) {
+
             if (request.url.startsWith("/wx/") || request.url.startsWith("/qywx/")) {
                 request.url = config.apiServer + "/api" + request.url;
             } else {

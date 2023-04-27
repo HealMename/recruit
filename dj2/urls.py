@@ -27,6 +27,7 @@ from dj2.settings import dbName as schemaName
 urlpatterns = [
 
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_SITE}),  # 静态文件路径
+    url(r'^upload/(?P<path>.*)$', serve, {'document_root': 'templates/front/'}),  # 静态文件路径
 
     path('xadmin/', admin.site.urls),
     path(r'index/', views.index),

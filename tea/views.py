@@ -19,18 +19,36 @@ def add_tea(request):
         args = {k: v for k, v in request.QUERY.items()}
 
         id_ = args.pop('id', 0)
-        username = args.pop('username')
-        password = args.pop('password1')
-        args.pop('password2')
-        if db.default.users.filter(username=username, type=3).exclude(id=id_):
+        username = args.pop('username', '')
+        if db.default.users.filter(username=username, type=3, id__ne=id_):
             return ajax.ajax_fail(message='用户名已存在')
         now = int(time.time())
         if not id_:
+            password = args.pop('password1', '')
+            args.pop('password2')
             password = auth_token.sha1_encode_password(password)  # 加密密码
             id_ = db.default.users.create(username=username, password=password, role='教师', type=3)
             db.default.user_tea_det.create(user_id=id_, add_time=now, **args)
+        else:
+            args['add_time'] = now
+            db.default.users.filter(id=id_).update(username=username)
+            db.default.user_tea_det.filter(user_id=id_).update(**args)
         return ajax.ajax_ok(message='注册成功')
+
     return render_template(request, 'tea/index.html', data)
+
+
+def user_info(request):
+    """用户信息"""
+    id_ = request.QUERY.get('id')
+    user = db.default.users.get(id=id_)
+    info = db.default.user_tea_det.get(user_id=id_)
+    data = {
+        'username': user.username,
+    }
+    data.update(info)
+    data['id'] = id_
+    return ajax.ajax_ok(data)
 
 
 def login(request):

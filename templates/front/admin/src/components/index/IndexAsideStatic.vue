@@ -2,12 +2,7 @@
   <el-aside class="index-aside" width="210px">
     <div class="index-aside-inner menulist">
       <div v-for="item in menuList" :key="item.roleName" v-if="role===item.roleName" class="menulist-item">
-        <div class="menulistImg" v-if="false && 2 == 2">
-          <el-image
-              :style='{"padding":"0","boxShadow":"0 0 6px rgba(0,0,0,0)","margin":"0","borderColor":"rgba(0,0,0,0)","borderRadius":"0","borderWidth":"0","width":"100%","borderStyle":"solid","height":"auto"}'
-              v-if="'http://codegen.caihongy.cn/20201021/cc7d45d9c8164b58b18351764eba9be1.jpg'"
-              src="http://codegen.caihongy.cn/20201021/cc7d45d9c8164b58b18351764eba9be1.jpg" fit="cover"/>
-        </div>
+
         <el-menu :mode="2 == 1? 'horizontal':'vertical'" :unique-opened="true" class="el-menu-demo" default-active="0">
           <el-menu-item index="0" @click="menuHandler('')"><i v-if="true" class="el-icon-menu el-icon-s-home"/>首页
           </el-menu-item>
@@ -90,7 +85,6 @@ export default {
   },
   mounted() {
     const menus = menu.list()
-    console.log(menus)
     if (menus) {
       this.menuList = menus
     } else {
@@ -191,7 +185,6 @@ export default {
     menulistStyleChange() {
       this.setMenulistIconColor()
       this.setMenulistHoverColor()
-      this.setMenulistStyleHeightChange()
       let str = "2"
       if (1 == str) {
         this.$nextTick(() => {
@@ -218,19 +211,7 @@ export default {
         })
       }
     },
-    setMenulistStyleHeightChange() {
-      return;
-      this.$nextTick(() => {
-        document.querySelectorAll('.menulist-item>.el-menu--horizontal>.el-menu-item').forEach(el => {
-          el.style.height = "60px"
-          el.style.lineHeight = "60px"
-        })
-        document.querySelectorAll('.menulist-item>.el-menu--horizontal>.el-submenu>.el-submenu__title').forEach(el => {
-          el.style.height = "60px"
-          el.style.lineHeight = "60px"
-        })
-      })
-    },
+
   }
 }
 </script>
@@ -283,7 +264,6 @@ export default {
 
   .menulist-item {
     width: 210px;
-    padding: 15px 20px;
     margin: 0;
     border-radius: 0;
     border-width: 0 0 0px 0 !important;
@@ -395,16 +375,16 @@ export default {
     }
 
     & /deep/ .el-menu.el-menu--inline {
-      width: 150px;
+      //width: 150px;
       height: auto;
       padding: 0;
       margin: 0;
-      border-radius: 0px;
-      border-width: 0;
-      border-style: solid;
-      border-color: rgba(0, 0, 0, .3);
-      background-color: rgba(52, 57, 87, 1);
-      box-shadow: 0 0 6px rgba(0, 0, 0, .3);
+      //border-radius: 0px;
+      //border-width: 0;
+      //border-style: solid;
+      //border-color: rgba(0, 0, 0, .3);
+      //background-color: rgba(52, 57, 87, 1);
+      //box-shadow: 0 0 6px rgba(0, 0, 0, .3);
 
       .el-menu-item {
         width: 100%;
