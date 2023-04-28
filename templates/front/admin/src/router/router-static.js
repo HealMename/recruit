@@ -30,6 +30,8 @@ import toudijilu from '@/views/modules/toudijilu/list'
 import config from '@/views/modules/config/list'
 import question from '@/views/modules/question/question'
 import questionadd from '@/views/modules/question/questionadd'
+import paper from '@/views/modules/question/paper'
+import paperadd from '@/views/modules/question/paperadd'
 
 
 //2.配置路由   注意：名字
@@ -46,9 +48,21 @@ const routes = [{
         meta: {icon: '', title: 'center'}
     },{
         // 这里不设置值，是把main作为默认页面
-        path: '/question/add/',
-        name: '添加题目',
+        path: '/question/add/:id',
+        name: '题库 / 添加题目',
         component: questionadd,
+        meta: {icon: '', title: 'center'}
+    },{
+        // 这里不设置值，是把main作为默认页面
+        path: '/paper',
+        name: '试卷',
+        component: paper,
+        meta: {icon: '', title: 'center'}
+    },{
+        // 这里不设置值，是把main作为默认页面
+        path: '/paper/add/:id',
+        name: '试卷 / 试卷详情',
+        component: paperadd,
         meta: {icon: '', title: 'center'}
     },
         {
