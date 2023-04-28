@@ -77,81 +77,6 @@ def check_response(data_dict):
         return data, data_dict.message, True
 
 
-def get_upload_key():
-    """
-    功能:生成上传key
-    """
-    # 上传key
-    now = datetime.datetime.now()
-    m = hashlib.md5()
-    key_var = '%s%s' % ('bannei_upload', now.strftime("%Y%m%d"))
-    m.update(key_var.encode())
-    return m.hexdigest()
-
-
-def get_abs_url(path):
-    """
-    功能:获取文件的绝对路径
-    :param path: 相对路径
-    :return: 绝对路径
-    -----------------------------
-    添加人:宋国洋
-    -----------------------------
-    添加时间:2018-06-27
-    """
-    if not path:
-        return ''
-    if path.startswith("http"):
-        return path
-    zi_yuan_source = settings.FILE_CDN_URLROOT
-    if path.endswith("mp3") and "outside" not in path:
-        return "%s/upload_media/tts/%s" % (zi_yuan_source, path)
-    return "%s/upload_media/%s" % (zi_yuan_source, path)
-
-def get_absurl(url, zy_type=1):
-    """
-    将相对路径转换为绝对路径
-    :param url:
-    :return:
-    """
-    # zy_type = 1 数英  2 语文  3 其他
-    if not url:
-        return ""
-    # 数英资源路径替换
-    if "osszy.uhongedu.com" in url:
-        url = url.replace('https', 'http').replace('http://osszy.uhongedu.com', settings.FILE_ZY_URLROOT)
-    # 绝对路径不替换
-    if "http" in url:
-        return url
-    if zy_type == 1:
-        if url.endswith("mp3") and "outside" not in url:
-            return f"{settings.FILE_CDN_URLROOT}/upload_media/tts/{url}"
-
-        return f"{settings.FILE_ZY_URLROOT}/{url}"
-    else:
-        return f"{settings.FILE_CDN_URLROOT}/upload_media/{url}"
-
-
-def get_absolute_path(url):
-    """
-    将相对路径转换为绝对路径
-    :param url:
-    :return:
-    """
-    if not url:
-        return ""
-    if "http" in url:
-        return url
-    if "UploadFileS" in url:
-        url = url.replace('/UploadFileS/', '/upload_media/yuwen/').replace("//", "/")
-        return f"{settings.FILE_YWZY_URLROOT}{url}"
-    if ".m.xueceping.cn" in url:
-        return url.replace('https', 'http'). \
-            replace('http://flv.m.xueceping.cn', settings.FILE_YWZY_URLROOT). \
-            replace('http://file.m.xueceping.cn', settings.FILE_YWZY_URLROOT)
-    return "%s/upload_media/%s" % (settings.FILE_YWZY_URLROOT, url)
-
-
 def num_to_ch(num):
     """
     功能说明：讲阿拉伯数字转换成中文数字（转换[0, 10000)之间的阿拉伯数字 ）
@@ -200,6 +125,13 @@ def type_default_value(type):
     """返回基本类型默认值, 没有识别的类型返回None"""
     tab = {str:"", list:[], int:0}
     return tab.get(type)
+
+
+def trancate_date(ctime, format="%Y-%m-%d %H:%M:%S"):
+    """时间戳转字符串"""
+    timeArray = time.localtime(ctime)
+    otherStyleTime = time.strftime(format, timeArray)
+    return otherStyleTime
 
 
 def casts(self, **kw):

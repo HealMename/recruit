@@ -4,6 +4,7 @@ import base64, copy
 from django.http import JsonResponse
 from django.apps import apps
 
+from libs.utils import Struct
 from util.codes import *
 from util import message as mes
 
@@ -61,6 +62,7 @@ class Auth(object):
                 msg['msg'] = '找不到该用户信息'
                 result = msg
             else:
+                request.user = Struct(datas[0])
                 request.session['tablename'] = tablename2
                 request.session['params'] = params2
                 msg['msg'] = '身份验证通过。'

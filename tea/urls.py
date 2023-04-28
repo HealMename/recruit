@@ -17,5 +17,11 @@ urlpatterns = [
 urlpatterns += [
     re_path(r'^get_question_class/$', question.get_question_class),
     re_path(r'^question/$', question.question_add),
+    re_path(r'^paper/$', question.paper),
+    re_path(r'^paper_question/$', question.paper_det),
+    re_path(r'^del_q/$', question.question_del),
+    re_path(r'^del_p/$', question.paper_del),
+    re_path(r'^save_paper_question/$', question.save_paper_question),
+    re_path(r'^save_paper/$', question.save_paper),
     re_path(r'^question_list/$', question.question_list),
 ]
