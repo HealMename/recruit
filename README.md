@@ -1,0 +1,14 @@
+# 面霸网
+- recruit
+  - db
+  - dj2
+  - libs
+  - main
+  - media
+  - tea
+  - templates
+    - front
+      - admin
+    - tea
+  - util
+  - xmiddleware
