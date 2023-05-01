@@ -56,7 +56,7 @@ class Auth(object):
             for model in allModels:
                 if model.__tablename__ == tablename2:
                     datas = model.getbyparams(model, model, params2)
-
+            print(datas[:])
             if not datas:
                 msg['code'] = username_error_code
                 msg['msg'] = '找不到该用户信息'

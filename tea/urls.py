@@ -24,4 +24,7 @@ urlpatterns += [
     re_path(r'^save_paper_question/$', question.save_paper_question),
     re_path(r'^save_paper/$', question.save_paper),
     re_path(r'^question_list/$', question.question_list),
+    re_path(r'^create_user_question/$', question.create_user_question),
+    re_path(r'^get_paper_question/$', question.get_paper_question),
+
 ]

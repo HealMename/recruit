@@ -25,7 +25,7 @@
             width="50">
         </el-table-column>
         <el-table-column
-            prop="sid"
+            prop="sid_name"
             align="center"
             label="科目"
             width="100">
@@ -36,9 +36,14 @@
             label="版本" width="100">
         </el-table-column>
         <el-table-column
-            prop="level"
+            prop="level_name"
             align="center"
             label="级别" width="100">
+        </el-table-column>
+        <el-table-column
+            prop="size_name"
+            align="center"
+            label="规模" width="100">
         </el-table-column>
         <el-table-column
             prop="title"

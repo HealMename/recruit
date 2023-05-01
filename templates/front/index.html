@@ -117,10 +117,11 @@
         flex-direction: column;
     }
 
-    .list{
+    .list {
         width: 80%;
     }
-    .list .right{
+
+    .list .right {
         float: right;
     }
 
@@ -154,7 +155,7 @@
     }
 
     #header .navs li.current {
-        {#box-shadow: 0 3px 0 rgba(0, 85, 119, 1);#}
+    {#box-shadow: 0 3px 0 rgba(0, 85, 119, 1);#}
     }
 
     #header .navs li:hover {
@@ -165,6 +166,30 @@
         border-style: solid;
         border-color: rgba(255, 255, 255, 1);
         background-color: rgba(254, 254, 254, 0);
+        box-shadow: 0 1px 0 #ffffff;
+    }
+
+    .logins, .register {
+        display: inline;
+        position: absolute;
+
+    }
+
+    .logins p, .register p {
+        padding: 10px;
+        background-color: #009688;
+        position: relative;
+        left: -10px;
+    }
+
+    .logins p:hover, .register p:hover {
+        color: #fff;
+        font-size: 17px;
+        border-radius: 0;
+        border-width: 0;
+        border-bottom-width: 1px;
+        border-style: solid;
+        border-color: rgba(255, 255, 255, 1);
         box-shadow: 0 1px 0 #ffffff;
     }
 </style>
@@ -184,25 +209,46 @@
                 <li class='current'>
                     <a href="javascript:navPage('./pages/zhaopinxinxi/list.html')" class="menumain">首页</a></li>
                 <li class='current'>
-                    <a href="javascript:navPage('./pages/question/list.html?type=1')" class="menumain">练习平台</a></li></li>
+                    <a href="javascript:navPage('./pages/question/list.html?type=1')" class="menumain">练习平台</a></li>
                 <li class='current'>
-                    <a href="javascript:navPage('./pages/question/list.html?type=2')" class="menumain">考试平台</a></li></li>
+                    <a href="javascript:navPage('./pages/question/list.html?type=2')" class="menumain">考试平台</a></li>
                 <li class='current'>
-                    <a href="javascript:" class="menumain">企业</a></li></li>
+                    <a href="javascript:" class="menumain">企业</a></li>
                 <li class='current'>
-                    <a href="javascript:" class="menumain">新闻资讯</a></li></li>
+                    <a href="javascript:" class="menumain">新闻资讯</a></li>
                 <li class='current'>
-                    <a href="javascript:" class="menumain">培训</a></li></li>
+                    <a href="javascript:" class="menumain">培训</a></li>
                 <li class='current'>
-                    <a href="javascript:" class="menumain">模拟面试</a></li></li>
-                <li class='current right'>
-                    <a href="/admin/#/login" target="_blank" class="menumain">登录</a></li></li>
-                <li class='current right'>
-                    <a href="javascript:" class="menumain">个人注册</a></li></li>
-                <li class='current right'>
-                    <a href="javascript:navPage('/tea/add/')" class="menumain">教师注册</a></li></li>
-                <li class='current right'>
-                    <a href="javascript:" class="menumain">企业注册</a></li></li>
+                    <a href="javascript:" class="menumain">模拟面试</a></li>
+                <li class='current right' v-if="!username">
+                    <a href="javascript:" id="register" class="menumain">注册</a>
+                    <div class="register" style="display: none">
+                        <p><a href="/pages/yonghu/register.html?tablename=yonghu" target="_blank">个人注册</a></p>
+                        <p><a href="javascript:navPage('/tea/add/')">教师注册</a></p>
+                        <p><a href="javascript:">企业注册</a></p>
+                    </div>
+                </li>
+                <li class='current right' v-if="!username">
+                    <a href="javascript:" id="login" class="menumain">登录</a> <br>
+                    <div class="logins" style="display: none">
+                        <p><a href="/admin/#/login">后台登录</a></p>
+                        <p><a href="/pages/login/login.html">前台登录</a></p>
+                    </div>
+                </li>
+                <li class='current right user' >
+                    <a href="javascript:" id="userrole" class="menumain"></a> <br>
+
+
+                </li>
+                <li class='current right user'>
+                    <a href="javascript:" id="username" class="menumain"></a>
+                    <div class="register" style="display: none">
+                        <p><a href="javascript:">切换教师</a></p>
+                        <p><a href="javascript:">切换面试官</a></p>
+                        <p><a href="javascript:">切换企业用户</a></p>
+                        <p><a href="javascript:localStorage.clear();location.reload()">退出登录</a></p>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>
@@ -229,6 +275,19 @@
 <script src="/media/js/config.js"></script>
 <script src="/media/js/common.js"></script>
 <script>
+    $(function () {
+         var username = localStorage.getItem('adminName')
+        if (username){
+            $("#username").text(username)
+            $(".user").show()
+        }else{
+            $(".user").hide()
+        }
+        var role = localStorage.getItem('role')
+        if (role){
+            $("#userrole").text(role)
+        }
+    })
     var vue1 = new Vue({el: '#tabbar'})
 
     var vue = new Vue({
@@ -240,6 +299,8 @@
             adminurl: adminurl,
             chatFlag: chatFlag,
             projectName: projectName,
+            username: '',
+            role: '',
         },
         mounted: function () {
             this.bindClickOnLi();
@@ -248,6 +309,7 @@
             this.iconArr.sort(() => {
                 return (0.5 - Math.random())
             })
+
         },
         methods: {
             jump(url) {
@@ -268,6 +330,8 @@
     layui.use(['element', 'layer'], function () {
         var element = layui.element;
         var layer = layui.layer;
+        vue.username = localStorage.getItem('adminName')
+        vue.role = localStorage.getItem('role')
     });
 
     function chatTap() {
@@ -283,6 +347,43 @@
             window.location.href = './pages/login/login.html'
         }
     }
+
+    $('#username').mousemove(function () {
+
+        $('.register').show()
+        $('.logins').hide()
+    })
+    $('#userrole').mousemove(function () {
+        $('.logins').show()
+        $('.register').hide()
+    })
+
+    $('#login').mousemove(function () {
+        $('.logins').show()
+        $('.register').hide()
+    })
+    $('.logins').mousemove(function () {
+        $(".logins").show() //把鼠标放到box_tow的时候继续显示避免隐藏
+    })
+    $('.logins').mouseout(function () {
+        $('.logins').hide()
+    })
+
+    $('#register').mousemove(function () {
+        $('.register').show()
+        $('.logins').hide()
+    })
+    $('.register').mousemove(function () {
+        $(".register").show() //把鼠标放到box_tow的时候继续显示避免隐藏
+    })
+    $('.register').mouseout(function () {
+        $('.register').hide()
+    })
+    $('#iframe').mouseout(function () {
+        $('.register').hide()
+        $('.logins').hide()
+    })
+
 
     // 导航栏跳转
     function navPage(url) {
@@ -346,6 +447,7 @@
     window.onresize = function () {
         changeFrameHeight();
     }
+
 </script>
 </body>
 </html>

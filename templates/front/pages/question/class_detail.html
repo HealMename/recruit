@@ -8,13 +8,25 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="/media/layui/css/layui.css">
+    <link rel="stylesheet" href="/media/layui-v2.7.6/layui/css/layui.css">
     <link rel="stylesheet" href="/media/css/common.css"/>
     <link rel="stylesheet" href="/media/css/style.css"/>
     <script type="text/javascript" src="/media/js/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="/media/js/jquery.SuperSlide.2.1.1.js"></script>
 </head>
 <style>
+    ::v-deep input[type='number'] {
+        -moz-appearance: textfield;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    body {
+        min-height: 500px;
+    }
 
     html::after {
         position: fixed;
@@ -88,20 +100,24 @@
         padding: 0 10px;
         display: flex;
     }
-    .recommend .box .filter input{
+
+    .recommend .box .filter input {
         width: 40%;
     }
-    .recommend .box .filter p{
+
+    .recommend .box .filter p {
         text-align: right;
         width: 100%;
         margin-top: 10px;
         font-size: 15px;
-        cursor:pointer;
+        cursor: pointer;
     }
-    .recommend .box .filter p span:hover{
+
+    .recommend .box .filter p span:hover {
         border-bottom-width: 1px;
         border-bottom-style: solid;
     }
+
     .filter > input, .filter > button {
         border-radius: 36px;
     }
@@ -259,8 +275,7 @@
     }
 
     .index-pv1 .animation-box:hover {
-        {#transform: perspective(1000px) translate3d(0px, 0px, 0px) scale(1.05) rotate(0deg) skew(0deg, 0deg);#}
-        {#transition: all 0.1s;#}
+    {#transform: perspective(1000px) translate3d(0px, 0px, 0px) scale(1.05) rotate(0deg) skew(0deg, 0deg);#}{#transition: all 0.1s;#}
     }
 
     .index-pv1 .animation-box img:hover {
@@ -299,9 +314,11 @@
         line-height: 22px;
         transition: all .2s linear;
     }
-    .gs_name{
+
+    .gs_name {
         font-size: 13px;
     }
+
     .category-search {
         box-shadow: rgba(0, 0, 0, 0.2) 0 0 3px !important;
         border-color: rgba(0, 0, 0, 0.1) !important;
@@ -340,6 +357,16 @@
         float: left;
         margin: 0 10px 20px 10px;
     }
+    .layui-form{
+        margin: 20px;
+    }
+    .layui-form-label {
+        width: 30px;
+    }
+
+    .layui-input-block {
+        margin-left: 68px;
+    }
 </style>
 <body>
 <div id="app">
@@ -348,11 +375,11 @@
          :style='{"padding":"10px 0 10px 0","boxShadow":"0 0 0px ","margin":"0px 0 0 0","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#009688","borderRadius":"0","borderWidth":"0","background":"white","borderStyle":"solid"}'>
         <div class="box" style='width:80%'>
             <form class="layui-form filter">
-                <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="搜索题目"
+                <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="搜索题目" v-model="title"
                        class="layui-input">
-                <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">搜索</button>
+                <button type="button" class="layui-btn" id="btn-search" lay-submit="" lay-filter="demo1">搜索</button>
                 </button>
-                <p><span>按照主题练习(五个题目一组)</span></p>
+                <p id="user_paper"><span>按照主题练习(五个题目一组)</span></p>
             </form>
             <!-- 样式一 -->
             <div class="list" style="position: relative;">
@@ -361,12 +388,15 @@
                     <div class="list-item-body animation-box"
                          :style='{"padding":"10px","boxShadow":"0 0 0px ","margin":"0 0 10px 0","borderColor":"rgba(0,0,0,.1)","backgroundColor":"#fff","borderRadius":"4px","borderWidth":"0","borderStyle":"solid"}'>
                         <div class="station">
-                            <p class="st_name">题目ID: {{ item.id }}</p>
-                            <p class="st_name">Deployment</p>
+                            <p class="st_name">题目ID: {{ item.id }} <span
+                                    style="float: right;">科目:{{ item.sid_name }}</span></p>
+                            <p class="st_name">{{ item.title }}</p>
                             <p class="gs_name">
-                                Kubernetes 中的 Deployment 和 StatefulSet 分别是什么？它们之间有什么区别？
+                                {{ item.content }}
                             </p>
-                            <p style="text-align: center;"><button class="layui-btn" style="width: 80%">进入学习</button></p>
+                            <p style="text-align: center;">
+                                <button class="layui-btn" style="width: 80%">进入学习</button>
+                            </p>
 
                         </div>
                     </div>
@@ -376,15 +406,51 @@
         </div>
     </div>
 
+    <div style="display: none;" id="user_paper_det">
+        <form class="layui-form" action="">
+            <div class="layui-form-item sid">
+                <label class="layui-form-label">科目</label>
+                <div class="layui-input-block">
+                    <select name="sid" lay-filter="sid" lay-verify="sid">
+                        <option value="" selected=""></option>
+                        <option value="1">K8s</option>
+                        <option value="2">Mysql</option>
+                        <option value="3">Python</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item level">
+                <label class="layui-form-label">级别</label>
+                <div class="layui-input-block">
+                    <select name="level" lay-filter="level" lay-verify="level">
+                        <option value="" selected=""></option>
+                        <option value="1">初级</option>
+                        <option value="2">中级</option>
+                        <option value="2">高级</option>
+                    </select>
+                </div>
+            </div>
+            <!--
+            <div class="layui-form-item">
+                <label class="layui-form-label">题目数量</label>
+                <div class="layui-input-block">
+                    <input type="number" name="phone_number" lay-verify="phone_number" autocomplete="off"
+                           placeholder="题目数量"
+                           class="layui-input" max="10">
+                </div>
+            </div> -->
+        </form>
+    </div>
+
 
 </div>
 
 
 <script src="/media/js/jquery-1.11.3.min.js"></script>
-<script src="/media/layui/layui.js"></script>
+<script src="/media/layui-v2.7.6/layui/layui.js"></script>
 <script src="/media/js/vue.js"></script>
 <script src="/media/js/config.js"></script>
-
+<script src="/media/js/common.js"></script>
 <script src="/media/modules/config.js"></script>
 <script src="/media/js/utils.js"></script>
 
@@ -392,12 +458,12 @@
     var vue = new Vue({
         el: '#app',
         data: {
+            title: '',
             swiperList: [],
-            categoryList: [],
-            chengshiOptions: [],
-            gangweileixingOptions: [],
             dataList: [],
             baseurl: '',
+            type: 1,
+            sid: 1,
             swiperIndex: '-1'
         },
         filters: {
@@ -418,83 +484,93 @@
             },
             jump(url) {
                 jump(url)
-            }
+            },
         }
     });
 
-    layui.use(['layer', 'element', 'carousel', 'laypage', 'http', 'jquery', 'laydate'], function () {
-        var layer = layui.layer;
-        var element = layui.element;
-        var carousel = layui.carousel;
+    layui.use(['form', 'layer', 'element', 'carousel', 'laypage', 'http', 'jquery', 'laydate'], function () {
+        var form = layui.form;
+
+
         var laypage = layui.laypage;
         var http = layui.http;
+        vue.type = http.getParam('type')
+        vue.sid = http.getParam('id')
         var jquery = layui.jquery;
-        var laydate = layui.laydate;
-
-        var limit = 8;
-        limit = 4 * 3;
-        http.request(`option/chengshi/chengshi`, 'get', {}, (res) => {
-            vue.chengshiOptions = res.data
-        });
-        http.request(`option/gangweifenlei/gangweileixing`, 'get', {}, (res) => {
-            vue.gangweileixingOptions = res.data
-        });
-
-
-        //类型查询
-        categoryList();
-        //类型搜索
-        $(document).on("click", ".category-search", function (e) {
-            vue.swiperIndex = $(this).attr('index')
-            pageList(e.target.innerText);
-        });
-
-        function categoryList() {
-            // 获取列表数据
-            http.request('option/chengshi/chengshi', 'get', {}, function (res) {
-                vue.categoryList = res.data
-            })
-
-        }
-
-        var vCategory = '';
-
+        var limit = 20;
         // 分页列表
         pageList();
-
         // 搜索按钮
         jquery('#btn-search').click(function (e) {
             pageList();
         });
+        jquery('#user_paper').click(function (e) {
+            layer.open({
+                type: 1,
+                title: '选择你要练习的科目/级别',
+                success: function () {
+                    form.render();
+                },
+                content: $('#user_paper_det').html(),
+                area: ['500px', '400px'],
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var sid = $(".sid").find('.layui-this').attr('lay-value')
+                    var level = $(".level").find('.layui-this').attr('lay-value')
+                    document.cookie = 'token' +"="+ localStorage.getItem('Token');
+                    $.post('/tea/create_user_question/', {sid: sid, level: level, q_num: 5}, function (res) {
+                        console.log(res)
+                        if (res.response === 'ok') {
+                            var id_ = res.data
+                            jump('../question/detail.html?type=2&id=' + id_)
+                        } else {
+                            if (res.code === 401){
+                                msg_fail("请登录后重试")
+                            }else{
+                                 msg_fail(res.message)
+                            }
 
-        function pageList(category) {
+                            return false
+                        }
+
+                    })
+
+                },
+            });
+
+        });
+
+
+        function pageList() {
             var param = {
-                page: 1,
-                limit: limit
+                id: vue.title,
+                page_id: 1,
+                page_size: limit,
+                sid: vue.sid,
             }
-
-            // 获取列表数据
-            http.request('zhaopinxinxi/list', 'get', param, function (res) {
-                vue.dataList = res.data.list
+            $.get('/tea/question_list/', param, function (res) {
+                vue.dataList = res.data.page_data
                 // 分页
                 laypage.render({
                     elem: 'pager',
-                    count: res.data.total, 'id': 1,
+                    count: res.data.sum_len, 'id': 1,
                     limit: limit,
                     groups: 3,
                     layout: ["prev", "page", "next"],
                     theme: '#009688',
                     jump: function (obj, first) {
-                        param.page = obj.curr;
+                        param.page_id = obj.curr;
                         //首次不执行
                         if (!first) {
-                            http.request('zhaopinxinxi/list', 'get', param, function (res) {
-                                vue.dataList = res.data.list
+                            $.get('/tea/question_list/', param, function (res) {
+                                vue.dataList = res.data.page_data
                             })
+
                         }
                     }
                 });
             })
+
         }
     });
 

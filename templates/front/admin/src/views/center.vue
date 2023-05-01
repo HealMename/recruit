@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-form
+        v-loading="loading"
         class="detail-form-content"
         ref="ruleForm"
         :model="ruleForm"
@@ -214,6 +215,7 @@ import {isNumber, isIntNumer, isEmail, isMobile, isPhone, isURL, checkIdCard} fr
 export default {
   data() {
     return {
+      loading: false,
       ruleForm: {},
       flag: '',
       role: "",
@@ -226,9 +228,11 @@ export default {
     var table = this.$storage.get("sessionTable");
     this.role = this.$storage.get("role");
     this.flag = table;
+    this.loading = true;
     if (this.role === '教师') {
       this.$http.get(DOMAIN_API_SYS + "/tea/userinfo/?id=" + this.$storage.get("userId")).then(res => {
         console.log(res.data.data)
+        this.loading = false;
         this.ruleForm = res.data.data;
       })
     } else {
@@ -236,6 +240,7 @@ export default {
         url: `${this.$storage.get("sessionTable")}/session?id=${this.$storage.get('userId')}`,
         method: "get"
       }).then(({data}) => {
+        this.loading = false;
         if (data && data.code === 0) {
           this.ruleForm = data.data;
         } else {

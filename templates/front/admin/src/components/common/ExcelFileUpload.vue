@@ -121,6 +121,7 @@ export default {
       fileList.forEach(function(item, index) {
         var url = item.url.split("?")[0];
     if(!url.startsWith("http")) {
+
       url = _this.$base.url+url
     }
         var name = item.name;

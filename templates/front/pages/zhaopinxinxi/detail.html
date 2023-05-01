@@ -446,16 +446,8 @@ color: rgba(214, 236, 240, 1) !important;
 		})
 
 		layui.use(['layer', 'form', 'element', 'carousel', 'http', 'jquery', 'laypage'], function() {
-			var layer = layui.layer;
-			var element = layui.element;
-			var form = layui.form;
 			var carousel = layui.carousel;
-			var http = layui.http;
-			var jquery = layui.jquery;
-			var laypage = layui.laypage;
-
-			var limit = 10;
-
+            var http = layui.http;
 			// 数据ID
 			var id = http.getParam('id');
 			vue.detail.id = id;
@@ -469,14 +461,6 @@ color: rgba(214, 236, 240, 1) !important;
 				vue.title = vue.detail.zhaopingangwei;
 				// 轮播图片
 				vue.swiperList = vue.detail.fengmian ? vue.detail.fengmian.split(",") : [];
-				// var swiperItemHtml = '';
-				// for (let item of vue.swiperList) {
-				// 	swiperItemHtml +=
-				// 		'<div>' +
-				// 		'<img class="swiper-item" style="width: 100%;height: 100%;object-fit:cover;" src="' + item + '">' +
-				// 		'</div>';
-				// }
-				// jquery('#swiper-item').html(swiperItemHtml);
 				// 轮播图
 				vue.$nextTick(() => {
 				  carousel.render({
@@ -491,14 +475,6 @@ color: rgba(214, 236, 240, 1) !important;
 				  });
 
 				})
-				// carousel.render({
-				// 	elem: '#swiper',
-				// 	width: swiper.width,height:swiper.height,
-				// 	arrow: swiper.arrow,
-				// 	anim: swiper.anim,
-				// 	interval: swiper.interval,
-				// 	indicator: swiper.indicator
-				// });
 
 
 
@@ -517,50 +493,7 @@ color: rgba(214, 236, 240, 1) !important;
 			}
 
 
-			// 获取评论
-			http.request(`discuss${vue.detailTable}/list`, 'get', {
-				page: 1,
-				limit: limit,
-				refid : vue.detail.id
-			}, function(res) {
-				vue.dataList = res.data.list
-				// 分页
-				laypage.render({
-					elem: 'pager',
-					count: res.data.total,
-					limit: limit,
-					jump: function(obj, first) {
-						//首次不执行
-						if (!first) {
-							http.request(`discuss${vue.detailTable}/list`, 'get', {
-								page: obj.curr,
-								limit: obj.limit,
-								refid : vue.detail.id
-							}, function(res) {
-								vue.dataList = res.data.list
-							})
-						}
-					}
-				});
-			})
 
-			// 提交评论
-			form.on('submit(*)', function(data) {
-				data = data.field;
-				data.userid = localStorage.getItem('userid')
-				data.nickname = localStorage.getItem('adminName')
-				data.refid = vue.detail.id
-				http.requestJson(`discuss${vue.detailTable}/save`, 'post', data, function(res) {
-					layer.msg('评论成功', {
-						time: 2000,
-						icon: 6
-					}, function() {
-						window.location.reload();
-					});
-					return false
-				});
-				return false
-			});
 
 			});
 		</script>

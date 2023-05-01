@@ -2,22 +2,22 @@
   <div>
     <!-- 上传文件组件 -->
     <el-upload
-      ref="upload"
-      :action="getActionUrl"
-      list-type="picture-card"
-      :multiple="multiple"
-      :limit="limit"
-      :headers="myHeaders"
-      :file-list="fileList"
-      :on-exceed="handleExceed"
-      :on-preview="handleUploadPreview"
-      :on-remove="handleRemove"
-      :on-success="handleUploadSuccess"
-      :on-error="handleUploadErr"
-      :before-upload="handleBeforeUpload"
+        ref="upload"
+        :action="getActionUrl"
+        list-type="picture-card"
+        :multiple="multiple"
+        :limit="limit"
+        :headers="myHeaders"
+        :file-list="fileList"
+        :on-exceed="handleExceed"
+        :on-preview="handleUploadPreview"
+        :on-remove="handleRemove"
+        :on-success="handleUploadSuccess"
+        :on-error="handleUploadErr"
+        :before-upload="handleBeforeUpload"
     >
       <i class="el-icon-plus"></i>
-      <div slot="tip" class="el-upload__tip" style="color:#838fa1;">{{tip}}</div>
+      <div slot="tip" class="el-upload__tip" style="color:#838fa1;">{{ tip }}</div>
     </el-upload>
     <el-dialog :visible.sync="dialogVisible" size="tiny" append-to-body>
       <img width="100%" :src="dialogImageUrl" alt>
@@ -27,6 +27,7 @@
 <script>
 import storage from "@/utils/storage";
 import base from "@/utils/base";
+
 export default {
   data() {
     return {
@@ -37,27 +38,28 @@ export default {
       // 组件渲染图片的数组字段，有特殊格式要求
       fileList: [],
       fileUrlList: [],
-      myHeaders:{}
+      myHeaders: {}
     };
   },
   props: ["tip", "action", "limit", "multiple", "fileUrls"],
   mounted() {
     this.init();
-    this.myHeaders= {
-      'Token':storage.get("Token")
+    this.myHeaders = {
+      'Token': storage.get("Token")
     }
   },
   watch: {
-    fileUrls: function(val, oldVal) {
+    fileUrls: function (val, oldVal) {
       //   console.log("new: %s, old: %s", val, oldVal);
       this.init();
     }
   },
   computed: {
     // 计算属性的 getter
-    getActionUrl: function() {
+    getActionUrl: function () {
       // return base.url + this.action + "?token=" + storage.get("token");
-      return `/${this.$base.name}/` + this.action;
+      console.log(111, `${this.$base.url}${this.$base.name}/` + this.action)
+      return `${this.$base.url}${this.$base.name}/` + this.action;
     }
   },
   methods: {
@@ -67,7 +69,7 @@ export default {
       if (this.fileUrls) {
         this.fileUrlList = this.fileUrls.split(",");
         let fileArray = [];
-        this.fileUrlList.forEach(function(item, index) {
+        this.fileUrlList.forEach(function (item, index) {
           var url = item;
           var name = index;
           var file = {
@@ -80,12 +82,12 @@ export default {
       }
     },
     handleBeforeUpload(file) {
-	
+
     },
     // 上传文件成功后执行
     handleUploadSuccess(res, file, fileList) {
       if (res && res.code === 0) {
-        fileList[fileList.length - 1]["url"] = "upload/" + file.response.file;
+        fileList[fileList.length - 1]["url"] = "media/img/" + file.response.file;
         this.setFileList(fileList);
         this.$emit("change", this.fileUrlList.join(","));
       } else {
@@ -117,11 +119,11 @@ export default {
       // 有些图片不是公开的，所以需要携带token信息做权限校验
       var token = storage.get("token");
       let _this = this;
-      fileList.forEach(function(item, index) {
+      fileList.forEach(function (item, index) {
         var url = item.url.split("?")[0];
-	if(!url.startsWith("http")) {
-	  url = _this.$base.url+url
-	}
+        if (!url.startsWith("http")) {
+          url = _this.$base.url + url
+        }
         var name = item.name;
         var file = {
           name: name,
@@ -136,5 +138,11 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+input[type="file"] {
+  display: none !important;
+}
+.el-upload__tip{
+  display: none;
+}
 </style>

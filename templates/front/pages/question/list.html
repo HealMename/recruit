@@ -331,7 +331,6 @@
              :style='{"boxShadow":"0 0px 0px #fff143","margin":"0 ","borderColor":"rgba(0,0,0,.3)","borderRadius":"0px","borderWidth":"0","width":"100%","borderStyle":"solid"}'>
             <div carousel-item>
                 <div v-for="(item,index) in swiperList" :key="index">
-
                     <img style="width: 100%;height: 100%;object-fit:cover;" :src="item.img"/>
                 </div>
             </div>
@@ -344,7 +343,7 @@
             <p style="text-align: center">选择你要练习的页面</p>
             <!-- 样式一 -->
             <div class="list" style="position: relative;">
-                <div @click="jump('../question/class_detail.html?id='+item.id)" v-for="(item,index) in dataList"
+                <div @click="jump('../question/class_detail.html?id='+item.id + '&type='+type)" v-for="(item,index) in dataList"
                      :key="index" class="list-item" :class="4=='3'?'list-item3':4=='5'?'list-item5':''">
                     <div class="list-item-body animation-box"
                          :style='{"padding":"10px","boxShadow":"0 0 0px ","margin":"0 0 10px 0","borderColor":"rgba(0,0,0,.1)","backgroundColor":"#fff","borderRadius":"4px","borderWidth":"0","borderStyle":"solid"}'>
@@ -374,6 +373,7 @@
     var vue = new Vue({
         el: '#app',
         data: {
+            type: 1,
             swiperList: [],
             dataList: [],
             baseurl: '',
@@ -404,10 +404,9 @@
     layui.use(['layer', 'element', 'carousel', 'laypage', 'http', 'jquery', 'laydate'], function () {
         var carousel = layui.carousel;
         var http = layui.http;
-        var jquery = layui.jquery;
-
+        // 考试类型 1练习 2考试
+        vue.type = http.getParam('type')
         var limit = 8;
-        limit = 4 * 3;
         vue.baseurl = http.baseurl;
         // 获取轮播图 数据
         http.request('config/list', 'get', {
@@ -419,7 +418,7 @@
                 res.data.list.forEach(element => {
                     if (element.value != null) {
                         swiperList.push({
-                            img: '/media' + element.value
+                            img: '/' + element.value
                         });
                     }
                 });
@@ -447,12 +446,7 @@
         pageList();
 
 
-        function pageList(category) {
-            console.log(1111)
-            var param = {
-                page: 1,
-                limit: limit
-            }
+        function pageList() {
             $.get('/tea/get_question_class/', function (res) {
                 vue.dataList = res.data.list
             })

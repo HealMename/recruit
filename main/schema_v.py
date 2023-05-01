@@ -73,7 +73,7 @@ def schemaName_file_upload(request):
             filename = file.name
             filesuffix = filename.split(".")[-1]
             file_name = "{}.{}".format(int(float(time.time()) * 1000), filesuffix)
-            filePath = os.path.join(os.getcwd(), "templates/front", file_name)
+            filePath = os.path.join(os.getcwd(), "media/img", file_name)
 
             with open(filePath, 'wb+') as destination:
                 for chunk in file.chunks():

@@ -14,6 +14,10 @@
     <link rel="stylesheet" href="../../css/common.css"/>
 </head>
 <style>
+    body {
+        padding-bottom: 50px
+    }
+
     html::after {
         position: fixed;
         top: 0;
@@ -81,9 +85,25 @@
         color: rgba(214, 236, 240, 1) !important;
     }
 
-    .create {
-        position: relative;
-        top: 279px;
+    .next_q {
+        display: flex;
+        padding-bottom: 6px;
+        width: 905px;
+        margin: 0 auto;
+
+    }
+
+    .buttons {
+        flex: 1 0 0%;
+        text-align: center;
+    }
+    .but1{
+        float: right;
+        margin-right: 49px !important;
+        text-align: center;
+    }
+    .btn2{
+        float: left;
     }
 </style>
 <body>
@@ -101,23 +121,34 @@
                             :style='{"padding":"8px 15px","boxShadow":"0 0 0px rgba(46, 78, 126, 1)","margin":"0 15px","borderColor":"rgba(255,0,0,.3)","backgroundColor":"rgb(46, 126, 115)","color":"rgba(255, 251, 240, 1)","borderRadius":"4px","borderWidth":"0","fontSize":"20px","borderStyle":"solid"}'>练习平台</cite></a>
 				</span>
 
-            <a v-if='storeupFlag'
-               :style='{"padding":"0 12px","boxShadow":"0 0 6px rgba(255,0,0,.3)","borderColor":"rgba(255,0,0,.3)","backgroundColor":"rgba(240, 252, 255, 1)","color":"rgba(0, 188, 18, 1)","borderRadius":"4px","borderWidth":"0","fontSize":"17px","lineHeight":"40px","borderStyle":"solid"}'
-               @click="storeUp()" href="javascript:void(0)">
-                <i class="layui-icon" style="font-size: 20px;color: red;" v-if='true'
-                   :style='{"color":"rgba(0, 188, 18, 1)","padding":"0 2px 0 0","fontSize":"18px"}'>&#xe67a;</i>取消收藏
-            </a>
-            <a v-if='!storeupFlag'
-               :style='{"padding":"0 12px","boxShadow":"0 0 6px rgba(255,0,0,.3)","borderColor":"rgba(255,0,0,.3)","backgroundColor":"rgba(240, 252, 255, 1)","color":"rgba(0, 188, 18, 1)","borderRadius":"4px","borderWidth":"0","fontSize":"17px","lineHeight":"40px","borderStyle":"solid"}'
-               @click="storeUp()" href="javascript:void(0)">
-                <i class="layui-icon" style="font-size: 20px;color: red;" v-if='true'
-                   :style='{"color":"rgba(0, 188, 18, 1)","padding":"0 2px 0 0","fontSize":"18px"}'>&#xe67b;</i>点我收藏
-            </a>
 
         </div>
     </div>
+
     <div class="data-detail" style="padding:0;width:100%;"
          :style='{"padding":"0","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(0,0,0,.3)","borderRadius":"0","borderWidth":"0","background":"white","borderStyle":"solid"}'>
+        <div class="next_q">
+            <div class="buttons">
+                <button v-if="paper_id !== 0"
+                        :style='{"padding":"0 10px","boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"0 5px","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#009688","borderRadius":"6px","borderWidth":"0","width":"auto","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}'
+                        @click="next_q(1)" type="button" class="layui-btn btn2">
+                    上一题
+                </button>
+                <span style="    padding-top: 10px;
+    display: inline-block;">({{ index + 1 }}/{{ questions.length }})</span>
+                <button v-if="paper_id !== 0"
+                        :style='{"padding":"0 10px","boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"0 5px","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#009688","borderRadius":"6px","borderWidth":"0","width":"auto","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}'
+                        @click="next_q(2)" type="button" class="layui-btn but1">
+                    下一题
+                </button>
+            </div>
+
+            <div class="buttons">
+
+            </div>
+
+
+        </div>
         <div class="layui-row" style="display: flex;width:980px;margin: 0 auto;">
 
             <div class="layui-col-md7" style="padding-left: 20px;flex: 1;"
@@ -125,14 +156,14 @@
                 <h1 style="position: relative;"
                     :style='{"padding":"20px 30px","boxShadow":"0 0 0px #009688","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","color":"rgba(179, 92, 68, 1)","borderRadius":"0","textAlign":"center","borderWidth":"0","fontSize":"20px","borderStyle":"solid"}'
                     class="title">
-                    题目标题</h1>
+                    {{ detail.title }}</h1>
                 <div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}'
                      class="detail-item">
                     <span :style='{"padding":"0 12px 0 0","minWidth":"82px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>题目ID：</span>
                     <span style="word-break: break-all"
                           :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}'
                           class="desc">
-							10
+							{{ detail.id }}
 						</span>
                 </div>
                 <div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}'
@@ -141,41 +172,66 @@
                     <span style="word-break: break-all"
                           :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}'
                           class="desc">
-							创建一个 Deployment，并指定 Pod 的副本数量为 3
+							{{ detail.content }}
 						</span>
                 </div>
-                <div class="detail-item create"
-                     :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 0 0","borderStyle":"solid"}'
-                     style="text-align: right;">
-                    <button :style='{"padding":"0 10px","boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"0 5px","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#009688","borderRadius":"6px","borderWidth":"0","width":"auto","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}'
-                            @click="onAcrossTap('toudijilu','','','')" type="button" class="layui-btn">
-                        开始练习
-                    </button>
-                    <button :style='{"padding":"0 10px","boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"0 5px","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#009688","borderRadius":"6px","borderWidth":"0","width":"auto","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}'
-                            @click="onAcrossTap('toudijilu','','','')" type="button" class="layui-btn">
-                        上一题
-                    </button>
-                    <button :style='{"padding":"0 10px","boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"0 5px","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#009688","borderRadius":"6px","borderWidth":"0","width":"auto","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}'
-                            @click="onAcrossTap('toudijilu','','','')" type="button" class="layui-btn">
-                        下一题
-                    </button>
+                <div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}'
+                     class="detail-item">
+                    <span :style='{"padding":"0 12px 0 0","minWidth":"82px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>考点：</span>
+                    <span style="word-break: break-all"
+                          :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}'
+                          class="desc">
+							{{ detail.do_points }}
+						</span>
+                </div>
+                <div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}'
+                     class="detail-item">
+                    <span :style='{"padding":"0 12px 0 0","minWidth":"82px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>考试时长：</span>
+                    <span style="word-break: break-all"
+                          :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}'
+                          class="desc">
+							{{ detail.do_time }}(分)
+						</span>
+                </div>
+                <div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}'
+                     class="detail-item">
+                    <span :style='{"padding":"0 12px 0 0","minWidth":"82px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>级别：</span>
+                    <span style="word-break: break-all"
+                          :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}'
+                          class="desc">
+							{{ detail.level_name }}
+						</span>
+                </div>
+                <div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}'
+                     class="detail-item">
+                    <span :style='{"padding":"0 12px 0 0","minWidth":"82px","fontSize":"15px","color":"rgba(80, 97, 109, 1)","textAlign":"left"}'>规模：</span>
+                    <span style="word-break: break-all"
+                          :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}'
+                          class="desc">
+							{{ detail.size_name }}
+						</span>
+                </div>
+
+                <div class=""
+                     style="    position: absolute;bottom: 12%;left: 31%;font-size: 28px;color: rgb(179, 92, 68);">
+                    {{ SecondToDate }}
                 </div>
             </div>
             <div class="layui-col-md5" style="width:500px">
 
-                <div class="layui-carousel" id="swiper"
+                <div class="layui-carousel" id="swiper" @click="countDown()"
                      :style='{"margin":"0 auto","borderColor":"rgba(0,0,0,.3)","borderRadius":"6px","borderWidth":"0","width":"500px","borderStyle":"solid","height":"468px"}'>
-                    <div carousel-item>
-                        <img style="width: 100%;height: 100%" src="/media/img/gagnwei.png"/>
+                    <div>
+                        <img style="cursor:pointer;width: 500px;height: 468px;object-fit: cover;"
+                             src="/media/img/gagnwei.png"/>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
 </div>
 
+<script src="/media/js/jquery-1.11.3.min.js"></script>
 
 <script src="../../layui/layui.js"></script>
 <script src="../../js/vue.js"></script>
@@ -185,14 +241,18 @@
 <script src="../../modules/config.js"></script>
 <!-- 工具方法 -->
 <script src="../../js/utils.js"></script>
-
+<script src="/media/js/common.js"></script>
 <script>
     var vue = new Vue({
         el: '#app',
         data: {
+            questions: [],
+            index: 0,
+            type: 0,
             // 轮播图
             swiperList: [],
             // 数据详情
+            paper_id: 0,
             detail: {
                 id: 0
             },
@@ -283,9 +343,10 @@
             },
             // 倒计时初始化
             countDown() {
-                let reversetime = new Date(this.detail.reversetime).getTime()
+                layer.msg("倒计时已开始，请在容器中做题", {icon: 1, time: 1500})
                 let now = new Date().getTime();
-                let count = reversetime - now;
+                console.log(this.detail.do_time)
+                let count = (now + this.detail.do_time * 1000 * 60) - now;
                 if (count > 0) {
                     this.count = count / 1000
                     var _this = this;
@@ -293,7 +354,7 @@
                         _this.count = _this.count - 1;
                         if (_this.count < 0) {
                             window.clearInterval(_this.inter);
-                            layer.msg("活动已结束", {
+                            layer.msg("时间到了！", {
                                 time: 2000,
                                 icon: 5
                             })
@@ -311,134 +372,58 @@
                 $("#down")[0].click();
             },
             // 跨表
-            onAcrossTap(acrossTable, crossOptAudit, statusColumnName, tips, statusColumnValue) {
+            next_q(type_) {
+                if (type_ === 1) {
+                    // 上一题
+                    if (vue.index === 0) {
+                        msg_fail("已经是第一题")
+                    }else{
+                        vue.index -= 1
+                        vue.detail = vue.questions[vue.index]
+                        vue.title = vue.questions[vue.index].title;
 
-                layer.msg("请在容器中做题", {icon: 1, time: 1500})
-                return;
-                localStorage.setItem('crossTable', `zhaopinxinxi`);
-                localStorage.setItem('crossObj', JSON.stringify(this.detail));
-                localStorage.setItem('statusColumnName', statusColumnName);
-                localStorage.setItem('statusColumnValue', statusColumnValue);
-                localStorage.setItem('tips', tips);
-
-                if (statusColumnName != '' && !statusColumnName.startsWith("[")) {
-                    var obj = JSON.parse(localStorage.getItem('crossObj'));
-                    for (var o in obj) {
-                        if (o == statusColumnName && obj[o] == statusColumnValue) {
-                            layer.msg(tips, {
-                                time: 2000,
-                                icon: 5
-                            });
-                            return
-                        }
                     }
+                } else {
+                    // 下一题
+                    if (vue.index+1 === vue.questions.length) {
+                        msg_fail("已经最后最后一题")
+                    }else{
+                        vue.index += 1
+                        vue.detail = vue.questions[vue.index]
+                        vue.title = vue.questions[vue.index].title;
+
+                    }
+
                 }
-
-                jump(`../${acrossTable}/add.html?corss=true`);
             },
-
-
-            // 收藏商品
-            storeUp() {
-                layui.http.request('storeup/list', 'get', {
-                    page: 1,
-                    limit: 1,
-                    type: 1,
-                    refid: this.detail.id,
-                    tablename: this.detailTable,
-                    userid: localStorage.getItem('userid'),
-                }, (res) => {
-                    vue.dataList = res.data.list
-                    if (res.data.list.length == 1) {
-                        layui.http.requestJson(`storeup/delete`, 'post', [res.data.list[0].id], function (res) {
-                            layer.msg('取消成功', {
-                                time: 1000,
-                                icon: 5
-                            }, function () {
-                                window.location.reload();
-                            });
-                        });
-                        return;
-                    }
-                    layui.http.requestJson('storeup/save', 'post', {
-                        userid: localStorage.getItem('userid'),
-                        name: this.title,
-                        type: 1,
-                        picture: vue.detail.fengmian,
-                        refid: this.detail.id,
-                        tablename: this.detailTable
-                    }, function (res) {
-                        layer.msg('收藏成功', {
-                            time: 1000,
-                            icon: 6
-                        }, function () {
-                            window.location.reload();
-                        });
-                    });
-                });
-            },
-
-
         }
     })
 
     layui.use(['layer', 'form', 'element', 'carousel', 'http', 'jquery', 'laypage'], function () {
-        var layer = layui.layer;
-        var element = layui.element;
-        var form = layui.form;
-        var carousel = layui.carousel;
         var http = layui.http;
-        var jquery = layui.jquery;
-        var laypage = layui.laypage;
-
-        var limit = 10;
-
         // 数据ID
         var id = http.getParam('id');
         vue.detail.id = id;
+        vue.type = http.getParam('type');
         vue.baseurl = http.baseurl;
 
-        // 商品信息
-        http.request(`${vue.detailTable}/detail/` + id, 'get', {}, function (res) {
-            // 详情信息
-            vue.detail = res.data
-            vue.title = vue.detail.biaoti;
-            vue.title = vue.detail.zhaopingangwei;
-            // 轮播图片
-            vue.swiperList = vue.detail.fengmian ? vue.detail.fengmian.split(",") : [];
-            // var swiperItemHtml = '';
-            // for (let item of vue.swiperList) {
-            // 	swiperItemHtml +=
-            // 		'<div>' +
-            // 		'<img class="swiper-item" style="width: 100%;height: 100%;object-fit:cover;" src="' + item + '">' +
-            // 		'</div>';
-            // }
-            // jquery('#swiper-item').html(swiperItemHtml);
-            // 轮播图
-            vue.$nextTick(() => {
-                carousel.render({
-                    elem: '#swiper',
-                    width: '500px',
-                    height: '511px',
-                    arrow: 'hover',
-                    anim: 'default',
-                    autoplay: 'true',
-                    interval: '3000',
-                    indicator: 'inside'
-                });
-
+        if (vue.type === '2') {
+            // 五个题目练习
+            vue.paper_id = id
+            $.get('/tea/get_paper_question/?type=2&paper_id=' + id, function (res) {
+                // 详情信息
+                console.log(res)
+                vue.questions = res.data
+                vue.detail = res.data[vue.index]
+                vue.title = res.data[vue.index].title;
             })
-            // carousel.render({
-            // 	elem: '#swiper',
-            // 	width: swiper.width,height:swiper.height,
-            // 	arrow: swiper.arrow,
-            // 	anim: swiper.anim,
-            // 	interval: swiper.interval,
-            // 	indicator: swiper.indicator
-            // });
-
-
-        });
+        } else {
+            $.get('/tea/question_list/?id=' + id, function (res) {
+                // 详情信息
+                vue.detail = res.data.page_data[0]
+                vue.title = vue.detail.title;
+            })
+        }
         if (localStorage.getItem('userid')) {
             http.request(`storeup/list`, 'get', {
                 page: 1,
@@ -451,52 +436,6 @@
                 vue.storeupFlag = res.data.list.length;
             })
         }
-
-
-        // 获取评论
-        http.request(`discuss${vue.detailTable}/list`, 'get', {
-            page: 1,
-            limit: limit,
-            refid: vue.detail.id
-        }, function (res) {
-            vue.dataList = res.data.list
-            // 分页
-            laypage.render({
-                elem: 'pager',
-                count: res.data.total,
-                limit: limit,
-                jump: function (obj, first) {
-                    //首次不执行
-                    if (!first) {
-                        http.request(`discuss${vue.detailTable}/list`, 'get', {
-                            page: obj.curr,
-                            limit: obj.limit,
-                            refid: vue.detail.id
-                        }, function (res) {
-                            vue.dataList = res.data.list
-                        })
-                    }
-                }
-            });
-        })
-
-        // 提交评论
-        form.on('submit(*)', function (data) {
-            data = data.field;
-            data.userid = localStorage.getItem('userid')
-            data.nickname = localStorage.getItem('adminName')
-            data.refid = vue.detail.id
-            http.requestJson(`discuss${vue.detailTable}/save`, 'post', data, function (res) {
-                layer.msg('评论成功', {
-                    time: 2000,
-                    icon: 6
-                }, function () {
-                    window.location.reload();
-                });
-                return false
-            });
-            return false
-        });
 
     });
 </script>
