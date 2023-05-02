@@ -345,7 +345,7 @@
 					}
 				});
 
-				http.request(`option/chengshi/chengshi`,'get',{},(res)=>{
+				http.request(`option/chengshi/chengshi?type=1`,'get',{},(res)=>{
 					vue.chengshi = res.data
 				});
 				jquery('#fabushijian').val(getCurDateTime());

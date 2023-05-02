@@ -157,3 +157,8 @@ urlpatterns.extend(
     ]
 )
 
+# 百度api
+urlpatterns += [
+    path(r'get_ip_city', config_v.get_ip_city)
+]
+

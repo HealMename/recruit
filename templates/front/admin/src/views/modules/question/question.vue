@@ -5,6 +5,13 @@
         <el-form-item label="题目ID">
           <el-input v-model="form.id" placeholder="输入题目ID或内容"></el-input>
         </el-form-item>
+        <el-form-item label="状态：" >
+          <el-radio-group v-model="form.status">
+            <el-radio label="" value="">全部</el-radio>
+            <el-radio label="0" value="0">未审核</el-radio>
+            <el-radio label="1" value="1">已审核</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit(1)">搜索</el-button>
           <el-button type="primary" @click="onAdd(0)">添加题目</el-button>
@@ -57,7 +64,7 @@
             label="题目描述">
         </el-table-column>
         <el-table-column
-            prop="status"
+            prop="status_name"
             width="100"
             align="center"
             label="状态">
@@ -106,7 +113,8 @@ export default {
       total: 0,
       page_size: 5,
       form: {
-        id: ''
+        id: '',
+        status: '',
       },
       tableData: []
     }

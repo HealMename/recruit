@@ -5,6 +5,12 @@
         <el-form-item label="题目ID：">
           <el-input v-model="form.id" disabled></el-input>
         </el-form-item>
+        <el-form-item label="状态："  v-if="role ==='管理员'">
+          <el-radio-group v-model="form.status">
+            <el-radio label="0" value="0">未审核</el-radio>
+            <el-radio label="1" value="1">已审核</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="科目：">
           <el-radio-group v-model="form.sid">
             <el-radio label="1" value="1">K8s</el-radio>
@@ -68,6 +74,7 @@ export default {
   data() {
     return {
       loading: false,
+      role: this.$storage.get("role"),
       form: {
         urls: [{
           value: ''
@@ -81,7 +88,8 @@ export default {
         title: "",
         content: "",
         size: "1",
-        add_user: this.$storage.get("userId")
+        add_user: this.$storage.get("userId"),
+
       },
       rules: {
         do_time: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
@@ -97,6 +105,7 @@ export default {
 
   },
   created() {
+    console.log(this.role)
     if (this.form.id > 0){
         this.loading = true;
         this.$http.post(DOMAIN_API_SYS + "/tea/question_list/", {id: this.form.id}).then(res => {

@@ -111,6 +111,7 @@ def question_list(request):
     """
     id_ = request.QUERY.get('id')
     sid = request.QUERY.get('sid')
+    status = request.QUERY.get('status')
     page_id = int(request.QUERY.get('page_id', 1))
     page_size = int(request.QUERY.get('page_size', 5))
     where_sql = ""
@@ -121,6 +122,8 @@ def question_list(request):
             where_sql += f" and (title like '%{id_}%' or content like '%{id_}%')"
     if sid:
         where_sql += f" and sid= {sid}"
+    if status:
+        where_sql += f" and status = {status}"
     sql = f"""
         select * from question 
         where status in (0, 1)
@@ -130,7 +133,8 @@ def question_list(request):
     """
     page_data = db.default.fetchall_dict(sql)
     for q in page_data:
-        q['status'] = {1: '已审核', 0: '未审核'}[q['status']]
+        q['status_name'] = {1: '已审核', 0: '未审核'}[q['status']]
+        q['status'] = str(q['status'])
         q['add_time'] = trancate_date(q['add_time'])
         q['sid'] = str(q['sid'])
         q['sid_name'] = sid_name[str(q['sid'])]
@@ -172,10 +176,11 @@ def question_add(request):
     添加编辑
     """
     args = Struct({k: v for k, v in request.QUERY.items()})
+    user_id = request.user.id
     id_ = int(args.pop('id', 0))
     now = int(time.time())
     args.pop('add_time', '')
-    args.pop('status', '')
+    args.pop('status_name', '')
     args.pop('level_name', '')
     args.pop('size_name', '')
     args.pop('sid_name', '')
@@ -184,7 +189,10 @@ def question_add(request):
     if not id_:
         db.default.question.create(add_time=now, **args)
     else:
-        db.default.question.filter(id=id_).update(add_time=now, **args)
+        if args.status == '1':
+            args.update(dict(verify_time=now, verify_user=user_id))
+        db.default.question.filter(id=id_).update(**args)
+
     return ajax.ajax_ok()
 
 
@@ -207,7 +215,7 @@ def paper(request):
         where_sql += f" and type = {type_}"
     sql = f"""
         select id, name, type, add_time, level, do_time, sid from paper 
-        where status in (0, 1)  and add_user = {user_id}
+        where status in (0, 1)
         {where_sql} 
         order by -id
         limit {(page_id -1) * page_size}, {page_size} ;

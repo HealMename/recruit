@@ -3,11 +3,24 @@ __author__ = "ila"
 
 import logging
 
+import requests
 from django.http import JsonResponse
 
+from libs.utils import ajax
 from .config_model import config
 from util.codes import *
 from util import message as mes
+
+# 百度AK
+AK = "2nOEspppjFSaRClGqWE66FNK2eF81TFy"
+
+
+def get_ip_city(request):
+    """获取位置信息"""
+    ip = request.QUERY.get('ip')
+    url = f"https://api.map.baidu.com/location/ip?ak={AK}&ip={ip}"
+    res = requests.get(url)
+    return ajax.ajax_ok(res.json())
 
 
 def config_page(request):

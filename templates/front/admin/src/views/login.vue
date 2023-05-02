@@ -13,13 +13,17 @@
           </el-form-item>
           <el-form-item label="">
             <el-radio-group v-model="rulesForm.role">
+
+
               <el-radio
+                  v-if="type !='1' && item.roleName !== '管理员'"
                   v-for="item in roles"
                   v-bind:key="item.roleName"
                   v-model="rulesForm.role"
                   :label="item.roleName"
               >{{ item.roleName }}
               </el-radio>
+
             </el-radio-group>
           </el-form-item>
           <el-form-item v-if="roles.length==1" label=" " prop="loginInRole" class="role"
@@ -41,6 +45,7 @@ import menu from "@/utils/menu";
 export default {
   data() {
     return {
+      type: this.$route.query.type,
       rulesForm: {
         username: "",
         password: "",
@@ -83,6 +88,9 @@ export default {
     }
   },
   created() {
+    if (this.type === '1'){
+      this.rulesForm.role = '管理员'
+    }
     this.getRandCode()
   },
   methods: {

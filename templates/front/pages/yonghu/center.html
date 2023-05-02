@@ -373,7 +373,7 @@
           res.data.list.forEach(element => {
             if (element.value != null) {
               swiperList.push({
-                img: http.baseurl+element.value
+                img: '/' + element.value
               });
             }
           });
@@ -483,9 +483,9 @@
 								time: 2000,
 								icon: 6
 							})
-							var url = 'upload/' + res.file;
+							var url = 'media/img/' + res.file;
 							jquery('#zhaopian').val(url);
-							jquery('#zhaopianImg').attr('src', http.baseurl+url)
+							jquery('#zhaopianImg').attr('src', '/' + url)
 						} else {
 							layer.msg(res.msg, {
 								time: 2000,
@@ -520,7 +520,7 @@
 					// 表单赋值
 					form.val("myForm", data.data);
 					// 图片赋值
-					jquery("#zhaopianImg").attr("src", http.baseurl+data.data.zhaopian);
+					jquery("#zhaopianImg").attr("src", '/'+data.data.zhaopian);
 				});
 
 				// 提交表单

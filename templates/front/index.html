@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>面霸网</title>
-    <link rel="stylesheet" href="/media/layui/css/layui.css">
+    <link rel="stylesheet" href="/media/layui-v2.7.6/layui/css/layui.css">
     <link rel="stylesheet" href="/media/css/common.css"/>
     <link rel="stylesheet" href="/media/css/style.css"/>
 </head>
@@ -121,6 +121,10 @@
         width: 80%;
     }
 
+    .list > ul {
+        margin-right: 100px;
+    }
+
     .list .right {
         float: right;
     }
@@ -130,8 +134,18 @@
         line-height: 40px;
         font-size: 30px;
         color: white;
-        padding: 10px 10px 10px;
-        margin: 50px;
+        margin: 32px;
+
+    }
+
+    #header .navs .title2 {
+        line-height: 40px;
+        color: white;
+
+    }
+
+    #header .navs .title2:hover {
+        cursor: pointer;
 
     }
 
@@ -192,18 +206,21 @@
         border-color: rgba(255, 255, 255, 1);
         box-shadow: 0 1px 0 #ffffff;
     }
+    .citys .city{
+        margin-bottom: 10px;
+    }
+    .layui-btn.layui-btn{
+        margin-left: 10px !important;
+    }
 </style>
 <body>
 <!-- start 顶部导航栏 -->
 <div id="header">
-    <div v-if='true' class="nav-top">
-        <img v-if='false' class="nav-top-img" src='https://www.baidu.com/img/flexible/logo/pc/result@2.png'>
-        <div v-if="false" class="nav-top-title">{{ projectName }}</div>
-        <div class="nav-top-tel"></div>
-    </div>
+
     <div class="navs">
-        <!-- <div class="logo" style="font-size: 20px;top: 32px;color: #fff;font-weight: bold;margin-left: -200px;width: 240px;" v-text="projectName"></div> -->
-        <div class="title" v-if="true" v-text="projectName"></div>
+        <div class="title" v-text="projectName"></div>
+        <div class="title2" v-text="city" @click="city_list()"></div>
+        <span class="title2" style="margin-right: 20px" @click="city_list()">[切换城市]</span>
         <div class="list">
             <ul>
                 <li class='current'>
@@ -235,8 +252,8 @@
                         <p><a href="/pages/login/login.html">前台登录</a></p>
                     </div>
                 </li>
-                <li class='current right user' >
-                    <a href="javascript:" id="userrole" class="menumain"></a> <br>
+                <li class='current right user'>
+                    <a href="javascript:" id="userrole" class="menumain" onclick="centerPage()"></a> <br>
 
 
                 </li>
@@ -255,7 +272,7 @@
 </div>
 <!-- end 顶部导航栏 -->
 
-<iframe src="./pages/home/home.html" id="iframe" frameborder="0" scrolling="no" width="100%"
+<iframe src="./pages/zhaopinxinxi/list.html" id="iframe" frameborder="0" scrolling="no" width="100%"
         onload="changeFrameHeight"></iframe>
 <div id="tabbar" class="tabbar"
      :style='{"boxShadow":"0 0 6px ","margin":"30px 0 0 0","borderColor":"rgba(255, 255, 255, 0.3)","backgroundColor":"#009688","borderRadius":"0","borderWidth":"0","borderStyle":"solid"}'
@@ -269,24 +286,52 @@
          class="desc"></div>
 </div>
 
+<div id="city_list" style="display: none;">
+    <table id="city_list">
+        <div class="layui-card">
+            <div class="layui-card-header">当前城市</div>
+            <div class="layui-card-body">
+                <button class="layui-btn layui-btn-primary now_city" ></button>
+            </div>
+        </div>
+        <div class="layui-card">
+            <div class="layui-card-header">热门城市</div>
+            <div class="layui-card-body citys">
+
+            </div>
+        </div>
+    </table>
+</div>
+
+
 <script src="/media/js/jquery-1.11.3.min.js"></script>
-<script src="/media/layui/layui.js"></script>
+<script src="/media/layui-v2.7.6/layui/layui.js"></script>
 <script src="/media/js/vue.js"></script>
 <script src="/media/js/config.js"></script>
 <script src="/media/js/common.js"></script>
 <script>
+    function ipJson(ipJson) {
+        if (!localStorage.getItem("ipJson")){
+            window.ipJson = ipJson;
+            localStorage.setItem("ipJson", JSON.stringify(ipJson))
+        }
+    }
+</script>
+<script src="https://whois.pconline.com.cn/ipJson.jsp?callback=ipJson" type="text/javascript"></script>
+<script>
     $(function () {
-         var username = localStorage.getItem('adminName')
-        if (username){
+        var username = localStorage.getItem('adminName')
+        if (username) {
             $("#username").text(username)
             $(".user").show()
-        }else{
+        } else {
             $(".user").hide()
         }
         var role = localStorage.getItem('role')
-        if (role){
+        if (role) {
             $("#userrole").text(role)
         }
+
     })
     var vue1 = new Vue({el: '#tabbar'})
 
@@ -301,6 +346,8 @@
             projectName: projectName,
             username: '',
             role: '',
+            city: "",
+            chengshiOptions: [],
         },
         mounted: function () {
             this.bindClickOnLi();
@@ -309,6 +356,7 @@
             this.iconArr.sort(() => {
                 return (0.5 - Math.random())
             })
+            this.city = JSON.parse(localStorage.getItem("ipJson")).city
 
         },
         methods: {
@@ -323,15 +371,37 @@
                         localStorage.setItem("checkedLiIndex", $(this).index());
                     }
                 }
+            },
+            city_list() {
+                $('.now_city').text(this.city)
+                layer.open({
+                    type: 1,
+                    skin: 'alert-skin',//弹出层皮肤，可自定义也可用官方
+                    title: ['城市列表', 'color:#009688'],//弹出层title,数组右半部份设置title样式
+                    area: ['500px', '400px'],
+                    success: function () {
+                    },
+                    //content为弹出层内容
+                    content: $("#city_list").html()
+                });
             }
         }
     });
 
-    layui.use(['element', 'layer'], function () {
-        var element = layui.element;
-        var layer = layui.layer;
+    layui.use(['layer', 'element', 'carousel', 'laypage', 'jquery','laydate'], function () {
         vue.username = localStorage.getItem('adminName')
         vue.role = localStorage.getItem('role')
+
+        $.get(`/django7681v/option/chengshi/chengshi?type=1`,function (res) {
+            vue.chengshiOptions = res.data
+            let html = ''
+            $.each(vue.chengshiOptions, function (i) {
+                html += `<button class="layui-btn layui-btn-primary city" >${this}</button>`
+            })
+            $(".citys").html(html)
+        });
+
+
     });
 
     function chatTap() {
@@ -402,8 +472,6 @@
         }
     }
 
-    var iframeUrl = localStorage.getItem('iframeUrl');
-    document.getElementById('iframe').src = './pages/zhaopinxinxi/list.html';
 
     let list = document.getElementsByTagName("li");
     for (var i = 0; i < list.length; i++) {
@@ -414,10 +482,8 @@
 
     // var i = 0;
     setInterval(function () {
-        // i++;
-        // if(i<50) changeFrameHeight();
         changeFrameHeight();
-    }, 200)
+    }, 500)
 
     function changeFrameHeight() {
         var iframe = document.getElementById('iframe');

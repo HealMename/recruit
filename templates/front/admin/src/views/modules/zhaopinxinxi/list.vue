@@ -620,7 +620,7 @@ export default {
     },
     init () {
           this.$http({
-            url: `option/chengshi/chengshi`,
+            url: `option/chengshi/chengshi?type=1`,
             method: "get"
           }).then(({ data }) => {
             if (data && data.code === 0) {

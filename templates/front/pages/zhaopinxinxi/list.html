@@ -447,7 +447,7 @@ width: 100%;
           // });
         }
       });
-	http.request(`option/chengshi/chengshi`,'get',{},(res)=>{
+	http.request(`option/chengshi/chengshi?type=1`,'get',{},(res)=>{
 		vue.chengshiOptions = res.data
 	});
 	http.request(`option/gangweifenlei/gangweileixing`,'get',{},(res)=>{
@@ -465,7 +465,7 @@ width: 100%;
 
       function categoryList() {
           // 获取列表数据
-          http.request('option/chengshi/chengshi', 'get', {}, function(res) {
+          http.request('option/chengshi/chengshi?type=1', 'get', {}, function(res) {
             vue.categoryList = res.data
           })
 
