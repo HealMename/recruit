@@ -133,7 +133,7 @@ export default {
               this.$storage.set("role", this.rulesForm.role);
               this.$storage.set("sessionTable", "users");
               this.$storage.set("adminName", this.rulesForm.username);
-            this.$router.replace({path: "/index/"});
+            window.location.href = `${this.$base.indexUrl}`
               }).catch((res) => {
                   this.$layer_message(res.result)
               }).finally(() => this.loading = false)
@@ -146,7 +146,12 @@ export default {
             this.$storage.set("role", this.rulesForm.role);
             this.$storage.set("sessionTable", this.tableName);
             this.$storage.set("adminName", this.rulesForm.username);
-            this.$router.replace({path: "/index/"});
+            if (this.rulesForm.role === '管理员'){
+              this.$router.replace({path: "/index/"});
+            }else{
+              window.location.href = `${this.$base.indexUrl}`
+            }
+
           } else {
             this.$message.error(data.msg);
           }

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>首页</title>
-    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="/media/layui-v2.7.6/layui/css/layui.css">
     <!-- 样式 -->
     <link rel="stylesheet" href="../../css/style.css"/>
     <!-- 主题（主要颜色设置） -->
@@ -97,12 +97,14 @@
         flex: 1 0 0%;
         text-align: center;
     }
-    .but1{
+
+    .but1 {
         float: right;
         margin-right: 49px !important;
         text-align: center;
     }
-    .btn2{
+
+    .btn2 {
         float: left;
     }
 </style>
@@ -113,7 +115,7 @@
     <div class="data-detail" style="padding:0">
         <div class="data-detail-breadcrumb"
              :style='{"padding":"0 10px","margin":"20px auto","borderColor":"rgba(255,0,0,.3)","backgroundColor":"rgb(46 126 115)","borderRadius":"4px","borderWidth":"0","borderStyle":"solid","height":"80px"}'>
-				<span class="layui-breadcrumb">
+				<span class="">
 					<a class="first"
                        :style='{"padding":"8px 10px","boxShadow":"0 0 0px ","margin":"0 15px","borderColor":"rgba(255,0,0,.3)","backgroundColor":"rgb(46, 126, 115)","color":"rgba(214, 236, 240, 1)","borderRadius":"0","borderWidth":"0","fontSize":"20px","borderStyle":"solid"}'
                        href="javascript:navPage('./pages/zhaopinxinxi/list.html')">首页</a>
@@ -134,7 +136,7 @@
                         @click="next_q(1)" type="button" class="layui-btn btn2">
                     上一题
                 </button>
-                <span style="    padding-top: 10px;
+                <span v-if="paper_id !== 0" style="    padding-top: 10px;
     display: inline-block;">({{ index + 1 }}/{{ questions.length }})</span>
                 <button v-if="paper_id !== 0"
                         :style='{"padding":"0 10px","boxShadow":"0 0 0px rgba(255,0,0,.3)","margin":"0 5px","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#009688","borderRadius":"6px","borderWidth":"0","width":"auto","lineHeight":"40px","fontSize":"16px","borderStyle":"solid"}'
@@ -219,7 +221,7 @@
             </div>
             <div class="layui-col-md5" style="width:500px">
 
-                <div class="layui-carousel" id="swiper" @click="countDown()"
+                <div class="layui-carousel" id="swiper" @click="countDown(detail.urls[0].value)"
                      :style='{"margin":"0 auto","borderColor":"rgba(0,0,0,.3)","borderRadius":"6px","borderWidth":"0","width":"500px","borderStyle":"solid","height":"468px"}'>
                     <div>
                         <img style="cursor:pointer;width: 500px;height: 468px;object-fit: cover;"
@@ -342,24 +344,31 @@
                 return isFrontAuth(tablename, button)
             },
             // 倒计时初始化
-            countDown() {
-                layer.msg("倒计时已开始，请在容器中做题", {icon: 1, time: 1500})
-                let now = new Date().getTime();
-                console.log(this.detail.do_time)
-                let count = (now + this.detail.do_time * 1000 * 60) - now;
-                if (count > 0) {
-                    this.count = count / 1000
-                    var _this = this;
-                    this.inter = window.setInterval(function () {
-                        _this.count = _this.count - 1;
-                        if (_this.count < 0) {
-                            window.clearInterval(_this.inter);
-                            layer.msg("时间到了！", {
-                                time: 2000,
-                                icon: 5
-                            })
-                        }
-                    }, 1000);
+            countDown(url) {
+                if (!localStorage.getItem('adminName')) {
+                    layer.msg("请登录后重试", {icon: 1, time: 1500})
+                    return false
+                } else {
+
+
+                    layer.msg("倒计时已开始，请在容器中做题", {icon: 1, time: 1500})
+                    let now = new Date().getTime();
+                    let count = (now + this.detail.do_time * 1000 * 60) - now;
+                    if (count > 0) {
+                        this.count = count / 1000
+                        var _this = this;
+                        this.inter = window.setInterval(function () {
+                            _this.count = _this.count - 1;
+                            if (_this.count < 0) {
+                                window.clearInterval(_this.inter);
+                                layer.msg("时间到了！", {
+                                    time: 2000,
+                                    icon: 5
+                                })
+                            }
+                        }, 1000);
+                    }
+                    window.open('http://182.42.137.129:30880/terminal/cluster/default/projects/yp-test/pods/mysql57-0/containers/container-qgg6fg')
                 }
             },
 
@@ -377,7 +386,7 @@
                     // 上一题
                     if (vue.index === 0) {
                         msg_fail("已经是第一题")
-                    }else{
+                    } else {
                         vue.index -= 1
                         vue.detail = vue.questions[vue.index]
                         vue.title = vue.questions[vue.index].title;
@@ -385,9 +394,9 @@
                     }
                 } else {
                     // 下一题
-                    if (vue.index+1 === vue.questions.length) {
+                    if (vue.index + 1 === vue.questions.length) {
                         msg_fail("已经最后最后一题")
-                    }else{
+                    } else {
                         vue.index += 1
                         vue.detail = vue.questions[vue.index]
                         vue.title = vue.questions[vue.index].title;

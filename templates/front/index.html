@@ -246,23 +246,22 @@
                     </div>
                 </li>
                 <li class='current right' v-if="!username">
-                    <a href="javascript:" id="login" class="menumain">登录</a> <br>
-                    <div class="logins" style="display: none">
-                        <p><a href="/admin/#/login">后台登录</a></p>
-                        <p><a href="/pages/login/login.html">前台登录</a></p>
-                    </div>
+                    <a href="/admin/#/login" id="login" class="menumain">登录</a> <br>
+
                 </li>
                 <li class='current right user'>
-                    <a href="javascript:" id="userrole" class="menumain" onclick="centerPage()"></a> <br>
+                    <a href="/admin/#/index" id="userrole" class="menumain" target="_blank"></a> <br>
 
 
                 </li>
                 <li class='current right user'>
                     <a href="javascript:" id="username" class="menumain"></a>
                     <div class="register" style="display: none">
+                        <p><a href="/admin/#/index"  target="_blank">我的后台管理</a></p>
                         <p><a href="javascript:">切换教师</a></p>
                         <p><a href="javascript:">切换面试官</a></p>
                         <p><a href="javascript:">切换企业用户</a></p>
+                        <p><a href="/admin/#/updatePassword" target="_blank">修改密码</a></p>
                         <p><a href="javascript:localStorage.clear();location.reload()">退出登录</a></p>
                     </div>
                 </li>
@@ -317,7 +316,7 @@
         }
     }
 </script>
-<script src="https://whois.pconline.com.cn/ipJson.jsp?callback=ipJson" type="text/javascript"></script>
+<script src="http://whois.pconline.com.cn/ipJson.jsp?callback=ipJson" type="text/javascript"></script>
 <script>
     $(function () {
         var username = localStorage.getItem('adminName')
