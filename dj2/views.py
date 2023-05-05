@@ -1,8 +1,15 @@
 # coding:utf-8
 __author__ = "ila"
-import os,sys
+
+import os, sys
+
+import requests
 from django.http import JsonResponse, HttpResponse
 from django.apps import apps
+
+from libs.utils import ajax
+
+AK = "2nOEspppjFSaRClGqWE66FNK2eF81TFy"
 
 
 def index(request):
@@ -16,12 +23,21 @@ def test(request, p1):
         msg = {"code": 200, "msg": "success", "data": []}
         return JsonResponse(msg)
 
-def null(request,):
+
+def get_ip_city(request):
+    """获取位置信息"""
+    url = f"https://api.map.baidu.com/location/ip?ak={AK}&coor=bd09ll"
+    res = requests.get(url)
+    return ajax.ajax_ok(res.json())
+
+
+def null(request, ):
     if request.method in ["GET", "POST"]:
         msg = {"code": 200, "msg": "success", "data": []}
         return JsonResponse(msg)
 
-def check_suffix(filelName,path1):
+
+def check_suffix(filelName, path1):
     try:
         image_data = open(path1, "rb").read()
     except:
@@ -43,24 +59,28 @@ def check_suffix(filelName,path1):
     elif '.doc' in filelName:
         return HttpResponse(image_data, content_type="application/msword")
     elif '.docx' in filelName:
-        return HttpResponse(image_data, content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+        return HttpResponse(image_data,
+                            content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
     elif '.xls' in filelName:
         return HttpResponse(image_data, content_type="application/vnd.ms-excel")
     elif '.xlsx' in filelName:
-        return HttpResponse(image_data, content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        return HttpResponse(image_data,
+                            content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     elif '.ppt' in filelName:
         return HttpResponse(image_data, content_type="application/vnd.ms-powerpoint")
     elif '.pptx' in filelName:
-        return HttpResponse(image_data, content_type="application/vnd.openxmlformats-officedocument.presentationml.presentation")
+        return HttpResponse(image_data,
+                            content_type="application/vnd.openxmlformats-officedocument.presentationml.presentation")
     else:
         return HttpResponse(image_data, content_type="text/html")
+
 
 def admin_lib2(request, p1, p2):
     if request.method in ["GET", "POST"]:
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/admin/lib/", p1, p2)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -86,7 +106,7 @@ def admin_lib3(request, p1, p2, p3):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/admin/lib/", p1, p2, p3)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -112,7 +132,7 @@ def admin_lib4(request, p1, p2, p3, p4):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/admin/lib/", p1, p2, p3, p4)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -138,7 +158,7 @@ def admin_page(request, p1):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/admin/page/", p1)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -164,7 +184,7 @@ def admin_page2(request, p1, p2):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/admin/page/", p1, p2)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -190,7 +210,7 @@ def admin_pages(request, p1):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/admin/pages/", p1)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -216,7 +236,7 @@ def admin_pages2(request, p1, p2):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/admin/pages/", p1, p2)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
 
         # try:
         #     image_data = open(path1, "rb").read()
@@ -243,15 +263,14 @@ def admin_file1(request, p1):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/admin/dist/static/", p1)
         print(1, p1, path1)
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
-
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
 
 
 def admin_file2(request, p1, p2):
     if request.method in ["GET", "POST"]:
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/admin/dist/", p1, p2)
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -277,10 +296,10 @@ def admin_file3(request, p1, p2, p3):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/admin/", p1, p2, p3)
 
-        if not  os.path.isfile(path1):
-            path1 = os.path.join(os.getcwd(), "templates/front/admin/dist/", p1, p2,p3)
+        if not os.path.isfile(path1):
+            path1 = os.path.join(os.getcwd(), "templates/front/admin/dist/", p1, p2, p3)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -305,10 +324,10 @@ def admin_file4(request, p1, p2, p3, p4):
     if request.method in ["GET", "POST"]:
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/admin/", p1, p2, p3, p4)
-        if not  os.path.isfile(path1):
-            path1 = os.path.join(os.getcwd(), "templates/front/admin/dist/", p1, p2,p3,p4)
+        if not os.path.isfile(path1):
+            path1 = os.path.join(os.getcwd(), "templates/front/admin/dist/", p1, p2, p3, p4)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -328,12 +347,13 @@ def admin_file4(request, p1, p2, p3, p4):
         # else:
         #     return HttpResponse(image_data, content_type="text/html")
 
+
 def front_pages(request, p1):
     if request.method in ["GET", "POST"]:
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/pages/", p1)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -359,7 +379,7 @@ def front_pages2(request, p1, p2):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/pages/", p1, p2)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
 
         # try:
         #     image_data = open(path1, "rb").read()
@@ -386,7 +406,7 @@ def layui1(request, p1):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/layui/", p1)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -411,7 +431,7 @@ def layui2(request, p1, p2):
     if request.method in ["GET", "POST"]:
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/layui/", p1, p2)
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -436,7 +456,7 @@ def layui3(request, p1, p2, p3):
     if request.method in ["GET", "POST"]:
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/layui/", p1, p2, p3)
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         #
         # try:
         #     image_data = open(path1, "rb").read()
@@ -462,7 +482,7 @@ def layui4(request, p1, p2, p3, p4):
     if request.method in ["GET", "POST"]:
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/layui/", p1, p2, p3, p4)
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -488,7 +508,7 @@ def pages1(request, p1):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/pages/", p1)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
 
         # try:
         #     image_data = open(path1, "rb").read()
@@ -515,7 +535,7 @@ def pages2(request, p1, p2):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/pages/", p1, p2)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
 
         # try:
         #     image_data = open(path1, "rb").read()
@@ -542,7 +562,7 @@ def front_file1(request, p1):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/", p1)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
 
         # try:
         #     image_data = open(path1, "rb").read()
@@ -569,7 +589,7 @@ def front_file2(request, p1, p2):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/", p1, p2)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
 
         # try:
         #     image_data = open(path1, "rb").read()
@@ -590,12 +610,13 @@ def front_file2(request, p1, p2):
         # else:
         #     return HttpResponse(image_data, content_type="text/html")
 
+
 def schema_front1(request, p1):
     if request.method in ["GET", "POST"]:
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/", p1)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -621,7 +642,7 @@ def schema_front2(request, p1, p2):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/", p1, p2)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
 
         # try:
         #     image_data = open(path1, "rb").read()
@@ -648,7 +669,7 @@ def schema_front3(request, p1, p2, p3):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/", p1, p2, p3)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -674,7 +695,7 @@ def schema_front4(request, p1, p2, p3, p4):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/", p1, p2, p3, p4)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
 
         # try:
         #     image_data = open(path1, "rb").read()
@@ -695,12 +716,13 @@ def schema_front4(request, p1, p2, p3, p4):
         # else:
         #     return HttpResponse(image_data, content_type="text/html")
 
+
 def assets1(request, p1):
     if request.method in ["GET", "POST"]:
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/assets/", p1)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
 
         # try:
         #     image_data = open(path1, "rb").read()
@@ -729,7 +751,7 @@ def assets2(request, p1, p2):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/assets/", p1, p2)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -757,7 +779,7 @@ def assets3(request, p1, p2, p3):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/assets/", p1, p2, p3)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -785,7 +807,7 @@ def assets4(request, p1, p2, p3, p4):
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/assets/", p1, p2, p3, p4)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
         # try:
         #     image_data = open(path1, "rb").read()
         # except:
@@ -807,12 +829,13 @@ def assets4(request, p1, p2, p3, p4):
         # else:
         #     return HttpResponse(image_data, content_type="text/html")
 
+
 def css1(request, p1):
     if request.method in ["GET", "POST"]:
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/css/", p1)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
 
         # try:
         #     image_data = open(path1, "rb").read()
@@ -832,13 +855,14 @@ def css1(request, p1):
         #     return HttpResponse(image_data, content_type="audio/mp3")
         # else:
         #     return HttpResponse(image_data, content_type="text/html")
+
 
 def js1(request, p1):
     if request.method in ["GET", "POST"]:
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/js/", p1)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
 
         # try:
         #     image_data = open(path1, "rb").read()
@@ -858,13 +882,14 @@ def js1(request, p1):
         #     return HttpResponse(image_data, content_type="audio/mp3")
         # else:
         #     return HttpResponse(image_data, content_type="text/html")
+
 
 def img1(request, p1):
     if request.method in ["GET", "POST"]:
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/img/", p1)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
 
         # try:
         #     image_data = open(path1, "rb").read()
@@ -884,9 +909,11 @@ def img1(request, p1):
         #     return HttpResponse(image_data, content_type="audio/mp3")
         # else:
         #     return HttpResponse(image_data, content_type="text/html")
+
+
 def front_modules(request, p1):
     if request.method in ["GET", "POST"]:
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/modules/", p1)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)

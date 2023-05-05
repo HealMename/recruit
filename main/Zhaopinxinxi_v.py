@@ -242,7 +242,7 @@ def zhaopinxinxi_list(request):
         msg = {"code": normal_code, "msg": mes.normal_code,
                "data": {"currPage": 1, "totalPage": 1, "total": 1, "pageSize": 10, "list": []}}
         req_dict = request.session.get("req_dict")
-
+        req_dict['order'] = 'desc'
         # 获取全部列名
         columns = zhaopinxinxi.getallcolumn(zhaopinxinxi, zhaopinxinxi)
         # 表属性[foreEndList]前台list:和后台默认的list列表页相似,只是摆在前台,否:指没有此页,是:表示有此页(不需要登陆即可查看),前要登:表示有此页且需要登陆后才能查看
@@ -327,7 +327,6 @@ def zhaopinxinxi_list(request):
 
         msg['data']['list'], msg['data']['currPage'], msg['data']['totalPage'], msg['data']['total'], \
         msg['data']['pageSize'] = zhaopinxinxi.page(zhaopinxinxi, zhaopinxinxi, req_dict)
-        msg['data']['list'] += msg['data']['list']
         return JsonResponse(msg)
 
 

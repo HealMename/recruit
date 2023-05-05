@@ -17,8 +17,7 @@ AK = "2nOEspppjFSaRClGqWE66FNK2eF81TFy"
 
 def get_ip_city(request):
     """获取位置信息"""
-    ip = request.QUERY.get('ip')
-    url = f"https://api.map.baidu.com/location/ip?ak={AK}&ip={ip}"
+    url = f"https://api.map.baidu.com/location/ip?ak={AK}&coor=bd09ll"
     res = requests.get(url)
     return ajax.ajax_ok(res.json())
 

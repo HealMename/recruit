@@ -64,6 +64,7 @@ urlpatterns = [
     re_path(r'img/(?P<p1>.*)$', views.img1),
     path(r'test/<str:p1>/', views.test),
     path(r'null', views.null),
+    path(r'get_ip_city/', views.get_ip_city),
     path('{}/'.format(schemaName), include('main.urls')),  # 导入schemaName
 ]
 

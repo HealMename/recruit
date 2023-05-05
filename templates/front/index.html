@@ -308,15 +308,7 @@
 <script src="/media/js/vue.js"></script>
 <script src="/media/js/config.js"></script>
 <script src="/media/js/common.js"></script>
-<script>
-    function ipJson(ipJson) {
-        if (!localStorage.getItem("ipJson")){
-            window.ipJson = ipJson;
-            localStorage.setItem("ipJson", JSON.stringify(ipJson))
-        }
-    }
-</script>
-<script src="http://whois.pconline.com.cn/ipJson.jsp?callback=ipJson" type="text/javascript"></script>
+
 <script>
     $(function () {
         var username = localStorage.getItem('adminName')
@@ -355,7 +347,7 @@
             this.iconArr.sort(() => {
                 return (0.5 - Math.random())
             })
-            this.city = JSON.parse(localStorage.getItem("ipJson")).city
+            this.city = localStorage.getItem("city")
 
         },
         methods: {
@@ -379,6 +371,7 @@
                     title: ['城市列表', 'color:#009688'],//弹出层title,数组右半部份设置title样式
                     area: ['500px', '400px'],
                     success: function () {
+
                     },
                     //content为弹出层内容
                     content: $("#city_list").html()
@@ -395,10 +388,24 @@
             vue.chengshiOptions = res.data
             let html = ''
             $.each(vue.chengshiOptions, function (i) {
-                html += `<button class="layui-btn layui-btn-primary city" >${this}</button>`
+                html += `<button class="layui-btn layui-btn-primary city" index="${i}">${this}</button>`
             })
             $(".citys").html(html)
         });
+        if (!vue.city){
+            $.get('/get_ip_city/',function (res) {
+                localStorage.setItem("city", res.data.content.address_detail.city)
+                vue.city = res.data.content.address_detail.city
+            });
+        }
+
+
+        $(document).on("click", ".citys .city", function(e){
+            localStorage.setItem("city", e.target.innerText)
+            vue.city = e.target.innerText
+            layer.closeAll()
+    	    navPage(`./pages/zhaopinxinxi/list.html?city=${e.target.innerText}&swiperIndex=${$(this).attr('index')}`)
+      });
 
 
     });
