@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "main",
 ]
-
 MIDDLEWARE = [
     'dj2.mymiddle.CoreMiddle',
     'django.middleware.security.SecurityMiddleware',

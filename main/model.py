@@ -97,19 +97,7 @@ class BaseModel(models.Model):
                     contain_str +='.filter({}__icontains="{}")'.format(fuzzy_key,fuzzy_val)
             else:
                 condition[copy.deepcopy(k)] = copy.deepcopy(v)
-        # if fuzzy_key != None:
-        #     del params[fuzzy_key]
-        #     contain_str='.filter({}__icontains="{}")'.format(fuzzy_key,fuzzy_val)
-        # __authSeparate__此属性为真，params添加userid，只查询个人数据
-        # try:
-        #     __authSeparate__ = model.__authSeparate__
-        # except:
-        #     __authSeparate__ = None
 
-        # #所有属性为"是"时才有效
-        # if __authSeparate__=='是':
-        #     request = get_current_request()
-        #     params["userid"] = request.session.get("params").get("id")
         order_by_str=''
         if sort != None or __sort__ != None:
             if sort == None:
@@ -122,8 +110,6 @@ class BaseModel(models.Model):
 
         datas = eval(
             '''model.objects.filter(**condition){}{}{}.all()'''.format(contain_str, between_str, order_by_str))
-
-
         p = Paginator(datas, int(limit))
         try:
             p2 = p.page(int(page))
