@@ -81,7 +81,6 @@ def get_paper_question(request):
     else:
         ids = [x['id'] for x in json.loads(db.default.user_test_det.get(id=paper_id).content)]
         data = db.default.question.filter(id__in=ids)[:]
-    print(data)
     for q in data:
         q['add_time'] = trancate_date(q['add_time'])
         q['sid'] = str(q['sid'])

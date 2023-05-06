@@ -49,7 +49,7 @@ export default {
       rulesForm: {
         username: "",
         password: "",
-        role: "教师",
+        role: "出题专家",
         code: '',
       },
       menus: [],
@@ -124,7 +124,7 @@ export default {
         this.rulesForm.role = this.roles[0].roleName;
       }
       let url = `${DOMAIN_API_SYS}/django7681v/${this.tableName}/login?username=${this.rulesForm.username}&password=${this.rulesForm.password}&role=${this.rulesForm.role}`
-      if (this.rulesForm.role === '教师'){
+      if (this.rulesForm.role === '出题专家'){
         url = `${DOMAIN_API_SYS}/tea/login/?username=${this.rulesForm.username}&password=${this.rulesForm.password}`
         this.$http.post(url, {}).then(res => {
           console.log(res)
@@ -208,7 +208,7 @@ export default {
   background-size: cover;
   width: 100%;
   height: 100%;
-  background-image: url(https://yujing.uhongedu.com/static/img/login-bg.jpg);
+  background-image: url(/media/img/admin/login-bg.jpg);
 
   .loginInBt {
     width: 100%;

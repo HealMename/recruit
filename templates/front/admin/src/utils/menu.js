@@ -33,7 +33,7 @@ const menu = {
         "hasBackRegister": "否",
         "hasFrontLogin": "否",
         "hasFrontRegister": "否",
-        "roleName": "教师",
+        "roleName": "出题专家",
         "tableName": "users"
     },{"backMenu":[{
                 "child": [

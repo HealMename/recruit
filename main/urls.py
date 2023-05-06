@@ -3,7 +3,7 @@ __author__ = "ila"
 
 import os
 from django.urls import path
-from main import users_v, config_v, schema_v
+from main import users_v, config_v, schema_v, views
 
 # from dj2.settings import dbName as schemaName
 
@@ -157,8 +157,9 @@ urlpatterns.extend(
     ]
 )
 
-# 百度api
+
 urlpatterns += [
-    path(r'get_ip_city', config_v.get_ip_city)
+    path(r'get_ip_city', config_v.get_ip_city),  # 百度api
+    path(r'checkout_user_type/', views.checkout_user_type),  # 切换身份
 ]
 

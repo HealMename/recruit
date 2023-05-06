@@ -491,7 +491,6 @@ def discusszhaopinxinxi_detail(request,id_):
             if ret!=None:
                 msg['code'] = crud_error_code
                 msg['msg'] = retfo
-            print(msg)
         return JsonResponse(msg)
 
 

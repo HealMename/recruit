@@ -4,7 +4,7 @@ import base64, copy
 from django.http import JsonResponse
 from django.apps import apps
 
-from libs.utils import Struct
+from libs.utils import Struct, db
 from util.codes import *
 from util import message as mes
 
@@ -50,20 +50,22 @@ class Auth(object):
             tablename2 = decode_dict.get("tablename")
 
             params2 = decode_dict.get("params", {})
-
+            print(f"取出：{params2}")
             datas = None
             allModels = apps.get_app_config('main').get_models()
             for model in allModels:
                 if model.__tablename__ == tablename2:
                     datas = model.getbyparams(model, model, params2)
-            print(datas[:])
             if not datas:
                 msg['code'] = username_error_code
                 msg['msg'] = '找不到该用户信息'
                 result = msg
             else:
                 request.user = Struct(datas[0])
+                if request.user.role == '教师':
+                    request.user.shouji = db.default.user_tea_det.get(user_id=request.user.id).phone_number
                 request.session['tablename'] = tablename2
+                print(f"设置：{params2}")
                 request.session['params'] = params2
                 msg['msg'] = '身份验证通过。'
                 result = msg

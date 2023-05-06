@@ -262,7 +262,6 @@ def admin_file1(request, p1):
     if request.method in ["GET", "POST"]:
         fullPath = request.get_full_path()
         path1 = os.path.join(os.getcwd(), "templates/front/admin/dist/static/", p1)
-        print(1, p1, path1)
         return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
 
 

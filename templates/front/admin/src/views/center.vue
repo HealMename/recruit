@@ -147,45 +147,45 @@
                     placeholder="用户名"></el-input>
         </el-form-item>
 
-        <!--       教师 开始-->
-        <el-form-item v-if="role === '教师'" label="用户名" prop="username">
+        <!--       出题专家 开始-->
+        <el-form-item v-if="role === '出题专家'" label="用户名" prop="username">
           <el-input v-model="ruleForm.username"
                     placeholder="账号"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="role === '教师'" label="姓名" prop="name">
+        <el-form-item v-if="role === '出题专家'" label="姓名" prop="name">
           <el-input v-model="ruleForm.name"
                     placeholder="姓名"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="role === '教师'" label="性别" prop="age">
+        <el-form-item v-if="role === '出题专家'" label="性别" prop="age">
           <el-select v-model="ruleForm.age" placeholder="请选择性别">
             <el-option label="男" :value="1">男</el-option>
             <el-option label="女" :value="2">女</el-option>
           </el-select>
         </el-form-item>
 
-        <el-form-item v-if="role === '教师'" label="手机号" prop="phone_number">
+        <el-form-item v-if="role === '出题专家'" label="手机号" prop="phone_number">
           <el-input v-model="ruleForm.phone_number"
                     placeholder="手机号"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="role === '教师'" label="邮箱" prop="email">
+        <el-form-item v-if="role === '出题专家'" label="邮箱" prop="email">
           <el-input v-model="ruleForm.email"
                     placeholder="邮箱"></el-input>
         </el-form-item>
 
 
-        <el-form-item v-if="role === '教师'" label="身份证" prop="number_id">
+        <el-form-item v-if="role === '出题专家'" label="身份证" prop="number_id">
           <el-input v-model="ruleForm.number_id"
                     placeholder="身份证"></el-input>
         </el-form-item>
-        <el-form-item v-if="role === '教师'" label="毕业院校" prop="school">
+        <el-form-item v-if="role === '出题专家'" label="毕业院校" prop="school">
           <el-input v-model="ruleForm.school"
                     placeholder="毕业院校"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="role === '教师'" label="学历" prop="school_level">
+        <el-form-item v-if="role === '出题专家'" label="学历" prop="school_level">
           <el-select v-model="ruleForm.school_level" placeholder="请选择学历">
             <el-option label="大专" value="1">大专</el-option>
             <el-option label="本科" value="2">本科</el-option>
@@ -194,7 +194,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item v-if="role === '教师'" label="专业" prop="speciality">
+        <el-form-item v-if="role === '出题专家'" label="专业" prop="speciality">
           <el-input v-model="ruleForm.speciality"
                     placeholder="专业"></el-input>
         </el-form-item>
@@ -229,7 +229,7 @@ export default {
     this.role = this.$storage.get("role");
     this.flag = table;
     this.loading = true;
-    if (this.role === '教师') {
+    if (this.role === '出题专家') {
       this.$http.get(DOMAIN_API_SYS + "/tea/userinfo/?id=" + this.$storage.get("userId")).then(res => {
         console.log(res.data.data)
         this.loading = false;
@@ -257,7 +257,7 @@ export default {
       this.ruleForm.zhaopian = fileUrls;
     },
     onUpdateHandler() {
-      if (this.role === '教师') {
+      if (this.role === '出题专家') {
         this.$http.post(DOMAIN_API_SYS + '/tea/add/', this.ruleForm).then(res => {
 
 

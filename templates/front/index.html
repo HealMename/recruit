@@ -241,7 +241,7 @@
                     <a href="javascript:" id="register" class="menumain">注册</a>
                     <div class="register" style="display: none">
                         <p><a href="/pages/yonghu/register.html?tablename=yonghu" target="_blank">个人注册</a></p>
-                        <p><a href="javascript:navPage('/tea/add/')">教师注册</a></p>
+                        <p><a href="javascript:navPage('/tea/add/')">出题专家注册</a></p>
                         <p><a href="javascript:">企业注册</a></p>
                     </div>
                 </li>
@@ -258,10 +258,10 @@
                     <a href="javascript:" id="username" class="menumain"></a>
                     <div class="register" style="display: none">
                         <p><a href="/admin/#/index"  target="_blank">我的后台管理</a></p>
-                        <p><a href="javascript:">切换普通用户</a></p>
-                        <p><a href="javascript:">切换教师</a></p>
-                        <p><a href="javascript:">切换面试官</a></p>
-                        <p><a href="javascript:">切换企业用户</a></p>
+                        <p v-if="role!=='用户'"><a href="javascript:" @click="checkout_user_type(1, '用户', 'users')">切换普通用户</a></p>
+                        <p v-if="role!=='出题专家'"><a href="javascript:" @click="checkout_user_type(2, '出题专家', 'users')">切换出题专家</a></p>
+                        <p v-if="role!=='面试官'"><a href="javascript:" >切换面试官</a></p>
+                        <p v-if="role!=='企业用户'"><a href="javascript:" @click="checkout_user_type(4, '公司', 'gongsi')">切换企业用户</a></p>
                         <p><a href="/admin/#/updatePassword" target="_blank">修改密码</a></p>
                         <p><a href="javascript:localStorage.clear();location.reload()">退出登录</a></p>
                     </div>
@@ -309,17 +309,24 @@
 <script src="/media/js/vue.js"></script>
 <script src="/media/js/config.js"></script>
 <script src="/media/js/common.js"></script>
+<script type="application/javascript">
+    function getIP(json) {
+      localStorage.setItem("ip", json.ip)
+    }
+  </script>
+
+  <script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
 
 <script>
     $(function () {
-        var username = localStorage.getItem('adminName')
+        var username = localStorage.getItem('adminName').replaceAll('"', '')
         if (username) {
             $("#username").text(username)
             $(".user").show()
         } else {
             $(".user").hide()
         }
-        var role = localStorage.getItem('role')
+        var role = localStorage.getItem('role').replaceAll('"', '')
         if (role) {
             $("#userrole").text(role)
         }
@@ -377,14 +384,39 @@
                     //content为弹出层内容
                     content: $("#city_list").html()
                 });
+            },
+            checkout_user_type(type, role, tableName){
+                // 切换身份
+                $.get(`/django7681v/checkout_user_type/?type=${type}`,function (res) {
+                    if (res.response === 'fail'){
+                         msg_fail(res.message, function () {
+                             if (role === '用户'){
+                                 navPage('./pages/yonghu/register.html')
+                             }else if (role === '公司'){
+                                 navPage('./pages/gongsi/register.html')
+                             }else if (role === '出题专家'){
+                                 navPage('/tea/add/')
+                             }
+                         })
+                    }else{
+                        localStorage.setItem("userId", res.id);
+                        localStorage.setItem("Token", res.token);
+                        localStorage.setItem("role", role);
+                        localStorage.setItem("sessionTable", tableName);
+                        msg_ok("切换成功", function () {
+                            location.reload()
+                        })
+                    }
+                });
             }
         }
     });
 
     layui.use(['layer', 'element', 'carousel', 'laypage', 'jquery','laydate'], function () {
-        vue.username = localStorage.getItem('adminName')
-        vue.role = localStorage.getItem('role')
-
+        vue.username = localStorage.getItem('adminName').replaceAll('"', '')
+        vue.role = localStorage.getItem('role').replaceAll('"', '')
+        vue.id = localStorage.getItem('ip')
+        console.log(localStorage.getItem('adminName').replaceAll('"', ''))
         $.get(`/django7681v/option/chengshi/chengshi?type=1`,function (res) {
             vue.chengshiOptions = res.data
             let html = ''
@@ -394,7 +426,7 @@
             $(".citys").html(html)
         });
         if (!vue.city){
-            $.get('/get_ip_city/',function (res) {
+            $.get('/get_ip_city/?ip=' + vue.id,function (res) {
                 localStorage.setItem("city", res.data.content.address_detail.city)
                 vue.city = res.data.content.address_detail.city
             });

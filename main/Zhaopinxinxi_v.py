@@ -210,7 +210,6 @@ def zhaopinxinxi_page(request):
                     break
         msg['data']['list'], msg['data']['currPage'], msg['data']['totalPage'], msg['data']['total'], \
         msg['data']['pageSize'] = zhaopinxinxi.page(zhaopinxinxi, zhaopinxinxi, req_dict, request)
-        print(1, msg)
         return JsonResponse(msg)
 
 
@@ -230,7 +229,6 @@ def zhaopinxinxi_autoSort(request):
         req_dict['order'] = 'desc'
         msg['data']['list'], msg['data']['currPage'], msg['data']['totalPage'], msg['data']['total'], \
         msg['data']['pageSize'] = zhaopinxinxi.page(zhaopinxinxi, zhaopinxinxi, req_dict)
-        print(2, msg)
         return JsonResponse(msg)
 
 
@@ -484,7 +482,6 @@ def zhaopinxinxi_detail(request, id_):
             if ret != None:
                 msg['code'] = crud_error_code
                 msg['msg'] = retfo
-        print(2, msg)
         return JsonResponse(msg)
 
 
