@@ -1,10 +1,10 @@
 const base = {
     get() {
         return {
-            url : DOMAIN_API_SYS,
+            url : DOMAIN_API_SYS + '/',
             name: "django7681v",
             // 退出到首页链接
-            indexUrl: DOMAIN_API_SYS
+            indexUrl: DOMAIN_API_SYS + '/'
         };
     },
     getProjectName(){
