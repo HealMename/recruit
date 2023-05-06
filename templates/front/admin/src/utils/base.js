@@ -1,10 +1,10 @@
 const base = {
     get() {
         return {
-            url : "http://127.0.0.1:8087/",
+            url : DOMAIN_API_SYS,
             name: "django7681v",
             // 退出到首页链接
-            indexUrl: 'http://127.0.0.1:8087/'
+            indexUrl: DOMAIN_API_SYS
         };
     },
     getProjectName(){
