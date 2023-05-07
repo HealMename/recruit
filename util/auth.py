@@ -50,7 +50,6 @@ class Auth(object):
             tablename2 = decode_dict.get("tablename")
 
             params2 = decode_dict.get("params", {})
-            print(f"取出：{params2}")
             datas = None
             allModels = apps.get_app_config('main').get_models()
             for model in allModels:
@@ -65,7 +64,6 @@ class Auth(object):
                 if request.user.role == '教师':
                     request.user.shouji = db.default.user_tea_det.get(user_id=request.user.id).phone_number
                 request.session['tablename'] = tablename2
-                print(f"设置：{params2}")
                 request.session['params'] = params2
                 msg['msg'] = '身份验证通过。'
                 result = msg
