@@ -406,18 +406,18 @@
     });
 
     layui.use(['layer', 'element', 'carousel', 'laypage', 'jquery','laydate'], function () {
-        vue.username = localStorage.getItem('adminName').replaceAll('"', '')
-        vue.role = localStorage.getItem('role').replaceAll('"', '')
+        vue.username = localStorage.getItem('adminName')
+        vue.role = localStorage.getItem('role')
         vue.id = localStorage.getItem('ip')
 
         if (vue.username) {
-            $("#username").text(vue.username)
+            $("#username").text(vue.username.replaceAll('"', ''))
             $(".user").show()
         } else {
             $(".user").hide()
         }
         if (vue.role) {
-            $("#userrole").text(vue.role)
+            $("#userrole").text(vue.role.replaceAll('"', ''))
         }
 
 
