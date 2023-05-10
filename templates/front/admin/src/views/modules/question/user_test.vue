@@ -1,20 +1,15 @@
 <template>
   <el-row>
     <el-col :span="12">
-      <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item label="题目ID">
-          <el-input v-model="form.id" placeholder="输入题目ID或内容"></el-input>
+      <el-form ref="form" :model="form" label-width="100px">
+        <el-form-item label="做题记录ID">
+          <el-input v-model="form.id" placeholder=""></el-input>
         </el-form-item>
-        <el-form-item label="状态：" >
-          <el-radio-group v-model="form.status">
-            <el-radio label="" value="">全部</el-radio>
-            <el-radio label="0" value="0">未审核</el-radio>
-            <el-radio label="1" value="1">已审核</el-radio>
-          </el-radio-group>
+        <el-form-item label="手机号">
+          <el-input v-model="form.phone" placeholder=""></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit(1)">搜索</el-button>
-          <el-button type="primary" @click="onAdd(0)">添加题目</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -29,45 +24,19 @@
             prop="id"
             align="center"
             label="ID"
-            width="50">
+            width="150">
         </el-table-column>
         <el-table-column
-            prop="sid_name"
+            prop="phone"
             align="center"
-            label="科目"
-            width="100">
+            label="手机号"
+            width="200">
         </el-table-column>
-        <el-table-column
-            prop="version"
+      <el-table-column
+            prop="name"
             align="center"
-            label="版本" width="100">
-        </el-table-column>
-        <el-table-column
-            prop="level_name"
-            align="center"
-            label="级别" width="100">
-        </el-table-column>
-        <el-table-column
-            prop="size_name"
-            align="center"
-            label="规模" width="100">
-        </el-table-column>
-        <el-table-column
-            prop="title"
-            align="center"
-            label="题目标题">
-        </el-table-column>
-        <el-table-column
-            prop="desc"
-            width="300"
-            align="desc"
-            label="题目描述">
-        </el-table-column>
-        <el-table-column
-            prop="status_name"
-            width="100"
-            align="center"
-            label="状态">
+            label="姓名"
+            >
         </el-table-column>
         <el-table-column
             prop="add_time"
@@ -77,12 +46,12 @@
         </el-table-column>
         <el-table-column
             prop=""
-            width="100"
+            width="200"
             align="center"
             label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="onAdd(scope.row.id)">编辑</el-button>
-            <el-button type="text" size="small" style="color: red" @click="delQ(scope.row.id)">删除</el-button>
+            <el-button type="text" size="small" @click="onAdd(scope.row.id)">查看详情</el-button>
+            <el-button type="text" size="small" style="color: red" @click="delQ(scope.row.id)">删除记录</el-button>
           </template>
         </el-table-column>
       </el-table>

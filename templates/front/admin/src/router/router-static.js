@@ -32,6 +32,7 @@ import question from '@/views/modules/question/question'
 import questionadd from '@/views/modules/question/questionadd'
 import paper from '@/views/modules/question/paper'
 import paperadd from '@/views/modules/question/paperadd'
+import user_test from '@/views/modules/question/user_test'
 
 
 //2.配置路由   注意：名字
@@ -63,6 +64,12 @@ const routes = [{
         path: '/paper/add/:id',
         name: '试卷 / 试卷详情',
         component: paperadd,
+        meta: {icon: '', title: 'center'}
+    },{
+        // 这里不设置值，是把main作为默认页面
+        path: '/user/test/',
+        name: '题目 / 做题记录',
+        component: user_test,
         meta: {icon: '', title: 'center'}
     },
         {

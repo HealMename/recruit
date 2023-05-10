@@ -44,11 +44,21 @@
         <el-form-item label="题目标题：" prop="title">
           <el-input v-model="form.title"></el-input>
         </el-form-item>
-        <el-form-item label="题目描述：" prop="content">
-          <el-input type="textarea" v-model="form.content"></el-input>
+        <el-form-item label="题目描述：" prop="desc">
+          <el-input type="textarea" v-model="form.desc"></el-input>
         </el-form-item>
 
-        <el-form-item :label="'url' + (index+1)" v-for="(item,index) in form.urls">
+        <el-form-item label="题目详情：" prop="content">
+          <editor
+                    style="min-width: 200px; max-width: 600px;"
+                    v-model="form.content"
+                    class="editor"
+                    action="file/upload">
+                </editor>
+        </el-form-item>
+
+
+        <el-form-item :label="'url' + (index+1)" v-for="(item,index) in form.urls" v-bind:key="index">
           <el-input v-model="item.value" v-bind:key="index" style="width: 92%"></el-input>
           <i class="el-icon-circle-plus-outline" style="padding-left: 12px;cursor:pointer;" @click="addUrl()" v-if="index+1 === 1"></i>
           <i class="el-icon-remove-outline" style="padding-left: 12px;cursor:pointer;" @click="delUrl(index)" v-if="index+1 > 1"></i>
@@ -87,6 +97,7 @@ export default {
         level: "1",
         title: "",
         content: "",
+        desc: "",
         size: "1",
         add_user: this.$storage.get("userId"),
 
@@ -96,7 +107,8 @@ export default {
         version: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
         title: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
         do_points: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
-        content: [{ required: true, message: '请输入做题时间', trigger: 'blur' }]
+        desc: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
+        content: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
       }
 
     }
@@ -111,7 +123,6 @@ export default {
         this.$http.post(DOMAIN_API_SYS + "/tea/question_list/", {id: this.form.id}).then(res => {
           let r = res.data.data
           this.form = r.page_data[0]
-          console.log(r.page_data[0])
           this.loading = false
       })
     }
@@ -150,6 +161,11 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="css">
+.editor{
+  height: 500px;
+  & /deep/ .ql-container {
+	  height: 310px;
+  }
+}
 </style>
