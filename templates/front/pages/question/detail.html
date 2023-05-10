@@ -174,7 +174,7 @@
                     <span style="word-break: break-all"
                           :style='{"padding":"5px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","color":"#333","borderRadius":"6px","textAlign":"left","borderWidth":"0","width":"auto","lineHeight":"20px","fontSize":"15px","borderStyle":"solid"}'
                           class="desc">
-							{{ detail.content }}
+							{{ detail.desc }}
 						</span>
                 </div>
                 <div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(6, 82, 121, 1)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"solid"}'
@@ -349,26 +349,8 @@
                     layer.msg("请登录后重试", {icon: 1, time: 1500})
                     return false
                 } else {
-
-
                     layer.msg("倒计时已开始，请在容器中做题", {icon: 1, time: 1500})
-                    let now = new Date().getTime();
-                    let count = (now + this.detail.do_time * 1000 * 60) - now;
-                    if (count > 0) {
-                        this.count = count / 1000
-                        var _this = this;
-                        this.inter = window.setInterval(function () {
-                            _this.count = _this.count - 1;
-                            if (_this.count < 0) {
-                                window.clearInterval(_this.inter);
-                                layer.msg("时间到了！", {
-                                    time: 2000,
-                                    icon: 5
-                                })
-                            }
-                        }, 1000);
-                    }
-                    window.open(url)
+
                 }
             },
 

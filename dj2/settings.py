@@ -24,8 +24,9 @@ with open(config_file) as f:
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'w5yn#0gn2tt7pvu%hvwt0!lt=!$6+eqp4%m8)u3u#gknm@jm)k'
-
+SECRET_KEY = '10086'
+SESSION_COOKIE_AGE = 60 * 60 * 24  # token有效期
+K8S_URL = "http://127.0.0.1:8088/workload/terminal_index/"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -66,7 +67,6 @@ SESSION_COOKIE_PATH = "/"
 SESSION_COOKIE_DOMAIN = None
 SESSION_COOKIE_SECURE = False
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_AGE = 1209600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = False
 

@@ -3,12 +3,17 @@ import time
 
 import random
 
-from libs.utils import ajax, db
+from django.http import HttpResponseRedirect
+
+from dj2.settings import K8S_URL
+from libs.utils import ajax, db, auth_token
 from libs.utils.common import Struct, trancate_date
 
 level_name = {'1': "初级", "2": "中级", "3": "高级"}
 sid_name = {'1': "K8s", "2": "Mysql", "3": "Vue"}
 size_name = {'1': '单机', "2": "集群", "3": "多集群"}
+
+ROLE = {"用户": 1, "教师": 2, "面试官": 3, "企业": 4}
 
 
 def get_question_class(request):
@@ -44,29 +49,6 @@ def get_question_class(request):
     return ajax.ajax_ok(data=data)
 
 
-def create_user_question(request):
-    """
-    用户按照主题练习
-    """
-    user_id = request.user.id or 10
-    now = int(time.time())
-    # 生成 q_num 个试题
-    sid = request.QUERY.get('sid')  # 科目
-    level = request.QUERY.get('level')  # 级别
-    if not sid:
-        return ajax.ajax_fail(message='请选择科目')
-    if not level:
-        return ajax.ajax_fail(message='请选择级别')
-    q_num = request.QUERY.get('q_num')  # 做题数量
-    questions = db.default.question.filter(sid=sid, level=level)
-    if len(questions) < 5:
-        return ajax.ajax_fail(message='题目不足， 请联系管理员')
-    qids = random.sample([x.id for x in questions], int(q_num))
-    content = json.dumps([{'id': x, 'is_right': 0} for x in qids])
-    id_ = db.default.user_test_det.create(type=2, content=content, status=0, add_user=user_id, add_time=now, do_time=0)
-    return ajax.ajax_ok(id_)
-
-
 def get_paper_question(request):
     """获取试卷关联题目"""
     type_ = int(request.QUERY.get('type'))  # 1 1考试试卷 2随机试卷
@@ -91,17 +73,6 @@ def get_paper_question(request):
         q['size_name'] = size_name[str(q['size'])]
         q['urls'] = [{'value': x} for x in json.loads(q.pop('link_url'))]
     return ajax.ajax_ok(data)
-
-
-def do_question(request):
-    """做题"""
-    user_id = request.user.id
-    now = int(time.time())
-    type_ = request.QUERY.get('type')  # 1 单题练习 2随机试卷练习 3考试试卷
-    paper_id = request.QUERY.get('paper_id')  # 试卷id
-    status = request.QUERY.get('status')  # 0未完成 1 已完成
-    data = request.QUERY.get('data')  # 答题详情
-
 
 
 def question_list(request):
@@ -307,3 +278,52 @@ def save_paper_question(request):
             paper_id=paper_id, question_id=question_id, status=1, add_time=now, add_user=user_id)
     return ajax.ajax_ok(paper_id)
 
+
+def redirect(role_id, user_id, message_id):
+    """重定向到做题页"""
+    url = K8S_URL + f"?token={auth_token.create_token(role_id, user_id)}&id={message_id}"
+    return url
+
+
+def do_question(request):
+    """生成做题url"""
+    user_id = request.user.id
+    now = int(time.time())
+    type_ = int(request.QUERY.get('type'))  # 1 单题练习
+    paper_id = request.QUERY.get('paper_id')  # 试卷id
+    qid = request.QUERY.get('qid')  # 题目id
+    role_id = ROLE[request.user.role]
+    if type_ == 1:
+        # 单题练习
+        content = json.dumps([{"id": qid, "is_right": 0}])
+        message_id = db.default.user_test_det.create(
+            type=1, content=content, status=0, add_user=user_id, add_time=now, do_time=0, role=role_id)
+        url = redirect(role_id, user_id, message_id)
+        return ajax.ajax_ok(url)
+
+
+def create_user_question(request):
+    """
+    用户按照主题练习
+    """
+    user_id = request.user.id or 10
+    now = int(time.time())
+    # 生成 q_num 个试题
+    sid = request.QUERY.get('sid')  # 科目
+    level = request.QUERY.get('level')  # 级别
+    if not sid:
+        return ajax.ajax_fail(message='请选择科目')
+    if not level:
+        return ajax.ajax_fail(message='请选择级别')
+    q_num = request.QUERY.get('q_num')  # 做题数量
+    questions = db.default.question.filter(sid=sid, level=level)
+    if len(questions) < 5:
+        return ajax.ajax_fail(message='题目不足， 请联系管理员')
+    qids = random.sample([x.id for x in questions], int(q_num))
+    content = json.dumps([{'id': x, 'is_right': 0} for x in qids])
+    role_id = ROLE[request.user.role]
+    message_id = db.default.user_test_det.create(
+        type=2, content=content, status=0, add_user=user_id,
+        add_time=now, do_time=0, role=role_id)
+    url = redirect(role_id, user_id, message_id)
+    return ajax.ajax_ok(url)

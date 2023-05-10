@@ -63,13 +63,6 @@ class CoreMiddle(MiddlewareMixin):
             r = self.cross_domain(request)
 
             request.QUERY = query
-            path = request.path
-
-            if not request.auth:
-                for i in write_list:
-                    if i in path:
-                        return r
-                return ajax.jsonp_fail(request, data='', error='no_user', message="请您先登录")
 
             if r:
                 return r

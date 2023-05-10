@@ -383,7 +383,7 @@
             </form>
             <!-- 样式一 -->
             <div class="list" style="position: relative;">
-                <div @click="jump('../question/detail.html?id='+item.id)" v-for="(item,index) in dataList"
+                <div @click="do_question(item.id)" v-for="(item,index) in dataList"
                      :key="index" class="list-item" :class="4=='3'?'list-item3':4=='5'?'list-item5':''">
                     <div class="list-item-body animation-box"
                          :style='{"padding":"10px","boxShadow":"0 0 0px ","margin":"0 0 10px 0","borderColor":"rgba(0,0,0,.1)","backgroundColor":"#fff","borderRadius":"4px","borderWidth":"0","borderStyle":"solid"}'>
@@ -392,7 +392,7 @@
                                     style="float: right;">科目:{{ item.sid_name }}</span></p>
                             <p class="st_name">{{ item.title }}</p>
                             <p class="gs_name">
-                                {{ item.content }}
+                                {{ item.desc }}
                             </p>
                             <p style="text-align: center;">
                                 <button class="layui-btn" style="width: 80%">进入学习</button>
@@ -485,6 +485,25 @@
             jump(url) {
                 jump(url)
             },
+            do_question(qid){
+                document.cookie = 'token' +"="+ localStorage.getItem('Token');
+                msg_ok("容器创建中，请稍后")
+                $.post('/tea/do_question/', {type: 1, qid: qid}, function (res) {
+                    console.log(res)
+                    if (res.response === 'ok') {
+                        window.open(res.data)
+                    } else {
+                        if (res.code === 401){
+                            msg_fail("请登录后重试")
+                        }else{
+                             msg_fail(res.message)
+                        }
+
+                        return false
+                    }
+
+                })
+            }
         }
     });
 
@@ -518,11 +537,10 @@
                     var sid = $(".sid").find('.layui-this').attr('lay-value')
                     var level = $(".level").find('.layui-this').attr('lay-value')
                     document.cookie = 'token' +"="+ localStorage.getItem('Token');
+                    msg_ok("容器创建中，请稍后")
                     $.post('/tea/create_user_question/', {sid: sid, level: level, q_num: 5}, function (res) {
-                        console.log(res)
                         if (res.response === 'ok') {
-                            var id_ = res.data
-                            jump('../question/detail.html?type=2&id=' + id_)
+                            window.open(res.data)
                         } else {
                             if (res.code === 401){
                                 msg_fail("请登录后重试")

@@ -26,5 +26,7 @@ urlpatterns += [
     re_path(r'^question_list/$', question.question_list),
     re_path(r'^create_user_question/$', question.create_user_question),
     re_path(r'^get_paper_question/$', question.get_paper_question),
+    re_path(r'^redirect/$', question.redirect),  # 跳转到做题页
+    re_path(r'^do_question/$', question.do_question),  # 单个题目做题
 
 ]

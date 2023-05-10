@@ -61,6 +61,7 @@ class Auth(object):
                 result = msg
             else:
                 request.user = Struct(datas[0])
+                print(request.user)
                 if request.user.role == '教师':
                     request.user.shouji = db.default.user_tea_det.get(user_id=request.user.id).phone_number
                 request.session['tablename'] = tablename2
