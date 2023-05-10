@@ -99,7 +99,7 @@ export default {
       this.form.page_id = page_id ? page_id: this.currentPage;
       this.form.page_size = this.page_size;
       this.loading = true;
-      this.$http.post(DOMAIN_API_SYS + "/tea/question_list/", this.form).then(res => {
+      this.$http.post(DOMAIN_API_SYS + "/user/test_list/", this.form).then(res => {
         let r = res.data.data
         this.tableData = r.page_data;
         this.total = r.sum_len

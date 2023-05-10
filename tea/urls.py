@@ -30,3 +30,7 @@ urlpatterns += [
     re_path(r'^do_question/$', question.do_question),  # 单个题目做题
 
 ]
+
+urlpatterns += [
+    re_path(r'^user/test_list/$', question.do_question),  # 单个题目做题
+]
