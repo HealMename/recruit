@@ -59,7 +59,8 @@ class Xauth(MiddlewareMixin):
                  "/{}/remind/".format(schemaName),
                   "/{}/option/".format(schemaName),
                 "resetPass",
-                "/tea/add/"
+                "/tea/add/",
+                "/tea/get_question_class/"
             ]
 
             allModels = apps.get_app_config('main').get_models()
