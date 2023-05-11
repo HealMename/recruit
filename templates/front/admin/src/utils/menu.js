@@ -32,7 +32,7 @@ const menu = {
                         ],
                         "menu": "做题记录",
                         "menuJump": "列表",
-                        "tableName": "user_test"
+                        "tableName": "user/test"
                     }
                 ],
                 "menu": "题库管理"
