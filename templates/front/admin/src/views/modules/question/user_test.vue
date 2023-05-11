@@ -8,6 +8,12 @@
         <el-form-item label="手机号">
           <el-input v-model="form.phone" placeholder=""></el-input>
         </el-form-item>
+        <el-form-item label="做题人：" >
+          <el-radio-group v-model="form.role">
+            <el-radio label="1" value="1">用户</el-radio>
+            <el-radio label="2" value="2">出题专家</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit(1)">搜索</el-button>
         </el-form-item>
@@ -83,6 +89,7 @@ export default {
       page_size: 5,
       form: {
         id: '',
+        role: '1',
         status: '',
       },
       tableData: []
@@ -99,7 +106,7 @@ export default {
       this.form.page_id = page_id ? page_id: this.currentPage;
       this.form.page_size = this.page_size;
       this.loading = true;
-      this.$http.post(DOMAIN_API_SYS + "/user/test_list/", this.form).then(res => {
+      this.$http.post(DOMAIN_API_SYS + "/tea/user/test_list/", this.form).then(res => {
         let r = res.data.data
         this.tableData = r.page_data;
         this.total = r.sum_len
@@ -108,7 +115,7 @@ export default {
       }).finally(() => this.loading = false)
     },
     onAdd: function (id_) {
-      this.$router.replace({path: "/question/add/" + id_});
+      this.$router.replace({path: "/user/test/det/" + id_});
     },
     handleSizeChange: function (val) {
       this.page_size = val;
@@ -120,7 +127,7 @@ export default {
     },
     delQ(id_){
       this.loading = true;
-      this.$http.post(DOMAIN_API_SYS + "/tea/del_q/", {id: id_, status: -1}).then(res => {
+      this.$http.post(DOMAIN_API_SYS + "/tea/user/user_test_del/", {id: id_, status: -1}).then(res => {
           this.$layer_message("已删除", 'success')
           this.onSubmit()
       }).catch((res) => {

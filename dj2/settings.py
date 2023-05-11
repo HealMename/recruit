@@ -26,8 +26,8 @@ with open(config_file) as f:
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '10086'
 SESSION_COOKIE_AGE = 60 * 60 * 24  # token有效期
-# K8S_URL = "http://127.0.0.1:8088/workload/terminal_index/"
-K8S_URL = "http://182.42.126.254:8088/workload/terminal_index/"
+K8S_URL = "http://127.0.0.1:8088/workload/terminal_index/"
+# K8S_URL = "http://182.42.126.254:8088/workload/terminal_index/"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

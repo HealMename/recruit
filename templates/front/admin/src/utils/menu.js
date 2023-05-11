@@ -24,6 +24,15 @@ const menu = {
                         "menu": "试卷",
                         "menuJump": "列表",
                         "tableName": "paper"
+                    },
+                    {
+                        "appFrontIcon": "cuIcon-list",
+                        "buttons": [
+
+                        ],
+                        "menu": "做题记录",
+                        "menuJump": "列表",
+                        "tableName": "user_test"
                     }
                 ],
                 "menu": "题库管理"
@@ -54,6 +63,15 @@ const menu = {
                         "menu": "试卷",
                         "menuJump": "列表",
                         "tableName": "paper"
+                    },
+                    {
+                        "appFrontIcon": "cuIcon-list",
+                        "buttons": [
+
+                        ],
+                        "menu": "做题记录",
+                        "menuJump": "列表",
+                        "tableName": "user/test"
                     }
                 ],
                 "menu": "题库管理"

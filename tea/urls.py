@@ -3,8 +3,7 @@ __author__ = "ila"
 
 import os
 from django.urls import path, re_path
-from tea import views, question
-
+from tea import views, question, user
 
 # url规则列表
 urlpatterns = [
@@ -32,5 +31,7 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    re_path(r'^user/test_list/$', question.do_question),  # 单个题目做题
+    re_path(r'^user/test_list/$', user.user_test_list),  # 单个题目做题
+    re_path(r'^user/user_test_del/$', user.user_test_del),  # 单个题目做题
+    re_path(r'^user/user_test_det/$', user.get_user_test_det),  # 单个题目做题
 ]

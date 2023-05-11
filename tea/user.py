@@ -20,7 +20,7 @@ def user_test_list(request):
     """获取做题记录"""
     id_ = request.QUERY.get('id')
     phone = request.QUERY.get('phone', 0)
-    role = request.QUERY.get('role', 2)
+    role = int(request.QUERY.get('role', 2))
     page_id = request.QUERY.get('page_id', 1)
     page_size = request.QUERY.get('page_size', 5)
     where_sql = ""
@@ -33,9 +33,10 @@ def user_test_list(request):
         if phone:
             where_sql += f" and tea.phone_number = '{phone}'"
         sql = f"""
-                select det.id ,au.username name, tea.phone_number phone, det.add_time  from django7681v.user_test_det det
-                join django7681v.users au on au.id =det.add_user  and det.`role` =2
-                join user_tea_det tea on tea.user_id =det.add_user 
+                select distinct det.id ,au.username name, tea.phone_number phone, det.add_time  from django7681v.user_test_det det
+                join django7681v.users au on au.id =det.add_user  and det.`role` =2 and det.status!=-1
+                join user_tea_det tea on tea.user_id =det.add_user
+                join user_test_det_content c on c.det_id=det.id
                 {where_sql}
                 order by -det.id
                 limit {(page_id - 1) * page_size}, {page_size} ;
@@ -45,9 +46,13 @@ def user_test_list(request):
             where_sql += f" and au.shouji = '{phone}'"
         # 用户
         sql = f"""
-            select det.id ,au.shouji phone, au.yonghuxingming name, det.add_time  
+            select distinct det.id ,au.shouji phone, au.yonghuxingming name, det.add_time  
             from django7681v.user_test_det det
-            join django7681v.yonghu au on au.id =det.add_user  and det.`role` =1 {where_sql}
+            join django7681v.yonghu au on au.id =det.add_user  
+            join user_test_det_content c on c.det_id=det.id
+            and det.`role` =1 and det.status!=-1 {where_sql} 
+            order by -det.id
+            limit {(page_id - 1) * page_size}, {page_size} ;
         """
     page_data = db.default.fetchall_dict(sql)
     for obj in page_data:
@@ -67,3 +72,37 @@ def get_page_len(table, where_sql):
     """
     num = db.default.fetchone_dict(sql)
     return num.num if num else 0
+
+
+def user_test_del(request):
+    """
+    删除
+    status:1正常 -1删除
+    """
+    id_ = request.QUERY.get('id')
+    status = request.QUERY.get('status')
+    db.default.user_test_det.filter(id=id_).update(status=status)
+    return ajax.ajax_ok()
+
+
+def get_user_test_det(request):
+    """获取做题详情"""
+    id_ = request.QUERY.get('id')
+    sql = f"""
+        select q.id, q.title, q.version, q.`level`, q.`size`,det.content  from django7681v.user_test_det t
+        join django7681v.user_test_det_content det on det.det_id =t.id and t.id={id_}
+        join django7681v.question q on q.id =det.question_id 
+    """
+    data = db.default.fetchall_dict(sql)
+    for obj in data:
+        obj.content = json.loads(obj.content)
+        content = ""
+        for x in obj.content:
+            content += str(x['msg']).replace('\u0007', '').replace(
+                '\r\n', r'<br \>')
+        obj.content = content
+    return ajax.ajax_ok(data[:])
+
+
+
+
