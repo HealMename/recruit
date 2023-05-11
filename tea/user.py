@@ -89,18 +89,22 @@ def get_user_test_det(request):
     """获取做题详情"""
     id_ = request.QUERY.get('id')
     sql = f"""
-        select q.id, q.title, q.version, q.`level`, q.`size`,det.content  from django7681v.user_test_det t
+        select q.id, q.title, q.version, q.`level`, q.`size`,det.content,det.add_time, q.sid  from django7681v.user_test_det t
         join django7681v.user_test_det_content det on det.det_id =t.id and t.id={id_}
         join django7681v.question q on q.id =det.question_id 
     """
     data = db.default.fetchall_dict(sql)
-    for obj in data:
-        obj.content = json.loads(obj.content)
+    for q in data:
+        q['add_time'] = trancate_date(q['add_time'])
+        q['sid'] = sid_name[str(q['sid'])]
+        q['level'] = level_name[str(q['level'])]
+        q['size'] = size_name[str(q['size'])]
+        q.content = json.loads(q.content)
         content = ""
-        for x in obj.content:
+        for x in q.content:
             content += str(x['msg']).replace('\u0007', '').replace(
                 '\r\n', r'<br \>')
-        obj.content = content
+        q.content = content
     return ajax.ajax_ok(data[:])
 
 

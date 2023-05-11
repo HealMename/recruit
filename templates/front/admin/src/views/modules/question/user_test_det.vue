@@ -10,7 +10,7 @@
           <el-descriptions-item label="标题">{{ item.title }}</el-descriptions-item>
           <el-descriptions-item label="级别">{{ item.level }}</el-descriptions-item>
           <el-descriptions-item label="规模">{{ item.size }}</el-descriptions-item>
-          <el-descriptions-item label="耗时">{{ item.size }}分钟</el-descriptions-item>
+          <el-descriptions-item label="耗时">1分钟</el-descriptions-item>
           <el-descriptions-item label="版本">
             <el-tag size="small">{{ item.version }}</el-tag>
           </el-descriptions-item>
