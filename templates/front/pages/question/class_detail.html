@@ -96,24 +96,16 @@
         line-height: 1.4;
     }
 
-    .recommend .box .filter {
-        padding: 0 10px;
-        display: flex;
-    }
-
-    .recommend .box .filter input {
-        width: 40%;
-    }
-
-    .recommend .box .filter p {
-        text-align: right;
+    .recommend .box .filter #user_paper {
         width: 100%;
         margin-top: 10px;
         font-size: 15px;
         cursor: pointer;
+        margin-left: 48px;
     }
 
     .recommend .box .filter p span:hover {
+        color: #2a8a15;
         border-bottom-width: 1px;
         border-bottom-style: solid;
     }
@@ -313,6 +305,13 @@
         font-weight: 500;
         line-height: 22px;
         transition: all .2s linear;
+        width: 241px;
+        overflow: hidden;
+        height: 22px;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 3;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
     }
 
     .gs_name {
@@ -363,15 +362,30 @@
         float: left;
         margin: 0 10px 20px 10px;
     }
-    .layui-form{
-        margin: 20px;
-    }
-    .layui-form-label {
-        width: 30px;
-    }
 
-    .layui-input-block {
-        margin-left: 68px;
+
+    .inputs{
+        float: left;
+        text-align: left;
+    }
+    .filter{
+        font-size: 15px;
+        position: relative;
+        left: -32px;
+    }
+    .filter a{
+        margin-top: 9px;
+        margin-left: 10px;
+        display: inline-block;
+        margin-right: 10px;
+    }
+    .filter a:first-child{
+        color: #2a8a15;
+    }
+    .filter a:hover{
+        color: #2a8a15;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
     }
 </style>
 <body>
@@ -382,10 +396,40 @@
         <div class="box" style='width:80%'>
             <form class="layui-form filter">
                 <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="搜索题目" v-model="title"
-                       class="layui-input">
-                <button type="button" class="layui-btn" id="btn-search" lay-submit="" lay-filter="demo1">搜索</button>
+                       class="layui-input" style="width: 200px;display: inline-block;margin-left: 48px;">
+                <button type="button" class="layui-btn" id="btn-search" lay-submit="" lay-filter="demo1" style="display: inline-block;">搜索</button>
                 </button>
-                <p id="user_paper"><span>按照主题练习(五个题目一组)</span></p>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">科目：</label>
+                    <div class="layui-input-block">
+                        <a href="javascript:">不限</a>/
+                        <a href="javascript:">k8s</a>/
+                        <a href="javascript:">shell</a>/
+                        <a href="javascript:">Mysql</a>/
+                        <a href="javascript:">Python</a>/
+                        <a href="javascript:">其他</a>
+                    </div>
+                  </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">级别：</label>
+                    <div class="layui-input-block">
+                        <a href="javascript:">不限</a>/
+                        <a href="javascript:">初级</a>/
+                        <a href="javascript:">中级</a>/
+                        <a href="javascript:">高级</a>/
+                        <a href="javascript:">其他</a>
+                    </div>
+                  </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规模：</label>
+                    <div class="layui-input-block">
+                        <a href="javascript:">不限</a>/
+                        <a href="javascript:">单机</a>/
+                        <a href="javascript:">集群</a>/
+                        <a href="javascript:">多集群</a>/
+                        <a href="javascript:">其他</a>
+                    </div>
+                  </div>
             </form>
             <!-- 样式一 -->
             <div class="list" style="position: relative;">
@@ -401,7 +445,7 @@
                                 {{ item.desc }}
                             </p>
                             <p style="text-align: center;">
-                                <button class="layui-btn" style="width: 80%">进入学习</button>
+                                <button class="layui-btn" style="width: 80%">进入实操环境</button>
                             </p>
 
                         </div>
@@ -567,10 +611,11 @@
 
         function pageList() {
             var param = {
-                id: vue.title,
+                // id: vue.title,
                 page_id: 1,
                 page_size: limit,
-                sid: vue.sid,
+                // sid: vue.sid,
+                status:1
             }
             $.get('/tea/question_list/', param, function (res) {
                 vue.dataList = res.data.page_data

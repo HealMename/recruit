@@ -101,13 +101,13 @@ EMAIL_HOST_PASSWORD = 'mhbrkuayvkkgbijd'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
+dbName = "django7681v"
 DB_ENGINE = 'django.db.backends.mysql'
 
 DATABASES = {
     'default': {
         'ENGINE': DB_ENGINE,
-        'NAME': 'django7681v',
+        'NAME': 'recruit',
         'USER': DATABASES_CONFIG["BASE_USER"],
         'PASSWORD': DATABASES_CONFIG["BASE_PASSWORD"],
         'HOST': DATABASES_CONFIG["BASE_HOST"],
@@ -115,35 +115,6 @@ DATABASES = {
     },
 }
 APPEND_SLASH = False
-dbtype, host, port, user, passwd, dbName, charset = config_read("config.ini")
-dbName = dbName.replace(" ", "").strip()
-
-if dbtype == 'mysql':
-    DATABASES = {
-        'default': {
-            # 'ENGINE': 'django.db.backends.sqlite3',
-            # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-            'ENGINE': 'django.db.backends.mysql',
-            'OPTIONS': {
-                'sql_mode': 'traditional',
-                'init_command': "SET sql_mode='traditional'",  # STRICT_TRANS_TABLES
-            },
-            'NAME': dbName,
-            'USER': user,
-            'PASSWORD': passwd,
-            'HOST': host,
-            'PORT': port,
-            'charset': charset,
-            'TEST': {
-                'CHARSET': charset,
-                'COLLATION': 'utf8_general_ci',
-            },
-            'CONN_MAX_AGE': 60
-        },
-    }
-else:
-    logging.error("请使用mysql5.5数据库")
-    os._exit(1)
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
