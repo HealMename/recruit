@@ -4,7 +4,7 @@
 
       <div :class="2 == 1 ? 'left' : 2 == 2 ? 'left center' : 'left right'">
         <el-form class="login-form" label-position="left" :label-width="3 == 3 || 3 == 2 ? '60px': '0px'">
-          <div class="title-container"><h3 class="title">面霸王登录</h3></div>
+          <div class="title-container"><h3 class="title">it学霸登录</h3></div>
           <el-form-item label="">
             <el-input placeholder="账号" name="username" type="text" v-model="rulesForm.username"/>
           </el-form-item>

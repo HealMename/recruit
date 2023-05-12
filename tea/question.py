@@ -10,7 +10,7 @@ from libs.utils import ajax, db, auth_token
 from libs.utils.common import Struct, trancate_date
 
 level_name = {'1': "初级", "2": "中级", "3": "高级"}
-sid_name = {'1': "K8s", "2": "Mysql", "3": "Vue"}
+sid_name = {'1': "K8s", "2": "Mysql", "3": "Vue", "4": "shell"}
 size_name = {'1': '单机', "2": "集群", "3": "多集群"}
 
 ROLE = {"用户": 1, "教师": 2, "面试官": 3, "企业": 4}
@@ -25,6 +25,13 @@ def get_question_class(request):
         {
             'id': 1,
             'name': 'K8s',
+            'content': 'Kubernetes（通常被简称为K8s）是一个开源的容器编排平台，可以管理和部署容器化应用程序。'
+                       '它最初由Google设计并开源，目的是为了帮助开发人员更好地管理和扩展容器化应用程序。',
+            'image': '/media/img/k8s.png',
+        },
+        {
+            'id': 4,
+            'name': 'shell',
             'content': 'Kubernetes（通常被简称为K8s）是一个开源的容器编排平台，可以管理和部署容器化应用程序。'
                        '它最初由Google设计并开源，目的是为了帮助开发人员更好地管理和扩展容器化应用程序。',
             'image': '/media/img/k8s.png',

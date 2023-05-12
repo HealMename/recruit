@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="referrer" content="no-referrer" />
-    <title>面霸网</title>
+    <title>it学霸</title>
     <link rel="stylesheet" href="/media/layui-v2.7.6/layui/css/layui.css">
     <link rel="stylesheet" href="/media/css/common.css"/>
     <link rel="stylesheet" href="/media/css/style.css"/>
@@ -19,7 +19,7 @@
     #iframe {
         width: 100%;
         margin-top: 00px;
-        padding-top: 60px;
+        padding-top: 41px;
     }
 
     #header {
@@ -91,7 +91,7 @@
         display: flex;
         align-items: center;
         box-sizing: border-box;
-        height: 50px;
+        height: 40px;
         background: #009688;
         box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
         justify-content: flex-start;
@@ -134,7 +134,7 @@
     #header .navs .title {
         width: auto;
         line-height: 40px;
-        font-size: 30px;
+        font-size: 24px;
         color: white;
         margin: 32px;
 
@@ -155,7 +155,7 @@
         display: inline-block;
         margin: 10px;
         color: rgba(255, 255, 255, 1);
-        font-size: 17px;
+        font-size: 14px;
     }
 
     #header .navs li a {
@@ -176,7 +176,7 @@
 
     #header .navs li:hover {
         color: #fff;
-        font-size: 17px;
+        font-size: 14px;
         border-radius: 0;
         border-width: 0;
         border-style: solid;
@@ -200,7 +200,7 @@
 
     .logins p:hover, .register p:hover {
         color: #fff;
-        font-size: 17px;
+        font-size: 14px;
         border-radius: 0;
         border-width: 0;
         border-bottom-width: 1px;
@@ -226,7 +226,7 @@
         <div class="list">
             <ul>
                 <li class='current'>
-                    <a href="javascript:navPage('./pages/zhaopinxinxi/list.html')" class="menumain">首页</a></li>
+                    <a href="javascript:navPage('./pages/question/list.html?type=1')" class="menumain">首页</a></li>
                 <li class='current'>
                     <a href="javascript:navPage('./pages/question/list.html?type=1')" class="menumain">练习平台</a></li>
                 <li class='current'>
@@ -239,6 +239,11 @@
                     <a href="javascript:" class="menumain">培训</a></li>
                 <li class='current'>
                     <a href="javascript:" class="menumain">模拟面试</a></li>
+                <li class='current'>
+                    <a href="javascript:" class="menumain">直播</a></li>
+                <li class='current right' >
+                    <a href="javascript:" id="login" class="menumain" @click="link_me()">联系我们</a> <br>
+                </li>
                 <li class='current right' v-if="!username">
                     <a href="javascript:" id="register" class="menumain">注册</a>
                     <div class="register" style="display: none">
@@ -265,24 +270,21 @@
                         <p><a href="javascript:localStorage.clear();location.reload()">退出登录</a></p>
                     </div>
                 </li>
+
             </ul>
         </div>
     </div>
 </div>
 <!-- end 顶部导航栏 -->
 
-<iframe src="./pages/zhaopinxinxi/list.html" id="iframe" frameborder="0" scrolling="no" width="100%"
+<iframe src="./pages/question/list.html?type=1" id="iframe" frameborder="0" scrolling="no" width="100%"
         onload="changeFrameHeight"></iframe>
 <div id="tabbar" class="tabbar"
      :style='{"boxShadow":"0 0 6px ","margin":"30px 0 0 0","borderColor":"rgba(255, 255, 255, 0.3)","backgroundColor":"#009688","borderRadius":"0","borderWidth":"0","borderStyle":"solid"}'
      style="position: relative;">
-    <div :style='{"padding":"0 5px","boxShadow":"0 0 0px 0","margin":"10px auto","borderColor":"#009688","backgroundColor":"#009688","color":"#fff","textAlign":"center","borderRadius":"0","borderWidth":"0","width":"100%","lineHeight":"32px","fontSize":"13px","borderStyle":"solid"}'
-         class="company">联系人: 杨先生 联系电话: 18600605385 电子邮箱: yp2007@126.com <br> 禁止发布、复制、传播违法信息，一旦发现将移送司法机关处理。
+    <div :style='{"padding":"0 5px","boxShadow":"0 0 0px 0","margin":"10px auto","borderColor":"#009688","backgroundColor":"#009688","color":"#fff","textAlign":"center","borderRadius":"0","borderWidth":"0","width":"100%","lineHeight":"22px","fontSize":"13px","borderStyle":"solid"}'
+         class="company">联系人: 杨先生 联系电话: 13161883018 电子邮箱: yp2007@126.com <br> 禁止发布、复制、传播违法信息，一旦发现将移送司法机关处理。
     </div>
-    <div :style='{"padding":"0 10px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"10px auto","borderColor":"rgba(0,0,0,1)","backgroundColor":"#000","color":"#fff","textAlign":"center","borderRadius":"0","borderWidth":"0","width":"100%","lineHeight":"32px","fontSize":"14px","borderStyle":"solid"}'
-         class="record"></div>
-    <div :style='{"padding":"0 10px","boxShadow":"0 0 0px ","margin":"10px auto 30px auto","borderColor":"#009688","backgroundColor":"#009688","color":"#fff","textAlign":"center","borderRadius":"0","borderWidth":"1px 0","width":"40%","lineHeight":"32px","fontSize":"14px","borderStyle":"solid"}'
-         class="desc"></div>
 </div>
 
 <div id="city_list" style="display: none;">
@@ -300,6 +302,15 @@
             </div>
         </div>
     </table>
+</div>
+
+<div class="link_me" style="display: none;">
+<div class="layui-card">
+  <div class="layui-card-body">
+          <img src="/media/img/link_me.png" alt="" style="width: 300px;">
+  </div>
+</div>
+
 </div>
 
 
@@ -365,6 +376,7 @@
                 $('.now_city').text(this.city)
                 layer.open({
                     type: 1,
+                    shade:0,
                     skin: 'alert-skin',//弹出层皮肤，可自定义也可用官方
                     title: ['城市列表', 'color:#009688'],//弹出层title,数组右半部份设置title样式
                     area: ['500px', '400px'],
@@ -374,6 +386,15 @@
                     //content为弹出层内容
                     content: $("#city_list").html()
                 });
+            },
+            link_me(){
+              layer.open({
+                  type: 1,
+                  shade:0,
+                  content: $(".link_me").html(),
+                  title: ''
+              });
+
             },
             checkout_user_type(type, role, tableName){
                 // 切换身份
@@ -436,20 +457,6 @@
 
 
     });
-
-    function chatTap() {
-        var userTable = localStorage.getItem('userTable');
-        if (userTable) {
-            layui.layer.open({
-                type: 2,
-                title: '客服咨询',
-                area: ['600px', '600px'],
-                content: './pages/chat/chat.html'
-            });
-        } else {
-            window.location.href = './pages/login/login.html'
-        }
-    }
 
     $('#username').mousemove(function () {
 

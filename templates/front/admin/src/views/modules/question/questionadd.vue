@@ -16,6 +16,7 @@
             <el-radio label="1" value="1">K8s</el-radio>
             <el-radio label="2" value="2">Mysql</el-radio>
             <el-radio label="3" value="3">Vue</el-radio>
+            <el-radio label="4" value="4">shell</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="版本：" prop="version">

@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="login-form">
-        <h1 class="h1">面霸王注册</h1>
+        <h1 class="h1">it学霸注册</h1>
         <el-form ref="rgsForm" class="rgs-form" :model="rgsForm">
           <!-- <div v-if="tableName=='yonghu'" class="input-group">
              <div class="label">用户账号</div>
