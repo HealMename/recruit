@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="utf-8">
-    <title>招聘信息</title>
+    <title>面试</title>
     <meta name="keywords" content=""/>
     <meta name="description" content=""/>
     <meta name="renderer" content="webkit">
@@ -294,7 +294,24 @@
         background: rgba(246, 246, 248, 0.17);
         box-shadow: rgba(0, 0, 0, 0.2) 0 0 3px;
     }
-
+    .station img {
+        width: 100px;
+        position: relative;   top: -44px; left: 5px;
+    }
+    .station .name{
+        width: 150px;
+        display: inline-block;
+    }
+    .station .info1{
+        width: 100px;
+        display: inline-block;
+        font-size: 13px;
+        margin-left: 15px;
+        
+    }
+    .name:first-child{
+        font-size: 16px;
+    }
     .list-item-body p {
         margin: 10px;
     }
@@ -337,52 +354,26 @@
         background: rgba(246, 246, 248, 0.2);
     }
 
-    .station .st_tag span, .gs_tag span {
-        display: inline-block;
-        font-size: 13px;
-        font-weight: 400;
-        line-height: 15px;
-        padding: 2px 4px;
-        border-radius: 4px;
-        background: rgba(102, 102, 102, 0.1);
-        height: 18px;
-    }
-
-    .station .score {
-        float: right;
-        font-size: 20px;
-        color: darkred;
-        position: relative;
-        top: -142px;
-        left: -4px;
-    }
-
-    .gs_img {
-        width: 52px;
-        float: left;
-        margin: 0 10px 20px 10px;
-    }
 
 
-    .inputs{
-        float: left;
-        text-align: left;
-    }
-    .filter{
+    .filter {
         font-size: 15px;
         position: relative;
         left: -32px;
     }
-    .filter a{
+
+    .filter a {
         margin-top: 9px;
         margin-left: 10px;
         display: inline-block;
         margin-right: 10px;
     }
-    .filter a:first-child{
+
+    .filter a:first-child {
         color: #2a8a15;
     }
-    .filter a:hover{
+
+    .filter a:hover {
         color: #2a8a15;
         border-bottom-width: 1px;
         border-bottom-style: solid;
@@ -397,64 +388,69 @@
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-md12">
                     <div class="layui-panel">
-                        <div style="padding: 30px;text-align: center;">领先的在线IT技能实训基地——掌握技能,赢在起跑线</div>
-                        <div style="padding: 30px;text-align: center;">技能不止步于知,教不止于书——在线实操,学习焕然一新</div>
+                        <div style="padding: 30px;text-align: center;">文明面试、礼貌面试、拒绝暴力、平台会严肃处理</div>
+                        <div style="padding: 30px;text-align: center;">领先的技术社区——汇聚极客与前沿技术,连接人才与公司</div>
                     </div>
                 </div>
             </div>
             <form class="layui-form filter">
-                <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="搜索题目" v-model="title"
-                       class="layui-input" style="width: 200px;display: inline-block;margin-left: 48px;">
-                <button type="button" class="layui-btn" id="btn-search" lay-submit="" lay-filter="demo1" style="display: inline-block;">搜索</button>
                 </button>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">科目：</label>
+                    <label class="layui-form-label">行业：</label>
                     <div class="layui-input-block">
                         <a href="javascript:">不限</a>/
-                        <a href="javascript:">k8s</a>/
-                        <a href="javascript:">shell</a>/
+                        <a href="javascript:">电商</a>/
+                        <a href="javascript:">社交网络</a>/
+                        <a href="javascript:">在线教育</a>/
+                        <a href="javascript:">O2O</a>/
+                        <a href="javascript:">软件研发</a>/
+                        <a href="javascript:">其他</a>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">职位：</label>
+                    <div class="layui-input-block">
+                        <a href="javascript:">不限</a>/
+                        <a href="javascript:">开发</a>/
+                        <a href="javascript:">运维</a>/
+                        <a href="javascript:">运营</a>/
+                        <a href="javascript:">产品经理</a>/
+                        <a href="javascript:">网络工程师</a>/
+                        <a href="javascript:">其他</a>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">岗位：</label>
+                    <div class="layui-input-block">
+                        <a href="javascript:">不限</a>/
+                        <a href="javascript:">PMP</a>/
                         <a href="javascript:">Mysql</a>/
+                        <a href="javascript:">K8s</a>/
                         <a href="javascript:">Python</a>/
+                        <a href="javascript:">Vue</a>/
+                        <a href="javascript:">Java</a>/
+                        <a href="javascript:">PHP</a>/
                         <a href="javascript:">其他</a>
                     </div>
-                  </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">级别：</label>
-                    <div class="layui-input-block">
-                        <a href="javascript:">不限</a>/
-                        <a href="javascript:">初级</a>/
-                        <a href="javascript:">中级</a>/
-                        <a href="javascript:">高级</a>/
-                        <a href="javascript:">其他</a>
-                    </div>
-                  </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">规模：</label>
-                    <div class="layui-input-block">
-                        <a href="javascript:">不限</a>/
-                        <a href="javascript:">单机</a>/
-                        <a href="javascript:">集群</a>/
-                        <a href="javascript:">多集群</a>/
-                        <a href="javascript:">其他</a>
-                    </div>
-                  </div>
+                </div>
             </form>
             <!-- 样式一 -->
             <div class="list" style="position: relative;">
-                <div @click="do_question(item.id)" v-for="(item,index) in dataList"
+                <div v-for="(item,index) in dataList"
                      :key="index" class="list-item" :class="4=='3'?'list-item3':4=='5'?'list-item5':''">
                     <div class="list-item-body animation-box"
                          :style='{"padding":"10px","boxShadow":"0 0 0px ","margin":"0 0 10px 0","borderColor":"rgba(0,0,0,.1)","backgroundColor":"#fff","borderRadius":"4px","borderWidth":"0","borderStyle":"solid"}'>
                         <div class="station">
-                            <p class="st_name">题目ID: {{ item.id }} <span
-                                    style="float: right;">科目:{{ item.sid_name }}</span></p>
-                            <p class="st_name">{{ item.title }}</p>
-                            <p class="gs_name">
-                                {{ item.desc }}
-                            </p>
-                            <p style="text-align: center;">
-                                <button class="layui-btn" style="width: 80%">进入实操环境</button>
-                            </p>
+                            <img src="/media/img/touxiang.jpeg" alt="">
+                            <div class="info1">
+                                <span class="name"><b>刘欣</b></span>
+                                <span class="name">出勤率 99%</span>
+                                <span class="name">好评率 99%</span>
+                                <span class="name">简介:人事专家、技术专家、部门负责人、高级工程师 </span>
+                            </div>
+                            <button type="button" class="layui-btn layui-btn-primary" style="margin: 0 10px;">详细信息</button>
+                            <button type="button" class="layui-btn layui-btn-primary">预约</button>
+                            <button type="button" class="layui-btn layui-btn-primary" data-type="chat">联系</button>
 
                         </div>
                     </div>
@@ -464,41 +460,6 @@
         </div>
     </div>
 
-    <div style="display: none;" id="user_paper_det">
-        <form class="layui-form" action="">
-            <div class="layui-form-item sid">
-                <label class="layui-form-label">科目</label>
-                <div class="layui-input-block">
-                    <select name="sid" lay-filter="sid" lay-verify="sid">
-                        <option value="" selected=""></option>
-                        <option value="1">K8s</option>
-                        <option value="2">Mysql</option>
-                        <option value="3">Python</option>
-                    </select>
-                </div>
-            </div>
-            <div class="layui-form-item level">
-                <label class="layui-form-label">级别</label>
-                <div class="layui-input-block">
-                    <select name="level" lay-filter="level" lay-verify="level">
-                        <option value="" selected=""></option>
-                        <option value="1">初级</option>
-                        <option value="2">中级</option>
-                        <option value="2">高级</option>
-                    </select>
-                </div>
-            </div>
-            <!--
-            <div class="layui-form-item">
-                <label class="layui-form-label">题目数量</label>
-                <div class="layui-input-block">
-                    <input type="number" name="phone_number" lay-verify="phone_number" autocomplete="off"
-                           placeholder="题目数量"
-                           class="layui-input" max="10">
-                </div>
-            </div> -->
-        </form>
-    </div>
 
 
 </div>
@@ -543,27 +504,26 @@
             jump(url) {
                 jump(url)
             },
-            do_question(qid){
-                document.cookie = 'token' +"="+ localStorage.getItem('Token');
-                msg_ok("容器创建中，请稍后")
-                $.post('/tea/do_question/', {type: 1, qid: qid}, function (res) {
-                    console.log(res)
-                    if (res.response === 'ok') {
-                        window.open(res.data)
-                    } else {
-                        if (res.code === 401){
-                            msg_fail("请登录后重试")
-                        }else{
-                             msg_fail(res.message)
-                        }
 
-                        return false
-                    }
-
-                })
-            }
         }
     });
+
+     //面板外的操作
+      var $ = layui.jquery, active = {
+        chat: function(){
+          //自定义会话
+          layui.layim.chat({
+            name: '小测试'
+            ,type: 'friend'
+            ,avatar: '../../other/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg'
+            ,id: 1008612
+          });
+          layer.msg('也就是说，此人可以不在好友面板里');
+        }
+      }
+
+
+
 
     layui.use(['form', 'layer', 'element', 'carousel', 'laypage', 'http', 'jquery', 'laydate'], function () {
         var form = layui.form;
@@ -594,16 +554,16 @@
                 yes: function (index, layero) {
                     var sid = $(".sid").find('.layui-this').attr('lay-value')
                     var level = $(".level").find('.layui-this').attr('lay-value')
-                    document.cookie = 'token' +"="+ localStorage.getItem('Token');
+                    document.cookie = 'token' + "=" + localStorage.getItem('Token');
                     msg_ok("容器创建中，请稍后")
                     $.post('/tea/create_user_question/', {sid: sid, level: level, q_num: 5}, function (res) {
                         if (res.response === 'ok') {
                             window.open(res.data)
                         } else {
-                            if (res.code === 401){
+                            if (res.code === 401) {
                                 msg_fail("请登录后重试")
-                            }else{
-                                 msg_fail(res.message)
+                            } else {
+                                msg_fail(res.message)
                             }
 
                             return false
@@ -623,7 +583,7 @@
                 page_id: 1,
                 page_size: limit,
                 // sid: vue.sid,
-                status:1
+                status: 1
             }
             $.get('/tea/question_list/', param, function (res) {
                 vue.dataList = res.data.page_data

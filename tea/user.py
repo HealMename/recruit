@@ -10,7 +10,7 @@ from libs.utils import ajax, db, auth_token
 from libs.utils.common import Struct, trancate_date
 
 level_name = {'1': "初级", "2": "中级", "3": "高级"}
-sid_name = {'1': "K8s", "2": "Mysql", "3": "Vue"}
+sid_name = {'1': "K8s", "2": "Mysql", "3": "Vue", "4": "shell"}
 size_name = {'1': '单机', "2": "集群", "3": "多集群"}
 
 ROLE = {"用户": 1, "教师": 2, "面试官": 3, "企业": 4}
@@ -33,8 +33,8 @@ def user_test_list(request):
         if phone:
             where_sql += f" and tea.phone_number = '{phone}'"
         sql = f"""
-                select distinct det.id ,au.username name, tea.phone_number phone, det.add_time  from django7681v.user_test_det det
-                join django7681v.users au on au.id =det.add_user  and det.`role` =2 and det.status!=-1
+                select distinct det.id ,au.username name, tea.phone_number phone, det.add_time  from recruit.user_test_det det
+                join recruit.users au on au.id =det.add_user  and det.`role` =2 and det.status!=-1
                 join user_tea_det tea on tea.user_id =det.add_user
                 join user_test_det_content c on c.det_id=det.id
                 {where_sql}
@@ -47,8 +47,8 @@ def user_test_list(request):
         # 用户
         sql = f"""
             select distinct det.id ,au.shouji phone, au.yonghuxingming name, det.add_time  
-            from django7681v.user_test_det det
-            join django7681v.yonghu au on au.id =det.add_user  
+            from recruit.user_test_det det
+            join recruit.yonghu au on au.id =det.add_user  
             join user_test_det_content c on c.det_id=det.id
             and det.`role` =1 and det.status!=-1 {where_sql} 
             order by -det.id
@@ -89,9 +89,9 @@ def get_user_test_det(request):
     """获取做题详情"""
     id_ = request.QUERY.get('id')
     sql = f"""
-        select q.id, q.title, q.version, q.`level`, q.`size`,det.content,det.add_time, q.sid  from django7681v.user_test_det t
-        join django7681v.user_test_det_content det on det.det_id =t.id and t.id={id_}
-        join django7681v.question q on q.id =det.question_id 
+        select q.id, q.title, q.version, q.`level`, q.`size`,det.content,det.add_time, q.sid  from recruit.user_test_det t
+        join recruit.user_test_det_content det on det.det_id =t.id and t.id={id_}
+        join recruit.question q on q.id =det.question_id 
     """
     data = db.default.fetchall_dict(sql)
     for q in data:

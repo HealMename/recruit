@@ -62,8 +62,8 @@ def get_paper_question(request):
     paper_id = request.QUERY.get('paper_id')  # 试卷id
     if type_ == 1:
         sql = f"""
-            select q.* from django7681v.paper_question p
-            join django7681v.question q on q.id=p.question_id
+            select q.* from recruit.paper_question p
+            join recruit.question q on q.id=p.question_id
             where p.paper_id ={paper_id} and p.status =1
         """
         data = db.default.fetchall_dict(sql)[:]
