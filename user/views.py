@@ -16,3 +16,11 @@ def login(request):
         return Auth.authenticate(Auth, yonghu, args)
     else:
         return render_template(request, 'user/index.html')
+
+
+def info(request):
+    """获取用户信息"""
+    return ajax.ajax_ok(Auth.identify(request, request))
+
+
+

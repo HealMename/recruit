@@ -89,13 +89,13 @@ def decode_plain_password(data):
     return base64.b64decode(data)
 
 
-def create_checkcode(account_id, user_id, expire_time):
+def create_checkcode(user_id, expire_time):
     """
     快速计算session校验码
     ----------------------
     添加user_id
     """
-    return account_id ^ user_id ^ expire_time ^ int(settings.SECRET_KEY)
+    return user_id ^ expire_time ^ int(settings.SECRET_KEY)
 
 
 def create_token(account_id, user_id):
@@ -110,7 +110,7 @@ def create_token(account_id, user_id):
     """
     try:
         expire_time = int(time.time()) + settings.SESSION_COOKIE_AGE
-        code = create_checkcode(account_id, user_id, expire_time)
+        code = create_checkcode(user_id, expire_time)
         token = "%s|%s|%s|%s" % (account_id, user_id, expire_time, code)
         # 对token进行encode,转换成bytearray可接收的类型
         token = strxor(token.encode(), int(settings.SECRET_KEY))
@@ -121,7 +121,7 @@ def create_token(account_id, user_id):
         logging.error(e)
 
 
-def decode_token(token, args):
+def decode_token(token, args=''):
     """
     解析token, 成功返回{account_id:账户ID, user_id:用户ID, expire:过期时间戳}, 失败返回None
     -----------------------------------------------------------------------------
@@ -136,8 +136,8 @@ def decode_token(token, args):
             token += '=' * missing_padding
         # token += '=' * (-len(token) % 4)
         token = base64.b64decode(token)
-        if '\\x' in str(token):
-            return
+        # if '\\x' in str(token):
+        #     return
         token = strxor(token, int(settings.SECRET_KEY))
         # 将token转换成str类型
         token = token.decode("utf-8")
@@ -146,7 +146,7 @@ def decode_token(token, args):
             account_id, user_id, expire_time, code = token.split('|')
         else:
             user_id, expire_time, code = token.split('|')
-        account_id = int(account_id)
+        account_id = account_id
         user_id = int(user_id)
         expire_time = int(expire_time)
         code = int(code)
@@ -156,10 +156,10 @@ def decode_token(token, args):
     nowt = time.time()
     if nowt > expire_time:
         return
-    check_code = create_checkcode(account_id, user_id, expire_time)
+    check_code = create_checkcode(user_id, expire_time)
     if code != check_code:
         return
-    return {'account_id': account_id, 'user_id': user_id, 'expire': expire_time}
+    return {'tablename': account_id, 'user_id': user_id, 'expire': expire_time}
 
 
 def login(request, account_id, user_id):

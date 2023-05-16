@@ -82,5 +82,7 @@ urlpatterns.extend([
 urlpatterns += [
     url(r'tea/', include('tea.urls')),
     url(r'user/', include('user.urls')),
+    url(r'interviewer/', include('interviewer.urls')),
+    url(r'uploads/', include('upload.urls')),
 
 ]

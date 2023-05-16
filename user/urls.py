@@ -8,4 +8,5 @@ from user import views
 # url规则列表
 urlpatterns = [
     re_path(r'^login/$', views.login),
+    re_path(r'^info/$', views.info),
 ]

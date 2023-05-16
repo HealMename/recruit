@@ -249,6 +249,7 @@
                     <div class="register" style="display: none">
                         <p><a href="javascript:navPage('/pages/yonghu/register.html?tablename=yonghu')">个人注册</a></p>
                         <p><a href="javascript:navPage('/tea/add/')">出题专家注册</a></p>
+                        <p><a href="javascript:navPage('/interviewer/add/')">面试官注册</a></p>
                         <p><a href="javascript:navPage('/pages/gongsi/register.html?tablename=gongsi')">企业注册</a></p>
                     </div>
                 </li>
@@ -424,19 +425,21 @@
     });
 
     layui.use(['layer', 'element', 'carousel', 'laypage', 'jquery','laydate'], function () {
-        vue.username = localStorage.getItem('adminName')
-        vue.role = localStorage.getItem('role')
-        vue.id = localStorage.getItem('ip')
-
-        if (vue.username) {
-            $("#username").text(vue.username.replaceAll('"', ''))
-            $(".user").show()
-        } else {
-            $(".user").hide()
-        }
-        if (vue.role) {
-            $("#userrole").text(vue.role.replaceAll('"', ''))
-        }
+        $.get('/user/info/?token='+ localStorage.getItem('Token'), function (res) {
+            if (!res.data.user){
+                $(".user").hide()
+                console.log("未登录")
+                localStorage.clear()
+            }else{
+                var res = res.data.user
+                vue.username = res.username
+                vue.role = res.role
+                vue.id = res.id
+                $("#username").text(vue.username.replaceAll('"', ''))
+                $(".user").show()
+                $("#userrole").text(vue.role.replaceAll('"', ''))
+            }
+        })
 
 
         $.get(`/django7681v/option/chengshi/chengshi?type=1`,function (res) {
