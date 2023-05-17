@@ -545,22 +545,27 @@
             },
             do_question(qid){
                 document.cookie = 'token' +"="+ localStorage.getItem('Token');
-                msg_ok("容器创建中，请稍后")
-                $.post('/tea/do_question/', {type: 1, qid: qid}, function (res) {
-                    console.log(res)
-                    if (res.response === 'ok') {
-                        window.open(res.data)
-                    } else {
-                        if (res.code === 401){
-                            msg_fail("请登录后重试")
-                        }else{
-                             msg_fail(res.message)
+                if (localStorage.getItem('role') === '"管理员"'){
+                    msg_fail("请切换用户或出题专家")
+                }else{
+                    msg_ok("容器创建中，请稍后")
+                    $.post('/tea/do_question/', {type: 1, qid: qid}, function (res) {
+                        console.log(res)
+                        if (res.response === 'ok') {
+                            window.open(res.data)
+                        } else {
+                            if (res.code === 401){
+                                msg_fail("请登录后重试")
+                            }else{
+                                 msg_fail(res.message)
+                            }
+
+                            return false
                         }
 
-                        return false
-                    }
+                    })
+                }
 
-                })
             }
         }
     });

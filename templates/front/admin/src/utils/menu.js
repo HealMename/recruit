@@ -66,6 +66,19 @@ const menu = {
                         "buttons": [
 
                         ],
+                        "menu": "申请列表",
+                        "menuJump": "列表",
+                        "tableName": "verify"
+                    },
+                ],
+                "menu": "审核管理"
+            },{
+                "child": [
+                    {
+                        "appFrontIcon": "cuIcon-list",
+                        "buttons": [
+
+                        ],
                         "menu": "题目",
                         "menuJump": "列表",
                         "tableName": "question"
