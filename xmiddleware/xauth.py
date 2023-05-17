@@ -97,9 +97,9 @@ class Xauth(MiddlewareMixin):
                 "/{}/examusers/login".format(schemaName),
                 "/{}/examusers/register".format(schemaName),
                 "/tea/add/",
-                "/uploads/"
+                "/uploads/",
+                "/interviewer/add/"
             ]  # 免认证list
-            print(request.path, post_list)
             if fullPath not in post_list and "register" not in fullPath and "login" not in fullPath \
                     and request.path not in post_list:  # 注册时不检测token。
                 result = Auth.identify(Auth, request)

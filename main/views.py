@@ -19,27 +19,33 @@ def checkout_user_type(request):
     type_ = int(request.QUERY.get('type'))  # 用户要切换的身份 1普通用户 2教师 3面试官 4企业用户
     user = request.user
     phone = user.shouji
+    print(phone)
     if type_ == 1:
         # 普通用户
         yonghu = db.default.yonghu.filter(shouji=phone).first()
         if yonghu:
             return yonghu_login({'shouji': phone})
         else:
-            return ajax.ajax_fail(message='您还没有注册普通用户身份，请前往注册')
-    elif type_ == 2:
+            return ajax.ajax_fail(message='您还没有注册该身份，请前往注册')
+    elif type_ in (2, 3):
         # 教师
-        yonghu = db.default.yonghu.filter(shouji=phone).first()
-        if yonghu:
-            return tea_login({'shouji': phone})
+        sql = f"""
+                select u.id from recruit.users u
+                join recruit.user_tea_det d on d.user_id=u.id 
+                and u.`type` ={type_} and d.phone_number ='{phone}'
+        """
+        tea = db.default.fetchone_dict(sql)
+        if tea:
+            return tea_login({'id': tea.id})
         else:
-            return ajax.ajax_fail(message='您还没有注册出题专家用户身份，请前往注册')
+            return ajax.ajax_fail(message='您还没有注册该身份，请前往注册')
     elif type_ == 4:
         # 企业
         yonghu = db.default.gongsi.filter(shouji=phone).first()
         if yonghu:
             return gongsi_login({'shouji': phone})
         else:
-            return ajax.ajax_fail(message='您还没有注册企业身份，请前往注册')
+            return ajax.ajax_fail(message='您还没有注册该身份，请前往注册')
     return ajax.ajax_ok()
 
 
@@ -57,7 +63,7 @@ def yonghu_login(req_dict):
 
 def tea_login(args):
     "教师登录"
-    args['type'] = 3
+    args['type'] = 2
     datas = users.getbyparams(users, users, args)
     if not datas:
         return ajax.ajax_fail(message='您还没有出题专家身份，请前往注册！')

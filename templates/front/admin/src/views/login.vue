@@ -124,8 +124,8 @@ export default {
         this.rulesForm.role = this.roles[0].roleName;
       }
       let url = `${DOMAIN_API_SYS}/django7681v/${this.tableName}/login?username=${this.rulesForm.username}&password=${this.rulesForm.password}&role=${this.rulesForm.role}`
-      if (this.rulesForm.role === '出题专家'){
-        url = `${DOMAIN_API_SYS}/tea/login/?username=${this.rulesForm.username}&password=${this.rulesForm.password}`
+      if (this.rulesForm.role === '出题专家' || this.rulesForm.role === '面试官'){
+        url = `${DOMAIN_API_SYS}/tea/login/?username=${this.rulesForm.username}&password=${this.rulesForm.password}&role=${this.rulesForm.role}`
         this.$http.post(url, {}).then(res => {
           console.log(res)
                 this.$storage.set("Token", res.data.token);
@@ -208,7 +208,7 @@ export default {
   background-size: cover;
   width: 100%;
   height: 100%;
-  background-image: url(/media/img/admin/login-bg.jpg);
+  background-image: url(http://182.42.126.254:8087/media/img/admin/login-bg.jpg);
 
   .loginInBt {
     width: 100%;
@@ -273,7 +273,7 @@ export default {
     left: 0;
     top: 0;
     box-sizing: border-box;
-    width: 360px;
+    width: 370px;
     height: auto;
     margin: 0;
     padding: 0 12px;

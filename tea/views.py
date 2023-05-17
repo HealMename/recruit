@@ -9,6 +9,8 @@ from libs.utils.common import Struct, render_template, num_to_ch
 from main.users_model import users
 from util.auth import Auth
 
+role_dict = {"出题专家": 2, "面试官": 3}
+
 
 def add_tea(request):
     """
@@ -53,11 +55,12 @@ def user_info(request):
 
 def login(request):
     """
-    教师登录
+    教师/面试官登录
     """
     if request.method == 'POST':
         args = {k: v for k, v in request.QUERY.items()}
-        args['type'] = 2
+        role = args.pop("role")
+        args['type'] = role_dict[role]
         password = args.pop('password')
         datas = users.getbyparams(users, users, args)
         if not datas:

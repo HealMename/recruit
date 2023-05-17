@@ -1,6 +1,8 @@
 const menu = {
     list() {
-        return [{
+        return [
+
+            {
         "frontMenu": [
 
         ],
@@ -43,6 +45,19 @@ const menu = {
         "hasFrontLogin": "否",
         "hasFrontRegister": "否",
         "roleName": "出题专家",
+        "tableName": "users"
+    },{
+        "frontMenu": [
+
+        ],
+        "backMenu": [
+
+        ],
+        "hasBackLogin": "是",
+        "hasBackRegister": "否",
+        "hasFrontLogin": "否",
+        "hasFrontRegister": "否",
+        "roleName": "面试官",
         "tableName": "users"
     },{"backMenu":[{
                 "child": [

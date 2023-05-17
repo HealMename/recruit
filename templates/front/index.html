@@ -265,7 +265,7 @@
                         <p><a href="/admin/#/index"  target="_blank">我的后台管理</a></p>
                         <p v-if="role!=='用户'"><a href="javascript:" @click="checkout_user_type(1, '用户', 'users')">切换普通用户</a></p>
                         <p v-if="role!=='出题专家'"><a href="javascript:" @click="checkout_user_type(2, '出题专家', 'users')">切换出题专家</a></p>
-                        <p v-if="role!=='面试官'"><a href="javascript:" >切换面试官</a></p>
+                        <p v-if="role!=='面试官'"><a href="javascript:" @click="checkout_user_type(3, '面试官', 'users')">切换面试官</a></p>
                         <p v-if="role!=='企业用户'"><a href="javascript:" @click="checkout_user_type(4, '公司', 'gongsi')">切换企业用户</a></p>
                         <p><a href="/admin/#/updatePassword" target="_blank">修改密码</a></p>
                         <p><a href="javascript:localStorage.clear();location.reload()">退出登录</a></p>
@@ -406,6 +406,8 @@
                                  navPage('./pages/yonghu/register.html?tablename=yonghu')
                              }else if (role === '公司'){
                                  navPage('./pages/gongsi/register.html?tablename=gongsi')
+                             }else if (role === '面试官'){
+                                 navPage('/interviewer/add/')
                              }else if (role === '出题专家'){
                                  navPage('/tea/add/')
                              }

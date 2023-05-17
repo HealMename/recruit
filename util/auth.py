@@ -60,7 +60,7 @@ class Auth(object):
 
                 if request.user.yonghuzhanghao:
                     request.user.role = '用户'
-                if request.user.role == '教师':
+                if request.user.role == '教师' or request.user.role == '面试官':
                     request.user.shouji = db.default.user_tea_det.get(user_id=request.user.id).phone_number
                 request.session['tablename'] = tablename
                 msg['msg'] = '身份验证通过。'

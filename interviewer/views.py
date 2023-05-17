@@ -22,14 +22,18 @@ def add_tea(request):
 
         id_ = args.pop('id', 0)
         username = args.pop('username', '')
-        if db.default.users.filter(username=username, type=3, id__ne=id_):
+        if db.default.users.filter(username=username, type=3, role="面试官", id__ne=id_):
             return ajax.ajax_fail(message='用户名已存在')
         now = int(time.time())
         if not id_:
             password = args.pop('password1', '')
-            args.pop('password2')
+            args.pop('password2', '')
+            args.pop('file', '')
+            args.pop('code', '')
+            args.pop('number_id_img1', '')
+            args.pop('number_id_img2', '')
             password = auth_token.sha1_encode_password(password)  # 加密密码
-            id_ = db.default.users.create(username=username, password=password, role='教师', type=3)
+            id_ = db.default.users.create(username=username, password=password, role='面试官', type=3)
             db.default.user_tea_det.create(user_id=id_, add_time=now, **args)
         else:
             args['add_time'] = now
