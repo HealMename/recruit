@@ -3,11 +3,11 @@ import time
 from django.http import JsonResponse
 from django.shortcuts import render
 
-from dj2.settings import UPLOAD_URL
+from dj2.settings import UPLOAD_URL, web_file_url
 from util.codes import *
 
 from libs.utils import ajax, db, auth_token
-from libs.utils.common import Struct, render_template, num_to_ch
+from libs.utils.common import Struct, render_template, num_to_ch, get_upload_key
 from main.users_model import users
 from util.auth import Auth
 
@@ -40,8 +40,11 @@ def add_tea(request):
             db.default.users.filter(id=id_).update(username=username)
             db.default.user_tea_det.filter(user_id=id_).update(**args)
         return ajax.ajax_ok(message='注册成功')
-    data.upload_url = UPLOAD_URL
+    data.upload_url = f"{UPLOAD_URL}?upcheck={get_upload_key()}&up_type=number_id_img"
+    data.web_file_url = web_file_url
     return render_template(request, 'interviewer/index.html', data)
+
+
 
 
 def user_info(request):

@@ -11,6 +11,20 @@ log = logging.getLogger(__name__)
 from django.template import loader
 
 
+UPLOAD_FILE_KEY_VALUE = 'bannei_upload'
+
+
+def get_upload_key():
+    """
+    功能:生成上传key
+    """
+    # 上传key
+    now = datetime.datetime.now()
+    m = hashlib.md5()
+    key_var = '%s%s' % (UPLOAD_FILE_KEY_VALUE, now.strftime("%Y%m%d"))
+    m.update(key_var.encode())
+    return m.hexdigest()
+
 class Struct(dict):
     """
     - 为字典加上点语法. 例如:

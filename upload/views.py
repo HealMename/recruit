@@ -8,23 +8,9 @@ import time
 from django.conf import settings
 
 from upload import fileutil
-from libs.utils import ajax, db
+from libs.utils import ajax, db, get_upload_key, UPLOAD_FILE_KEY_VALUE
 
 log = logging.getLogger(__name__)
-
-UPLOAD_FILE_KEY_VALUE = 'bannei_upload'
-
-
-def get_upload_key():
-    """
-    功能:生成上传key
-    """
-    # 上传key
-    now = datetime.datetime.now()
-    m = hashlib.md5()
-    key_var = '%s%s' % (UPLOAD_FILE_KEY_VALUE, now.strftime("%Y%m%d"))
-    m.update(key_var.encode())
-    return m.hexdigest()
 
 
 def upload_key(request):
