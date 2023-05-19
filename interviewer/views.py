@@ -1,3 +1,4 @@
+import json
 import time
 
 from aip import AipOcr
@@ -9,36 +10,61 @@ from main.users_model import users
 from util.auth import Auth
 
 
+def save_info(request):
+    """保存信息"""
+    step_id = int(request.QUERY.get('step_id'))
+    now = int(time.time())
+    data = Struct()
+    if step_id == 1:
+        # 保存个人信息
+        id_ = request.user.id or 0
+        name = request.QUERY.get('name')
+        phone = request.QUERY.get('phone')
+        code = request.QUERY.get('code')  # 验证码
+        front = request.QUERY.get('front')
+        back = request.QUERY.get('back')
+        info_front = Struct(json.loads(request.QUERY.get('info_front')))
+        info_back = Struct(json.loads(request.QUERY.get('info_back')))
+        ocr_info_front = Struct(json.loads(request.QUERY.get('ocr_info_front')))
+        ocr_info_back = Struct(json.loads(request.QUERY.get('ocr_info_back')))
+        if db.default.users.filter(username=phone, type=3, status=1, id__ne=id_):
+            return ajax.ajax_fail(message='手机号已被注册')
+        user_id = db.default.users.create(username=phone, type=3, status=1, role='面试官') if not id_ else id_
+        data.token = auth_token.create_token('users', user_id)
+        media_args = dict(
+            add_time=now, front=front, back=back, ocr_info_front=json.dumps(ocr_info_front),
+            ocr_info_back=json.dumps(ocr_info_back), status=1)
+
+        if not id_:
+            db.default.user_media_det.create(user_id=user_id, **media_args)
+
+        else:
+            db.default.user_media_det.filter(user_id=user_id).update(**media_args)
+        ocr_info_front = {x: y for x, y in ocr_info_front.items() if x in info_front}
+        ocr_info_back = {x: y for x, y in ocr_info_back.items() if x in info_back}
+        is_update = 0
+        if info_front != ocr_info_front or info_back != ocr_info_back:
+            # 判断用户是否修改过识别的内容
+            is_update = 1
+        det_args = dict(phone_number=phone, name=info_front.name, step_id=1, status=1, add_time=now,
+                        nickname=name, number_id=info_front.number_id, is_update=is_update)
+        if not id_:
+            db.default.user_tea_det.create(user_id=user_id, **det_args)
+        else:
+            db.default.user_tea_det.filter(user_id=user_id).update(**det_args)
+    return ajax.ajax_ok(data)
+
+
 def add_tea(request):
     """
-    面试官
+    面试官注册页面
     """
     data = Struct()
-    if request.method == 'POST':
-        args = {k: v for k, v in request.QUERY.items()}
-
-        id_ = args.pop('id', 0)
-        username = args.pop('username', '')
-        if db.default.users.filter(username=username, type=3, role="面试官", id__ne=id_):
-            return ajax.ajax_fail(message='用户名已存在')
-        now = int(time.time())
-        if not id_:
-            password = args.pop('password1', '')
-            args.pop('password2', '')
-            args.pop('file', '')
-            args.pop('code', '')
-            args.pop('number_id_img1', '')
-            args.pop('number_id_img2', '')
-            password = auth_token.sha1_encode_password(password)  # 加密密码
-            id_ = db.default.users.create(username=username, password=password, role='面试官', type=3)
-            db.default.user_tea_det.create(user_id=id_, add_time=now, **args)
-        else:
-            args['add_time'] = now
-            db.default.users.filter(id=id_).update(username=username)
-            db.default.user_tea_det.filter(user_id=id_).update(**args)
-        return ajax.ajax_ok(message='注册成功')
     data.upload_url = f"{UPLOAD_URL}?upcheck={get_upload_key()}&up_type=number_id_img"
     data.web_file_url = web_file_url
+    data.step_id = 0
+    if request.user.id:
+        data.step_id = db.default.user_tea_det.get(user_id=request.user.id).step_id - 1
     return render_template(request, 'interviewer/index.html', data)
 
 

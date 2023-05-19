@@ -1,4 +1,7 @@
+function copy(obj) {
+    return JSON.parse(JSON.stringify(obj))
 
+  }
 // 成功提醒
 function msg_ok(message, callback) {
     layer.msg(message, {icon: 1, time: 1500}, callback)
@@ -10,7 +13,7 @@ function msg_fail(message, callback) {
 }
 
 // 在接口请求的同时  在每个接口之前加上tbkt_token  用于跨域
-var Token = localStorage.getItem('Token');
+var Token = localStorage.getItem('Token') || '';
 $.ajaxSetup({
     beforeSend: function (xhr) {
         xhr.setRequestHeader('token', Token)

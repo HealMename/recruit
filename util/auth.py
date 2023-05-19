@@ -25,7 +25,7 @@ class Auth(object):
         msg['token'] = token
         return JsonResponse(msg)
 
-    def identify(self, request):
+    def identify(self, request, token=''):
         """
         用户鉴权
         :param request:本次请求对象
@@ -34,7 +34,7 @@ class Auth(object):
 
         msg = {'code': normal_code, 'msg': mes.normal_code, 'data': {}}
         # django的header被处理过了
-        token = request.QUERY.get("token") \
+        token = token or request.QUERY.get("token") \
                 or request.META.get('HTTP_TOKEN') \
                 or request.COOKIES.get('token')
         if token and token != "null":
