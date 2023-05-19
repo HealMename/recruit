@@ -6,7 +6,6 @@ from interviewer import views, verify
 
 # url规则列表
 urlpatterns = [
-    path(r'userinfo/', views.user_info),
     path(r'add/', views.add_tea),
     path(r'save/', views.save_info),
     path(r'ocr_sfz/', views.ocr_sfz),
