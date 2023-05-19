@@ -9,6 +9,7 @@ from interviewer import views, verify
 urlpatterns = [
     path(r'userinfo/', views.user_info),
     path(r'add/', views.add_tea),
+    path(r'ocr_sfz/', views.ocr_sfz),
     path(r'verify/index/', verify.index),
     path(r'verify/status/', verify.set_status),
 ]

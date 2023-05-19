@@ -1,13 +1,10 @@
 import time
 
-from django.http import JsonResponse
-from django.shortcuts import render
-
-from dj2.settings import UPLOAD_URL, web_file_url
-from util.codes import *
+from aip import AipOcr
+from dj2.settings import UPLOAD_URL, web_file_url, BD_APP_ID, BD_API_KEY, BD_SECRET_KEY
 
 from libs.utils import ajax, db, auth_token
-from libs.utils.common import Struct, render_template, num_to_ch, get_upload_key
+from libs.utils.common import Struct, render_template, get_upload_key
 from main.users_model import users
 from util.auth import Auth
 
@@ -45,8 +42,6 @@ def add_tea(request):
     return render_template(request, 'interviewer/index.html', data)
 
 
-
-
 def user_info(request):
     """用户信息"""
     id_ = request.QUERY.get('id')
@@ -75,3 +70,30 @@ def login(request):
             return ajax.ajax_fail(message='密码不正确请重试！')
         args['id'] = datas[0].get('id')
         return Auth.authenticate(Auth, users, args)
+
+
+def ocr_sfz(request):
+    """识别身份证"""
+    idCardSide = request.QUERY.get('idCardSide', 'front')
+    url = request.QUERY.get('url')
+    client = AipOcr(BD_APP_ID, BD_API_KEY, BD_SECRET_KEY)
+    """ 读取图片 """
+    # idCardSide = 'front'  # 身份证正面
+    # idCardSide = 'back'   #身份证反面
+    data = Struct()
+    # 如果有可选参数
+    options = {}
+    options["detect_risk"] = "true"
+    res_url = client.idcardUrl(url, idCardSide, options)
+    if idCardSide == 'front':
+        data.name = res_url['words_result']['姓名']['words']
+        data.nation = res_url['words_result']['民族']['words']
+        data.address = res_url['words_result']['住址']['words']
+        data.number_id = res_url['words_result']['公民身份号码']['words']
+        data.birthday = res_url['words_result']['出生']['words']
+        data.sex = res_url['words_result']['性别']['words']
+    else:
+        data.end_time = res_url['words_result']['失效日期']['words']
+        data.start_time = res_url['words_result']['签发日期']['words']
+        data.organ = res_url['words_result']['签发机关']['words']
+    return ajax.ajax_ok(data)

@@ -169,3 +169,9 @@ ALIPAY_APP_ID = ''
 APP_PRIVATE_KEY_STRING = open('{}/util/alipay_key/app_private_2048.txt'.format(BASE_DIR)).read()
 ALIPAY_PUBLIC_KEY_STRING = open('{}/util/alipay_key/alipay_public_2048.txt'.format(BASE_DIR)).read()
 ALIPAY_SIGN_TYPE = 'RSA2'
+
+
+BD_APP_ID = '33687130'
+BD_API_KEY = 'HgxU31nWmsqc4eCfg1HAQAe3'
+BD_SECRET_KEY = 'jkpL79OWW6UvMhFAwrkh6ptNEzT7HGTz'
+

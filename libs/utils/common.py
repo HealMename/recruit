@@ -25,6 +25,7 @@ def get_upload_key():
     m.update(key_var.encode())
     return m.hexdigest()
 
+
 class Struct(dict):
     """
     - 为字典加上点语法. 例如:

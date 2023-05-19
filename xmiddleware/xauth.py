@@ -98,6 +98,7 @@ class Xauth(MiddlewareMixin):
                 "/{}/examusers/register".format(schemaName),
                 "/tea/add/",
                 "/uploads/",
+                "/interviewer/ocr_sfz/",
                 "/interviewer/add/"
             ]  # 免认证list
             if fullPath not in post_list and "register" not in fullPath and "login" not in fullPath \
