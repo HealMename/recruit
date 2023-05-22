@@ -61,6 +61,7 @@ def login(request):
         args = {k: v for k, v in request.QUERY.items()}
         role = args.pop("role")
         args['type'] = role_dict[role]
+        print(args)
         password = args.pop('password')
         datas = users.getbyparams(users, users, args)
         if not datas:

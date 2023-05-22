@@ -133,7 +133,7 @@ export default {
               this.$storage.set("role", this.rulesForm.role);
               this.$storage.set("sessionTable", "users");
               this.$storage.set("adminName", this.rulesForm.username);
-            window.location.href = `${this.$base.indexUrl}`
+              window.location.href = `${this.$base.indexUrl}`
               }).catch((res) => {
                   this.$layer_message(res.result)
               }).finally(() => this.loading = false)
