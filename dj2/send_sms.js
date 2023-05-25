@@ -26,7 +26,7 @@ function send(body) {
     // const timestamp = '20230525T094351Z'
 
 // SETUP3:构造请求流水号
-    const requestId = crypto.randomUUID()
+    const requestId = body.extendCode
 
 // SETUP4:构造待签名字符串
     const headerStr = `ctyun-eop-request-id:${requestId}\neop-date:${timestamp}\n\n`
