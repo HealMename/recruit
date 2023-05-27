@@ -21,7 +21,7 @@ from django.views.static import serve
 from django.views.generic import TemplateView
 from django.conf import settings
 
-from . import views
+from . import views, send_msg
 from dj2.settings import dbName as schemaName
 
 urlpatterns = [
@@ -32,6 +32,7 @@ urlpatterns = [
 
     path('xadmin/', admin.site.urls),
     path(r'index/', views.index),
+    path(r'sms/send/', send_msg.index),  # 发短信接口
     re_path(r'admin/lib/(?P<p1>.*)/(?P<p2>.*)$', views.admin_lib2),
     re_path(r'admin/lib/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)$', views.admin_lib3),
     re_path(r'admin/lib/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)/(?P<p4>.*)$', views.admin_lib4),

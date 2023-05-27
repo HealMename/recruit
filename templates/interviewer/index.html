@@ -217,7 +217,7 @@
                 imageUrl2: '',
                 upload_url: "{{ upload_url|safe }}",
                 web_file_url: "{{ web_file_url|safe }}",
-                exit_count: 60,
+                exit_count: 1,
 
             },
             created() {
@@ -227,13 +227,20 @@
             methods: {
 
                 send_code() {
-                    if (this.exit_count === 60) {
-                        msg_ok("验证码已发送，2分钟内有效。")
+                    if (this.exit_count >= 1) {
+                        if (!this.form.phone){
+                            msg_fail('请输入手机号！')
+                            return
+                        }
+                        $.post('/sms/send/', {phone: this.form.phone, code_id: 1}, function (res) {
+                            msg_ok("验证码已发送，2分钟内有效。")
+                        })
+
                         var thsi = this;
                         var inter_exit = window.setInterval(function () {
                             thsi.exit_count--;
                             if (thsi.exit_count < 0) {
-                                thsi.exit_count = 60;
+                                thsi.exit_count = 1;
                                 thsi.disabled = false;
                                 window.clearInterval(inter_exit);
                                 $("#send_code .code_time").text('')

@@ -101,13 +101,14 @@ class Xauth(MiddlewareMixin):
                 "/interviewer/ocr_sfz/",
                 "/interviewer/save/",
                 "/interviewer/add/",
-                "/tea/login/"
+                "/tea/login/",
+                '/sms/send/'
             ]  # 免认证list
             token = request.QUERY.get("token") \
                     or request.META.get('HTTP_TOKEN') \
                     or request.COOKIES.get('token')
             if fullPath not in post_list and "register" not in fullPath and "login" not in fullPath \
-                    and request.path not in post_list or len(token) > 10:  # 注册时不检测token。
+                    and request.path not in post_list or (token and len(token) > 10):  # 注册时不检测token。
                 result = Auth.identify(Auth, request, token)
 
                 if result.get('code') != normal_code:

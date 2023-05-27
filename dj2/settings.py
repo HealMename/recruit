@@ -26,12 +26,27 @@ with open(config_file) as f:
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '10086'
 SESSION_COOKIE_AGE = 60 * 60 * 24  # token有效期
+
+# 本地
 # UPLOAD_URL = "http://127.0.0.1:8087/uploads/"
 # web_file_url = "http://127.0.0.1:8087/file/"
-UPLOAD_URL = "http://182.42.126.254:8087/uploads/"
-web_file_url = "http://182.42.126.254:8087/file/"
-# K8S_URL = "http://127.0.0.1:8088/workload/terminal_index/"
-K8S_URL = "http://182.42.126.254:8088/workload/terminal_index/"
+# K8S_URL = "http://127.0.0.1:8088/workload/terminal_index/"  # 终端项目
+# SMS_API = "http://127.0.0.1:3000/sms/send/"  # 短信接口
+
+# 线上
+UPLOAD_URL = "http://182.42.126.254:8087/uploads/"  # 上传地址
+web_file_url = "http://182.42.126.254:8087/file/"  # 文件域名
+K8S_URL = "http://182.42.126.254:8088/workload/terminal_index/"  # 终端项目
+SMS_API = "http://182.42.126.254:3000/sms/send/"  # 短信接口
+
+
+# REDIS配置
+REDIS_HOST = DATABASES_CONFIG['REDIS_HOST']
+REDIS_PORT = DATABASES_CONFIG['REDIS_PORT']
+REDIS_PASSWORD = DATABASES_CONFIG['REDIS_PASSWORD']
+REDIS_DB = DATABASES_CONFIG['REDIS_DB']
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
