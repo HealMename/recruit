@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <title>面试</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/media/layui-v2.7.6/layui/css/layui.css">
+    <link rel="stylesheet" href="/media/css/common.css"/>
+    <link rel="stylesheet" href="/media/css/style.css"/>
+    <script type="text/javascript" src="/media/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/media/js/jquery.SuperSlide.2.1.1.js"></script>
+</head>
+<style>
+
+</style>
+<body>
+<div id="app">
+<!-- 在页面插入代码 -->
+<div class="container">
+  <input type="number" id="roomId" name="roomId" placeholder="roomId" required>
+  <input type="text" id="userId" name="userId" placeholder="userId" required>
+  <input type="text" id="userSig" name="userSig" placeholder="userSig" required>
+  <button type="button" id="startCall">开始通话</button>
+  <button type="button" id="finishCall">结束通话</button>
+</div>
+<div id="localStreamContainer"></div>
+<div id="remoteStreamContainer"></div>
+</div>
+
+
+<script src="/media/js/jquery-1.11.3.min.js"></script>
+<script src="/media/layui-v2.7.6/layui/layui.js"></script>
+<script src="/media/js/vue.js"></script>
+<script src="/media/js/config.js"></script>
+<script src="/media/js/common.js"></script>
+<script src="/media/modules/config.js"></script>
+<script src="/media/js/utils.js"></script>
+<script type="module">
+    import TRTC from 'trtc-js-sdk';
+</script>
+<script src="trtc.js"></script>
+<script type="text/javascript">
+
+
+let sdkAppId = 1400813313; // '填入您创建应用的 sdkAppId'
+let roomId ; // '您指定的房间号'
+let userId ; // '您指定的用户ID'
+let userSig ; // '生成的userSig'
+let client, localStream;
+document.getElementById("startCall").onclick = async function () {
+  roomId = parseInt(document.querySelector('#roomId').value);
+  userId = document.querySelector('#userId').value;
+  userSig = document.querySelector('#userSig').value;
+  client = TRTC.createClient({ mode: 'rtc', sdkAppId, userId, userSig });
+  // 1.监听事件
+  client.on('stream-added', event => {
+    const remoteStream = event.stream;
+    console.log('远端流增加: ' + remoteStream.getId());
+    //订阅远端流
+    client.subscribe(remoteStream);
+  });
+  client.on('stream-subscribed', event => {
+    // 远端流订阅成功
+    const remoteStream = event.stream;
+    // 播放远端流，传入的元素 ID 必须是页面里存在的 div 元素
+    remoteStream.play('remoteStreamContainer');
+  });
+  // 2.进房成功后开始推流
+  try {
+    await client.join({ roomId });
+    localStream = TRTC.createStream({ userId, audio: true, video: true });
+    await localStream.initialize();
+    // 播放本地流
+    localStream.play("localStreamContainer");
+    await client.publish(localStream);
+  } catch (error) {
+    console.error(error);
+  }
+}
+document.getElementById("finishCall").onclick = async function () {
+  // 停止本地流预览
+  localStream.close();
+  await client.leave();
+  // 退房成功，如果没有调用 client.destroy()，可再次调用 client.join 重新进房开启新的通话
+  // 调用 destroy() 结束当前 client 的生命周期
+  client.destroy();
+}
+
+</script>
+</body>
+</html>

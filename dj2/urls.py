@@ -32,6 +32,7 @@ urlpatterns = [
 
     path('xadmin/', admin.site.urls),
     path(r'index/', views.index),
+    path(r'call/index/', send_msg.call_index),
     path(r'sms/send/', send_msg.index),  # 发短信接口
     re_path(r'admin/lib/(?P<p1>.*)/(?P<p2>.*)$', views.admin_lib2),
     re_path(r'admin/lib/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)$', views.admin_lib3),

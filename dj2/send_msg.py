@@ -5,8 +5,13 @@ import requests
 from libs.utils.redis_com import rd
 
 from dj2.settings import SMS_API
-from libs.utils import ajax, db
+from libs.utils import ajax, db, render_template
 from libs.utils.auth_token import get_random_string
+
+
+def call_index(request):
+    """视频面试"""
+    return render_template(request, 'call/call.html', {})
 
 
 def verify_code(request):
@@ -50,3 +55,5 @@ def index(request):
     }
     requests.post(SMS_API, json=body)
     return ajax.ajax_ok()
+
+
