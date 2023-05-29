@@ -60,6 +60,8 @@ class Auth(object):
 
                 if request.user.yonghuzhanghao:
                     request.user.role = '用户'
+                    request.user.username = request.user.yonghuzhanghao
+                    datas[0]['username'] = request.user.yonghuzhanghao
                 if request.user.role == '教师' or request.user.role == '面试官':
                     request.user.shouji = db.default.user_tea_det.get(user_id=request.user.id).phone_number
                 request.session['tablename'] = tablename

@@ -448,7 +448,7 @@
                             </div>
                             <button type="button" class="layui-btn layui-btn-primary" style="margin: 0 10px;">详细信息</button>
                             <button type="button" class="layui-btn layui-btn-primary">预约</button>
-                            <button type="button" class="layui-btn layui-btn-primary" data-type="chat">联系</button>
+                            <a class="layui-btn layui-btn-primary" href="javascript:" onclick="im()">联系</a>
 
                         </div>
                     </div>
@@ -466,7 +466,7 @@
                             </div>
                             <button type="button" class="layui-btn layui-btn-primary" style="margin: 0 10px;">详细信息</button>
                             <button type="button" class="layui-btn layui-btn-primary">预约</button>
-                            <button type="button" class="layui-btn layui-btn-primary" data-type="chat">联系</button>
+                            <a class="layui-btn layui-btn-primary" href="javascript:" onclick="im()">联系</a>
 
                         </div>
                     </div>
@@ -484,7 +484,7 @@
                             </div>
                             <button type="button" class="layui-btn layui-btn-primary" style="margin: 0 10px;">详细信息</button>
                             <button type="button" class="layui-btn layui-btn-primary">预约</button>
-                            <button type="button" class="layui-btn layui-btn-primary" data-type="chat">联系</button>
+                            <a class="layui-btn layui-btn-primary" href="javascript:" onclick="im()">联系</a>
 
                         </div>
                     </div>
@@ -502,7 +502,7 @@
                             </div>
                             <button type="button" class="layui-btn layui-btn-primary" style="margin: 0 10px;">详细信息</button>
                             <button type="button" class="layui-btn layui-btn-primary">预约</button>
-                            <button type="button" class="layui-btn layui-btn-primary" data-type="chat">联系</button>
+                            <a class="layui-btn layui-btn-primary" href="javascript:" onclick="im()">联系</a>
 
                         </div>
                     </div>
@@ -520,7 +520,7 @@
                             </div>
                             <button type="button" class="layui-btn layui-btn-primary" style="margin: 0 10px;">详细信息</button>
                             <button type="button" class="layui-btn layui-btn-primary">预约</button>
-                            <button type="button" class="layui-btn layui-btn-primary" data-type="chat">联系</button>
+                            <a class="layui-btn layui-btn-primary" href="javascript:" onclick="im()">联系</a>
 
                         </div>
                     </div>
@@ -538,7 +538,7 @@
                             </div>
                             <button type="button" class="layui-btn layui-btn-primary" style="margin: 0 10px;">详细信息</button>
                             <button type="button" class="layui-btn layui-btn-primary">预约</button>
-                            <button type="button" class="layui-btn layui-btn-primary" data-type="chat">联系</button>
+                            <a class="layui-btn layui-btn-primary" href="javascript:" onclick="im()">联系</a>
 
                         </div>
                     </div>
@@ -556,7 +556,7 @@
                             </div>
                             <button type="button" class="layui-btn layui-btn-primary" style="margin: 0 10px;">详细信息</button>
                             <button type="button" class="layui-btn layui-btn-primary">预约</button>
-                            <button type="button" class="layui-btn layui-btn-primary" data-type="chat">联系</button>
+                            <a class="layui-btn layui-btn-primary" href="javascript:" onclick="im()">联系</a>
 
                         </div>
                     </div>
@@ -574,7 +574,7 @@
                             </div>
                             <button type="button" class="layui-btn layui-btn-primary" style="margin: 0 10px;">详细信息</button>
                             <button type="button" class="layui-btn layui-btn-primary">预约</button>
-                            <button type="button" class="layui-btn layui-btn-primary" data-type="chat">联系</button>
+                            <a class="layui-btn layui-btn-primary" href="javascript:" onclick="im()">联系</a>
 
                         </div>
                     </div>
@@ -592,7 +592,7 @@
                             </div>
                             <button type="button" class="layui-btn layui-btn-primary" style="margin: 0 10px;">详细信息</button>
                             <button type="button" class="layui-btn layui-btn-primary">预约</button>
-                            <button type="button" class="layui-btn layui-btn-primary" data-type="chat">联系</button>
+                            <a class="layui-btn layui-btn-primary" href="javascript:" onclick="im()">联系</a>
 
                         </div>
                     </div>
@@ -610,7 +610,7 @@
                             </div>
                             <button type="button" class="layui-btn layui-btn-primary" style="margin: 0 10px;">详细信息</button>
                             <button type="button" class="layui-btn layui-btn-primary">预约</button>
-                            <a class="layui-btn layui-btn-primary" href="/call/index/" target="_blank">联系</a>
+                            <a class="layui-btn layui-btn-primary" href="javascript:" onclick="im()">联系</a>
                         </div>
                     </div>
                 </div>
@@ -618,9 +618,6 @@
             <div class="pager" id="pager" :style="{textAlign:1==1?'left':1==2?'center':'right'}"></div>
         </div>
     </div>
-
-
-
 </div>
 
 
@@ -769,7 +766,10 @@
 
         }
     });
-
+    function im() {
+        var token = localStorage.getItem('Token');
+        window.open(`http://localhost:8080/#/login?user_id=${token}`)
+    }
     window.xznSlide = function () {
         jQuery(".banner").slide({mainCell: ".bd ul", autoPlay: true, interTime: 5000});
         jQuery("#ifocus").slide({

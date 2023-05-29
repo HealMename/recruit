@@ -265,6 +265,7 @@
                     <div class="register" style="display: none">
                         <p><a href="/admin/#/index"  target="_blank">我的后台管理</a></p>
                         <p><a href="javascript:navPage('/interviewer/add/')">完善信息</a></p>
+                        <p><a href="javascript:im()">通信平台</a></p>
                         <p v-if="role!=='用户'"><a href="javascript:" @click="checkout_user_type(1, '用户', 'users')">切换普通用户</a></p>
                         <p v-if="role!=='出题专家'"><a href="javascript:" @click="checkout_user_type(2, '出题专家', 'users')">切换出题专家</a></p>
                         <p v-if="role!=='面试官'"><a href="javascript:" @click="checkout_user_type(3, '面试官', 'users')">切换面试官</a></p>
@@ -502,7 +503,10 @@
         $('.logins').hide()
     })
 
-
+    function im() {
+        var token = localStorage.getItem('Token');
+        window.open(`http://localhost:8080/#/login?user_id=${token}`)
+    }
     // 导航栏跳转
     function navPage(url) {
         url = url + '?token=' + localStorage.getItem("Token");
@@ -545,18 +549,6 @@
         }
     };
 
-    //  窗口变化时候iframe自适应
-    // function changeFrameHeight() {
-    // var header = document.getElementById('header').scrollHeight;
-    //     let isshow = true
-    //     var tabbar = 0
-    //     if(isshow) {
-    //       tabbar = document.getElementById('tabbar').scrollHeight
-    //     }
-    // var ifm = document.getElementById("iframe");
-    // ifm.height = document.documentElement.clientHeight - header - tabbar;
-    // ifm.width = document.documentElement.clientWidth;
-    // }
 
     // reasize 事件 窗口大小变化后执行的方法
     window.onresize = function () {

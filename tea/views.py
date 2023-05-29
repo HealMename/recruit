@@ -22,6 +22,7 @@ def add_tea(request):
 
         id_ = args.pop('id', 0)
         username = args.pop('username', '')
+        args.pop('token', '')
         if db.default.users.filter(username=username, type=2, id__ne=id_):
             return ajax.ajax_fail(message='用户名已存在')
         now = int(time.time())
