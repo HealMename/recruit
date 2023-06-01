@@ -208,7 +208,7 @@ export default {
   background-size: cover;
   width: 100%;
   height: 100%;
-  background-image: url(http://182.42.126.254:8087/media/img/admin/login-bg.jpg);
+  background-image: url(https://www.ittest008.com:81/file/number_id_img/2023/06/01/20230601080328255507.jpg);
 
   .loginInBt {
     width: 100%;
