@@ -36,7 +36,7 @@ SESSION_COOKIE_AGE = 60 * 60 * 24  # token有效期
 # 线上
 UPLOAD_URL = "https://www.ittest008.com:81/uploads/"  # 上传地址
 web_file_url = "https://www.ittest008.com:81/file/"  # 文件域名
-K8S_URL = "http://182.42.126.254:8088/workload/terminal_index/"  # 终端项目
+K8S_URL = "https://www.ittest008.com:8088/workload/terminal_index/"  # 终端项目
 SMS_API = "https://www.ittest008.com:81/sms/send/"  # 短信接口
 
 # 华为云
