@@ -5,3 +5,8 @@ click
 requests
 xlrd
 python-alipay-sdk
+django-sslserver
+simplejson
+redis
+baidu-aip
+chardet
