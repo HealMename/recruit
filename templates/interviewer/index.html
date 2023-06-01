@@ -184,7 +184,7 @@
                 loading_post: false,
                 loading: false,
                 loading2: false,
-                active: {{ step_id }},
+                active: {{ step_id|default:0 }},
                 token: "",
                 rules: {
                     name: [
@@ -351,9 +351,15 @@
                     this.loading = true;
                     var thsi = this;
                     $.post('/interviewer/ocr_sfz/', {idCardSide: 'front', url: this.imageUrl1}, function (res) {
-                        thsi.loading = false;
-                        thsi.form.ocr_info_front = res.data;
-                        thsi.ocr_front = copy(res.data);
+                        if (res.response === 'ok'){
+                            thsi.loading = false;
+                            thsi.form.ocr_info_front = res.data;
+                            thsi.ocr_front = copy(res.data);
+                        }else{
+                            thsi.loading = false;
+                            msg_fail(res.message)
+                        }
+
 
                     })
                 },

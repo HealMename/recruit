@@ -99,15 +99,19 @@ def ocr_sfz(request):
     options = {}
     options["detect_risk"] = "true"
     res_url = client.idcardUrl(url, idCardSide, options)
-    if idCardSide == 'front':
-        data.name = res_url['words_result']['姓名']['words']
-        data.nation = res_url['words_result']['民族']['words']
-        data.address = res_url['words_result']['住址']['words']
-        data.number_id = res_url['words_result']['公民身份号码']['words']
-        data.birthday = res_url['words_result']['出生']['words']
-        data.sex = res_url['words_result']['性别']['words']
-    else:
-        data.end_time = res_url['words_result']['失效日期']['words']
-        data.start_time = res_url['words_result']['签发日期']['words']
-        data.organ = res_url['words_result']['签发机关']['words']
-    return ajax.ajax_ok(data)
+    try:
+        if idCardSide == 'front':
+            data.name = res_url['words_result']['姓名']['words']
+            data.nation = res_url['words_result']['民族']['words']
+            data.address = res_url['words_result']['住址']['words']
+            data.number_id = res_url['words_result']['公民身份号码']['words']
+            data.birthday = res_url['words_result']['出生']['words']
+            data.sex = res_url['words_result']['性别']['words']
+        else:
+            data.end_time = res_url['words_result']['失效日期']['words']
+            data.start_time = res_url['words_result']['签发日期']['words']
+            data.organ = res_url['words_result']['签发机关']['words']
+        return ajax.ajax_ok(data)
+    except Exception as e:
+        print('识别失败请重试')
+        return ajax.ajax_fail(message='识别失败请重新上传')
