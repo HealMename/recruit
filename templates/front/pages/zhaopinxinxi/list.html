@@ -344,7 +344,7 @@
             <div carousel-item>
                 <div v-for="(item,index) in swiperList" :key="index">
 
-                    <img style="width: 100%;height: 100%;object-fit:cover;" :src="item.img"/>
+                    <img style="width: 100%;height: 100%;" :src="item.img"/>
                 </div>
             </div>
         </div>
@@ -388,7 +388,7 @@
                             <p class="st_sketch">{{ item.gangweidaiyu }}</p>
                             <!-- <p class="st_tag"> <span>世界</span> <span>原因</span></p> -->
                             <div>
-                                <img class="gs_img" :src="'/' + item.fengmian" alt="">
+                                <img class="gs_img" :src="'https://www.ittest008.com:81/' + item.fengmian" alt="">
                                 <p class="gs_name">{{ item.gongsimingcheng }}</p>
                                 <p class="gs_tag"><span>{{ item.chengshi }}</span> <span>上市公司</span></p>
                             </div>
@@ -474,7 +474,7 @@
                 res.data.list.forEach(element => {
                     if (element.value != null) {
                         swiperList.push({
-                            img: '/' + element.value
+                            img: 'https://www.ittest008.com:81/' + element.value
                         });
                     }
                 });

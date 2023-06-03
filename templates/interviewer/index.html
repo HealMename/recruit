@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block body %}
     <style>
         #wrapper {
@@ -43,9 +44,31 @@
             text-align: center;
         }
 
-        .el-divider__text.is-center {
+        .step1 .el-divider__text.is-center {
             width: 333px;
         }
+
+        .next2 {
+            height: 100px;
+            margin: 30px;
+        {#margin-left: 100px;#}
+        }
+
+        .next4 {
+            height: 100px;
+            margin: 30px;
+        {#margin-left: 100px;#}
+        }
+
+        .box-card {
+            margin-bottom: 20px;
+        }
+
+        .step4 img {
+            width: 200px;
+            height: auto;
+        }
+
     </style>
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
         <legend>申请成为面试官</legend>
@@ -65,109 +88,443 @@
              element-loading-spinner="el-icon-loading"
         >
             <!-- 第一步 -->
-            <transition name="el-fade-in-linear" v-if="active === 0" >
-                <el-form ref="form" :model="form" label-width="180px" :rules="rules">
-                    <el-form-item label="昵称:" prop="name">
-                        <el-input v-model="form.name" maxlength="10"></el-input>
-                    </el-form-item>
-                    <el-form-item label="手机号:" prop="phone">
-                        <el-input v-model.number="form.phone" maxlength="11"></el-input>
-                        <el-button @click="send_code()" style="margin-top: 10px;" id="send_code" :disabled="disabled">
-                            获取验证码 <span class="code_time"></span></el-button>
-                    </el-form-item>
-                    <el-form-item label="验证码:" prop="code">
-                        <el-input v-model.number="form.code" maxlength="6"></el-input>
-                    </el-form-item>
-                    <el-form-item label="身份证(正面):" prop="imageUrl1">
-                        <el-upload
-                                v-loading="loading"
-                                element-loading-text="拼命识别中"
-                                element-loading-spinner="el-icon-loading"
-                                class="avatar-uploader"
-                                :action="upload_url"
-                                :show-file-list="false"
-                                :on-success="handleAvatarSuccess"
-                                :before-upload="beforeAvatarUpload">
-                            <img v-if="imageUrl1" :src="imageUrl1" class="avatar">
-                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                        </el-upload>
-                    </el-form-item>
+            <transition name="el-fade-in-linear" v-if="active === 0">
+                <div class="step1">
 
-                    <el-form-item label="身份证(反面):" prop="imageUrl2">
-                        <el-upload
-                                v-loading="loading2"
-                                element-loading-text="拼命识别中"
-                                element-loading-spinner="el-icon-loading"
-                                class="avatar-uploader"
-                                :action="upload_url"
-                                :show-file-list="false"
-                                :on-success="handleAvatarSuccess2"
-                                :before-upload="beforeAvatarUpload">
-                            <img v-if="imageUrl2" :src="imageUrl2" class="avatar">
-                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                        </el-upload>
-                    </el-form-item>
-                    <div v-if="form.ocr_info_front.name">
-                        <el-form-item label="">
-                            <el-divider>请核对您的身份信息，如有错误请点击图片重新上传</el-divider>
 
-                        </el-form-item>
-                        <el-form-item label="姓名:" prop="username">
-                            <el-input v-model="form.ocr_info_front.name" maxlength="5"></el-input>
-                        </el-form-item>
-                        <el-form-item label="身份号码:" prop="number_id">
-                            <el-input v-model="form.ocr_info_front.number_id" maxlength="18"></el-input>
-                        </el-form-item>
-                    </div>
-                    <div v-if="form.ocr_info_back.start_time">
+                    <el-card class="box-card">
+                        <div slot="header" class="clearfix">
+                            <span>身份信息</span>
+                        </div>
+                        <el-form ref="form" :model="form" label-width="100px" :rules="rules">
+                            <el-form-item label="昵称:" prop="name">
+                                <el-input v-model="form.name" maxlength="10"></el-input>
+                            </el-form-item>
+                            <el-form-item label="手机号:" prop="phone">
+                                <el-input v-model.number="form.phone" maxlength="11"></el-input>
+                                <el-button @click="send_code()" style="margin-top: 10px;" id="send_code"
+                                           :disabled="disabled">
+                                    获取验证码 <span class="code_time"></span></el-button>
+                            </el-form-item>
+                            <el-form-item label="验证码:" prop="code">
+                                <el-input v-model.number="form.code" maxlength="6"></el-input>
+                            </el-form-item>
+                            <el-form-item label="身份证(正面):" prop="imageUrl1">
+                                <el-upload
+                                        v-loading="loading"
+                                        element-loading-text="拼命识别中"
+                                        element-loading-spinner="el-icon-loading"
+                                        class="avatar-uploader"
+                                        :action="upload_url"
+                                        :show-file-list="false"
+                                        :on-success="handleAvatarSuccess"
+                                        :before-upload="beforeAvatarUpload">
+                                    <img v-if="imageUrl1" :src="imageUrl1" class="avatar">
+                                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                </el-upload>
+                            </el-form-item>
 
-                        <el-form-item label="有效期:" prop="back_time">
-                            <el-date-picker
-                                    v-model="form.ocr_info_back.time"
-                                    type="daterange"
-                                    range-separator="至"
-                                    start-placeholder="开始日期"
-                                    end-placeholder="结束日期">
-                            </el-date-picker>
-                        </el-form-item>
-                    </div>
-                    <el-form-item>
+                            <el-form-item label="身份证(反面):" prop="imageUrl2">
+                                <el-upload
+                                        v-loading="loading2"
+                                        element-loading-text="拼命识别中"
+                                        element-loading-spinner="el-icon-loading"
+                                        class="avatar-uploader"
+                                        :action="upload_url"
+                                        :show-file-list="false"
+                                        :on-success="handleAvatarSuccess2"
+                                        :before-upload="beforeAvatarUpload">
+                                    <img v-if="imageUrl2" :src="imageUrl2" class="avatar">
+                                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                </el-upload>
+                            </el-form-item>
+                            <div v-if="form.ocr_info_front.name">
+                                <el-form-item label="">
+                                    <el-divider>请核对您的身份信息，如有错误请点击图片重新上传</el-divider>
+
+                                </el-form-item>
+                                <el-form-item label="姓名:" prop="username">
+                                    <el-input v-model="form.ocr_info_front.name" maxlength="5"></el-input>
+                                </el-form-item>
+                                <el-form-item label="身份号码:" prop="number_id">
+                                    <el-input v-model="form.ocr_info_front.number_id" maxlength="18"></el-input>
+                                </el-form-item>
+                            </div>
+                            <div v-if="form.ocr_info_back.start_time">
+
+                                <el-form-item label="有效期:" prop="back_time">
+                                    <el-date-picker
+                                            v-model="form.ocr_info_back.time"
+                                            type="daterange"
+                                            range-separator="至"
+                                            start-placeholder="开始日期"
+                                            end-placeholder="结束日期">
+                                    </el-date-picker>
+                                </el-form-item>
+                            </div>
+                            <el-form-item>
+
+                            </el-form-item>
+                        </el-form>
+                    </el-card>
+                    <div class="next2">
                         <el-button type="primary" @click="next(1, 'form')" v-if="active < 5">下一步</el-button>
                         <el-button type="primary" @click="next(-1)" v-if="active > 1 && active <= 5">上一步</el-button>
                         <el-button type="primary" @click="next(1)" v-if="active == 5">提交审核</el-button>
-                    </el-form-item>
-                </el-form>
+                    </div>
+
+                </div>
             </transition>
-             <!-- 第二步 -->
+            <!-- 第二步 -->
             <transition name="el-fade-in-linear" v-if="active === 1">
-                <el-card class="box-card">
-                  <div slot="header" class="clearfix">
-                    <span>学历信息</span>
-                    <el-button style="float: right; padding: 3px 0" type="text">新增</el-button>
-                  </div>
-                  <div v-for="o in 4" :key="o" class="text item">
-                    <el-form ref="form" :model="form" label-width="80px" :rules="rules">
-                    <el-form-item label="学历:" prop="name">
-                        <el-input v-model="form.name" maxlength="10"></el-input>
-                    </el-form-item>
-                         <el-form-item label="学校:" prop="name">
-                        <el-input v-model="form.name" maxlength="10"></el-input>
-                    </el-form-item>
-                         <el-form-item label="专业:" prop="name">
-                        <el-input v-model="form.name" maxlength="10"></el-input>
-                    </el-form-item>
-                        <el-form-item label="" prop="back_time">
-                            <el-date-picker
-                                    v-model="form.ocr_info_back.time"
-                                    type="daterange"
-                                    range-separator="至"
-                                    start-placeholder="开始日期"
-                                    end-placeholder="结束日期">
-                            </el-date-picker>
-                        </el-form-item>
-                    </el-form>
-                  </div>
-                </el-card>
+                <div>
+                    <div v-for="(item,i) in school_list" :key="i" class="text item">
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <span>学历信息</span>
+                            </div>
+
+                            <el-form ref="form" :model="item" label-width="100px" :rules="rules">
+                                <el-divider>学历</el-divider>
+                                <el-form-item label="学历:" prop="education">
+                                    <el-input v-model="item.education" maxlength="10"></el-input>
+                                </el-form-item>
+                                <el-form-item label="学校:" prop="school">
+                                    <el-input v-model="item.school" maxlength="10"></el-input>
+                                </el-form-item>
+                                <el-form-item label="专业:" prop="speciality">
+                                    <el-input v-model="item.speciality" maxlength="10"></el-input>
+                                </el-form-item>
+                                <el-form-item label="" prop="back_time">
+                                    <el-date-picker
+                                            v-model="item.time"
+                                            type="daterange"
+                                            range-separator="至"
+                                            start-placeholder="入学日期"
+                                            end-placeholder="毕业日期">
+                                    </el-date-picker>
+
+                                </el-form-item>
+                                <el-form-item label="毕业证:">
+                                    <el-upload
+                                            element-loading-text="上传中"
+                                            element-loading-spinner="el-icon-loading"
+                                            class="avatar-uploader"
+                                            :action="upload_url"
+                                            :show-file-list="false"
+                                            :on-success="(response) =>handleAvatarSuccess3(response, i, 1)"
+                                            :before-upload="beforeAvatarUpload">
+                                        <img v-if="item.diploma" :src="item.diploma" class="avatar">
+                                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                    </el-upload>
+                                </el-form-item>
+                                <el-form-item label="学位证:">
+                                    <el-upload
+                                            element-loading-text="上传中"
+                                            element-loading-spinner="el-icon-loading"
+                                            class="avatar-uploader"
+                                            :action="upload_url"
+                                            :show-file-list="false"
+                                            :on-success="(response) =>handleAvatarSuccess3(response, i, 2)"
+                                            :before-upload="beforeAvatarUpload">
+                                        <img v-if="item.degree" :src="item.degree" class="avatar">
+                                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                    </el-upload>
+                                    <el-button style="float: left;" type="primary" v-if="i===school_list.length-1"
+                                               @click="add_school_det()">新增
+                                    </el-button>
+                                </el-form-item>
+                            </el-form>
+
+                        </el-card>
+                    </div>
+                    <div class="next2">
+                        <el-button type="primary" @click="next(1, 'form')">下一步</el-button>
+                        <el-button type="primary" @click="next(-1)">上一步</el-button>
+                    </div>
+                </div>
+            </transition>
+            <!-- 第三步 -->
+            <transition name="el-fade-in-linear" v-if="active === 2">
+                <div>
+                    <div v-for="(item,i) in work_list" :key="i" class="text item">
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <span>工作经历</span>
+                            </div>
+
+                            <el-form ref="form" :model="item" label-width="100px" :rules="rules">
+                                <el-divider>工作经历</el-divider>
+                                <el-form-item label="公司名:" prop="name">
+                                    <el-input v-model="item.name" maxlength="10"></el-input>
+                                </el-form-item>
+                                <el-form-item label="从事行业:" prop="industry">
+                                    <el-input v-model="item.industry" maxlength="10"></el-input>
+                                </el-form-item>
+                                <el-form-item label="岗位:" prop="post">
+                                    <el-input v-model="item.post" maxlength="10"></el-input>
+                                </el-form-item>
+
+                                <el-form-item label="技能关键词:" prop="keyword">
+                                    <el-input v-model="item.keyword" maxlength="10"></el-input>
+                                </el-form-item>
+
+                                <el-form-item label="工作时间:" prop="back_time">
+                                    <el-date-picker
+                                            v-model="item.time"
+                                            type="daterange"
+                                            range-separator="至"
+                                            start-placeholder="入职时间"
+                                            end-placeholder="离职时间">
+                                    </el-date-picker>
+
+                                </el-form-item>
+                                <el-form-item label="" prop="back_time">
+                                    <el-button style="float: left;" type="primary" v-if="i===work_list.length-1"
+                                               @click="add_work_det()">新增
+                                    </el-button>
+                                </el-form-item>
+                            </el-form>
+                        </el-card>
+                    </div>
+                    <div class="next2">
+                        <el-button type="primary" @click="next(1, 'form')">下一步</el-button>
+                        <el-button type="primary" @click="next(-1)">上一步</el-button>
+                    </div>
+                </div>
+            </transition>
+            <!-- 第四步 -->
+            <transition name="el-fade-in-linear" v-if="active === 3">
+                <div>
+                    <div v-for="(item,i) in work_list" :key="i" class="text item">
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <span>其他证明</span>
+                            </div>
+
+                            <el-form ref="prove" :model="prove" label-width="100px">
+                                <el-divider>其他证明材料</el-divider>
+                                <el-form-item label="公司在职证明:">
+                                    <el-upload
+                                            element-loading-text="上传中"
+                                            element-loading-spinner="el-icon-loading"
+                                            class="avatar-uploader"
+                                            :action="upload_url"
+                                            :show-file-list="false"
+                                            :on-success="(response) =>handleAvatarSuccess3(response, i, 3)"
+                                            :before-upload="beforeAvatarUpload">
+                                        <img v-if="prove.work" :src="prove.work" class="avatar">
+                                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                    </el-upload>
+                                </el-form-item>
+                                <el-form-item label="社保证明:">
+                                    <el-upload
+                                            element-loading-text="上传中"
+                                            element-loading-spinner="el-icon-loading"
+                                            class="avatar-uploader"
+                                            :action="upload_url"
+                                            :show-file-list="false"
+                                            :on-success="(response) =>handleAvatarSuccess3(response, i, 4)"
+                                            :before-upload="beforeAvatarUpload">
+                                        <img v-if="prove.security" :src="prove.security" class="avatar">
+                                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                    </el-upload>
+                                </el-form-item>
+                                <el-form-item label="其他证明:">
+                                    <el-upload
+                                            element-loading-text="上传中"
+                                            element-loading-spinner="el-icon-loading"
+                                            class="avatar-uploader"
+                                            :action="upload_url"
+                                            :show-file-list="false"
+                                            :on-success="(response) =>handleAvatarSuccess3(response, i, 5)"
+                                            :before-upload="beforeAvatarUpload">
+                                        <img v-if="prove.other" :src="prove.other" class="avatar">
+                                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                    </el-upload>
+                                </el-form-item>
+
+                            </el-form>
+                        </el-card>
+                    </div>
+                    <div class="next2">
+                        <el-button type="primary" @click="next(1, 'form')">下一步</el-button>
+                        <el-button type="primary" @click="next(-1)">上一步</el-button>
+                    </div>
+                </div>
+            </transition>
+
+            <!-- 第五步 -->
+            <transition name="el-fade-in-linear" v-if="active === 4">
+                <div class="step4">
+                    <el-descriptions class="margin-top" title="" :column="3" border>
+
+                        <el-descriptions-item>
+                            <template slot="label">
+                                <i class="el-icon-user"></i>
+                                昵称
+                            </template>
+                            <p v-text="form.name"></p>
+                        </el-descriptions-item>
+
+                        <el-descriptions-item>
+                            <template slot="label">
+                                <i class="el-icon-user"></i>
+                                姓名
+                            </template>
+                            <p v-text="form.ocr_info_front.name"></p>
+
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                            <template slot="label">
+                                <i class="el-icon-mobile-phone"></i>
+                                手机号
+                            </template>
+                            <p v-text="form.phone"></p>
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                            <template slot="label">
+                                <i class="el-icon-tickets"></i>
+                                身份证号
+                            </template>
+                            <p v-text="form.ocr_info_front.number_id"></p>
+                        </el-descriptions-item>
+                        <el-descriptions-item span="2">
+                            <template slot="label">
+                                <i class="el-icon-office-building"></i>
+                                联系地址
+                            </template>
+                            <p v-text="form.ocr_info_front.address"></p>
+                        </el-descriptions-item>
+
+                        <el-descriptions-item span="3">
+                            <template slot="label">
+                                <i class="el-icon-office-building"></i>
+                                身份证有效期
+                            </template>
+                            <span v-text="form.ocr_info_back.start_time"></span> -- <span
+                                v-text="form.ocr_info_back.end_time"></span>
+                        </el-descriptions-item>
+                        <template v-for="(item,i) in school_list">
+                            <el-descriptions-item span="1" :key="i">
+                                <template slot="label">
+                                    <i class="el-icon-office-building"></i>
+                                    学校
+                                </template>
+                                <p v-text="item.school"></p>
+
+                            </el-descriptions-item>
+                            <el-descriptions-item span="1" :key="i">
+                                <template slot="label">
+                                    <i class="el-icon-office-building"></i>
+                                    学历
+                                </template>
+                                <p v-text="item.education"></p>
+                            </el-descriptions-item>
+                            <el-descriptions-item span="2" :key="i">
+                                <template slot="label">
+                                    <i class="el-icon-office-building"></i>
+                                    专业
+                                </template>
+                                <p v-text="item.speciality"></p>
+                            </el-descriptions-item>
+                            <el-descriptions-item span="3" :key="i">
+                                <template slot="label">
+                                    <i class="el-icon-office-building"></i>
+                                    入学毕业时间
+                                </template>
+                                <span v-text="handle_time(item.time)"></span>
+                            </el-descriptions-item>
+                            <el-descriptions-item span="1" :key="i">
+                                <template slot="label">
+                                    <i class="el-icon-office-building"></i>
+                                    毕业证
+                                </template>
+                                <img v-if="item.diploma" :src="item.diploma" class="avatar">
+                            </el-descriptions-item>
+                            <el-descriptions-item span="2" :key="i">
+                                <template slot="label">
+                                    <i class="el-icon-office-building"></i>
+                                    学位证
+                                </template>
+                                <img v-if="item.degree" :src="item.degree" class="avatar">
+                            </el-descriptions-item>
+                        </template>
+                        <template v-for="(item,i) in work_list">
+                            <el-descriptions-item span="1" :key="i">
+                                <template slot="label">
+                                    <i class="el-icon-office-building"></i>
+                                    公司名
+                                </template>
+                                <p v-text="item.name"></p>
+                            </el-descriptions-item>
+                            <el-descriptions-item span="1" :key="i">
+                                <template slot="label">
+                                    <i class="el-icon-office-building"></i>
+                                    从事行业
+                                </template>
+                                <p v-text="item.industry"></p>
+                            </el-descriptions-item>
+                            <el-descriptions-item span="1" :key="i">
+                                <template slot="label">
+                                    <i class="el-icon-office-building"></i>
+                                    岗位
+                                </template>
+                                <p v-text="item.post"></p>
+                            </el-descriptions-item>
+                            <el-descriptions-item span="1" :key="i">
+                                <template slot="label">
+                                    <i class="el-icon-office-building"></i>
+                                    技能关键词
+                                </template>
+                                <span v-text="item.keyword"></span>
+                            </el-descriptions-item>
+                            <el-descriptions-item span="2" :key="i">
+                                <template slot="label">
+                                    <i class="el-icon-office-building"></i>
+                                    工作时间
+                                </template>
+                                <span v-text="handle_time(item.time)"></span>
+                            </el-descriptions-item>
+                        </template>
+                        <el-descriptions-item span="3">
+                            <template slot="label">
+                                <i class="el-icon-office-building"></i>
+                                公司在职证明
+                            </template>
+                            <img v-if="prove.work" :src="prove.work" class="avatar">
+                        </el-descriptions-item>
+                        <el-descriptions-item span="3">
+                            <template slot="label">
+                                <i class="el-icon-office-building"></i>
+                                社保证明
+                            </template>
+                            <img v-if="prove.security" :src="prove.security" class="avatar">
+                        </el-descriptions-item>
+                        <el-descriptions-item span="3">
+                            <template slot="label">
+                                <i class="el-icon-office-building"></i>
+                                其他证明
+                            </template>
+                            <img v-if="prove.other" :src="prove.other" class="avatar">
+                        </el-descriptions-item>
+                    </el-descriptions>
+                    <div class="next4">
+                        <el-button type="primary" @click="next(1, 'form')">提交审核</el-button>
+                        <el-button type="primary" @click="next(-1)">上一步</el-button>
+                    </div>
+                </div>
+            </transition>
+
+            <!-- 第六步 -->
+            <transition name="el-fade-in-linear" v-if="active === 5">
+                <div class="step4">
+                    <el-result icon="success" title="提交成功，三个工作日内通过短信回复" subTitle="请根据提示进行操作">
+                        <template slot="extra">
+                            <a href="../front/pages/zhaopinxinxi/list.html"><el-button type="primary">返回首页</el-button></a>
+                        </template>
+                    </el-result>
+                </div>
             </transition>
         </div>
     </div>
@@ -180,11 +537,38 @@
         var vue = new Vue({
             el: "#app",
             data: {
+                prove: {
+                    work: '',
+                    security: "",
+                    other: ""
+                },
+                school_list: [
+                    {
+                        education: "",
+                        school: "",
+                        speciality: "",
+                        time: [],
+                        diploma: "",
+                        degree: "",
+                    }
+                ],
+                work_list: [
+                    {
+                        name: "",
+                        industry: "",
+                        post: "",
+                        time: [],
+                        start_time: "",
+                        end_time: "",
+                        keyword: "",
+                    }
+                ],
                 disabled: false,
                 loading_post: false,
                 loading: false,
                 loading2: false,
-                active: {{ step_id|default:0 }},
+                // active: {{ step_id|default:0 }},
+                active: 0,
                 token: "",
                 rules: {
                     name: [
@@ -204,6 +588,8 @@
                     ocr_info_front: {
                         name: '',
                         number_id: '',
+                        address: '',
+
                     },
                     ocr_info_back: {
                         start_time: '',
@@ -225,10 +611,36 @@
 
             },
             methods: {
-
+                // 处理时间
+                handle_time(time) {
+                    if (time.length) {
+                        var start_time_year = time[0].getFullYear();
+                        var start_time_moth = time[0].getMonth() + 1;
+                        var start_time_day = time[0].getDate();
+                        if (start_time_moth < 10) {
+                            start_time_moth = '0' + start_time_moth
+                        }
+                        if (start_time_day < 10) {
+                            start_time_day = '0' + start_time_day
+                        }
+                        var end_time_year = time[1].getFullYear();
+                        var end_time_moth = time[1].getMonth() + 1;
+                        var end_time_day = time[1].getDate();
+                        if (end_time_moth < 10) {
+                            end_time_moth = '0' + end_time_moth
+                        }
+                        if (end_time_day < 10) {
+                            end_time_day = '0' + end_time_day
+                        }
+                        var start_time = `${start_time_year}${start_time_moth}${start_time_day}`
+                        var end_time = `${end_time_year}${end_time_moth}${end_time_day}`
+                        return `${start_time} -- ${end_time}`
+                    }
+                },
+                // 发送短信
                 send_code() {
                     if (this.exit_count >= 1) {
-                        if (!this.form.phone){
+                        if (!this.form.phone) {
                             msg_fail('请输入手机号！')
                             return
                         }
@@ -251,62 +663,18 @@
                         }, 1000);
                     }
                 },
+                // 下一步
                 next(num, formName) {
                     var thsi = this;
                     if (num === 1) {
                         if (this.active !== 6) {
+                            thsi.active++
+                            return;
                             if (this.active === 0) {
                                 // 第一步
-                                console.log(formName, this.form)
                                 this.$refs[formName].validate((valid) => {
                                     if (valid) {
-                                        // this.loading_post = true;
-
-                                        var start_time_year = this.form.ocr_info_back.time[0].getFullYear();
-                                        var start_time_moth = this.form.ocr_info_back.time[0].getMonth() + 1;
-                                        var start_time_day = this.form.ocr_info_back.time[0].getDate();
-                                        if (start_time_moth < 10) {
-                                            start_time_moth = '0' + start_time_moth
-                                        }
-                                        if (start_time_day < 10) {
-                                            start_time_day = '0' + start_time_day
-                                        }
-                                        var end_time_year = this.form.ocr_info_back.time[1].getFullYear();
-                                        var end_time_moth = this.form.ocr_info_back.time[1].getMonth() + 1;
-                                        var end_time_day = this.form.ocr_info_back.time[1].getDate();
-                                        if (end_time_moth < 10) {
-                                            end_time_moth = '0' + end_time_moth
-                                        }
-                                        if (end_time_day < 10) {
-                                            end_time_day = '0' + end_time_day
-                                        }
-                                        this.form.ocr_info_back.start_time = `${start_time_year}${start_time_moth}${start_time_day}`
-                                        this.form.ocr_info_back.end_time = `${end_time_year}${end_time_moth}${end_time_day}`
-                                        var post_data = {
-                                            token: this.token || localStorage.getItem("Token"),
-                                            user_id: 19,
-                                            step_id: this.active + 1,
-                                            name: this.form.name,
-                                            phone: this.form.phone,
-                                            code: this.form.code,
-                                            front: this.imageUrl1,
-                                            back: this.imageUrl2,
-                                            info_front: JSON.stringify(this.form.ocr_info_front),
-                                            info_back: JSON.stringify(this.form.ocr_info_back),
-                                            ocr_info_front: JSON.stringify(this.ocr_front),
-                                            ocr_info_back: JSON.stringify(this.ocr_back)
-                                        }
-                                        $.post("/interviewer/save/", post_data, function (res) {
-                                            thsi.loading_post = false;
-                                            if (res.response === 'ok') {
-                                                localStorage.setItem("Token", res.data.token);
-                                                thsi.token = res.data.token
-                                                thsi.active++
-                                            } else {
-                                                msg_fail(res.message)
-                                            }
-                                        })
-
+                                        thsi.active++
                                     } else {
                                         return false;
                                     }
@@ -315,6 +683,9 @@
 
                         }
                     } else {
+                        // 上一步
+                        thsi.active--
+                        return;
                         this.loading_post = true;
                         $.get("/interviewer/save/?step_id=" + thsi.active, function (res) {
                             thsi.loading_post = false;
@@ -346,16 +717,33 @@
 
                     }
                 },
+                // 公共
+                // 上传验证
+                beforeAvatarUpload(file) {
+                    const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
+                    const isLt2M = file.size / 1024 / 1024 < 2;
+
+                    if (!isJPG) {
+                        this.$message.error('上传图片只能是 JPG 或 png 格式!');
+                    }
+                    if (!isLt2M) {
+                        this.$message.error('上传图片大小不能超过 2MB!');
+                    }
+                    return isJPG && isLt2M;
+                },
+
+                // 第一步
+                // 识别身份证正面
                 handleAvatarSuccess(res) {
                     this.imageUrl1 = this.web_file_url + res.data[0].file_url
                     this.loading = true;
                     var thsi = this;
                     $.post('/interviewer/ocr_sfz/', {idCardSide: 'front', url: this.imageUrl1}, function (res) {
-                        if (res.response === 'ok'){
+                        if (res.response === 'ok') {
                             thsi.loading = false;
                             thsi.form.ocr_info_front = res.data;
                             thsi.ocr_front = copy(res.data);
-                        }else{
+                        } else {
                             thsi.loading = false;
                             msg_fail(res.message)
                         }
@@ -363,6 +751,7 @@
 
                     })
                 },
+                // 识别身份证背面
                 handleAvatarSuccess2(res) {
                     this.loading2 = true;
                     var thsi = this;
@@ -380,21 +769,61 @@
                         thsi.ocr_back = copy(res.data);
                     })
                 },
-                beforeAvatarUpload(file) {
-                    const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
-                    const isLt2M = file.size / 1024 / 1024 < 2;
 
-                    if (!isJPG) {
-                        this.$message.error('上传图片只能是 JPG 或 png 格式!');
+
+                // 第二步
+                // 上传毕业证\学位证
+                handleAvatarSuccess3(res, i, type) {
+                    if (type === 1) {
+                        this.school_list[i].diploma = this.web_file_url + res.data[0].file_url
+                    } else if (type === 2) {
+                        this.school_list[i].degree = this.web_file_url + res.data[0].file_url
+                    } else if (type === 3) {
+                        this.prove.work = this.web_file_url + res.data[0].file_url
+                    } else if (type === 4) {
+                        this.prove.security = this.web_file_url + res.data[0].file_url
+                    } else if (type === 5) {
+                        this.prove.other = this.web_file_url + res.data[0].file_url
                     }
-                    if (!isLt2M) {
-                        this.$message.error('上传图片大小不能超过 2MB!');
+                },
+
+                // 新增学历信息
+                add_school_det() {
+                    if (this.school_list.length < 5) {
+                        this.school_list.push({
+                            name: "",
+                            industry: "",
+                            post: "",
+                            time: {},
+                            keyword: "",
+                        })
+                    } else {
+                        msg_fail("最多添加五个")
                     }
-                    return isJPG && isLt2M;
-                }
+
+                },
+                // 第三步
+                // 新增工作经历
+                add_work_det() {
+                    if (this.work_list.length < 5) {
+                        this.work_list.push({
+                            education: "",
+                            school: "",
+                            speciality: "",
+                            time: {},
+                            diploma: "",
+                            degree: "",
+                        })
+                    } else {
+                        msg_fail("最多添加五个")
+                    }
+                },
             }
         })
-
+    function navPage(url) {
+        localStorage.setItem('iframeUrl', url);
+        document.getElementById('iframe').src = url;
+    }
 
     </script>
 {% endblock %}
