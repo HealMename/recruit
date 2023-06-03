@@ -10,7 +10,7 @@
       <div class="chat-content">
         <div v-bind:key="item.id" v-for="item in dataList">
           <div v-if="item.ask" class="left-content">
-            <el-alert class="text-content" :title="item.ask" :closable="false" type="success"></el-alert>
+            <el-alert class="text-content" :title="item.ask" :closable="false" ></el-alert>
           </div>
           <div v-else class="right-content">
             <el-alert class="text-content" :title="item.reply" :closable="false" type="warning"></el-alert>
@@ -23,7 +23,7 @@
         <el-input v-model="ruleForm.reply" placeholder="回复" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">回复</el-button>
+        <el-button  @click="onSubmit">回复</el-button>
         <el-button @click="back()">返回</el-button>
       </el-form-item>
     </el-form>

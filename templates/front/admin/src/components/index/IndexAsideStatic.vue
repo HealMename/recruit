@@ -14,7 +14,7 @@
             <el-menu-item :index="1-1" @click="menuHandler('updatePassword')">修改密码</el-menu-item>
             <el-menu-item :index="1-2" @click="menuHandler('center')">个人信息</el-menu-item>
           </el-submenu>
-          <el-submenu v-for=" (menu,index) in item.backMenu" :key="menu.menu" :index="index+2+''" style="border-color: #343957 !important">
+          <el-submenu v-for=" (menu,index) in item.backMenu" :key="menu.menu" :index="index+2+''" style="border-color: rgb(50, 65, 87) !important">
             <template slot="title">
               <i v-if="true" class="el-icon-menu" :class="icons[index]"/>
               <span>{{ menu.menu }}</span>
@@ -154,7 +154,7 @@ export default {
           })
           el.addEventListener("mouseleave", e => {
             e.stopPropagation()
-            // el.style.backgroundColor = "#343957"
+            // el.style.backgroundColor = "rgb(50, 65, 87)"
             el.style.background = "none"
           })
           el.addEventListener("focus", e => {
@@ -169,7 +169,7 @@ export default {
           })
           el.addEventListener("mouseleave", e => {
             e.stopPropagation()
-            // el.style.backgroundColor = "#343957"
+            // el.style.backgroundColor = "rgb(50, 65, 87)"
             el.style.background = "none"
           })
         })
@@ -178,7 +178,7 @@ export default {
     setMenulistIconColor() {
       this.$nextTick(() => {
         document.querySelectorAll('.menulist .el-submenu__title .el-submenu__icon-arrow').forEach(el => {
-          el.style.color = "#343957"
+          el.style.color = "rgb(50, 65, 87)"
         })
       })
     },
@@ -268,7 +268,7 @@ export default {
     border-radius: 0;
     border-width: 0 0 0px 0 !important;
     border-style: solid !important;
-    border-color: rgba(52, 57, 87, 1) !important;
+
     background: rgb(52, 57, 87) !important;
     box-shadow: 0 0 6px rgba(30, 144, 255, .2);
     box-sizing: border-box;
@@ -289,7 +289,7 @@ export default {
       border-width: 0 0 1px 0;
       border-style: solid;
       border-color: rgba(218, 218, 218, 0.15) !important;
-      background-color: rgba(52, 57, 87, 1) !important;
+      background-color: rgb(50, 65, 87) !important;
       box-shadow: 0 0 6px rgba(255, 255, 255, 0);
       box-sizing: initial;
       display: flex;
@@ -308,7 +308,7 @@ export default {
         border-width: 0;
         border-style: solid;
         border-color: #fff;
-        background-color: rgba(52, 57, 87, 1) !important;
+        background-color: rgb(50, 65, 87) !important;
         box-shadow: 0 0 6px rgba(255, 255, 255, 0);
       }
     }
@@ -327,7 +327,7 @@ export default {
       border-width: 0 0 1px 0;
       border-style: solid;
       border-color:rgba(218, 218, 218, 0.15) !important;
-      background-color: rgba(52, 57, 87, 1) !important;
+      background-color: rgb(50, 65, 87) !important;
       box-shadow: 0 0 6px rgba(255, 255, 255, 0);
       box-sizing: initial;
       display: flex;
@@ -345,8 +345,8 @@ export default {
         border-radius: 0;
         border-width: 0;
         border-style: solid;
-        border-color: rgba(52, 57, 87, 1) !important;
-        background-color: rgba(52, 57, 87, 1);
+
+        background-color: rgb(50, 65, 87);
         box-shadow: 0 0 6px rgba(255, 255, 255, 0);
       }
 
@@ -360,8 +360,8 @@ export default {
         border-radius: 0;
         border-width: 0;
         border-style: solid;
-        border-color: rgba(52, 57, 87, 1) !important;
-        background-color: rgba(52, 57, 87, 1) !important;
+
+        background-color: rgb(50, 65, 87) !important;
         box-shadow: 0 0 6px rgba(255, 255, 255, 0);
         position: absolute;
         top: 50%;
@@ -381,7 +381,7 @@ export default {
       //border-width: 0;
       //border-style: solid;
       //border-color: rgba(0, 0, 0, .3);
-      //background-color: rgba(52, 57, 87, 1);
+      //background-color: rgb(50, 65, 87);
       //box-shadow: 0 0 6px rgba(0, 0, 0, .3);
 
       .el-menu-item {
@@ -396,7 +396,7 @@ export default {
         border-width: 0;
         border-style: solid;
         border-color: rgba(0, 0, 0, 0);
-        background-color: rgba(52, 57, 87, 1) !important;
+        background-color: #242f42 !important;
         box-shadow: 0 0 6px rgba(30, 144, 255, 0);
         text-align: left;
         min-width: auto;
@@ -413,7 +413,7 @@ export default {
           border-width: 0;
           border-style: solid;
           border-color: rgba(0, 0, 0, 0);
-          background-color: rgba(101, 126, 253, 1) !important;
+          background-color: #409eff!important;
           box-shadow: 0 0 6px rgba(30, 144, 255, 0);
           text-align: left;
         }
@@ -430,7 +430,7 @@ export default {
           border-width: 0;
           border-style: solid;
           border-color: rgba(0, 0, 0, 0);
-          background-color: rgba(101, 126, 253, 1) !important;
+          background-color: #409eff!important;
           box-shadow: 0 0 6px rgba(30, 144, 255, 0);
           text-align: left;
         }
@@ -450,7 +450,7 @@ export default {
   border-width: 0;
   border-style: solid;
   border-color: rgba(0, 0, 0, .3);
-  background-color: rgba(52, 57, 87, 1) !important;
+  background-color: rgb(50, 65, 87) !important;
   box-shadow: 0 0 6px rgba(0, 0, 0, .3);
   min-width: auto;
 }
@@ -467,7 +467,7 @@ export default {
   border-width: 0;
   border-style: solid;
   border-color: rgba(0, 0, 0, 0);
-  background-color: rgba(52, 57, 87, 1) !important;
+  background-color: rgb(50, 65, 87) !important;
   box-shadow: 0 0 6px rgba(30, 144, 255, 0);
   text-align: left;
   min-width: auto;
@@ -485,7 +485,7 @@ export default {
   border-width: 0;
   border-style: solid;
   border-color: rgba(0, 0, 0, 0);
-  background-color: rgba(101, 126, 253, 1) !important;
+  background-color: #409eff!important;
   box-shadow: 0 0 6px rgba(30, 144, 255, 0);
   text-align: left;
 }

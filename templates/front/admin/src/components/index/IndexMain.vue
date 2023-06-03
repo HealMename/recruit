@@ -1,5 +1,5 @@
 <template>
-  <el-main style="padding: 5px 10px; boxShadow: 0 0 6px rgba(0,0,0,0);">
+  <el-main style="padding: 5px 10px; boxShadow: 0 0 6px rgba(0,0,0,0);margin-top: 43px;">
     <bread-crumbs :title="title" class="bread-crumbs"></bread-crumbs>
     <router-view class="router-view" style="height:auto;background: transparent;"></router-view>
   </el-main>

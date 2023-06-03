@@ -65,8 +65,8 @@
           <i class="el-icon-remove-outline" style="padding-left: 12px;cursor:pointer;" @click="delUrl(index)" v-if="index+1 > 1"></i>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit('form')">保存</el-button>
-          <el-button type="primary" @click="go_bank">返回</el-button>
+          <el-button  @click="onSubmit('form')">保存</el-button>
+          <el-button  @click="go_bank">返回</el-button>
 
         </el-form-item>
       </el-form>

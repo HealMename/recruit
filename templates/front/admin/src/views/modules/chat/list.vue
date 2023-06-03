@@ -22,7 +22,7 @@
             width="150"
           >
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.isreply==1" type="success">未回复</el-tag>
+              <el-tag v-if="scope.row.isreply==1" >未回复</el-tag>
               <el-tag v-if="scope.row.isreply==0" type="info">已回复</el-tag>
             </template>
           </el-table-column>

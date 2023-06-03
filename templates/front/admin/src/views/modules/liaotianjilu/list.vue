@@ -15,9 +15,9 @@
                   <el-input v-if="contents.inputIcon == 0" v-model="searchForm.gongsizhanghao" placeholder="公司账号" clearable></el-input>
                 </el-form-item>
           <el-form-item>
-            <el-button v-if="contents.searchBtnIcon == 1 && contents.searchBtnIconPosition == 1" icon="el-icon-search" type="success" @click="search()">{{ contents.searchBtnFont == 1?'查询':'' }}</el-button>
-            <el-button v-if="contents.searchBtnIcon == 1 && contents.searchBtnIconPosition == 2" type="success" @click="search()">{{ contents.searchBtnFont == 1?'查询':'' }}<i class="el-icon-search el-icon--right"/></el-button>
-            <el-button v-if="contents.searchBtnIcon == 0" type="success" @click="search()">{{ contents.searchBtnFont == 1?'查询':'' }}</el-button>
+            <el-button v-if="contents.searchBtnIcon == 1 && contents.searchBtnIconPosition == 1" icon="el-icon-search"  @click="search()">{{ contents.searchBtnFont == 1?'查询':'' }}</el-button>
+            <el-button v-if="contents.searchBtnIcon == 1 && contents.searchBtnIconPosition == 2"  @click="search()">{{ contents.searchBtnFont == 1?'查询':'' }}<i class="el-icon-search el-icon--right"/></el-button>
+            <el-button v-if="contents.searchBtnIcon == 0"  @click="search()">{{ contents.searchBtnFont == 1?'查询':'' }}</el-button>
           </el-form-item>
         </el-row>
 
@@ -25,39 +25,39 @@
           <el-form-item>
             <el-button
               v-if="isAuth('liaotianjilu','新增') && contents.btnAdAllIcon == 1 && contents.btnAdAllIconPosition == 1"
-              type="success"
+
               icon="el-icon-plus"
               @click="addOrUpdateHandler()"
-            >{{ contents.btnAdAllFont == 1?'新增':'' }}</el-button>
+            >新增</el-button>
             <el-button
               v-if="isAuth('liaotianjilu','新增') && contents.btnAdAllIcon == 1 && contents.btnAdAllIconPosition == 2"
-              type="success"
+
               @click="addOrUpdateHandler()"
-            >{{ contents.btnAdAllFont == 1?'新增':'' }}<i class="el-icon-plus el-icon--right" /></el-button>
+            >新增<i class="el-icon-plus el-icon--right" /></el-button>
             <el-button
               v-if="isAuth('liaotianjilu','新增') && contents.btnAdAllIcon == 0"
-              type="success"
+
               @click="addOrUpdateHandler()"
-            >{{ contents.btnAdAllFont == 1?'新增':'' }}</el-button>
+            >新增</el-button>
             <el-button
               v-if="isAuth('liaotianjilu','删除') && contents.btnAdAllIcon == 1 && contents.btnAdAllIconPosition == 1 && contents.tableSelection"
               :disabled="dataListSelections.length <= 0"
               type="danger"
               icon="el-icon-delete"
               @click="deleteHandler()"
-            >{{ contents.btnAdAllFont == 1?'删除':'' }}</el-button>
+            >删除</el-button>
             <el-button
               v-if="isAuth('liaotianjilu','删除') && contents.btnAdAllIcon == 1 && contents.btnAdAllIconPosition == 2 && contents.tableSelection"
               :disabled="dataListSelections.length <= 0"
               type="danger"
               @click="deleteHandler()"
-            >{{ contents.btnAdAllFont == 1?'删除':'' }}<i class="el-icon-delete el-icon--right" /></el-button>
+            >删除<i class="el-icon-delete el-icon--right" /></el-button>
             <el-button
               v-if="isAuth('liaotianjilu','删除') && contents.btnAdAllIcon == 0 && contents.tableSelection"
               :disabled="dataListSelections.length <= 0"
               type="danger"
               @click="deleteHandler()"
-            >{{ contents.btnAdAllFont == 1?'删除':'' }}</el-button>
+            >删除</el-button>
 
 
 
@@ -128,15 +128,15 @@
                :header-align="contents.tableAlign"
                 label="操作">
                 <template slot-scope="scope">
-                <el-button v-if="isAuth('liaotianjilu','查看') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 1" type="success" icon="el-icon-tickets" size="mini" @click="addOrUpdateHandler(scope.row.id,'info')">{{ contents.tableBtnFont == 1?'详情':'' }}</el-button>
-                <el-button v-if="isAuth('liaotianjilu','查看') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 2" type="success" size="mini" @click="addOrUpdateHandler(scope.row.id,'info')">{{ contents.tableBtnFont == 1?'详情':'' }}<i class="el-icon-tickets el-icon--right" /></el-button>
-                <el-button v-if="isAuth('liaotianjilu','查看') && contents.tableBtnIcon == 0" type="success" size="mini" @click="addOrUpdateHandler(scope.row.id,'info')">{{ contents.tableBtnFont == 1?'详情':'' }}</el-button>
-                <el-button v-if="isAuth('liaotianjilu','回复') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 1" type="success" icon="el-icon-tickets" size="mini" @click="liaotianjiluCrossAddOrUpdateHandler(scope.row,'cross','','','')">{{ contents.tableBtnFont == 1?'回复':'' }}</el-button>
-                <el-button v-if="isAuth('liaotianjilu','回复') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 2" type="success" size="mini" @click="liaotianjiluCrossAddOrUpdateHandler(scope.row,'cross','','','')">{{ contents.tableBtnFont == 1?'回复':'' }}<i class="el-icon-tickets el-icon--right" /></el-button>
-                <el-button v-if="isAuth('liaotianjilu','回复') && contents.tableBtnIcon == 0" type="success" size="mini" @click="liaotianjiluCrossAddOrUpdateHandler(scope.row,'cross','','','')">{{ contents.tableBtnFont == 1?'回复':'' }}</el-button>
-                <el-button v-if=" isAuth('liaotianjilu','修改') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 1" type="primary" icon="el-icon-edit" size="mini" @click="addOrUpdateHandler(scope.row.id)">{{ contents.tableBtnFont == 1?'修改':'' }}</el-button>
-                <el-button v-if=" isAuth('liaotianjilu','修改') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 2" type="primary" size="mini" @click="addOrUpdateHandler(scope.row.id)">{{ contents.tableBtnFont == 1?'修改':'' }}<i class="el-icon-edit el-icon--right" /></el-button>
-                <el-button v-if=" isAuth('liaotianjilu','修改') && contents.tableBtnIcon == 0" type="primary" size="mini" @click="addOrUpdateHandler(scope.row.id)">{{ contents.tableBtnFont == 1?'修改':'' }}</el-button>
+                <el-button v-if="isAuth('liaotianjilu','查看') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 1"  icon="el-icon-tickets" size="mini" @click="addOrUpdateHandler(scope.row.id,'info')">{{ contents.tableBtnFont == 1?'详情':'' }}</el-button>
+                <el-button v-if="isAuth('liaotianjilu','查看') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 2"  size="mini" @click="addOrUpdateHandler(scope.row.id,'info')">{{ contents.tableBtnFont == 1?'详情':'' }}<i class="el-icon-tickets el-icon--right" /></el-button>
+                <el-button v-if="isAuth('liaotianjilu','查看') && contents.tableBtnIcon == 0"  size="mini" @click="addOrUpdateHandler(scope.row.id,'info')">{{ contents.tableBtnFont == 1?'详情':'' }}</el-button>
+                <el-button v-if="isAuth('liaotianjilu','回复') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 1"  icon="el-icon-tickets" size="mini" @click="liaotianjiluCrossAddOrUpdateHandler(scope.row,'cross','','','')">{{ contents.tableBtnFont == 1?'回复':'' }}</el-button>
+                <el-button v-if="isAuth('liaotianjilu','回复') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 2"  size="mini" @click="liaotianjiluCrossAddOrUpdateHandler(scope.row,'cross','','','')">{{ contents.tableBtnFont == 1?'回复':'' }}<i class="el-icon-tickets el-icon--right" /></el-button>
+                <el-button v-if="isAuth('liaotianjilu','回复') && contents.tableBtnIcon == 0"  size="mini" @click="liaotianjiluCrossAddOrUpdateHandler(scope.row,'cross','','','')">{{ contents.tableBtnFont == 1?'回复':'' }}</el-button>
+                <el-button v-if=" isAuth('liaotianjilu','修改') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 1"  icon="el-icon-edit" size="mini" @click="addOrUpdateHandler(scope.row.id)">{{ contents.tableBtnFont == 1?'修改':'' }}</el-button>
+                <el-button v-if=" isAuth('liaotianjilu','修改') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 2"  size="mini" @click="addOrUpdateHandler(scope.row.id)">{{ contents.tableBtnFont == 1?'修改':'' }}<i class="el-icon-edit el-icon--right" /></el-button>
+                <el-button v-if=" isAuth('liaotianjilu','修改') && contents.tableBtnIcon == 0"  size="mini" @click="addOrUpdateHandler(scope.row.id)">{{ contents.tableBtnFont == 1?'修改':'' }}</el-button>
 
 
 
@@ -196,7 +196,7 @@ export default {
       chartVisiable: false,
       addOrUpdateFlag:false,
       liaotianjiluCrossAddOrUpdateFlag: false,
-      contents:{"searchBtnFontColor":"rgba(255, 255, 255, 1)","pagePosition":"1","inputFontSize":"14px","inputBorderRadius":"4px","tableBtnDelFontColor":"rgba(101, 126, 253, 1)","tableBtnIconPosition":"1","searchBtnHeight":"40px","tableBgColor":"#f5f5f5","inputIconColor":"rgba(101, 126, 253, 1)","searchBtnBorderRadius":"10px","tableStripe":true,"btnAdAllWarnFontColor":"rgba(255, 255, 255, 1)","tableBtnDelBgColor":"#fff","searchBtnIcon":"1","tableSize":"medium","searchBtnBorderStyle":"solid","tableSelection":true,"text":{"padding":"0","boxShadow":"0 0 6px rgba(0,0,0,.1)","margin":"0 auto","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#f7f7f7","color":"#333","borderRadius":"6px","borderWidth":"0","width":"auto","lineHeight":"auto","fontSize":"24px","borderStyle":"solid"},"searchBtnBorderWidth":"0px","tableContentFontSize":"14px","searchBtnBgColor":"rgba(101, 126, 253, 1)","inputTitleSize":"14px","btnAdAllBorderColor":"rgba(0, 71, 238, 1)","pageJumper":true,"btnAdAllIconPosition":"1","searchBoxPosition":"1","tableBtnDetailFontColor":"rgba(101, 126, 253, 1)","tableBtnHeight":"40px","pagePager":true,"searchBtnBorderColor":"rgba(52, 57, 87, 1)","tableHeaderFontColor":"#909399","inputTitle":"0","tableBtnBorderRadius":"4px","btnAdAllFont":"0","btnAdAllDelFontColor":"rgba(255, 255, 255, 1)","tableBtnIcon":"0","btnAdAllHeight":"40px","btnAdAllWarnBgColor":"rgba(101, 126, 253, 1)","btnAdAllBorderWidth":"0px","tableStripeFontColor":"#606266","tableBtnBorderStyle":"solid","inputHeight":"40px","btnAdAllBorderRadius":"18px","btnAdAllDelBgColor":"rgba(205, 32, 31, 1)","pagePrevNext":true,"btnAdAllAddBgColor":"rgba(40, 167, 69, 1)","searchBtnFont":"1","tableIndex":true,"btnAdAllIcon":"1","tableSortable":false,"pageSizes":true,"tableFit":true,"pageBtnBG":true,"searchBtnFontSize":"14px","tableBtnEditBgColor":"rgba(255, 255, 255, 1)","inputBorderWidth":"1px","box":{"padding":"10px 20px","boxShadow":"0 0 6px rgba(0,0,0,0)","flag":1,"backgroundImage":"","background":"#fff"},"inputFontPosition":"1","inputFontColor":"#333","pageEachNum":10,"tableHeaderBgColor":"#fff","inputTitleColor":"#333","btnAdAllBoxPosition":"3","tableBtnDetailBgColor":"#fff","inputIcon":"1","searchBtnIconPosition":"2","btnAdAllFontSize":"16px","inputBorderStyle":"solid","tableHoverFontColor":"#333","inputBgColor":"#fff","pageStyle":false,"pageTotal":true,"btnAdAllAddFontColor":"rgba(255, 255, 255, 1)","tableBtnFont":"1","tableContentFontColor":"#606266","inputBorderColor":"#DCDFE6","tableShowHeader":true,"tableHoverBgColor":"#f5f5f5","tableBtnFontSize":"14px","tableBtnBorderColor":"rgba(101, 126, 253, 1)","inputIconPosition":"2","tableBorder":true,"btnAdAllBorderStyle":"solid","tableBtnBorderWidth":"1px","tableStripeBgColor":"#F5F7FA","tableBtnEditFontColor":"rgba(101, 126, 253, 1)","tableAlign":"center"},
+      contents:{"searchBtnFontColor":"rgba(255, 255, 255, 1)","pagePosition":"1","inputFontSize":"14px","inputBorderRadius":"4px","tableBtnDelFontColor":"rgba(101, 126, 253, 1)","tableBtnIconPosition":"1","searchBtnHeight":"40px","tableBgColor":"#f5f5f5","inputIconColor":"rgba(101, 126, 253, 1)","searchBtnBorderRadius":"10px","tableStripe":true,"btnAdAllWarnFontColor":"rgba(255, 255, 255, 1)","tableBtnDelBgColor":"#fff","searchBtnIcon":"1","tableSize":"medium","searchBtnBorderStyle":"solid","tableSelection":true,"text":{"padding":"0","boxShadow":"0 0 6px rgba(0,0,0,.1)","margin":"0 auto","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#f7f7f7","color":"#333","borderRadius":"6px","borderWidth":"0","width":"auto","lineHeight":"auto","fontSize":"24px","borderStyle":"solid"},"searchBtnBorderWidth":"0px","tableContentFontSize":"14px","searchBtnBgColor":"rgba(101, 126, 253, 1)","inputTitleSize":"14px","btnAdAllBorderColor":"rgba(0, 71, 238, 1)","pageJumper":true,"btnAdAllIconPosition":"1","searchBoxPosition":"1","tableBtnDetailFontColor":"rgba(101, 126, 253, 1)","tableBtnHeight":"40px","pagePager":true,"searchBtnBorderColor":"rgb(50, 65, 87)","tableHeaderFontColor":"#909399","inputTitle":"0","tableBtnBorderRadius":"4px","btnAdAllFont":"0","btnAdAllDelFontColor":"rgba(255, 255, 255, 1)","tableBtnIcon":"0","btnAdAllHeight":"40px","btnAdAllWarnBgColor":"rgba(101, 126, 253, 1)","btnAdAllBorderWidth":"0px","tableStripeFontColor":"#606266","tableBtnBorderStyle":"solid","inputHeight":"40px","btnAdAllBorderRadius":"18px","btnAdAllDelBgColor":"rgba(205, 32, 31, 1)","pagePrevNext":true,"btnAdAllAddBgColor":"rgba(40, 167, 69, 1)","searchBtnFont":"1","tableIndex":true,"btnAdAllIcon":"1","tableSortable":false,"pageSizes":true,"tableFit":true,"pageBtnBG":true,"searchBtnFontSize":"14px","tableBtnEditBgColor":"rgba(255, 255, 255, 1)","inputBorderWidth":"1px","box":{"padding":"10px 20px","boxShadow":"0 0 6px rgba(0,0,0,0)","flag":1,"backgroundImage":"","background":"#fff"},"inputFontPosition":"1","inputFontColor":"#333","pageEachNum":10,"tableHeaderBgColor":"#fff","inputTitleColor":"#333","btnAdAllBoxPosition":"3","tableBtnDetailBgColor":"#fff","inputIcon":"1","searchBtnIconPosition":"2","btnAdAllFontSize":"16px","inputBorderStyle":"solid","tableHoverFontColor":"#333","inputBgColor":"#fff","pageStyle":false,"pageTotal":true,"btnAdAllAddFontColor":"rgba(255, 255, 255, 1)","tableBtnFont":"1","tableContentFontColor":"#606266","inputBorderColor":"#DCDFE6","tableShowHeader":true,"tableHoverBgColor":"#f5f5f5","tableBtnFontSize":"14px","tableBtnBorderColor":"rgba(101, 126, 253, 1)","inputIconPosition":"2","tableBorder":true,"btnAdAllBorderStyle":"solid","tableBtnBorderWidth":"1px","tableStripeBgColor":"#F5F7FA","tableBtnEditFontColor":"rgba(101, 126, 253, 1)","tableAlign":"center"},
       layouts: '',
 
 
@@ -205,7 +205,7 @@ export default {
   created() {
     this.init();
     this.getDataList();
-    this.contentStyleChange()
+    // this.contentStyleChange()
   },
   mounted() {
 
@@ -555,48 +555,6 @@ export default {
   }
   
 
-  .el-button+.el-button {
-    margin:0;
-  } 
-
-  .tables {
-	& /deep/ .el-button--success {
-		height: 40px;
-		color: rgba(101, 126, 253, 1);
-		font-size: 14px;
-		border-width: 1px;
-		border-style: solid;
-		border-color: rgba(101, 126, 253, 1);
-		border-radius: 4px;
-		background-color: #fff;
-	}
-	
-	& /deep/ .el-button--primary {
-		height: 40px;
-		color: rgba(101, 126, 253, 1);
-		font-size: 14px;
-		border-width: 1px;
-		border-style: solid;
-		border-color: rgba(101, 126, 253, 1);
-		border-radius: 4px;
-		background-color: rgba(255, 255, 255, 1);
-	}
-	
-	& /deep/ .el-button--danger {
-		height: 40px;
-		color: rgba(101, 126, 253, 1);
-		font-size: 14px;
-		border-width: 1px;
-		border-style: solid;
-		border-color: rgba(101, 126, 253, 1);
-		border-radius: 4px;
-		background-color: #fff;
-	}
-
-    & /deep/ .el-button {
-      margin: 4px;
-    }
-  }
 	.form-content {
 		background: transparent;
 	}

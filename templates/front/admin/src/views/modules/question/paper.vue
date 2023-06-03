@@ -13,8 +13,8 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit(1)">搜索</el-button>
-          <el-button type="primary" @click="onAdd(0)">添加试卷</el-button>
+          <el-button  @click="onSubmit(1)">搜索</el-button>
+          <el-button  @click="onAdd(0)">添加试卷</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -120,7 +120,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="savePaper()">确 定</el-button>
+        <el-button  @click="savePaper()">确 定</el-button>
       </div>
     </el-dialog>
   </el-row>

@@ -1,7 +1,7 @@
 <template>
   <el-row>
     <el-col :span="24">
-      <el-button type="primary" @click="go_bank()">返回</el-button>
+      <el-button  @click="go_bank()">返回</el-button>
       <el-empty description="暂无信息" v-if="!tableData.length"></el-empty>
 
       <el-card class="box-card" v-for="(item,index) in tableData" v-bind:key="index" style="margin-bottom: 10px;">
@@ -27,7 +27,7 @@
               </el-card>
               <span slot="footer" class="dialog-footer">
                   <el-button @click="dialogVisible = false">取 消</el-button>
-                  <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                  <el-button  @click="dialogVisible = false">确 定</el-button>
                 </span>
             </el-dialog>
           </el-descriptions-item>

@@ -1,8 +1,8 @@
 <template>
 
-	<div class="navbar" :style="{background:heads.headBgColor,height:heads.headHeight,boxShadow:heads.headBoxShadow,lineHeight:heads.headHeight}">
+	<div class="navbar" :style="{background:heads.headBgColor,height:heads.headHeight,lineHeight:heads.headHeight}">
 		<div class="title-menu" :style="{justifyContent:heads.headTitleStyle=='1'?'flex-start':'center'}">
-			<el-image v-if="heads.headTitleImg" class="title-img" :style="{width:heads.headTitleImgWidth,height:heads.headTitleImgHeight,boxShadow:heads.headTitleImgBoxShadow,borderRadius:heads.headTitleImgBorderRadius}" :src="heads.headTitleImgUrl" fit="cover"></el-image>
+			<el-image v-if="heads.headTitleImg" class="title-img" :style="{width:heads.headTitleImgWidth,height:heads.headTitleImgHeight,borderRadius:heads.headTitleImgBorderRadius}" :src="heads.headTitleImgUrl" fit="cover"></el-image>
 			<div class="title-name" :style="{color:heads.headFontColor,fontSize:heads.headFontSize}">{{this.$project.projectName}}</div>
 		</div>
 		<div class="right-menu">
@@ -20,7 +20,7 @@
 				dialogVisible: false,
 				ruleForm: {},
 				user: {},
-				heads: {"headLogoutFontHoverColor":"#fff","headFontSize":"20px","headUserInfoFontColor":"rgba(255, 255, 255, 1)","headBoxShadow":"0 11px 66px #343957","headTitleImgHeight":"44px","headLogoutFontHoverBgColor":"rgba(101, 126, 253, 1)","headFontColor":"rgba(255, 255, 255, 1)","headTitleImg":false,"headHeight":"60px","headTitleImgBorderRadius":"22px","headTitleImgUrl":"http://codegen.caihongy.cn/20201021/cc7d45d9c8164b58b18351764eba9be1.jpg","headBgColor":"#343957","headTitleImgBoxShadow":"0 1px 6px #444","headLogoutFontColor":"rgba(255, 255, 255, 1)","headUserInfoFontSize":"16px","headTitleImgWidth":"44px","headTitleStyle":"1","headLogoutFontSize":"16px"},
+				heads: {"background-color": "#242f42", "headLogoutFontHoverColor":"#fff","headFontSize":"20px","headUserInfoFontColor":"rgba(255, 255, 255, 1)","headTitleImgHeight":"44px","headLogoutFontHoverBgColor":"rgba(101, 126, 253, 1)","headFontColor":"rgba(255, 255, 255, 1)","headTitleImg":false,"headHeight":"60px","headTitleImgBorderRadius":"22px","headTitleImgUrl":"http://codegen.caihongy.cn/20201021/cc7d45d9c8164b58b18351764eba9be1.jpg","headBgColor":"#242f42","headLogoutFontColor":"rgba(255, 255, 255, 1)","headUserInfoFontSize":"16px","headTitleImgWidth":"44px","headTitleStyle":"1","headLogoutFontSize":"16px"},
 			};
 		},
 		created() {
@@ -123,7 +123,7 @@
 				width: 44px;
 				height: 44px;
 				border-radius: 22px;
-				box-shadow: 0 1px 6px #444;
+				//box-shadow: 0 1px 6px #444;
 				margin-right: 16px;
 			}
 			

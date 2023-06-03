@@ -1,8 +1,8 @@
 <template>
   <el-row  v-loading="loading">
     <el-col :span="12">
-      <el-button type="primary" @click="onAdd(0)">引用题目</el-button>
-          <el-button type="primary" @click="go_bank">返回</el-button>
+      <el-button  @click="onAdd(0)">引用题目</el-button>
+          <el-button  @click="go_bank">返回</el-button>
     </el-col>
 
     <el-dialog title="引用题目" :visible.sync="dialogFormVisible">
@@ -13,7 +13,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="saveQuestion()">确 定</el-button>
+        <el-button  @click="saveQuestion()">确 定</el-button>
       </div>
     </el-dialog>
 

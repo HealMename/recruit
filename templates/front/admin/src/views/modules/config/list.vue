@@ -53,26 +53,26 @@
             <template slot-scope="scope">
               <el-button
                   v-if="isAuth('config','查看') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 1"
-                  type="success" icon="el-icon-tickets" size="mini" @click="addOrUpdateHandler(scope.row.id,'info')">
+                   icon="el-icon-tickets" size="mini" @click="addOrUpdateHandler(scope.row.id,'info')">
                 {{ contents.tableBtnFont == 1 ? '详情' : '' }}
               </el-button>
               <el-button
                   v-if="isAuth('config','查看') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 2"
-                  type="success" size="mini" @click="addOrUpdateHandler(scope.row.id,'info')">
+                   size="mini" @click="addOrUpdateHandler(scope.row.id,'info')">
                 {{ contents.tableBtnFont == 1 ? '详情' : '' }}<i class="el-icon-tickets el-icon--right"/></el-button>
-              <el-button v-if="isAuth('config','查看') && contents.tableBtnIcon == 0" type="success" size="mini"
+              <el-button v-if="isAuth('config','查看') && contents.tableBtnIcon == 0"  size="mini"
                          @click="addOrUpdateHandler(scope.row.id,'info')">{{ contents.tableBtnFont == 1 ? '详情' : '' }}
               </el-button>
               <el-button
                   v-if=" isAuth('config','修改') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 1"
-                  type="primary" icon="el-icon-edit" size="mini" @click="addOrUpdateHandler(scope.row.id)">
+                   icon="el-icon-edit" size="mini" @click="addOrUpdateHandler(scope.row.id)">
                 {{ contents.tableBtnFont == 1 ? '修改' : '' }}
               </el-button>
               <el-button
                   v-if=" isAuth('config','修改') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 2"
-                  type="primary" size="mini" @click="addOrUpdateHandler(scope.row.id)">
+                   size="mini" @click="addOrUpdateHandler(scope.row.id)">
                 {{ contents.tableBtnFont == 1 ? '修改' : '' }}<i class="el-icon-edit el-icon--right"/></el-button>
-              <el-button v-if=" isAuth('config','修改') && contents.tableBtnIcon == 0" type="primary" size="mini"
+              <el-button v-if=" isAuth('config','修改') && contents.tableBtnIcon == 0"  size="mini"
                          @click="addOrUpdateHandler(scope.row.id)">{{ contents.tableBtnFont == 1 ? '修改' : '' }}
               </el-button>
 
@@ -165,7 +165,7 @@ export default {
         "tableBtnDetailFontColor": "rgba(101, 126, 253, 1)",
         "tableBtnHeight": "40px",
         "pagePager": true,
-        "searchBtnBorderColor": "rgba(52, 57, 87, 1)",
+        "searchBtnBorderColor": "rgb(50, 65, 87)",
         "tableHeaderFontColor": "#909399",
         "inputTitle": "0",
         "tableBtnBorderRadius": "4px",
@@ -238,7 +238,7 @@ export default {
   created() {
     this.init();
     this.getDataList();
-    this.contentStyleChange()
+    // this.contentStyleChange()
   },
   mounted() {
 

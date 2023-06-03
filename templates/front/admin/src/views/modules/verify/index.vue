@@ -21,7 +21,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit(1)">搜索</el-button>
+          <el-button  @click="onSubmit(1)">搜索</el-button>
         </el-form-item>
       </el-form>
     </el-col>

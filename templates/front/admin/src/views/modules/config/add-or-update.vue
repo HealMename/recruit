@@ -41,7 +41,7 @@
         </el-col>
       </el-row>
       <el-form-item class="btn">
-        <el-button v-if="type!='info'" type="primary" class="btn-success" @click="onSubmit">提交</el-button>
+        <el-button v-if="type!='info'"  class="btn-success" @click="onSubmit">提交</el-button>
         <el-button v-if="type!='info'" class="btn-close" @click="back()">取消</el-button>
         <el-button v-if="type=='info'" class="btn-close" @click="back()">返回</el-button>
       </el-form-item>
@@ -141,7 +141,7 @@ export default {
         "inputLableColor": "#606266",
         "addEditBoxColor": "#fff",
         "dateIconFontSize": "14px",
-        "btnSaveBgColor": "rgba(52, 57, 87, 1)",
+        "btnSaveBgColor": "rgb(50, 65, 87)",
         "uploadIconFontColor": "#8c939d",
         "textareaBorderColor": "#DCDFE6",
         "btnCancelBgColor": "#ecf5ff",
