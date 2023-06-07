@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="referrer" content="no-referrer" />
+    <meta name="referrer" content="no-referrer"/>
     <title>it学霸</title>
     <link rel="shortcut icon" href="/media/img/favicon.ico">
     <link rel="stylesheet" href="/media/layui-v2.7.6/layui/css/layui.css">
@@ -17,11 +17,17 @@
         height: 100%;
     }
 
+    ::-webkit-scrollbar {
+        display: none; /* Chrome Safari */
+        -ms-overflow-style: none; /* IE 10+ */
+        scrollbar-width: none; /* Firefox */
+
+    }
+
     #iframe {
         width: 100%;
         margin-top: 00px;
         padding-top: 41px;
-        min-height: 800px;
     }
 
     #header {
@@ -190,7 +196,7 @@
     .logins, .register {
         display: inline;
         position: absolute;
-    margin-top: 10px;
+        margin-top: 10px;
     }
 
     .logins p, .register p {
@@ -210,10 +216,12 @@
         border-color: rgba(255, 255, 255, 1);
         box-shadow: 0 1px 0 #ffffff;
     }
-    .citys .city{
+
+    .citys .city {
         margin-bottom: 10px;
     }
-    .layui-btn.layui-btn{
+
+    .layui-btn.layui-btn {
         margin-left: 10px !important;
     }
 </style>
@@ -228,22 +236,25 @@
         <div class="list">
             <ul>
                 <li class='current'>
-                    <a href="javascript:navPage('./pages/zhaopinxinxi/list.html')"class="menumain">首页</a></li>
+                    <a href="javascript:navPage('./pages/zhaopinxinxi/list.html')" class="menumain">首页</a></li>
                 <li class='current'>
-                    <a href="javascript:navPage('./pages/question/class_detail.html?type=1')" class="menumain">练习平台</a></li>
+                    <a href="javascript:navPage('./pages/question/class_detail.html?type=1')" class="menumain">练习平台</a>
+                </li>
                 <li class='current'>
-                    <a href="javascript:navPage('./pages/question/class_detail.html?type=2')" class="menumain">考试平台</a></li>
+                    <a href="javascript:navPage('./pages/question/class_detail.html?type=2')" class="menumain">考试平台</a>
+                </li>
                 <li class='current'>
                     <a href="javascript:" class="menumain">企业</a></li>
                 <li class='current'>
                     <a href="javascript:" class="menumain">新闻资讯</a></li>
                 <li class='current'>
-                    <a href="https://coding.imooc.com/class/335.html?mc_marking=361ff96e77234c73c7b9049d93a959f2&mc_channel=bdocpc2&sem=2&utm_source=baidu-pc&utm_medium=sem2&utm_campaign=coding&utm_content=335&utm_term=coding&bd_vid=9170428280603174657" target="_blank" class="menumain">培训</a></li>
+                    <a href="https://coding.imooc.com/class/335.html?mc_marking=361ff96e77234c73c7b9049d93a959f2&mc_channel=bdocpc2&sem=2&utm_source=baidu-pc&utm_medium=sem2&utm_campaign=coding&utm_content=335&utm_term=coding&bd_vid=9170428280603174657"
+                       target="_blank" class="menumain">培训</a></li>
                 <li class='current'>
                     <a href="javascript:navPage('./pages/interview/index.html')" class="menumain">模拟面试</a></li>
                 <li class='current'>
                     <a href="javascript:" class="menumain">直播</a></li>
-                <li class='current right' >
+                <li class='current right'>
                     <a href="javascript:" id="login" class="menumain" @click="link_me()">联系我们</a> <br>
                 </li>
                 <li class='current right' v-if="!username">
@@ -264,13 +275,17 @@
                 <li class='current right user'>
                     <a href="javascript:" id="username" class="menumain"></a>
                     <div class="register" style="display: none">
-                        <p><a href="/admin/#/index"  target="_blank">我的后台管理</a></p>
+                        <p><a href="/admin/#/index" target="_blank">我的后台管理</a></p>
                         <p><a href="javascript:navPage('/interviewer/add/')">完善信息</a></p>
                         <p><a href="javascript:im()">通信平台</a></p>
-                        <p v-if="role!=='用户'"><a href="javascript:" @click="checkout_user_type(1, '用户', 'users')">切换普通用户</a></p>
-                        <p v-if="role!=='出题专家'"><a href="javascript:" @click="checkout_user_type(2, '出题专家', 'users')">切换出题专家</a></p>
-                        <p v-if="role!=='面试官'"><a href="javascript:" @click="checkout_user_type(3, '面试官', 'users')">切换面试官</a></p>
-                        <p v-if="role!=='企业用户'"><a href="javascript:" @click="checkout_user_type(4, '公司', 'gongsi')">切换企业用户</a></p>
+                        <p v-if="role!=='用户'"><a href="javascript:"
+                                                 @click="checkout_user_type(1, '用户', 'users')">切换普通用户</a></p>
+                        <p v-if="role!=='出题专家'"><a href="javascript:" @click="checkout_user_type(2, '出题专家', 'users')">切换出题专家</a>
+                        </p>
+                        <p v-if="role!=='面试官'"><a href="javascript:" @click="checkout_user_type(3, '面试官', 'users')">切换面试官</a>
+                        </p>
+                        <p v-if="role!=='企业用户'"><a href="javascript:" @click="checkout_user_type(4, '公司', 'gongsi')">切换企业用户</a>
+                        </p>
                         <p><a href="/admin/#/updatePassword" target="_blank">修改密码</a></p>
                         <p><a href="javascript:localStorage.clear();location.reload()">退出登录</a></p>
                     </div>
@@ -282,7 +297,7 @@
 </div>
 <!-- end 顶部导航栏 -->
 
-<iframe src="./pages/zhaopinxinxi/list.html" id="iframe" frameborder="0" scrolling="no" width="100%"
+<iframe src="./pages/zhaopinxinxi/list.html" id="iframe" frameborder="0" width="100%" height="100%"
         onload="changeFrameHeight"></iframe>
 <div id="tabbar" class="tabbar"
      :style='{"boxShadow":"0 0 6px ","margin":"30px 0 0 0","borderColor":"rgba(255, 255, 255, 0.3)","backgroundColor":"#009688","borderRadius":"0","borderWidth":"0","borderStyle":"solid"}'
@@ -297,7 +312,7 @@
         <div class="layui-card">
             <div class="layui-card-header">当前城市</div>
             <div class="layui-card-body">
-                <button class="layui-btn layui-btn-primary now_city" ></button>
+                <button class="layui-btn layui-btn-primary now_city"></button>
             </div>
         </div>
         <div class="layui-card">
@@ -310,11 +325,11 @@
 </div>
 
 <div class="link_me" style="display: none;">
-<div class="layui-card">
-  <div class="layui-card-body">
-          <img src="/media/img/link_me.png" alt="" style="width: 300px;">
-  </div>
-</div>
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <img src="/media/img/link_me.png" alt="" style="width: 300px;">
+        </div>
+    </div>
 
 </div>
 
@@ -326,11 +341,11 @@
 <script src="/media/js/common.js"></script>
 <script type="application/javascript">
     function ipJson(ipJson) {
-        if (!localStorage.getItem("city")){
+        if (!localStorage.getItem("city")) {
             localStorage.setItem("city", ipJson.city);
         }
     }
-  </script>
+</script>
 
 <script src="//whois.pconline.com.cn/ipJson.jsp?callback=ipJson" type="text/javascript"></script>
 <script>
@@ -381,7 +396,7 @@
                 $('.now_city').text(this.city)
                 layer.open({
                     type: 1,
-                    shade:0,
+                    shade: 0,
                     skin: 'alert-skin',//弹出层皮肤，可自定义也可用官方
                     title: ['城市列表', 'color:#009688'],//弹出层title,数组右半部份设置title样式
                     area: ['500px', '400px'],
@@ -392,31 +407,31 @@
                     content: $("#city_list").html()
                 });
             },
-            link_me(){
-              layer.open({
-                  type: 1,
-                  shade:0,
-                  content: $(".link_me").html(),
-                  title: ''
-              });
+            link_me() {
+                layer.open({
+                    type: 1,
+                    shade: 0,
+                    content: $(".link_me").html(),
+                    title: ''
+                });
 
             },
-            checkout_user_type(type, role, tableName){
+            checkout_user_type(type, role, tableName) {
                 // 切换身份
-                $.get(`/django7681v/checkout_user_type/?type=${type}`,function (res) {
-                    if (res.response === 'fail'){
-                         msg_fail(res.message, function () {
-                             if (role === '用户'){
-                                 navPage('./pages/yonghu/register.html?tablename=yonghu')
-                             }else if (role === '公司'){
-                                 navPage('./pages/gongsi/register.html?tablename=gongsi')
-                             }else if (role === '面试官'){
-                                 navPage('/interviewer/add/')
-                             }else if (role === '出题专家'){
-                                 navPage('/tea/add/')
-                             }
-                         })
-                    }else{
+                $.get(`/django7681v/checkout_user_type/?type=${type}`, function (res) {
+                    if (res.response === 'fail') {
+                        msg_fail(res.message, function () {
+                            if (role === '用户') {
+                                navPage('./pages/yonghu/register.html?tablename=yonghu')
+                            } else if (role === '公司') {
+                                navPage('./pages/gongsi/register.html?tablename=gongsi')
+                            } else if (role === '面试官') {
+                                navPage('/interviewer/add/')
+                            } else if (role === '出题专家') {
+                                navPage('/tea/add/')
+                            }
+                        })
+                    } else {
                         localStorage.setItem("userId", res.id);
                         localStorage.setItem("Token", res.token);
                         localStorage.setItem("role", role);
@@ -430,13 +445,13 @@
         }
     });
 
-    layui.use(['layer', 'element', 'carousel', 'laypage', 'jquery','laydate'], function () {
-        $.get('/user/info/?token='+ localStorage.getItem('Token'), function (res) {
-            if (!res.data.user){
+    layui.use(['layer', 'element', 'carousel', 'laypage', 'jquery', 'laydate'], function () {
+        $.get('/user/info/?token=' + localStorage.getItem('Token'), function (res) {
+            if (!res.data.user) {
                 $(".user").hide()
                 console.log("未登录")
                 localStorage.clear()
-            }else{
+            } else {
                 var res = res.data.user
                 vue.username = res.username
                 vue.role = res.role
@@ -448,7 +463,7 @@
         })
 
 
-        $.get(`/django7681v/option/chengshi/chengshi?type=1`,function (res) {
+        $.get(`/django7681v/option/chengshi/chengshi?type=1`, function (res) {
             vue.chengshiOptions = res.data
             let html = ''
             $.each(vue.chengshiOptions, function (i) {
@@ -457,12 +472,12 @@
             $(".citys").html(html)
         });
         vue.city = localStorage.getItem("city");
-        $(document).on("click", ".citys .city", function(e){
+        $(document).on("click", ".citys .city", function (e) {
             localStorage.setItem("city", e.target.innerText)
             vue.city = e.target.innerText
             layer.closeAll()
-    	    navPage(`./pages/zhaopinxinxi/list.html?city=${e.target.innerText}&swiperIndex=${$(this).attr('index')}`)
-      });
+            navPage(`./pages/zhaopinxinxi/list.html?city=${e.target.innerText}&swiperIndex=${$(this).attr('index')}`)
+        });
 
 
     });
@@ -508,6 +523,7 @@
         var token = localStorage.getItem('Token');
         window.open(`https://www.ittest008.com:8081/#/login?user_id=${token}`)
     }
+
     // 导航栏跳转
     function navPage(url) {
         url = url + '?token=' + localStorage.getItem("Token");
@@ -535,26 +551,7 @@
     }
 
     // var i = 0;
-    setInterval(function () {
-        changeFrameHeight();
-    }, 500)
 
-    function changeFrameHeight() {
-        var iframe = document.getElementById('iframe');
-        // iframe.height = 'auto';
-        if (iframe) {
-            var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
-            if (iframeWin.document.body) {
-                iframe.height = iframeWin.document.body.scrollHeight;
-            }
-        }
-    };
-
-
-    // reasize 事件 窗口大小变化后执行的方法
-    window.onresize = function () {
-        changeFrameHeight();
-    }
 
 </script>
 </body>

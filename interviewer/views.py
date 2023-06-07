@@ -2,8 +2,11 @@ import json
 import time
 
 from aip import AipOcr
+
+from dj2.send_msg import verify_
 from dj2.settings import UPLOAD_URL, web_file_url, BD_APP_ID, BD_API_KEY, BD_SECRET_KEY
 from libs.utils import ajax, db, auth_token
+from libs.utils.auth_token import get_random_string
 from libs.utils.common import Struct, render_template, get_upload_key
 
 
@@ -20,6 +23,9 @@ def save_info(request):
             name = request.QUERY.get('name')
             phone = request.QUERY.get('phone')
             code = request.QUERY.get('code')  # 验证码
+            is_ver = verify_(code, phone, 1)
+            if not is_ver:
+                return ajax.ajax_fail(message='验证码错误')
             front = request.QUERY.get('front')
             back = request.QUERY.get('back')
             info_front = Struct(json.loads(request.QUERY.get('info_front')))
@@ -28,7 +34,9 @@ def save_info(request):
             ocr_info_back = Struct(json.loads(request.QUERY.get('ocr_info_back')))
             if db.default.users.filter(username=phone, type=3, status=1, id__ne=id_):
                 return ajax.ajax_fail(message='手机号已被注册')
-            user_id = db.default.users.create(username=phone, type=3, status=1, role='面试官') if not id_ else id_
+            password = get_random_string(length=6, allowed_chars='0123456789')
+            password = auth_token.sha1_encode_password(password)  # 加密密码
+            user_id = db.default.users.create(username=phone, type=3, status=1, role='面试官', password=password) if not id_ else id_
             data.token = auth_token.create_token('users', user_id)
             media_args = dict(
                 add_time=now, front=front, back=back, ocr_info_front=json.dumps(ocr_info_front),
