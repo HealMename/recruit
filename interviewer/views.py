@@ -12,14 +12,13 @@ from libs.utils.common import Struct, render_template, get_upload_key
 
 def save_info(request):
     """保存信息"""
-    step_id = int(request.QUERY.get('step_id'))
+    step_id = int(request.QUERY.get('step_id', 0))
     now = int(time.time())
     data = Struct()
+    user_id = request.user.id or 0
     if request.method == 'POST':
-
+        # 保存个人信息
         if step_id == 1:
-            # 保存个人信息
-            id_ = request.user.id or 0
             name = request.QUERY.get('name')
             phone = request.QUERY.get('phone')
             code = request.QUERY.get('code')  # 验证码
@@ -32,19 +31,19 @@ def save_info(request):
             info_back = Struct(json.loads(request.QUERY.get('info_back')))
             ocr_info_front = Struct(json.loads(request.QUERY.get('ocr_info_front')))
             ocr_info_back = Struct(json.loads(request.QUERY.get('ocr_info_back')))
-            if db.default.users.filter(username=phone, type=3, status=1, id__ne=id_):
+            if db.default.users.filter(username=phone, type=3, status=1, id__ne=user_id):
                 return ajax.ajax_fail(message='手机号已被注册')
             password = get_random_string(length=6, allowed_chars='0123456789')
             password = auth_token.sha1_encode_password(password)  # 加密密码
-            user_id = db.default.users.create(username=phone, type=3, status=1, role='面试官', password=password) if not id_ else id_
+            if not user_id:
+                user_id = db.default.users.create(username=phone, type=3, status=1, role='面试官', password=password)
             data.token = auth_token.create_token('users', user_id)
             media_args = dict(
                 add_time=now, front=front, back=back, ocr_info_front=json.dumps(ocr_info_front),
                 ocr_info_back=json.dumps(ocr_info_back), status=1)
 
-            if not id_:
+            if not db.default.user_media_det.filter(user_id=user_id):
                 db.default.user_media_det.create(user_id=user_id, **media_args)
-
             else:
                 db.default.user_media_det.filter(user_id=user_id).update(**media_args)
             ocr_info_front = {x: y for x, y in ocr_info_front.items() if x in info_front}
@@ -56,28 +55,95 @@ def save_info(request):
             det_args = dict(phone_number=phone, name=info_front.name, step_id=1, status=1, add_time=now,
                             nickname=name, number_id=info_front.number_id, is_update=is_update,
                             start_time=info_back.start_time, end_time=info_back.end_time)
-            if not id_:
+            if not db.default.user_tea_det.filter(user_id=user_id):
                 db.default.user_tea_det.create(user_id=user_id, **det_args)
             else:
                 db.default.user_tea_det.filter(user_id=user_id).update(**det_args)
+        elif step_id == 2:
+            # 步骤2
+            data = json.loads(request.QUERY.get('data'))
+            if not user_id:
+                return ajax.ajax_fail(message='请登陆后重试!')
+            db.default.user_school_list.filter(user_id=user_id).update(status=-1)
+            objs = []
+            for obj in data:
+                obj.pop('time')
+                obj['user_id'] = user_id
+                obj['add_time'] = now
+                objs.append(obj)
+            db.default.user_school_list.bulk_create(objs)
+            db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
+        elif step_id == 3:
+            # 步骤 3
+            data = json.loads(request.QUERY.get('data'))
+            if not user_id:
+                return ajax.ajax_fail(message='请登陆后重试!')
+            db.default.user_work_list.filter(user_id=user_id).update(status=-1)
+            objs = []
+            for obj in data:
+                obj.pop('time')
+                obj['user_id'] = user_id
+                obj['add_time'] = now
+                objs.append(obj)
+            db.default.user_work_list.bulk_create(objs)
+            db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
+        elif step_id == 4:
+            # 步骤 4
+            prove = json.loads(request.QUERY.get('prove'))
+            if not user_id:
+                return ajax.ajax_fail(message='请登陆后重试!')
+
+            db.default.user_prove_list.filter(user_id=user_id).update(status=-1)
+            db.default.user_prove_list.create(user_id=user_id, add_time=now, **prove)
+            db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
+        elif step_id == 5:
+            # 步骤 5 确定审核
+            db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
         return ajax.ajax_ok(data)
     else:
         """获取提交步骤内容"""
         user_id = request.user.id or 0
         if user_id:
+            # 步骤 1
             user_det = db.default.user_tea_det.get(user_id=user_id)
             user_media = db.default.user_media_det.get(user_id=user_id)
-            if step_id == 1:
-                data.nickname = user_det.nickname
-                data.phone = user_det.phone_number
-                data.imageUrl1 = user_media.front
-                data.imageUrl2 = user_media.back
-                data.name = user_det.name
-                data.number_id = user_det.number_id
-                data.start_time = user_det.start_time
-                data.end_time = user_det.end_time
-                data.ocr_front = json.loads(user_media.ocr_info_front)
-                data.ocr_back = json.loads(user_media.ocr_info_back)
+            data.form = Struct()
+            data.form.nickname = user_det.nickname
+            data.form.phone = user_det.phone_number
+            data.form.imageUrl1 = user_media.front
+            data.form.imageUrl2 = user_media.back
+            data.form.name = user_det.name
+            data.form.number_id = user_det.number_id
+            data.form.start_time = user_det.start_time
+            data.form.end_time = user_det.end_time
+            data.form.ocr_front = json.loads(user_media.ocr_info_front)
+            data.form.ocr_back = json.loads(user_media.ocr_info_back)
+            # 步骤 2
+            data.school_list = []
+            for obj in db.default.user_school_list.filter(user_id=user_id, status=1):
+                data.school_list.append({
+                        "education": obj.education,
+                        "school": obj.school,
+                        "speciality": obj.speciality,
+                        "time": [obj.start_time, obj.end_time],
+                        "diploma": obj.diploma,
+                        "degree": obj.degree,
+                    })
+            # 步骤 3
+            data.work_list = []
+            for obj in db.default.user_work_list.filter(user_id=user_id, status=1):
+                data.work_list.append({
+                        "name": obj.name,
+                        "industry": obj.industry,
+                        "post": obj.post,
+                        "time": [obj.start_time, obj.end_time],
+                        "start_time": obj.start_time,
+                        "end_time": obj.end_time,
+                        "keyword": obj.keyword,
+                    })
+            # 步骤 4
+            data.prove = db.default.user_prove_list.filter(user_id=user_id, status=1).select(
+                'other', 'security', 'work').first()
         return ajax.ajax_ok(data)
 
 

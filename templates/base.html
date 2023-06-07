@@ -39,24 +39,8 @@
 	</style>
 	<body class="fixed-sidebar full-height-layout gray-bg">
     <script>
-       // var i = 0;
-    setInterval(function () {
-        // i++;
-        // if(i<50) changeFrameHeight();
-        changeFrameHeight();
-    }, 200)
 
-    function changeFrameHeight() {
-        var iframe = document.getElementById('iframe');
-        // iframe.height = 'auto';
-        if (iframe) {
 
-            var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
-            if (iframeWin.document.body) {
-                iframe.height = iframeWin.document.body.scrollHeight;
-            }
-        }
-    };
 
     </script>
 		{% block body %} {% endblock %}

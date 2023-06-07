@@ -170,9 +170,11 @@
                         </el-form>
                     </el-card>
                     <div class="next2">
-                        <el-button type="primary" size="small" @click="next(1, 'form', 'ocr_info')" v-if="active < 5">下一步</el-button>
-                        <el-button type="primary" size="small" @click="next(-1)" v-if="active > 1 && active <= 5">上一步</el-button>
-                        <el-button type="primary" size="small" @click="next(1)" v-if="active == 5">提交审核</el-button>
+                        <el-button type="primary" size="small" @click="next(-1)" v-if="active > 1 && active <= 5">上一步
+                        </el-button>
+                        <el-button type="primary" size="small" @click="next(1, 'form', 'ocr_info')" v-if="active < 5"
+                                   style="float: right">下一步
+                        </el-button>
                     </div>
 
                 </div>
@@ -197,13 +199,14 @@
                                 <el-form-item label="专业:" prop="speciality">
                                     <el-input v-model="item.speciality" maxlength="10"></el-input>
                                 </el-form-item>
-                                <el-form-item label="" prop="back_time">
+                                <el-form-item label="上学时间" prop="time">
                                     <el-date-picker
                                             v-model="item.time"
                                             type="daterange"
                                             range-separator="至"
                                             start-placeholder="入学日期"
-                                            end-placeholder="毕业日期">
+                                            end-placeholder="毕业日期"
+                                    >
                                     </el-date-picker>
 
                                 </el-form-item>
@@ -235,11 +238,12 @@
 
                                 </el-form-item>
                                 <el-form-item label="">
-                                    <el-button style="float: left;" type="primary" size="small" v-if="i===school_list.length-1"
-                                               @click="add_school_det()">新增
+                                    <el-button style="float: left;" type="primary" size="small"
+                                               v-if="i===school_list.length-1"
+                                               @click="add_school_det()" icon="el-icon-plus" circle>
                                     </el-button>
                                     <el-button style="float: left;" type="danger" size="small" v-if="i!=0"
-                                               @click="del_school_det(i)">删除
+                                               @click="del_school_det(i)" icon="el-icon-minus" circle>
                                     </el-button>
                                 </el-form-item>
 
@@ -248,8 +252,9 @@
                         </el-card>
                     </div>
                     <div class="next2">
-                        <el-button type="primary" size="small" @click="next(1, 'school_ref')">下一步</el-button>
                         <el-button type="primary" size="small" @click="next(-1)">上一步</el-button>
+                        <el-button type="primary" size="small" @click="next(1, 'school_ref')" style="float: right">下一步
+                        </el-button>
                     </div>
                 </div>
             </transition>
@@ -260,9 +265,12 @@
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
                                 <span>工作经历</span>
+                                <a href="javascript:" style="float: right; color: red;" v-if="i!=0"
+                                   @click="del_work_det(i)">删除
+                                </a>
                             </div>
 
-                            <el-form ref="form" :model="item" label-width="100px" :rules="rules">
+                            <el-form ref="work_rules" :model="item" label-width="100px" :rules="work_rules">
                                 <el-divider>工作经历</el-divider>
                                 <el-form-item label="公司名:" prop="name">
                                     <el-input v-model="item.name" maxlength="10"></el-input>
@@ -275,10 +283,10 @@
                                 </el-form-item>
 
                                 <el-form-item label="技能关键词:" prop="keyword">
-                                    <el-input v-model="item.keyword" maxlength="10"></el-input>
+                                    <el-input v-model="item.keyword" maxlength="100"></el-input>
                                 </el-form-item>
 
-                                <el-form-item label="工作时间:" prop="back_time">
+                                <el-form-item label="工作时间:" prop="time">
                                     <el-date-picker
                                             v-model="item.time"
                                             type="daterange"
@@ -289,16 +297,19 @@
 
                                 </el-form-item>
                                 <el-form-item label="" prop="back_time">
-                                    <el-button style="float: left;" type="primary" v-if="i===work_list.length-1"
-                                               @click="add_work_det()">新增
+                                    <el-button style="float: left;" type="primary" size="small"
+                                               v-if="i===work_list.length-1"
+                                               @click="add_work_det()" icon="el-icon-plus" circle>
                                     </el-button>
+
                                 </el-form-item>
                             </el-form>
                         </el-card>
                     </div>
                     <div class="next2">
-                        <el-button type="primary" @click="next(1, 'form')">下一步</el-button>
-                        <el-button type="primary" @click="next(-1)">上一步</el-button>
+                        <el-button type="primary" @click="next(-1)" size="small">上一步</el-button>
+                        <el-button type="primary" @click="next(1, 'work_rules')" size="small" style="float: right">下一步
+                        </el-button>
                     </div>
                 </div>
             </transition>
@@ -311,9 +322,9 @@
                                 <span>其他证明</span>
                             </div>
 
-                            <el-form ref="prove" :model="prove" label-width="100px">
+                            <el-form ref="prove_rules" :model="prove" label-width="100px" :rules="prove_rules">
                                 <el-divider>其他证明材料</el-divider>
-                                <el-form-item label="公司在职证明:">
+                                <el-form-item label="在职证明:" prop="work">
                                     <el-upload
                                             element-loading-text="上传中"
                                             element-loading-spinner="el-icon-loading"
@@ -326,7 +337,7 @@
                                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                                     </el-upload>
                                 </el-form-item>
-                                <el-form-item label="社保证明:">
+                                <el-form-item label="社保证明:" prop="security">
                                     <el-upload
                                             element-loading-text="上传中"
                                             element-loading-spinner="el-icon-loading"
@@ -357,8 +368,11 @@
                         </el-card>
                     </div>
                     <div class="next2">
-                        <el-button type="primary" @click="next(1, 'form')">下一步</el-button>
-                        <el-button type="primary" @click="next(-1)">上一步</el-button>
+                        <el-button type="primary" @click="next(-1)" size="small">上一步</el-button>
+                        <el-button type="primary" @click="next(1, 'prove_rules')" style="float: right" size="small">
+                            下一步
+                        </el-button>
+
                     </div>
                 </div>
             </transition>
@@ -519,16 +533,21 @@
                         </el-descriptions-item>
                     </el-descriptions>
                     <div class="next4">
-                        <el-button type="primary" @click="next(1, 'form')">提交审核</el-button>
-                        <el-button type="primary" @click="next(-1)">上一步</el-button>
+                        <el-button type="primary" @click="next(-1)" size="small">上一步</el-button>
+                        <el-button type="primary" @click="next(1, 'form')" size="small" style="float: right;">提交审核
+                        </el-button>
+
                     </div>
                 </div>
             </transition>
 
             <!-- 第六步 -->
             <transition name="el-fade-in-linear" v-if="active === 5">
-                <div class="step4">
-                    <el-result icon="success" title="提交成功，三个工作日内通过短信回复" subTitle="请根据提示进行操作">
+                <div class="step5">
+                    <el-result  title="提交审核成功, 扫码关注“云数智学”公众号及时获取审核信息！" subTitle="请根据提示进行操作">
+                        <template slot="icon">
+                        <el-image src="/media/img/gzh.jpg" style="width: 170px;"></el-image>
+                      </template>
                         <template slot="extra">
                             <a href="../front/pages/zhaopinxinxi/list.html">
                                 <el-button type="primary">返回首页</el-button>
@@ -548,6 +567,16 @@
         var vue = new Vue({
             el: "#app",
             data: {
+                // 其他证明验证
+                prove_rules: {
+                    work: [
+                        {required: true, message: '请上传在职证明', trigger: 'blur'},
+                    ],
+                    security: [
+                        {required: true, message: '请上传社保证明', trigger: 'blur'},
+                    ],
+
+                },
                 // 其他证明
                 prove: {
                     work: '',
@@ -570,7 +599,7 @@
                     degree: [
                         {required: true, message: '请上传学位证', trigger: 'blur'},
                     ],
-                    back_time: [
+                    time: [
                         {required: true, message: '请填写上学时间', trigger: 'blur'},
                     ]
                 },
@@ -585,6 +614,24 @@
                         degree: "",
                     }
                 ],
+                // 工作信息验证
+                work_rules: {
+                    name: [
+                        {required: true, message: '请填写公司名称', trigger: 'blur'},
+                    ],
+                    industry: [
+                        {required: true, message: '请填写从事行业', trigger: 'blur'},
+                    ],
+                    post: [
+                        {required: true, message: '请填写岗位', trigger: 'blur'},
+                    ],
+                    time: [
+                        {required: true, message: '请选择工作时间', trigger: 'blur'},
+                    ],
+                    keyword: [
+                        {required: true, message: '请填写技能关键词', trigger: 'blur'},
+                    ],
+                },
                 // 工作信息
                 work_list: [
                     {
@@ -602,7 +649,6 @@
                 loading: false,
                 loading2: false,
                 active: {{ step_id|default:0 }},
-                // active: 0,
                 token: "",
                 // 第一步的ocr信息验证
                 rulesocr1: {
@@ -656,10 +702,68 @@
 
             },
             created() {
+                if (this.active !== 5) {
 
+
+                    var thsi = this;
+                    this.loading_post = true;
+                    $.get("/interviewer/save/", function (res) {
+                        thsi.loading_post = false;
+                        if (res.response === 'ok') {
+                            var data = res.data;
+                            // 第一步
+                            thsi.form.name = data.form.nickname;
+                            thsi.form.phone = data.form.phone;
+                            thsi.imageUrl1 = data.form.imageUrl1
+                            thsi.imageUrl2 = data.form.imageUrl2
+                            thsi.form.ocr_info_front.name = data.form.name
+                            thsi.form.ocr_info_front.address = data.form.ocr_front.address
+                            thsi.form.ocr_info_front.number_id = data.form.number_id
+                            thsi.form.ocr_info_back.start_time = data.form.start_time
+                            thsi.form.ocr_info_back.end_time = data.form.end_time
+                            thsi.form.ocr_info_back.time = [
+                                new Date(data.form.start_time.substring(0, 4),
+                                    parseInt(data.form.start_time.substring(4, 6)) - 1,
+                                    data.form.start_time.substring(6, 8)),
+                                new Date(data.form.end_time.substring(0, 4),
+                                    parseInt(data.form.end_time.substring(4, 6)) - 1,
+                                    data.form.end_time.substring(6, 8))]
+                            thsi.ocr_front = data.form.ocr_front
+                            thsi.ocr_back = data.form.ocr_back
+                            $.each(data.school_list, function (i) {
+                                this.time = [
+                                    new Date(this.time[0].substring(0, 4),
+                                        parseInt(this.time[0].substring(4, 6)) - 1,
+                                        this.time[0].substring(6, 8)),
+                                    new Date(this.time[1].substring(0, 4),
+                                        parseInt(this.time[1].substring(4, 6)) - 1,
+                                        this.time[1].substring(6, 8))
+                                ]
+                            })
+                            thsi.school_list = data.school_list
+
+                            $.each(data.work_list, function (i) {
+                                this.time = [
+                                    new Date(this.time[0].substring(0, 4),
+                                        parseInt(this.time[0].substring(4, 6)) - 1,
+                                        this.time[0].substring(6, 8)),
+                                    new Date(this.time[1].substring(0, 4),
+                                        parseInt(this.time[1].substring(4, 6)) - 1,
+                                        this.time[1].substring(6, 8))
+                                ]
+                            })
+                            thsi.work_list = data.work_list
+                            thsi.prove = data.prove
+                        } else {
+                            msg_fail(res.message)
+                        }
+
+                    })
+                }
 
             },
             methods: {
+
                 // 处理时间
                 handle_time(time) {
                     if (time.length) {
@@ -715,6 +819,7 @@
                 // 下一步
                 next(num, formName) {
                     var thsi = this;
+                    var is_val = true
                     if (num === 1) {
                         if (this.active !== 6) {
                             if (this.active === 0) {
@@ -727,7 +832,7 @@
                                     }
                                 });
                             } else if (this.active === 1) {
-                                var is_val = true
+
                                 $.each(this.$refs[formName], function (i) {
                                     this.validate((valid) => {
                                         if (valid) {
@@ -737,48 +842,71 @@
                                         }
                                     });
                                 })
-                                if (is_val){
+                                if (is_val) {
                                     // 第二步
-                                    thsi.save_step2()
+                                    this.save_step2()
                                 }
+                            } else if (this.active === 2) {
+                                $.each(this.$refs[formName], function (i) {
+                                    this.validate((valid) => {
+                                        if (valid) {
+                                            is_val = true;
+                                        } else {
+                                            is_val = false;
+                                        }
+                                    });
+                                })
+                                if (is_val) {
+                                    // 第3步
+                                    this.save_step3()
+                                }
+                            } else if (this.active === 3) {
 
-
-
+                                this.$refs[formName][0].validate((valid) => {
+                                    if (valid) {
+                                        // 第4步
+                                        this.save_step4()
+                                    } else {
+                                        return false;
+                                    }
+                                });
+                            } else if (this.active === 4) {
+                                this.$confirm('确认提交审核?', '提示', {
+                                    confirmButtonText: '确定',
+                                    cancelButtonText: '取消',
+                                    type: 'warning'
+                                }).then(() => {
+                                    $.post("/interviewer/save/", {
+                                        token: this.token || localStorage.getItem("Token"),
+                                        step_id: this.active + 1,
+                                    }, function (res) {
+                                        thsi.loading_post = false;
+                                        if (res.response === 'ok') {
+                                            thsi.active++
+                                        } else {
+                                            const h = thsi.$createElement;
+                                            thsi.$notify({
+                                                title: '保存失败',
+                                                position: 'bottom-left',
+                                                message: h('i', {style: 'color: teal'}, res.message)
+                                            });
+                                        }
+                                    })
+                                    this.$message({
+                                        type: 'success',
+                                        message: '提交成功!'
+                                    });
+                                }).catch(() => {
+                                    this.$message({
+                                        type: 'info',
+                                        message: '已取消'
+                                    });
+                                });
                             }
                         }
                     } else {
                         // 上一步
                         thsi.active--
-                        return;
-                        this.loading_post = true;
-                        $.get("/interviewer/save/?step_id=" + thsi.active, function (res) {
-                            thsi.loading_post = false;
-                            if (res.response === 'ok') {
-                                var data = res.data;
-                                thsi.form.name = data.nickname;
-                                thsi.form.phone = data.phone;
-                                thsi.imageUrl1 = data.imageUrl1
-                                thsi.imageUrl2 = data.imageUrl2
-                                thsi.form.ocr_info_front.name = data.name
-                                thsi.form.ocr_info_front.number_id = data.number_id
-                                thsi.form.ocr_info_back.start_time = data.start_time
-                                thsi.form.ocr_info_back.end_time = data.end_time
-                                thsi.form.ocr_info_back.time = [
-                                    new Date(data.start_time.substring(0, 4),
-                                        parseInt(data.start_time.substring(4, 6)) - 1,
-                                        data.start_time.substring(6, 8)),
-                                    new Date(data.end_time.substring(0, 4),
-                                        parseInt(data.end_time.substring(4, 6)) - 1,
-                                        data.end_time.substring(6, 8))]
-                                thsi.ocr_front = data.ocr_front
-                                thsi.ocr_back = data.ocr_back
-                                thsi.active--
-                            } else {
-                                msg_fail(res.message)
-                            }
-
-                        })
-
                     }
                 },
                 // 公共
@@ -795,31 +923,37 @@
                     }
                     return isJPG && isLt2M;
                 },
-                // 第一步保存
-                save_step1() {
-                    var start_time_year = this.form.ocr_info_back.time[0].getFullYear();
-                    var start_time_moth = this.form.ocr_info_back.time[0].getMonth() + 1;
-                    var start_time_day = this.form.ocr_info_back.time[0].getDate();
+                // 处理时间
+                handle_times(time) {
+                    var start_time_year = time[0].getFullYear();
+                    var start_time_moth = time[0].getMonth() + 1;
+                    var start_time_day = time[0].getDate();
                     if (start_time_moth < 10) {
                         start_time_moth = '0' + start_time_moth
                     }
                     if (start_time_day < 10) {
                         start_time_day = '0' + start_time_day
                     }
-                    var end_time_year = this.form.ocr_info_back.time[1].getFullYear();
-                    var end_time_moth = this.form.ocr_info_back.time[1].getMonth() + 1;
-                    var end_time_day = this.form.ocr_info_back.time[1].getDate();
+                    var end_time_year = time[1].getFullYear();
+                    var end_time_moth = time[1].getMonth() + 1;
+                    var end_time_day = time[1].getDate();
                     if (end_time_moth < 10) {
                         end_time_moth = '0' + end_time_moth
                     }
                     if (end_time_day < 10) {
                         end_time_day = '0' + end_time_day
                     }
-                    this.form.ocr_info_back.start_time = `${start_time_year}${start_time_moth}${start_time_day}`
-                    this.form.ocr_info_back.end_time = `${end_time_year}${end_time_moth}${end_time_day}`
+                    var start_time = `${start_time_year}${start_time_moth}${start_time_day}`
+                    var end_time = `${end_time_year}${end_time_moth}${end_time_day}`
+                    return [start_time, end_time]
+                },
+                // 第一步保存
+                save_step1() {
+                    var time = this.handle_times(this.form.ocr_info_back.time)
+                    this.form.ocr_info_back.start_time = time[0]
+                    this.form.ocr_info_back.end_time = time[1]
                     var post_data = {
                         token: this.token || localStorage.getItem("Token"),
-                        user_id: 19,
                         step_id: this.active + 1,
                         name: this.form.name,
                         phone: this.form.phone,
@@ -851,45 +985,81 @@
 
                 // 第二步保存
                 save_step2() {
-
+                    var thsi = this;
                     $.each(this.school_list, function (i) {
-                        console.log(this)
+                        var time = thsi.handle_times(this.time)
+                        this.start_time = time[0]
+                        this.end_time = time[1]
                     })
-                    var start_time_year = this.form.ocr_info_back.time[0].getFullYear();
-                    var start_time_moth = this.form.ocr_info_back.time[0].getMonth() + 1;
-                    var start_time_day = this.form.ocr_info_back.time[0].getDate();
-                    if (start_time_moth < 10) {
-                        start_time_moth = '0' + start_time_moth
-                    }
-                    if (start_time_day < 10) {
-                        start_time_day = '0' + start_time_day
-                    }
-                    var end_time_year = this.form.ocr_info_back.time[1].getFullYear();
-                    var end_time_moth = this.form.ocr_info_back.time[1].getMonth() + 1;
-                    var end_time_day = this.form.ocr_info_back.time[1].getDate();
-                    if (end_time_moth < 10) {
-                        end_time_moth = '0' + end_time_moth
-                    }
-                    if (end_time_day < 10) {
-                        end_time_day = '0' + end_time_day
-                    }
-                    this.form.ocr_info_back.start_time = `${start_time_year}${start_time_moth}${start_time_day}`
-                    this.form.ocr_info_back.end_time = `${end_time_year}${end_time_moth}${end_time_day}`
+                    console.log(this.school_list)
                     var post_data = {
                         token: this.token || localStorage.getItem("Token"),
-                        user_id: 19,
                         step_id: this.active + 1,
-                        name: this.form.name,
-                        phone: this.form.phone,
-                        code: this.form.code,
-                        front: this.imageUrl1,
-                        back: this.imageUrl2,
-                        info_front: JSON.stringify(this.form.ocr_info_front),
-                        info_back: JSON.stringify(this.form.ocr_info_back),
-                        ocr_info_front: JSON.stringify(this.ocr_front),
-                        ocr_info_back: JSON.stringify(this.ocr_back)
+                        data: JSON.stringify(this.school_list)
                     }
+                    $.post("/interviewer/save/", post_data, function (res) {
+                        thsi.loading_post = false;
+                        if (res.response === 'ok') {
+                            thsi.active++
+                        } else {
+                            const h = thsi.$createElement;
+                            thsi.$notify({
+                                title: '保存失败',
+                                position: 'bottom-left',
+                                message: h('i', {style: 'color: teal'}, res.message)
+                            });
+                        }
+                    })
 
+                },
+                // 第三步
+                save_step3() {
+                    var thsi = this;
+                    $.each(this.work_list, function (i) {
+                        var time = thsi.handle_times(this.time)
+                        this.start_time = time[0]
+                        this.end_time = time[1]
+                    })
+                    console.log(this.work_list)
+                    var post_data = {
+                        token: this.token || localStorage.getItem("Token"),
+                        step_id: this.active + 1,
+                        data: JSON.stringify(this.work_list)
+                    }
+                    $.post("/interviewer/save/", post_data, function (res) {
+                        thsi.loading_post = false;
+                        if (res.response === 'ok') {
+                            thsi.active++
+                        } else {
+                            const h = thsi.$createElement;
+                            thsi.$notify({
+                                title: '保存失败',
+                                position: 'bottom-left',
+                                message: h('i', {style: 'color: teal'}, res.message)
+                            });
+                        }
+                    })
+
+                },
+                // 第4步
+                save_step4() {
+                    var thsi = this;
+                    $.post("/interviewer/save/", {
+                        token: this.token || localStorage.getItem("Token"),
+                        step_id: this.active + 1, prove: JSON.stringify(this.prove)
+                    }, function (res) {
+                        thsi.loading_post = false;
+                        if (res.response === 'ok') {
+                            thsi.active++
+                        } else {
+                            const h = thsi.$createElement;
+                            thsi.$notify({
+                                title: '保存失败',
+                                position: 'bottom-left',
+                                message: h('i', {style: 'color: teal'}, res.message)
+                            });
+                        }
+                    })
                 },
                 // 第一步
                 // 识别身份证正面
@@ -962,22 +1132,43 @@
 
                 },
                 // 删除学历信息
-                del_school_det(index){
-                    this.$confirm('确定删除?', '提示', {
-                      confirmButtonText: '确定',
-                      cancelButtonText: '取消',
-                      type: 'warning'
+                del_school_det(index) {
+                    this.$confirm('确定删除此信息?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
                     }).then(() => {
                         this.school_list.splice(index, 1)
-                      this.$message({
-                        type: 'success',
-                        message: '删除成功!'
-                      });
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
                     }).catch(() => {
-                      this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                      });
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+
+                },
+
+                // 删除工作经历
+                del_work_det(index) {
+                    this.$confirm('确定删除此信息?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.work_list.splice(index, 1)
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
                     });
 
                 },
