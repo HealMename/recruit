@@ -66,7 +66,7 @@ const menu = {
                         "buttons": [
 
                         ],
-                        "menu": "申请列表",
+                        "menu": "审核管理",
                         "menuJump": "列表",
                         "tableName": "verify"
                     },

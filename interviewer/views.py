@@ -31,7 +31,7 @@ def save_info(request):
             info_back = Struct(json.loads(request.QUERY.get('info_back')))
             ocr_info_front = Struct(json.loads(request.QUERY.get('ocr_info_front')))
             ocr_info_back = Struct(json.loads(request.QUERY.get('ocr_info_back')))
-            if db.default.users.filter(username=phone, type=3, status=1, id__ne=user_id):
+            if db.default.users.filter(username=phone, type=3, status=0, id__ne=user_id):
                 return ajax.ajax_fail(message='手机号已被注册')
             password = get_random_string(length=6, allowed_chars='0123456789')
             password = auth_token.sha1_encode_password(password)  # 加密密码
@@ -102,9 +102,10 @@ def save_info(request):
         return ajax.ajax_ok(data)
     else:
         """获取提交步骤内容"""
-        user_id = request.user.id or 0
+        user_id = request.GET.get('cms_user_id', 0) or request.user.id
         if user_id:
             # 步骤 1
+            data.status = db.default.users.get(id=user_id).status
             user_det = db.default.user_tea_det.get(user_id=user_id)
             user_media = db.default.user_media_det.get(user_id=user_id)
             data.form = Struct()

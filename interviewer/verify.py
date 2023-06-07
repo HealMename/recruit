@@ -29,6 +29,8 @@ def index(request):
             where_sql += f" and name like '%{id_}%'"
     if type_:
         where_sql += f" and type = {type_}"
+    else:
+        where_sql += f" and type in (2, 3)"
     if status:
         where_sql += f" and status = {status}"
     sql = f"""
@@ -65,7 +67,8 @@ def set_status(request):
     """修改审核状态"""
     id_ = request.QUERY.get('id')
     status = request.QUERY.get('status')
-    db.default.users.filter(id=id_).update(status=status)
+    feedback = request.QUERY.get('feedback', '')
+    db.default.users.filter(id=id_).update(status=status, feedback=feedback)
     return ajax.ajax_ok()
 
 

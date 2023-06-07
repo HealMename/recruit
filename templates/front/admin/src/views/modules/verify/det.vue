@@ -1,80 +1,164 @@
 <template>
   <el-row v-loading="loading">
-    <el-col :span="12">
-      <el-form ref="form" :model="form" label-width="120px" :rules="rules" >
-        <el-form-item label="题目ID：">
-          <el-input v-model="form.id" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="状态："  v-if="role ==='管理员'">
-          <el-radio-group v-model="form.status">
-            <el-radio label="0" value="0">未审核</el-radio>
-            <el-radio label="1" value="1">已审核</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="科目：">
-          <el-radio-group v-model="form.sid">
-            <el-radio label="1" value="1">K8s</el-radio>
-            <el-radio label="2" value="2">Mysql</el-radio>
-            <el-radio label="3" value="3">Vue</el-radio>
-            <el-radio label="4" value="4">shell</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="版本：" prop="version">
-          <el-input v-model="form.version"></el-input>
-        </el-form-item>
-        <el-form-item label="级别：">
-          <el-radio-group v-model="form.level">
-            <el-radio label="1" value="1">初级</el-radio>
-            <el-radio label="2" value="2">中级</el-radio>
-            <el-radio label="3" value="3">高级</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="规模：">
-          <el-radio-group v-model="form.size">
-            <el-radio label="1" value="1">单机</el-radio>
-            <el-radio label="2" value="2">集群</el-radio>
-            <el-radio label="3" value="3">多集群</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="做题时长(分)：" prop="do_time">
-          <el-input v-model.number="form.do_time"></el-input>
-        </el-form-item>
-        <el-form-item label="考点：" prop="do_points">
-          <el-input v-model="form.do_points"></el-input>
-        </el-form-item>
-        <el-form-item label="题目标题：" prop="title">
-          <el-input v-model="form.title"></el-input>
-        </el-form-item>
-        <el-form-item label="题目描述：" prop="desc">
-          <el-input type="textarea" v-model="form.desc"></el-input>
-        </el-form-item>
+    <el-col :span="24" v-if="type === '3'">
+      <el-descriptions class="margin-top" title="" :column="3" border>
 
-        <el-form-item label="题目详情：" prop="content">
-          <editor
-                    style="min-width: 200px; max-width: 600px;"
-                    v-model="form.content"
-                    class="editor"
-                    action="file/upload">
-                </editor>
-        </el-form-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-user"></i>
+            昵称
+          </template>
+          <p v-text="form.name"></p>
+        </el-descriptions-item>
 
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-user"></i>
+            姓名
+          </template>
+          <p v-text="form.ocr_info_front.name"></p>
 
-        <el-form-item :label="'url' + (index+1)" v-for="(item,index) in form.urls" v-bind:key="index">
-          <el-input v-model="item.value" v-bind:key="index" style="width: 92%"></el-input>
-          <i class="el-icon-circle-plus-outline" style="padding-left: 12px;cursor:pointer;" @click="addUrl()" v-if="index+1 === 1"></i>
-          <i class="el-icon-remove-outline" style="padding-left: 12px;cursor:pointer;" @click="delUrl(index)" v-if="index+1 > 1"></i>
-        </el-form-item>
-        <el-form-item>
-          <el-button  @click="onSubmit('form')">保存</el-button>
-          <el-button  @click="go_bank">返回</el-button>
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-mobile-phone"></i>
+            手机号
+          </template>
+          <p v-text="form.phone"></p>
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-tickets"></i>
+            身份证号
+          </template>
+          <p v-text="form.ocr_info_front.number_id"></p>
+        </el-descriptions-item>
+        <el-descriptions-item span="2">
+          <template slot="label">
+            <i class="el-icon-office-building"></i>
+            联系地址
+          </template>
+          <p v-text="form.ocr_info_front.address"></p>
+        </el-descriptions-item>
 
-        </el-form-item>
-      </el-form>
-    </el-col>
+        <el-descriptions-item span="3">
+          <template slot="label">
+            <i class="el-icon-office-building"></i>
+            身份证有效期
+          </template>
+          <span v-text="form.ocr_info_back.start_time"></span> -- <span
+            v-text="form.ocr_info_back.end_time"></span>
+        </el-descriptions-item>
+        <template v-for="(item,i) in school_list">
+          <el-descriptions-item span="1" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              学校
+            </template>
+            <p v-text="item.school"></p>
 
-    <el-col :span="24">
+          </el-descriptions-item>
+          <el-descriptions-item span="1" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              学历
+            </template>
+            <p v-text="item.education"></p>
+          </el-descriptions-item>
+          <el-descriptions-item span="2" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              专业
+            </template>
+            <p v-text="item.speciality"></p>
+          </el-descriptions-item>
+          <el-descriptions-item span="3" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              入学毕业时间
+            </template>
+            <span v-text="handle_time(item.time)"></span>
+          </el-descriptions-item>
+          <el-descriptions-item span="1" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              毕业证
+            </template>
+            <img v-if="item.diploma" :src="item.diploma" class="avatar">
+          </el-descriptions-item>
+          <el-descriptions-item span="2" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              学位证
+            </template>
+            <img v-if="item.degree" :src="item.degree" class="avatar">
+          </el-descriptions-item>
+        </template>
+        <template v-for="(item,i) in work_list">
+          <el-descriptions-item span="1" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              公司名
+            </template>
+            <p v-text="item.name"></p>
+          </el-descriptions-item>
+          <el-descriptions-item span="1" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              从事行业
+            </template>
+            <p v-text="item.industry"></p>
+          </el-descriptions-item>
+          <el-descriptions-item span="1" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              岗位
+            </template>
+            <p v-text="item.post"></p>
+          </el-descriptions-item>
+          <el-descriptions-item span="1" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              技能关键词
+            </template>
+            <span v-text="item.keyword"></span>
+          </el-descriptions-item>
+          <el-descriptions-item span="2" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              工作时间
+            </template>
+            <span v-text="handle_time(item.time)"></span>
+          </el-descriptions-item>
+        </template>
+        <el-descriptions-item span="3">
+          <template slot="label">
+            <i class="el-icon-office-building"></i>
+            公司在职证明
+          </template>
+          <img v-if="prove.work" :src="prove.work" class="avatar">
+        </el-descriptions-item>
+        <el-descriptions-item span="3">
+          <template slot="label">
+            <i class="el-icon-office-building"></i>
+            社保证明
+          </template>
+          <img v-if="prove.security" :src="prove.security" class="avatar">
+        </el-descriptions-item>
+        <el-descriptions-item span="3">
+          <template slot="label">
+            <i class="el-icon-office-building"></i>
+            其他证明
+          </template>
+          <img v-if="prove.other" :src="prove.other" class="avatar">
+        </el-descriptions-item>
+      </el-descriptions>
 
-
+      <div style="margin: 20px">
+        <el-button type="danger" @click="verify_(1)" v-if="status === 0">拒绝</el-button>
+        <el-button type="warning" @click="verify_(2)" v-if="status === 0">通过</el-button>
+        <el-button @click="go_bank()">返回</el-button>
+      </div>
     </el-col>
   </el-row>
 
@@ -84,89 +168,239 @@
 export default {
   data() {
     return {
-      loading: false,
-      role: this.$storage.get("role"),
-      form: {
-        urls: [{
-          value: ''
-        }],
-        id: this.$route.params.id,
-        sid: "1",
-        do_time: 0,
-        do_points: '',
-        version: '',
-        level: "1",
-        title: "",
-        content: "",
-        desc: "",
-        size: "1",
-        add_user: this.$storage.get("userId"),
-
+      status: 1,
+      id: this.$route.params.id,
+      type: this.$route.params.type,
+      // 其他证明
+      prove: {
+        work: '',
+        security: "",
+        other: ""
       },
-      rules: {
-        do_time: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
-        version: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
-        title: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
-        do_points: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
-        desc: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
-        content: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
-      }
+      // 学历信息
+      school_list: [
+        {
+          education: "",
+          school: "",
+          speciality: "",
+          time: [],
+          diploma: "",
+          degree: "",
+        }
+      ],
+      // 工作信息
+      work_list: [
+        {
+          name: "",
+          industry: "",
+          post: "",
+          time: [],
+          start_time: "",
+          end_time: "",
+          keyword: "",
+        }
+      ],
+      loading: false,
+      form: {
+        name: '',
+        code: '',
+        phone: '',
+        ocr_info_front: {
+          name: '',
+          number_id: '',
+          address: '',
 
+        },
+        ocr_info_back: {
+          start_time: '',
+          end_time: '',
+          time: []
+        },
+        imageUrl1: "",
+        imageUrl2: "",
+        ocr_front: {},
+        ocr_back: {}
+      },
     }
   },
   mounted() {
 
   },
   created() {
-    console.log(this.role)
-    if (this.form.id > 0){
-        this.loading = true;
-        this.$http.post(DOMAIN_API_SYS + "/tea/question_list/", {id: this.form.id}).then(res => {
-          let r = res.data.data
-          this.form = r.page_data[0]
-          this.loading = false
-      })
-    }
+    this.init_data()
+
   },
   methods: {
-    go_bank: function () {
-      this.$router.replace({path: "/question/"});
-    },
-    delUrl: function (index_) {
-      this.$delete(this.form.urls, index_)
-    },
-    addUrl: function () {
-      if (this.form.urls.length === 4){
-          this.$layer_message("最多四个关联地址")
-      }else{
-        this.form.urls.push({value: ''})
+    init_data: function () {
+      if (this.type === '3') {
+        this.loading = true;
+        this.$http.get(DOMAIN_API_SYS + "/interviewer/save/?cms_user_id=" + this.id).then(res => {
+          res = res.data
+          if (res.response === 'ok') {
+            this.loading = false;
+            var data = res.data;
+            this.status = data.status
+            // 第一步
+            this.form.name = data.form.nickname;
+            this.form.phone = data.form.phone;
+            this.imageUrl1 = data.form.imageUrl1
+            this.imageUrl2 = data.form.imageUrl2
+            this.form.ocr_info_front.name = data.form.name
+            this.form.ocr_info_front.address = data.form.ocr_front.address
+            this.form.ocr_info_front.number_id = data.form.number_id
+            this.form.ocr_info_back.start_time = data.form.start_time
+            this.form.ocr_info_back.end_time = data.form.end_time
+            this.form.ocr_info_back.time = [
+              new Date(data.form.start_time.substring(0, 4),
+                  parseInt(data.form.start_time.substring(4, 6)) - 1,
+                  data.form.start_time.substring(6, 8)),
+              new Date(data.form.end_time.substring(0, 4),
+                  parseInt(data.form.end_time.substring(4, 6)) - 1,
+                  data.form.end_time.substring(6, 8))]
+            this.ocr_front = data.form.ocr_front
+            this.ocr_back = data.form.ocr_back
+            data.school_list.forEach(option => {
+              option.time = [
+                new Date(option.time[0].substring(0, 4),
+                    parseInt(option.time[0].substring(4, 6)) - 1,
+                    option.time[0].substring(6, 8)),
+                new Date(option.time[1].substring(0, 4),
+                    parseInt(option.time[1].substring(4, 6)) - 1,
+                    option.time[1].substring(6, 8))
+              ]
+            })
+
+            this.school_list = data.school_list
+            data.work_list.forEach(option => {
+              option.time = [
+                new Date(option.time[0].substring(0, 4),
+                    parseInt(option.time[0].substring(4, 6)) - 1,
+                    option.time[0].substring(6, 8)),
+                new Date(option.time[1].substring(0, 4),
+                    parseInt(option.time[1].substring(4, 6)) - 1,
+                    option.time[1].substring(6, 8))
+              ]
+            })
+
+            this.work_list = data.work_list
+            this.prove = data.prove
+          }
+
+        })
       }
     },
-    onSubmit: function (formName) {
-       this.$refs[formName].validate((valid) => {
-          if (valid) {
-
-              this.$http.post(DOMAIN_API_SYS + "/tea/question/", this.form).then(res => {
-                this.$layer_message('操作成功', 'success')
-                this.$router.replace({path: "/question"});
-              }).catch((res) => {
-                this.$layer_message(res.result)
-              }).finally(() => this.loading = false)
-          } else {
-            return false;
-          }
-        });
+    go_bank: function () {
+      this.$router.replace({path: "/verify/"});
     },
+    verify_: function (type) {
+      if (type === 1) {
+        this.$prompt('反馈内容', '拒绝申请', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        }).then(({value}) => {
+          this.$confirm('确定拒绝吗, 是否继续?', '二次确认', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.loading = true;
+            this.$http.post(DOMAIN_API_SYS + "/interviewer/verify/status/", {
+              id: this.id,
+              status: -1,
+              feedback: value
+            }).then(res => {
 
+            }).catch((res) => {
+              this.$layer_message(res.result)
+            })
+
+            this.$message({
+              type: 'success',
+              message: '操作成功!'
+            });
+            this.init_data()
+            this.loading = false;
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消'
+            });
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          });
+        });
+      } else {
+        // 通过
+        this.$confirm('确定通过吗, 是否继续?', '通过申请', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$confirm('确定通过吗, 是否继续?', '二次确认', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.loading = true;
+            this.$http.post(DOMAIN_API_SYS + "/interviewer/verify/status/", {id: this.id, status: 1}).then(res => {
+
+            }).catch((res) => {
+              this.$layer_message(res.result)
+            })
+
+            this.$message({
+              type: 'success',
+              message: '操作成功!'
+            });
+            this.loading = false;
+            this.init_data()
+          })
+
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          });
+        });
+      }
+
+    },
+    handle_time(time) {
+      if (time.length) {
+        var start_time_year = time[0].getFullYear();
+        var start_time_moth = time[0].getMonth() + 1;
+        var start_time_day = time[0].getDate();
+        if (start_time_moth < 10) {
+          start_time_moth = '0' + start_time_moth
+        }
+        if (start_time_day < 10) {
+          start_time_day = '0' + start_time_day
+        }
+        var end_time_year = time[1].getFullYear();
+        var end_time_moth = time[1].getMonth() + 1;
+        var end_time_day = time[1].getDate();
+        if (end_time_moth < 10) {
+          end_time_moth = '0' + end_time_moth
+        }
+        if (end_time_day < 10) {
+          end_time_day = '0' + end_time_day
+        }
+        var start_time = `${start_time_year}${start_time_moth}${start_time_day}`
+        var end_time = `${end_time_year}${end_time_moth}${end_time_day}`
+        return `${start_time} -- ${end_time}`
+      }
+    },
   }
 }
 </script>
 
 <style lang="css">
-.editor{
-  height: 500px;
-  & /deep/ .ql-container {
-	  height: 310px;
-  }
+
+img {
+  width: 200px;
+  margin: 0 auto;
 }
 </style>

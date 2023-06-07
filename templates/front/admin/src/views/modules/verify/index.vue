@@ -73,10 +73,7 @@
             align="center"
             label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="onAdd(scope.row.id)">详情</el-button>
-
-            <el-button type="text" size="small" style="color: red" @click="delQ(scope.row.id, 1)" v-if="scope.row.status === '未审核'">通过</el-button>
-            <el-button type="text" size="small" style="color: red" @click="delQ(scope.row.id, -1)"  v-if="scope.row.status === '未审核'">不通过</el-button>
+            <el-button type="text" size="small" @click="detail(scope.row.type, scope.row.id)">详情</el-button>
             <el-button type="text" size="small" style="color: red" @click="delQ(scope.row.id, 0)"  v-if="scope.row.status === '已通过'">禁用</el-button>
           </template>
         </el-table-column>
@@ -133,9 +130,6 @@ export default {
         this.$layer_message(res.result)
       }).finally(() => this.loading = false)
     },
-    onAdd: function (id_) {
-      this.$router.replace({path: "/question/add/" + id_});
-    },
     handleSizeChange: function (val) {
       this.page_size = val;
       this.onSubmit()
@@ -143,6 +137,10 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
       this.onSubmit();
+    },
+    // 审核详情
+    detail(type, id_){
+      this.$router.replace({path: `/verify/det/${type}/${id_}`});
     },
     delQ(id_, status){
       this.$confirm('确定执行吗, 是否继续?', '提示', {

@@ -35,7 +35,7 @@ import paperadd from '@/views/modules/question/paperadd'
 import user_test from '@/views/modules/question/user_test'
 import user_test_det from '@/views/modules/question/user_test_det'
 import verify from '@/views/modules/verify/index'
-
+import verify_det from '@/views/modules/verify/det'
 
 //2.配置路由   注意：名字
 const routes = [{
@@ -84,6 +84,12 @@ const routes = [{
         path: '/verify',
         name: '审核管理',
         component: verify,
+        meta: {icon: '', title: 'center'}
+    },{
+        // 这里不设置值，是把main作为默认页面
+        path: '/verify/det/:type/:id',
+        name: '审核详情',
+        component: verify_det,
         meta: {icon: '', title: 'center'}
     },
         {
