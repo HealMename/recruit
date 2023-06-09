@@ -17,19 +17,6 @@ from util.auth import Auth
 role_dict = {"管理员": 1, "出题专家": 2, "面试官": 3, "用户": 4, "公司": 5}
 
 
-def verify_(code, phone, code_id):
-    """校验验证码"""
-    if code == '425381':  # 万能验证码
-        return True
-    redis_key = f"{phone}:{code_id}"
-    rd_code = rd.user_code.get(redis_key)  # 缓存验证码
-    if rd_code == code:
-        rd.user_code.delete(redis_key)  # 验证成功删除缓存
-        return True
-    else:
-        return False
-
-
 def add_tea(request):
     """
     教师注册
@@ -50,15 +37,24 @@ def add_tea(request):
         if not id_:
             password = get_random_string(length=6, allowed_chars='0123456789')
             password = auth_token.sha1_encode_password(password)  # 加密密码
-            id_ = db.default.users.create(username=phone_number, password=password, role='教师', type=2)
+            id_ = db.default.users.create(username=phone_number, password=password, role='教师', type=2, status=0)
             db.default.user_tea_det.create(user_id=id_, nickname=username, add_time=now, **args)
         else:
             args['add_time'] = now
             db.default.users.filter(id=id_).update(username=phone_number)
             db.default.user_tea_det.filter(user_id=id_).update(**args)
         return ajax.ajax_ok(message='注册成功')
-
-    return render_template(request, 'tea/index.html', data)
+    else:
+        user_id = request.QUERY.get('user_id')
+        if user_id:
+            sql = f"""
+                select  d.* , u.status from recruit.users u 
+                join recruit.user_tea_det d on d.user_id =u.id and u.`type` =2
+                where u.id= {user_id}
+            """
+            data.user = db.default.fetchone_dict(sql)
+            return ajax.ajax_ok(data)
+        return render_template(request, 'tea/index.html', data)
 
 
 def user_info(request):
@@ -106,6 +102,7 @@ def login(request):
         args = {'id': user_id}
         args['id'] = user_id
         if type_ in [1, 2, 3]:
+            args['status'] = 1
             return Auth.authenticate(Auth, users, args)
         elif type_ == 4:
             return Auth.authenticate(Auth, yonghu, args)

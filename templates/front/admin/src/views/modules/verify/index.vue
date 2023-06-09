@@ -47,7 +47,7 @@
         <el-table-column
             prop="name"
             align="center"
-            label="名称">
+            label="姓名">
         </el-table-column>
         <el-table-column
             prop="phone"

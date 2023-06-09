@@ -26,15 +26,15 @@ def index(request):
         if id_.isdigit():
             where_sql += f" and (u.id = {id_} or d.phone_number like '%{id_}%')"
         else:
-            where_sql += f" and name like '%{id_}%'"
+            where_sql += f" and d.name like '%{id_}%'"
     if type_:
-        where_sql += f" and type = {type_}"
+        where_sql += f" and u.type = {type_}"
     else:
-        where_sql += f" and type in (2, 3)"
+        where_sql += f" and u.type in (2, 3)"
     if status:
-        where_sql += f" and status = {status}"
+        where_sql += f" and u.status = {status}"
     sql = f"""
-            select u.id, u.type, u.username name, u.addtime as add_time, u.status, d.phone_number phone  
+            select u.id, u.type, d.name, u.addtime as add_time, u.status, d.phone_number phone  
             from recruit.users u
             join recruit.user_tea_det d on d.user_id=u.id
             {where_sql} 
