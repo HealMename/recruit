@@ -34,10 +34,10 @@ SESSION_COOKIE_AGE = 60 * 60 * 24  # token有效期
 # SMS_API = "http://127.0.0.1:3000/sms/send/"  # 短信接口
 
 # 线上
-UPLOAD_URL = "https://www.ittest008.com:81/uploads/"  # 上传地址
-web_file_url = "https://www.ittest008.com:81/file/"  # 文件域名
-K8S_URL = "https://www.ittest008.com:8088/workload/terminal_index/"  # 终端项目
-SMS_API = "https://www.ittest008.com:3001/sms/send/"  # 短信接口
+UPLOAD_URL = "https://www.ittest008.com/uploads/"  # 上传地址
+web_file_url = "https://www.ittest008.com/file/"  # 文件域名
+K8S_URL = "https://www.ittest008.com/k8workload/terminal_index/"  # 终端项目
+SMS_API = "https://www.ittest008.com/sms/send/"  # 短信接口
 
 # 华为云
 # UPLOAD_URL = "http://liudeli.top:8087/uploads/"  # 上传地址
@@ -179,7 +179,7 @@ STATIC_URL = '/assets/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "templates/front/assets"),
 ]
-
+FILE_URL = "/data/file/"
 # media
 MEDIA_URL = "/media/"  # 自定义
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # 自定义

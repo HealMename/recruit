@@ -76,7 +76,7 @@ def get_absolute_file_path(file_name, prefix_dir='', media_root=''):
     """
     absolute_file_path = ''
     if media_root == '':
-        media_root = settings.MEDIA_URL
+        media_root = settings.FILE_URL
     if prefix_dir:
         absolute_file_path = os.path.join(media_root, prefix_dir, file_name)
     else:
