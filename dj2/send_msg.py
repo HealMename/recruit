@@ -53,7 +53,7 @@ def index(request):
     """发短信"""
     phone = request.QUERY.get('phone')  # 接收人
     send_phone = request.QUERY.get('send_phone', 888)  # 发送人
-    code_id = int(request.QUERY.get('code_id'))  # 1面试官注册验证码 2登录验证码
+    code_id = int(request.QUERY.get('code_id'))  # 1面试官注册验证码 2登录验证码 3出题专家注册
     content = request.QUERY.get('content')  # 发送内容
     code = 0
     redis_key = f"{phone}:{code_id}"
@@ -64,7 +64,7 @@ def index(request):
         if not get_user_id(phone, type_):
             return ajax.ajax_fail(message='账号不存在')
 
-    if code_id in [1, 2]:
+    if code_id in [1, 2, 3]:
         # 面试官注册验证码
         rd.user_code.delete(redis_key)
         code = get_random_string(length=6, allowed_chars='0123456789')
