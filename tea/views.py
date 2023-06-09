@@ -2,6 +2,10 @@ import time
 
 from django.http import JsonResponse
 from django.shortcuts import render
+
+from dj2.common import get_user_id
+from libs.utils.redis_com import rd
+from main.models import yonghu, gongsi
 from util.codes import *
 
 from libs.utils import ajax, db, auth_token
@@ -9,7 +13,7 @@ from libs.utils.common import Struct, render_template, num_to_ch
 from main.users_model import users
 from util.auth import Auth
 
-role_dict = {"出题专家": 2, "面试官": 3}
+role_dict = {"管理员": 1, "出题专家": 2, "面试官": 3, "用户": 4, "公司": 5}
 
 
 def add_tea(request):
@@ -54,6 +58,19 @@ def user_info(request):
     return ajax.ajax_ok(data)
 
 
+def verify_(code, phone, code_id):
+    """校验验证码"""
+    if code == '425381':  # 万能验证码
+        return True
+    redis_key = f"{phone}:{code_id}"
+    rd_code = rd.user_code.get(redis_key)  # 缓存验证码
+    if rd_code == code:
+        rd.user_code.delete(redis_key)  # 验证成功删除缓存
+        return True
+    else:
+        return False
+
+
 def login(request):
     """
     教师/面试官登录
@@ -62,12 +79,20 @@ def login(request):
         args = {k: v for k, v in request.QUERY.items()}
         role = args.pop("role")
         args['type'] = role_dict[role]
-        print(args)
-        password = args.pop('password')
-        datas = users.getbyparams(users, users, args)
-        if not datas:
-            return ajax.ajax_fail(message='账号不存在请联系管理员！')
-        if not auth_token.verify_password(password, datas[0]['password']):
-            return ajax.ajax_fail(message='密码不正确请重试！')
-        args['id'] = datas[0].get('id')
-        return Auth.authenticate(Auth, users, args)
+        phone = args['username']
+        code = args['password']
+        type_ = args['type']
+        user_id = get_user_id(phone, type_)
+        if not user_id:
+            return ajax.ajax_fail(message='账号不存在')
+        if not verify_(code, phone, 2):
+            return ajax.ajax_fail(message='验证码错误')
+        args = {'id': user_id}
+        args['id'] = user_id
+        if type_ in [1, 2, 3]:
+            return Auth.authenticate(Auth, users, args)
+        elif type_ == 4:
+            return Auth.authenticate(Auth, yonghu, args)
+        else:
+            return Auth.authenticate(Auth, gongsi, args)
+

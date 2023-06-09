@@ -125,10 +125,8 @@ class BaseModel(models.Model):
 
         total = p.count
 
-
         # __authTables__
-        if params.get("tablename") == 'users':
-            return newData, datas.page, pages, datas.total, datas.per_page
+        return newData, page, pages, total, limit
         newDataa = []
         if hasattr(self, "__authTables__") and self.__authTables__ != {} and request != {} and request.session.get("tablename") != 'users':
             par_keys = params.keys()

@@ -62,8 +62,14 @@ class Auth(object):
                     request.user.role = '用户'
                     request.user.username = request.user.yonghuzhanghao
                     datas[0]['username'] = request.user.yonghuzhanghao
-                if request.user.role == '教师' or request.user.role == '面试官':
-                    request.user.shouji = db.default.user_tea_det.get(user_id=request.user.id).phone_number
+                    datas[0]['nickname'] = request.user.yonghuzhanghao
+                elif request.user.role in ['教师', '面试官', '管理员']:
+                    print(111)
+                    det = db.default.user_tea_det.get(user_id=request.user.id)
+                    request.user.shouji = det.phone_number
+                    datas[0]['nickname'] = det.nickname
+                else:
+                    datas[0]['nickname'] = request.user.gongsimingcheng
                 request.session['tablename'] = tablename
                 msg['msg'] = '身份验证通过。'
                 msg['user'] = Struct(datas[0])

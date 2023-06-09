@@ -42,6 +42,7 @@ import printJS from 'print-js'
 import md5 from 'js-md5';
 import GlobalTools from './plugins/globalTools'
 
+import $ from 'jquery';
 // 后台地图
 Vue.use(VueAMap)
 VueAMap.initAMapApiLoader({
@@ -57,6 +58,8 @@ Vue.prototype.$base = base.get()
 Vue.prototype.$project = base.getProjectName()
 Vue.prototype.$storage = storage
 Vue.prototype.$api = api
+
+Vue.prototype.$ = $
 // 判断权限方法
 Vue.prototype.isAuth = isAuth
 Vue.prototype.getCurDateTime = getCurDateTime

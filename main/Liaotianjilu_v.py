@@ -108,7 +108,7 @@ def liaotianjilu_session(request):
     if request.method in ["POST", "GET"]:
         msg = {"code": normal_code,"msg": mes.normal_code, "data": {}}
 
-        req_dict={"id":request.session.get('params').get("id")}
+        req_dict={"id":request.GET.get('id')}
         msg['data']  = liaotianjilu.getbyparams(liaotianjilu, liaotianjilu, req_dict)[0]
 
         return JsonResponse(msg)
@@ -146,7 +146,7 @@ def liaotianjilu_page(request):
 
             # if authTable==tablename:
                 #params = request.session.get("params")
-                #req_dict[authColumn]=params.get(authColumn)
+                #
 
         '''__authSeparate__此属性为真，params添加userid，后台只查询个人数据'''
         try:
@@ -213,7 +213,7 @@ def liaotianjilu_page(request):
             for authColumn,authTable in __authTables__.items():
                 if authTable==tablename:
                     params = request.session.get("params")
-                    req_dict[authColumn]=params.get(authColumn)
+                    
                     break
         msg['data']['list'], msg['data']['currPage'], msg['data']['totalPage'], msg['data']['total'], \
         msg['data']['pageSize']  =liaotianjilu.page(liaotianjilu, liaotianjilu, req_dict, request)
@@ -321,7 +321,7 @@ def liaotianjilu_list(request):
             for authColumn,authTable in __authTables__.items():
                 if authTable==tablename:
                     params = request.session.get("params")
-                    req_dict[authColumn]=params.get(authColumn)
+                    
                     break
         
         if liaotianjilu.__tablename__[:7]=="discuss":

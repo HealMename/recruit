@@ -8,8 +8,16 @@
           <el-form-item label="">
             <el-input placeholder="账号" name="username" type="text" v-model="rulesForm.username"/>
           </el-form-item>
+          <Vcode :show="isShow" @success="success" @close="close"/>
           <el-form-item label="">
-            <el-input placeholder="密码" name="password" type="password" v-model="rulesForm.password"/>
+            <div style="display: initial">
+              <el-input style="float: left;width: 65%;" placeholder="短信验证码" name="password" type="text" maxlength="6"
+                        v-model="rulesForm.password"/>
+              <button type="button" class="btn btn-normal" id="getcode" @click="sendMessage()"
+                      style="float: left;margin-left: 10px; background-color: #00a7d0; color: white;" :disabled="disabled">获取验证码
+              </button>
+            </div>
+
           </el-form-item>
           <el-form-item label="">
             <el-radio-group v-model="rulesForm.role">
@@ -42,10 +50,19 @@
 
 import menu from "@/utils/menu";
 
+import Vcode from "vue-puzzle-vcode";
+
 export default {
+  components: {
+    Vcode
+  },
   data() {
+
     return {
+      disabled: false,
+      buttonDefaultValue: "获取验证码",
       type: this.$route.query.type,
+      isShow: false,
       rulesForm: {
         username: "",
         password: "",
@@ -88,24 +105,79 @@ export default {
     }
   },
   created() {
-    if (this.type === '1'){
+    if (this.type === '1') {
       this.rulesForm.role = '管理员'
     }
-    this.getRandCode()
   },
   methods: {
+    countDown(obj, second) {
+      // 如果秒数还是大于0，则表示倒计时还没结束
+      var thsi = this;
+      if (second >= 0) {
+        this.disabled = true;
+
+        // 按钮置为不可点击状态
+        obj.disabled = true;
+        this.$("#getcode").css('background-color', 'grey')
+        // 按钮里的内容呈现倒计时状态
+        this.$(obj).text(String(second) + '秒后重发');
+        // 时间减一
+        second--;
+        // 一秒后重复执行
+        setTimeout(function () {
+          thsi.countDown(obj, second);
+        }, 1000);
+        // 否则，按钮重置为初始状态
+      } else {
+        // 按钮置未可点击状态
+        obj.disabled = false;
+        this.disabled = false;
+        this.$("#getcode").css('background-color', '#00a7d0')
+        // 按钮里的内容恢复初始状态
+        obj.value = this.buttonDefaultValue;
+      }
+    },
+    // 用户通过了验证
+    success(msg) {
+      var thsi = this;
+      this.isShow = false; // 通过验证后，需要手动隐藏模态框
+      // 发送验证码
+      this.countDown(this.$('#getcode'), 60)
+
+      this.$.post(DOMAIN_API_SYS + '/sms/send/', {phone: this.rulesForm.username, type: this.rulesForm.role, code_id: 2}, function (res) {
+        if (res.response === 'ok'){
+          thsi.$message.success('验证码已发送, 2分钟内有效')
+        }else{
+          thsi.$message.error(res.message)
+        }
+
+      })
+    },
+    close() {
+      this.isShow = false;
+    },
+    sendMessage() {
+      // 打开验证码弹窗
+      if (!this.rulesForm.username) {
+        this.$message.error("请输入账号");
+        return;
+      }
+      this.isShow = true;
+    },
     register(tableName) {
       this.$storage.set("loginTable", tableName);
       this.$router.push({path: '/register'})
     },
     // 登陆
     login() {
+      // 用户点击遮罩层，应该关闭模态框
+
       if (!this.rulesForm.username) {
         this.$message.error("请输入用户名");
         return;
       }
       if (!this.rulesForm.password) {
-        this.$message.error("请输入密码");
+        this.$message.error("请输入短信验证码");
         return;
       }
       if (this.roles.length > 1) {
@@ -124,77 +196,43 @@ export default {
         this.rulesForm.role = this.roles[0].roleName;
       }
       let url = `${DOMAIN_API_SYS}/django7681v/${this.tableName}/login?username=${this.rulesForm.username}&password=${this.rulesForm.password}&role=${this.rulesForm.role}`
-      if (this.rulesForm.role === '出题专家' || this.rulesForm.role === '面试官'){
+      // if (this.rulesForm.role === '出题专家' || this.rulesForm.role === '面试官') {
+      if (url) {
         url = `${DOMAIN_API_SYS}/tea/login/?username=${this.rulesForm.username}&password=${this.rulesForm.password}&role=${this.rulesForm.role}`
         this.$http.post(url, {}).then(res => {
           console.log(res)
-                this.$storage.set("Token", res.data.token);
-                this.$storage.set("userId", res.data.id);
-              this.$storage.set("role", this.rulesForm.role);
-              this.$storage.set("sessionTable", "users");
-              this.$storage.set("adminName", this.rulesForm.username);
-              window.location.href = `${this.$base.indexUrl}`
-              }).catch((res) => {
-                  this.$layer_message(res.result)
-              }).finally(() => this.loading = false)
-
-      }else{
-        this.$http.post(url, {"role": this.rulesForm.role}).then(({data}) => {
-          if (data && data.code === 0) {
-            this.$storage.set("userId", data.id);
-            this.$storage.set("Token", data.token);
-            this.$storage.set("role", this.rulesForm.role);
-            this.$storage.set("sessionTable", this.tableName);
-            this.$storage.set("adminName", this.rulesForm.username);
-            if (this.rulesForm.role === '管理员'){
+          this.$storage.set("Token", res.data.token);
+          this.$storage.set("userId", res.data.id);
+          this.$storage.set("role", this.rulesForm.role);
+          this.$storage.set("sessionTable", this.tableName);
+          this.$storage.set("adminName", this.rulesForm.username);
+          if (this.rulesForm.role === '管理员') {
               this.$router.replace({path: "/index/"});
-            }else{
+            } else {
               window.location.href = `${this.$base.indexUrl}`
             }
+        }).catch((res) => {
+          this.$layer_message(res.result)
+        }).finally(() => this.loading = false)
 
-          } else {
-            this.$message.error(data.msg);
-          }
-        });
-      }
-
-
-    },
-    getRandCode(len = 4) {
-      this.randomString(len)
-    },
-    randomString(len = 4) {
-      let chars = [
-        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
-        "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v",
-        "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G",
-        "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
-        "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2",
-        "3", "4", "5", "6", "7", "8", "9"
-      ]
-      let colors = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"]
-      let sizes = ['14', '15', '16', '17', '18']
-
-      let output = [];
-      for (let i = 0; i < len; i++) {
-        // 随机验证码
-        let key = Math.floor(Math.random() * chars.length)
-        this.codes[i].num = chars[key]
-        // 随机验证码颜色
-        let code = '#'
-        for (let j = 0; j < 6; j++) {
-          let key = Math.floor(Math.random() * colors.length)
-          code += colors[key]
-        }
-        this.codes[i].color = code
-        // 随机验证码方向
-        let rotate = Math.floor(Math.random() * 60)
-        let plus = Math.floor(Math.random() * 2)
-        if (plus == 1) rotate = '-' + rotate
-        this.codes[i].rotate = 'rotate(' + rotate + 'deg)'
-        // 随机验证码字体大小
-        let size = Math.floor(Math.random() * sizes.length)
-        this.codes[i].size = sizes[size] + 'px'
+      } else {
+        // this.$http.post(url, {"role": this.rulesForm.role}).then(({data}) => {
+        //   if (data && data.code === 0) {
+        //     this.$storage.set("userId", data.id);
+        //     this.$storage.set("Token", data.token);
+        //     this.$storage.set("role", this.rulesForm.role);
+        //     this.$storage.set("sessionTable", this.tableName);
+        //     this.$storage.set("adminName", this.rulesForm.username);
+        //     if (this.rulesForm.role === '管理员') {
+        //       this.$router.replace({path: "/index/"});
+        //     } else {
+        //       window.location.href = `${this.$base.indexUrl}`
+        //     }
+        //
+        //   } else {
+        //     this.$message.error(data.msg);
+        //   }
+        // });
       }
     },
   }

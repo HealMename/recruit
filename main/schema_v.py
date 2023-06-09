@@ -317,7 +317,7 @@ def schemaName_tablename_remind_columnname_type(request, tableName, columnName, 
             for authColumn, authTable in __authTables__.items():
                 if authTable == tablename:
                     params = request.session.get("params")
-                    req_dict[authColumn] = params.get(authColumn)
+                    
                     break
 
 

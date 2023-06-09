@@ -453,7 +453,7 @@
                 localStorage.clear()
             } else {
                 var res = res.data.user
-                vue.username = res.username
+                vue.username = res.nickname
                 vue.role = res.role
                 vue.id = res.id
                 $("#username").text(vue.username.replaceAll('"', ''))

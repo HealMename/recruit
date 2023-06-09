@@ -2,11 +2,21 @@
 import json
 
 import requests
+
+from dj2.common import get_user_id
 from libs.utils.redis_com import rd
 
 from dj2.settings import SMS_API
 from libs.utils import ajax, db, render_template
 from libs.utils.auth_token import get_random_string
+
+ROLE_ID = {
+    "管理员": 1,
+    "出题专家": 2,
+    "面试官": 3,
+    "用户": 4,
+    "企业": 5,
+}
 
 
 def call_index(request):
@@ -31,7 +41,7 @@ def verify_code(request):
     """验证验证码"""
     phone = request.QUERY.get('phone')  # 接收人
     code = request.QUERY.get('code')  # 验证码
-    code_id = int(request.QUERY.get('code_id'))  # 来源 1验证码
+    code_id = int(request.QUERY.get('code_id'))  # 来源 1面试官注册验证码 2登录验证码
     is_ver = verify_(code, phone, code_id)
     if is_ver:
         return ajax.ajax_ok(message='验证成功')
@@ -43,11 +53,18 @@ def index(request):
     """发短信"""
     phone = request.QUERY.get('phone')  # 接收人
     send_phone = request.QUERY.get('send_phone', 888)  # 发送人
-    code_id = int(request.QUERY.get('code_id'))  # 来源 1验证码
+    code_id = int(request.QUERY.get('code_id'))  # 1面试官注册验证码 2登录验证码
     content = request.QUERY.get('content')  # 发送内容
     code = 0
     redis_key = f"{phone}:{code_id}"
-    if code_id == 1:
+    if code_id in [2, ]:
+        # 登录验证码
+        role = request.QUERY.get('type')  # 角色
+        type_ = ROLE_ID[role]
+        if not get_user_id(phone, type_):
+            return ajax.ajax_fail(message='账号不存在')
+
+    if code_id in [1, 2]:
         # 面试官注册验证码
         rd.user_code.delete(redis_key)
         code = get_random_string(length=6, allowed_chars='0123456789')

@@ -1,5 +1,6 @@
 <template>
   <el-row v-loading="loading">
+    <!--面试官-->
     <el-col :span="24" v-if="type === '3'">
       <el-descriptions class="margin-top" title="" :column="3" border>
 
@@ -152,6 +153,85 @@
           </template>
           <img v-if="prove.other" :src="prove.other" class="avatar">
         </el-descriptions-item>
+      </el-descriptions>
+
+      <div style="margin: 20px">
+        <el-button type="danger" @click="verify_(1)" v-if="status === 0">拒绝</el-button>
+        <el-button type="warning" @click="verify_(2)" v-if="status === 0">通过</el-button>
+        <el-button @click="go_bank()">返回</el-button>
+      </div>
+    </el-col>
+    <!--出题专家-->
+    <el-col :span="24" v-if="type === '2'">
+      <el-descriptions class="margin-top" title="" :column="3" border>
+
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-user"></i>
+            账号
+          </template>
+          <p v-text="form.account_id"></p>
+        </el-descriptions-item>
+
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-user"></i>
+            姓名
+          </template>
+          <p v-text="form.name"></p>
+
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-mobile-phone"></i>
+            手机号
+          </template>
+          <p v-text="form.phone"></p>
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-tickets"></i>
+            身份证号
+          </template>
+          <p v-text="form.number_id"></p>
+        </el-descriptions-item>
+        <el-descriptions-item span="2">
+          <template slot="label">
+            <i class="el-icon-office-building"></i>
+            性别
+          </template>
+          <p v-text="form.sex"></p>
+        </el-descriptions-item>
+
+        <el-descriptions-item span="3">
+          <template slot="label">
+            <i class="el-icon-office-building"></i>
+            邮箱
+          </template>
+          <p v-text="form.emlie"></p>
+        </el-descriptions-item>
+        <el-descriptions-item span="1" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              毕业院校
+            </template>
+            <p v-text="item.school"></p>
+
+          </el-descriptions-item>
+          <el-descriptions-item span="1" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              学历
+            </template>
+            <p v-text="item.education"></p>
+          </el-descriptions-item>
+          <el-descriptions-item span="2" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              专业
+            </template>
+            <p v-text="item.speciality"></p>
+          </el-descriptions-item>
       </el-descriptions>
 
       <div style="margin: 20px">
