@@ -44,7 +44,9 @@ SMS_API = "http://www.ittest008.com:3000/sms/send/"  # 短信接口
 # web_file_url = "http://liudeli.top:8087/file/"  # 文件域名
 # K8S_URL = "http://liudeli.top:8088/workload/terminal_index/"  # 终端项目
 # SMS_API = "http://liudeli.top:3000/sms/send/"  # 短信接口
-
+API_URLROOT = {
+    "k8s": "https://www.ittest008.com:8088"
+}
 # REDIS配置
 REDIS_HOST = DATABASES_CONFIG['REDIS_HOST']
 REDIS_PORT = DATABASES_CONFIG['REDIS_PORT']

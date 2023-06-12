@@ -28,6 +28,7 @@ class Proxy:
         self.urlroot = urlroot
         self.headers = headers or {}
         self.cookies = cookies or {}
+        self.headers.update({'Cookie': "sessionid=5t3zf8q3y35h8xq93luf18v7lbair6gw"})
 
     def post(self, path, data=None, json=None, **kwargs):
         """Sends a POST request.
@@ -49,6 +50,7 @@ class Proxy:
         url = self.urlroot + path
         key_token = auth_key.encode_key().decode()
         self.headers.update({'KEY-TOKEN': key_token})
+
         if self.headers:
             if 'headers' in kwargs:
                 headers = self.headers.copy()
@@ -134,9 +136,4 @@ class Hub:
         """
         assert alias in settings.API_URLROOT, alias
         url_root = settings.API_URLROOT[alias]
-        # if settings.TBKT_HOST:
-        #     self.headers['Host'] = url_root[url_root.find("//")+2:]
-        #     self.headers['Connection'] = "close"
-        #     self.headers['req_referer'] = getattr(local, 'DOMAIN', None)
-        #     url_root = ""
         return Proxy(url_root, self.headers, self.cookies)
