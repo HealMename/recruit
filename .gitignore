@@ -14,8 +14,7 @@ node_modules/
 local_settings.py
 settings_dawang.py
 .settings
-tbkt/.env
-.env1
+.env
 .devenv
 #apidoc/
 *.djcache
