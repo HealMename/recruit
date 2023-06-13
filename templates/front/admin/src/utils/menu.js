@@ -79,6 +79,15 @@ const menu = {
                         "buttons": [
 
                         ],
+                        "menu": "学科管理",
+                        "menuJump": "列表",
+                        "tableName": "subjects"
+                    },
+                    {
+                        "appFrontIcon": "cuIcon-list",
+                        "buttons": [
+
+                        ],
                         "menu": "题目",
                         "menuJump": "列表",
                         "tableName": "question"

@@ -2,26 +2,12 @@
   <el-row>
     <el-col :span="12">
       <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item label="手机号">
-          <el-input v-model="form.id" placeholder="输入用户ID或手机号"></el-input>
-        </el-form-item>
-        <el-form-item label="状态：" >
-          <el-radio-group v-model="form.status">
-            <el-radio label="" value="">全部</el-radio>
-            <el-radio label="0" value="0">未审核</el-radio>
-            <el-radio label="-1" value="-1">未通过</el-radio>
-            <el-radio label="1" value="1">已通过</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="类型：" >
-          <el-radio-group v-model="form.type">
-            <el-radio label="" value="">全部</el-radio>
-            <el-radio label="2" value="2">出题专家</el-radio>
-            <el-radio label="3" value="3">面试官</el-radio>
-          </el-radio-group>
+        <el-form-item label="名称">
+          <el-input v-model="form.id" placeholder="输入学科名称或ID"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button  @click="onSubmit(1)">搜索</el-button>
+          <el-button @click="onSubmit(1)">搜索</el-button>
+          <el-button @click="detail('')">新增</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -39,28 +25,17 @@
             width="50">
         </el-table-column>
         <el-table-column
-            prop="type_name"
-            align="center"
-            label="类型"
-            width="100">
-        </el-table-column>
-        <el-table-column
             prop="name"
             align="center"
-            label="姓名">
+            label="名称"
+        >
         </el-table-column>
         <el-table-column
-            prop="phone"
+            prop="namespace"
             align="center"
-            label="手机号">
+            label="关联项目空间">
         </el-table-column>
 
-        <el-table-column
-            prop="status"
-            width="100"
-            align="center"
-            label="状态">
-        </el-table-column>
         <el-table-column
             prop="add_time"
             width="180"
@@ -73,8 +48,8 @@
             align="center"
             label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="detail(scope.row.type, scope.row.id)">详情</el-button>
-            <el-button type="text" size="small" style="color: red" @click="delQ(scope.row.id, 0)"  v-if="scope.row.status === '已通过'">禁用</el-button>
+            <el-button type="text" size="small" @click="detail(scope.row.id)">修改</el-button>
+            <el-button type="text" size="small" style="color: red" @click="delQ(scope.row.id, -1)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -89,6 +64,23 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="total">
       </el-pagination>
+<el-dialog title="学科" :visible.sync="dialogFormVisible">
+      <el-form :model="subject">
+        <el-form-item label="名称" label-width="80px">
+          <el-input v-model="subject.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="项目空间" label-width="80px">
+          <el-select v-model="subject.namespace" placeholder="请选择项目空间">
+            <el-option :label="item.name" :value="item.name" v-for="item in namespace"
+                  v-bind:key="item.name"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="save()">确 定</el-button>
+      </div>
+    </el-dialog>
     </el-col>
 
   </el-row>
@@ -99,10 +91,13 @@
 export default {
   data() {
     return {
+      dialogFormVisible:false,
       loading: false,
       currentPage: 1,
       total: 0,
       page_size: 5,
+      subject: {},
+      namespace: [],
       form: {
         id: '',
         status: '',
@@ -115,14 +110,22 @@ export default {
 
   },
   created() {
+    this.get_namespace()
     this.onSubmit()
   },
   methods: {
+    // 获取项目空间
+    get_namespace: function () {
+      var thsi = this;
+      this.$.get(DOMAIN_API_SYS + "/k8s/namespace_api/", function (res) {
+        thsi.namespace = res.data;
+      })
+    },
     onSubmit: function (page_id) {
-      this.form.page_id = page_id ? page_id: this.currentPage;
+      this.form.page_id = page_id ? page_id : this.currentPage;
       this.form.page_size = this.page_size;
       this.loading = true;
-      this.$http.post(DOMAIN_API_SYS + "/interviewer/verify/index/", this.form).then(res => {
+      this.$http.post(DOMAIN_API_SYS + "/tea/subject/index/", this.form).then(res => {
         let r = res.data.data
         this.tableData = r.page_data;
         this.total = r.sum_len
@@ -139,32 +142,45 @@ export default {
       this.onSubmit();
     },
     // 审核详情
-    detail(type, id_){
-      this.$router.replace({path: `/verify/det/${type}/${id_}`});
+    detail(id_) {
+      this.dialogFormVisible = true;
+      var thsi = this;
+      this.$.get(DOMAIN_API_SYS + "/tea/subject/add/?id=" + id_ || '', function (res) {
+        console.log(res)
+        thsi.subject = res.data;
+      })
     },
-    delQ(id_, status){
+    save(){
+      var thsi = this;
+      this.$http.post(DOMAIN_API_SYS + "/tea/subject/add/", thsi.subject).then(res => {
+        thsi.dialogFormVisible = false;
+        this.onSubmit()
+      })
+    },
+    delQ(id_, status) {
       this.$confirm('确定执行吗, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.loading = true;
-          this.$http.post(DOMAIN_API_SYS + "/interviewer/verify/status/", {id: id_, status: status}).then(res => {
-              this.onSubmit()
-          }).catch((res) => {
-            this.$layer_message(res.result)
-          })
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        lockScroll: false
+      }).then(() => {
+        this.loading = true;
+        this.$http.post(DOMAIN_API_SYS + "/tea/subject/status/", {id: id_, status: status}).then(res => {
+          this.onSubmit()
+        }).catch((res) => {
+          this.$layer_message(res.result)
+        })
 
-          this.$message({
-            type: 'success',
-            message: '操作成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          });
+        this.$message({
+          type: 'success',
+          message: '操作成功!'
         });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        });
+      });
 
 
     },

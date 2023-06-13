@@ -19,13 +19,17 @@ def namespace_api(request):
     redis_key = "namespace_api"
     k8s = rd.k8s.get(redis_key)
     if k8s:
-        res = json.loads(k8s)
+        data = json.loads(k8s)
     else:
+        pass
         api = Hub(request)
         res = api.k8s.get('/namespace_api/')
         # 接口缓存10分钟
-        rd.k8s.set(redis_key, json.dumps(res), timeout=60 * 10)
-    return ajax.ajax_ok(res)
+        data = []
+        for obj in res['data']:
+            data.append({'name': obj['name']})
+        rd.k8s.set(redis_key, json.dumps(data), timeout=60 * 10)
+    return ajax.ajax_ok(data)
 
 
 def pods_api(request):

@@ -28,7 +28,7 @@ class Proxy:
         self.urlroot = urlroot
         self.headers = headers or {}
         self.cookies = cookies or {}
-        self.headers.update({'Cookie': "sessionid=5t3zf8q3y35h8xq93luf18v7lbair6gw"})
+        self.headers.update({'Cookie': "sessionid=7701gb1x9iox7379ldfmtskyqye47obg"})
 
     def post(self, path, data=None, json=None, **kwargs):
         """Sends a POST request.

@@ -36,7 +36,7 @@ import user_test from '@/views/modules/question/user_test'
 import user_test_det from '@/views/modules/question/user_test_det'
 import verify from '@/views/modules/verify/index'
 import verify_det from '@/views/modules/verify/det'
-
+import subjects from '@/views/modules/subjects/index'
 //2.配置路由   注意：名字
 const routes = [{
     path: '/index',
@@ -44,56 +44,53 @@ const routes = [{
     component: Index,
     children: [
         {
-        // 这里不设置值，是把main作为默认页面
+        path: '/subjects',
+        name: '科目管理',
+        component: subjects,
+        meta: {icon: '', title: 'center'}
+    },
+        {
         path: '/question',
         name: '题目',
         component: question,
         meta: {icon: '', title: 'center'}
     },{
-        // 这里不设置值，是把main作为默认页面
         path: '/question/add/:id',
         name: '题库 / 添加题目',
         component: questionadd,
         meta: {icon: '', title: 'center'}
     },{
-        // 这里不设置值，是把main作为默认页面
         path: '/paper',
         name: '试卷',
         component: paper,
         meta: {icon: '', title: 'center'}
     },{
-        // 这里不设置值，是把main作为默认页面
         path: '/paper/add/:id',
         name: '试卷 / 试卷详情',
         component: paperadd,
         meta: {icon: '', title: 'center'}
     },{
-        // 这里不设置值，是把main作为默认页面
         path: '/user/test/',
         name: '题目 / 做题记录',
         component: user_test,
         meta: {icon: '', title: 'center'}
     },{
-        // 这里不设置值，是把main作为默认页面
         path: '/user/test/det/:id',
         name: '题目 / 做题记录',
         component: user_test_det,
         meta: {icon: '', title: 'center'}
     },{
-        // 这里不设置值，是把main作为默认页面
         path: '/verify',
         name: '审核管理',
         component: verify,
         meta: {icon: '', title: 'center'}
     },{
-        // 这里不设置值，是把main作为默认页面
         path: '/verify/det/:type/:id',
         name: '审核详情',
         component: verify_det,
         meta: {icon: '', title: 'center'}
     },
         {
-        // 这里不设置值，是把main作为默认页面
         path: '/',
         name: '首页',
         component: Home,

@@ -65,6 +65,7 @@ Vue.prototype.isAuth = isAuth
 Vue.prototype.getCurDateTime = getCurDateTime
 Vue.prototype.getCurDate = getCurDate
 // Vue.prototype.$base = base
+ElementUI.Dialog.props.lockScroll.default = false;
 Vue.use(ElementUI, { size: 'medium', zIndex: 3000 });
 Vue.config.productionTip = false
 // 组件全局组件

@@ -38,5 +38,6 @@ urlpatterns += [
 
 urlpatterns += [
     re_path(r'^subject/add/$', subject.add),  # 编辑科目
-    re_path(r'^subject/index/$', subject.index),  # 编辑科目
+    re_path(r'^subject/status/$', subject.status),  # 删除科目
+    re_path(r'^subject/index/$', subject.index),  # 科目列表
 ]
