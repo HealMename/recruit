@@ -31,13 +31,14 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    re_path(r'^user/test_list/$', user.user_test_list),  # 单个题目做题
-    re_path(r'^user/user_test_del/$', user.user_test_del),  # 单个题目做题
-    re_path(r'^user/user_test_det/$', user.get_user_test_det),  # 单个题目做题
+    re_path(r'^user/test_list/$', user.user_test_list),  # 获取做题记录
+    re_path(r'^user/user_test_del/$', user.user_test_del),  # 删除做题记录
+    re_path(r'^user/user_test_det/$', user.get_user_test_det),  # 获取做题详情
 ]
 
 urlpatterns += [
     re_path(r'^subject/add/$', subject.add),  # 编辑科目
     re_path(r'^subject/status/$', subject.status),  # 删除科目
     re_path(r'^subject/index/$', subject.index),  # 科目列表
+    re_path(r'^subject/all/$', subject.all_subjects),  # 所有科目
 ]

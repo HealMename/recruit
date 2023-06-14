@@ -13,10 +13,7 @@
         </el-form-item>
         <el-form-item label="科目：">
           <el-radio-group v-model="form.sid">
-            <el-radio label="1" value="1">K8s</el-radio>
-            <el-radio label="2" value="2">Mysql</el-radio>
-            <el-radio label="3" value="3">Vue</el-radio>
-            <el-radio label="4" value="4">shell</el-radio>
+            <el-radio :label="key.id" :value="key.id" v-for="(key, index) in subjects" v-bind:key="index">{{ key.name }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="版本：" prop="version">
@@ -57,13 +54,6 @@
                     action="file/upload">
                 </editor>
         </el-form-item>
-
-
-        <el-form-item :label="'url' + (index+1)" v-for="(item,index) in form.urls" v-bind:key="index">
-          <el-input v-model="item.value" v-bind:key="index" style="width: 92%"></el-input>
-          <i class="el-icon-circle-plus-outline" style="padding-left: 12px;cursor:pointer;" @click="addUrl()" v-if="index+1 === 1"></i>
-          <i class="el-icon-remove-outline" style="padding-left: 12px;cursor:pointer;" @click="delUrl(index)" v-if="index+1 > 1"></i>
-        </el-form-item>
         <el-form-item>
           <el-button  @click="onSubmit('form')">保存</el-button>
           <el-button  @click="go_bank">返回</el-button>
@@ -86,12 +76,10 @@ export default {
     return {
       loading: false,
       role: this.$storage.get("role"),
+      subjects: [],
       form: {
-        urls: [{
-          value: ''
-        }],
         id: this.$route.params.id,
-        sid: "1",
+        sid: 1,
         do_time: 0,
         do_points: '',
         version: '',
@@ -118,30 +106,27 @@ export default {
 
   },
   created() {
-    console.log(this.role)
+    this.loading = true;
     if (this.form.id > 0){
-        this.loading = true;
+this.loading = true;
         this.$http.post(DOMAIN_API_SYS + "/tea/question_list/", {id: this.form.id}).then(res => {
           let r = res.data.data
           this.form = r.page_data[0]
+          this.form.sid = Number(this.form.sid)
           this.loading = false
       })
     }
+      this.$http.post(DOMAIN_API_SYS + "/tea/subject/all/", {}).then(res => {
+        this.subjects = res.data.data
+        this.loading = false
+    })
   },
   methods: {
     go_bank: function () {
       this.$router.replace({path: "/question/"});
     },
-    delUrl: function (index_) {
-      this.$delete(this.form.urls, index_)
-    },
-    addUrl: function () {
-      if (this.form.urls.length === 4){
-          this.$layer_message("最多四个关联地址")
-      }else{
-        this.form.urls.push({value: ''})
-      }
-    },
+
+
     onSubmit: function (formName) {
        this.$refs[formName].validate((valid) => {
           if (valid) {

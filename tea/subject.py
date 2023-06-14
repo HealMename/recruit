@@ -82,3 +82,11 @@ def status(request):
     id_ = request.QUERY.get('id')
     db.default.subjects.filter(id=id_).update(update_time=now, update_user=user_id, status=-1)
     return ajax.ajax_ok(data=data)
+
+
+def all_subjects(request):
+    """获取所有科目"""
+    page_data = db.default.subjects.filter(status=1).select('id', 'name')[:]
+    return ajax.ajax_ok(page_data)
+
+

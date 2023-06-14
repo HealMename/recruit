@@ -2,7 +2,6 @@ import json
 
 from libs.utils import ajax
 from libs.utils.comapi import Hub
-from libs.utils.common import Struct
 from libs.utils.redis_com import rd
 
 

@@ -81,7 +81,6 @@ def get_paper_question(request):
     else:
         ids = [x['id'] for x in json.loads(db.default.user_test_det.get(id=paper_id).content)]
         data = db.default.question.filter(id__in=ids)[:]
-    print(data)
     for q in data:
         q['add_time'] = trancate_date(q['add_time'])
         q['sid'] = str(q['sid'])
@@ -92,17 +91,6 @@ def get_paper_question(request):
         q['size_name'] = size_name[str(q['size'])]
         q['urls'] = [{'value': x} for x in json.loads(q.pop('link_url'))]
     return ajax.ajax_ok(data)
-
-
-def do_question(request):
-    """做题"""
-    user_id = request.user.id
-    now = int(time.time())
-    type_ = request.QUERY.get('type')  # 1 单题练习 2随机试卷练习 3考试试卷
-    paper_id = request.QUERY.get('paper_id')  # 试卷id
-    status = request.QUERY.get('status')  # 0未完成 1 已完成
-    data = request.QUERY.get('data')  # 答题详情
-
 
 
 def question_list(request):

@@ -8,9 +8,9 @@ from django.http import HttpResponseRedirect
 from dj2.settings import K8S_URL
 from libs.utils import ajax, db, auth_token
 from libs.utils.common import Struct, trancate_date
+from tea.common import all_subjects
 
 level_name = {'1': "初级", "2": "中级", "3": "高级"}
-sid_name = {'1': "K8s", "2": "Mysql", "3": "Vue", "4": "shell"}
 size_name = {'1': '单机', "2": "集群", "3": "多集群"}
 
 ROLE = {"用户": 1, "教师": 2, "面试官": 3, "企业": 4}
@@ -94,9 +94,10 @@ def get_user_test_det(request):
         join recruit.question q on q.id =det.question_id 
     """
     data = db.default.fetchall_dict(sql)
+    sid_name = all_subjects()
     for q in data:
         q['add_time'] = trancate_date(q['add_time'])
-        q['sid'] = sid_name[str(q['sid'])]
+        q['sid'] = sid_name[q['sid']]
         q['level'] = level_name[str(q['level'])]
         q['size'] = size_name[str(q['size'])]
         q.content = json.loads(q.content)

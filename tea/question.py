@@ -8,9 +8,9 @@ from django.http import HttpResponseRedirect
 from dj2.settings import K8S_URL
 from libs.utils import ajax, db, auth_token
 from libs.utils.common import Struct, trancate_date
+from tea.common import all_subjects
 
 level_name = {'1': "初级", "2": "中级", "3": "高级"}
-sid_name = {'1': "K8s", "2": "Mysql", "3": "Vue", "4": "shell"}
 size_name = {'1': '单机', "2": "集群", "3": "多集群"}
 
 ROLE = {"用户": 1, "教师": 2, "面试官": 3, "企业": 4}
@@ -70,10 +70,11 @@ def get_paper_question(request):
     else:
         ids = [x['id'] for x in json.loads(db.default.user_test_det.get(id=paper_id).content)]
         data = db.default.question.filter(id__in=ids)[:]
+    sid_name = all_subjects()
     for q in data:
         q['add_time'] = trancate_date(q['add_time'])
         q['sid'] = str(q['sid'])
-        q['sid_name'] = sid_name[str(q['sid'])]
+        q['sid_name'] = sid_name[q['sid']]
         q['level'] = str(q['level'])
         q['level_name'] = level_name[str(q['level'])]
         q['size'] = str(q['size'])
@@ -109,17 +110,16 @@ def question_list(request):
         limit {(page_id -1) * page_size}, {page_size} ;
     """
     page_data = db.default.fetchall_dict(sql)
+    sid_name = all_subjects()
     for q in page_data:
         q['status_name'] = {1: '已审核', 0: '未审核'}[q['status']]
         q['status'] = str(q['status'])
         q['add_time'] = trancate_date(q['add_time'])
-        q['sid'] = str(q['sid'])
-        q['sid_name'] = sid_name[str(q['sid'])]
+        q['sid_name'] = sid_name[q['sid']]
         q['level'] = str(q['level'])
         q['level_name'] = level_name[str(q['level'])]
         q['size'] = str(q['size'])
         q['size_name'] = size_name[str(q['size'])]
-        q['urls'] = [{'value': x} for x in json.loads(q.pop('link_url'))]
     data = Struct()
     data.page_data = page_data
     data.sum_len = get_page_len('question', where_sql)
@@ -198,13 +198,14 @@ def paper(request):
         limit {(page_id -1) * page_size}, {page_size} ;
     """
     page_data = db.default.fetchall_dict(sql)
+    sid_name = all_subjects()
     for q in page_data:
         q['type_name'] = {1: '练习平台', 2: '考试平台'}[q['type']]
         q['type'] = str(q['type'])
         q['level_name'] = level_name[str(q['level'])]
         q['level'] = str(q['level'])
         q['sid'] = str(q['sid'])
-        q['sid_name'] = sid_name[str(q['sid'])]
+        q['sid_name'] = sid_name[q['sid']]
         q['add_time'] = trancate_date(q['add_time'])
     data = Struct()
     data.page_data = page_data
@@ -297,7 +298,6 @@ def do_question(request):
     user_id = request.user.id
     now = int(time.time())
     type_ = int(request.QUERY.get('type'))  # 1 单题练习
-    paper_id = request.QUERY.get('paper_id')  # 试卷id
     qid = request.QUERY.get('qid')  # 题目id
     role_id = ROLE[request.user.role]
     if type_ == 1:

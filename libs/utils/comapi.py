@@ -105,6 +105,7 @@ class Proxy:
                 cookies = self.cookies
             kwargs['cookies'] = cookies
         r = requests.get(url, params, **kwargs)
+        print(r.text)
         if r.status_code != 200:
             log.error("%s:%s" % ("API-ERROR", url))
             msg = "服务器开小差,请重试~"

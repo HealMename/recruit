@@ -4,7 +4,9 @@
 
       <div :class="2 == 1 ? 'left' : 2 == 2 ? 'left center' : 'left right'">
         <el-form class="login-form" label-position="left" :label-width="3 == 3 || 3 == 2 ? '60px': '0px'">
-          <div class="title-container"><h3 class="title">it学霸登录</h3></div>
+          <div class="title-container"><h3 class="title">
+            <img src="https://www.ittest008.com/file/number_id_img/2023/06/14/20230614061057325629.png" alt="">
+          </h3></div>
           <el-form-item label="">
             <el-input placeholder="手机号" name="username" type="text" v-model="rulesForm.username"/>
           </el-form-item>
@@ -246,7 +248,7 @@ export default {
   background-size: cover;
   width: 100%;
   height: 100%;
-  background-image: url(https://www.ittest008.com/file/number_id_img/2023/06/01/20230601080328255507.jpg);
+  background-image: url(https://www.ittest008.com/file/number_id_img/2023/06/14/20230614060328613832.jpg);
 
   .loginInBt {
     width: 100%;
@@ -259,14 +261,14 @@ export default {
     border-radius: 5px;
     border-width: 0;
     border-style: solid;
-    border-color: #6bc5a4;
-    background-color: #6bc5a4;
+    border-color: rgba(52, 128, 154, 0.8);
+    background-color: rgba(52, 128, 154, 0.69);
     box-shadow: 0 0 6px rgba(255, 0, 0, .1);
     font-size: 23px;
   }
 
   .loginInBt:hover {
-    background: #688ac2;
+    background: rgb(52, 128, 154);
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     transition: all 0.3s;
@@ -362,8 +364,8 @@ export default {
       & /deep/ .el-form-item__content input[type="text"], & /deep/ .el-form-item__content input[type="password"] {
         border-radius: 5px;
         -webkit-border-radius: 5px;
-        border: 1px solid #eaeaec;
-        background: #eaeaec;
+        border: 1px solid #c0c4cc;
+        background: #ffffff;
         box-shadow: none;
         font-size: 12px;
       }
@@ -390,7 +392,7 @@ export default {
         line-height: 14px;
         margin: 0;
         padding: 0 0 0 10px;
-        color: #00c292;
+        color: rgb(23, 70, 171);
         font-size: 14px;
         border-radius: 0;
         border-width: 0;
@@ -422,8 +424,8 @@ export default {
         border-radius: 100%;
         border-width: 1px;
         border-style: solid;
-        border-color: #00c292;
-        background-color: #00c292;
+        border-color: #1746ab;
+        background-color: #1746ab;
         box-shadow: 0 0 6px rgba(255, 0, 0, 0);
       }
 
