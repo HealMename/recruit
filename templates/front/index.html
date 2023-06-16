@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/media/layui-v2.7.6/layui/css/layui.css">
     <link rel="stylesheet" href="/media/css/common.css"/>
     <link rel="stylesheet" href="/media/css/style.css"/>
+    <link rel="stylesheet" href="/media/css/index.css"/>
 
 </head>
 <style type="text/css">
@@ -267,7 +268,7 @@
                     </div>
                 </li>
                 <li class='current right' v-if="!username">
-                    <a href="/admin/#/login" id="login" class="menumain">登录</a> <br>
+                    <a href="javascript:" id="login" class="menumain" @click="login_layer()">登录</a> <br>
                 </li>
                 <li class='current right user'>
                     <a href="/admin/#/index" id="userrole" class="menumain" target="_blank"></a> <br>
@@ -298,7 +299,7 @@
 <!-- end 顶部导航栏 -->
 
 <iframe src="./pages/zhaopinxinxi/list.html" id="iframe" frameborder="0" width="100%" height="100%"
-        ></iframe>
+></iframe>
 <div id="tabbar" class="tabbar"
      :style='{"borderColor":"rgba(255, 255, 255, 0.3)","backgroundColor":"#009688","borderRadius":"0","borderWidth":"0","borderStyle":"solid"}'
      style="position: relative;">
@@ -334,6 +335,42 @@
 
 </div>
 
+<div class="login_layer" style="display: none;">
+    <div id="componseLeft">
+        <img src="https://www.ittest008.com/media/img/%E4%BA%91%E6%95%B0%E6%99%BA%E5%AD%A6%E5%A0%82-logo.png" alt=""
+             class="pass-form-logo">
+        <br>
+        <img src="https://fileres.m.tbkt.cn/special_qrimg/2023/03/22/jWT2.png" alt="" class="logo_qr">
+        <p class="left_text">请使用微信扫码登录</p>
+    </div>
+    <div id="componseRight">
+        <p class="login-type-tab">
+            <span class="switch-item active">账号登录</span>
+            <span class="switch-item ">短信登录</span>
+        </p>
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="text" name="phone"  lay-verify="title" autocomplete="new-password" placeholder="手机号"
+                           class="layui-input phone">
+                    <i class="layui-icon pass-clearbtn pass-phone" onclick="empty_input('phone')">&#x1006;</i>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="password" name="password" lay-verify="title" autocomplete="new-password" placeholder="密码"
+                           class="layui-input password">
+                    <i class="layui-icon pass-clearbtn pass-password" onclick="empty_input('password')">&#x1006;</i>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <a type="button" class="layui-btn layui-btn-normal go_login">登陆</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 <script src="/media/js/jquery-1.11.3.min.js"></script>
 <script src="/media/layui-v2.7.6/layui/layui.js"></script>
@@ -378,7 +415,7 @@
                 return (0.5 - Math.random())
             })
             this.city = localStorage.getItem("city")
-
+            // this.login_layer()
         },
         methods: {
             jump(url) {
@@ -406,6 +443,15 @@
                     },
                     //content为弹出层内容
                     content: $("#city_list").html()
+                });
+            },
+            login_layer() {
+                layer.open({
+                    type: 1,
+                    shade: 0.5,
+                    area: ['800px', '325px'],
+                    content: $(".login_layer").html(),
+                    title: ''
                 });
             },
             link_me() {
@@ -445,8 +491,27 @@
             }
         }
     });
-
+    function empty_input(elem) {
+        $(`.${elem}`).val('')
+        $(`.pass-${elem}`).hide()
+    }
     layui.use(['layer', 'element', 'carousel', 'laypage', 'jquery', 'laydate'], function () {
+        $(".phone").bind("input propertychange",function(e){
+            //获取input输入的值
+            if (e.delegateTarget.value){
+                $('.pass-phone').show()
+            }else{
+                $('.pass-phone').hide()
+            }
+          });
+        $(".password").bind("input propertychange",function(e){
+            //获取input输入的值
+            if (e.delegateTarget.value){
+                $('.pass-password').show()
+            }else{
+                $('.pass-password').hide()
+            }
+          });
         $.get('/user/info/?token=' + localStorage.getItem('Token'), function (res) {
             if (!res.data.user) {
                 $(".user").hide()

@@ -1,0 +1,113 @@
+img.pass-form-logo {
+    line-height: 46px;
+    margin: 25px;
+    width: 200px;
+}
+
+img.logo_qr {
+    width: 150px;
+    margin-left: 51px;
+}
+
+#componseLeft {
+    float: left;
+    border-right: 1px solid #eee;
+    height: 325px;
+}
+
+#componseLeft .left_text {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 17px;
+}
+
+#componseRight {
+    float: right;
+    width: 548px;
+}
+
+.layui-layer-setwin .layui-layer-close2 {
+    right: -12px !important;
+    top: -13px !important;
+}
+
+#componseRight .login-type-tab {
+    font-size: 18px;
+    line-height: 18px;
+    font-weight: 300;
+    margin-left: 50px;
+    margin-top: 33px;
+}
+#componseRight .switch-item {
+    cursor: pointer;
+}
+#componseRight .switch-item.active {
+    color: #222;
+    font-weight: 600;
+}
+#componseRight .pass-clearbtn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    height: 16px;
+    width: 16px;
+    z-index: 100;
+    display: none;
+    cursor: pointer;
+}
+#componseRight .pass-clearbtn:hover{
+   font-weight: 600;
+}
+.login-type-tab .switch-item.active:last-child {
+    margin-left: 53px;
+    position: relative;
+    left: -21px;
+}
+.login-type-tab .switch-item:last-child {
+    position: relative;
+    left: 21px;
+}
+
+.login-type-tab .switch-item.active::after {
+    content: '';
+    display: inline-block;
+    height: 2px;
+    width: 63px;
+    position: absolute;
+    top: 55px;
+    background: #4e6ef2;
+    border-radius: 1px;
+    left: 306px;
+}
+.layui-layer {
+    border-radius: 14px !important;
+}
+.go_login{
+    width: 422px;
+    height: 45px;
+    border-radius: 16px;
+    background: #4e6ef2;
+    box-shadow: 0 6px 16px 0 rgba(78, 111, 242, 0.3);
+    font-size: 17px;
+    font-weight: 800;
+}
+.go_login:hover{
+    background: #4490f7;
+}
+
+.go_login:hover{
+    background-color: #4662d9;
+}
+#componseRight .layui-form{
+    position: relative;
+    top: 46px;
+    left: -62px;
+}
+#componseRight .layui-input{
+    border-radius: 10px;
+    height: 42px;
+}
+#componseRight .layui-input:focus, .layui-textarea:focus{
+    border-color: #488ee7 !important;
+    box-shadow: 0  0  3px rgba(78, 110, 242, .2)!important;
+}
