@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 import json
 import os
+import time
+
 from util.configread import config_read
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -97,7 +99,7 @@ SESSION_COOKIE_SECURE = False
 SESSION_COOKIE_HTTPONLY = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = False
-
+SITE_MEDIA = int(time.time())
 ROOT_URLCONF = 'dj2.urls'
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
 TEMPLATES = [
