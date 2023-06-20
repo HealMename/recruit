@@ -204,7 +204,6 @@ def paper(request):
         q['type'] = str(q['type'])
         q['level_name'] = level_name[str(q['level'])]
         q['level'] = str(q['level'])
-        q['sid'] = str(q['sid'])
         q['sid_name'] = sid_name[q['sid']]
         q['add_time'] = trancate_date(q['add_time'])
     data = Struct()

@@ -37,12 +37,18 @@ import user_test_det from '@/views/modules/question/user_test_det'
 import verify from '@/views/modules/verify/index'
 import verify_det from '@/views/modules/verify/det'
 import subjects from '@/views/modules/subjects/index'
+import ModuleList from '@/views/modules/system/ModuleList'
 //2.配置路由   注意：名字
 const routes = [{
     path: '/index',
     name: '首页',
     component: Index,
-    children: [
+    children: [{
+        path: '/module/list',
+        name: '模块管理',
+        component: ModuleList,
+        meta: {icon: '', title: 'center'}
+    },
         {
         path: '/subjects',
         name: '科目管理',

@@ -61,7 +61,8 @@ def index(request):
         # 登录验证码
         role = request.QUERY.get('type')  # 角色
         type_ = ROLE_ID[role]
-        if not get_user_id(phone, type_):
+        user_id, _ = get_user_id(phone, type_)
+        if not user_id:
             return ajax.ajax_fail(message='账号不存在')
 
     if code_id in [1, 2, 3]:

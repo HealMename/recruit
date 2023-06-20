@@ -345,27 +345,59 @@
     </div>
     <div id="componseRight">
         <p class="login-type-tab">
-            <span class="switch-item active">账号登录</span>
-            <span class="switch-item ">短信登录</span>
+            <span class="switch-item active" onclick="checkout_login(this, 1)">账号登录</span>
+            <span class="switch-item " onclick="checkout_login(this, 2)">短信登录</span>
         </p>
         <form class="layui-form" action="">
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <input type="text" name="phone"  lay-verify="title" autocomplete="new-password" placeholder="手机号"
-                           class="layui-input phone">
-                    <i class="layui-icon pass-clearbtn pass-phone" onclick="empty_input('phone')">&#x1006;</i>
+            <!-- 密码登录-->
+            <div class="password_login" >
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="phone" lay-verify="title" autocomplete="new-password" placeholder="手机号"
+                               class="layui-input phone">
+                        <i class="layui-icon pass-clearbtn pass-phone" onclick="empty_input('phone')">&#x1006;</i>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="password" name="password" lay-verify="title" autocomplete="new-password"
+                               placeholder="密码"
+                               class="layui-input password">
+                        <i class="layui-icon pass-clearbtn pass-password" onclick="empty_input('password')">&#x1006;</i>
+                        <a href="javascript:" class="pass-register">立即注册</a>
+                        <a href="javascript:" class="pass-fgtpwd">忘记密码？</a>
+                    </div>
+                </div>
+            </div>
+            <!-- 验证码登录-->
+            <div class="code_login" style="display: none;">
+                <p class="code_title">验证即登录，未注册将自动创建帐号</p>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+
+                        <input type="text" name="phone" lay-verify="title" autocomplete="new-password" placeholder="手机号"
+                               class="layui-input phone" >
+                        <i class="layui-icon pass-clearbtn pass-phone" onclick="empty_input('phone')">&#x1006;</i>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="code" lay-verify="title" autocomplete="new-password"
+                               placeholder="验证码"
+                               class="layui-input password">
+                        <a href="javascript:" class="pass-item-timer" onclick="send_code()">发送验证码</a>
+                        <i class="layui-icon pass-clearbtn pass-code" onclick="empty_input('code')">&#x1006;</i>
+                    </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <input type="password" name="password" lay-verify="title" autocomplete="new-password" placeholder="密码"
-                           class="layui-input password">
-                    <i class="layui-icon pass-clearbtn pass-password" onclick="empty_input('password')">&#x1006;</i>
+                    <a type="button" class="layui-btn layui-btn-normal go_login" onclick="login()">登录</a>
                 </div>
             </div>
             <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <a type="button" class="layui-btn layui-btn-normal go_login">登陆</a>
+                <div class="layui-input-block ">
+                    <p class="tang-pass-sms-agreement">阅读并接受 <a href="javascript:">用户协议</a> 和 <a href="javascript:">隐私政策</a></p>
                 </div>
             </div>
         </form>
@@ -392,7 +424,7 @@
 
     })
     var vue1 = new Vue({el: '#tabbar'})
-
+    var login_type = 1;
     var vue = new Vue({
         el: '#header',
         data: {
@@ -415,7 +447,7 @@
                 return (0.5 - Math.random())
             })
             this.city = localStorage.getItem("city")
-            // this.login_layer()
+            this.login_layer()
         },
         methods: {
             jump(url) {
@@ -463,6 +495,7 @@
                 });
 
             },
+
             checkout_user_type(type, role, tableName) {
                 // 切换身份
                 $.get(`/django7681v/checkout_user_type/?type=${type}`, function (res) {
@@ -491,27 +524,43 @@
             }
         }
     });
+
     function empty_input(elem) {
         $(`.${elem}`).val('')
         $(`.pass-${elem}`).hide()
     }
+    // 切换登录方式
+    function checkout_login(elem, type){
+        login_type = type
+        $(elem).siblings().removeClass('active')
+        $(elem).addClass('active')
+        if (type === 1){
+            $(elem).siblings().removeClass('active2')
+            $('.password_login').show()
+            $('.code_login').hide()
+        }else{
+            $(elem).addClass('active2')
+            $('.password_login').hide()
+            $('.code_login').show()
+        }
+    }
     layui.use(['layer', 'element', 'carousel', 'laypage', 'jquery', 'laydate'], function () {
-        $(".phone").bind("input propertychange",function(e){
+        $(".phone").bind("input propertychange", function (e) {
             //获取input输入的值
-            if (e.delegateTarget.value){
+            if (e.delegateTarget.value) {
                 $('.pass-phone').show()
-            }else{
+            } else {
                 $('.pass-phone').hide()
             }
-          });
-        $(".password").bind("input propertychange",function(e){
+        });
+        $(".password").bind("input propertychange", function (e) {
             //获取input输入的值
-            if (e.delegateTarget.value){
+            if (e.delegateTarget.value) {
                 $('.pass-password').show()
-            }else{
+            } else {
                 $('.pass-password').hide()
             }
-          });
+        });
         $.get('/user/info/?token=' + localStorage.getItem('Token'), function (res) {
             if (!res.data.user) {
                 $(".user").hide()
@@ -547,7 +596,42 @@
 
 
     });
+    function login() {
+        var phone = ''
+        var password = ''
+        if (login_type === 1){
+            phone = $('.phone:eq(2)').val()
+            password = $('.password:eq(2)').val()
+        }else{
+            phone = $('.phone:last').val()
+            password = $('.password:last').val()
+        }
 
+        if (!phone){
+            return msg_fail('请输入手机号')
+        }
+        console.log(phone)
+        console.log(password)
+        if (login_type === 1 && !password){
+            return msg_fail('请输入密码')
+        }else if (login_type === 2 && !password){
+            return msg_fail('请输入验证码')
+        }
+        $.post('/tea/login/', {username: phone, password: password, login_type:login_type, role:'出题专家'}, function (res) {
+            if (res.msg === '正常'){
+                msg_ok("登录成功", function () {
+                  localStorage.setItem("Token", res.token);
+                  localStorage.setItem("userId", res.id);
+                  localStorage.setItem("role", '用户');
+                  localStorage.setItem("sessionTable", 'yonghu');
+                  localStorage.setItem("adminName", phone);
+                  window.location.href = `/`
+                })
+            }else{
+                return msg_fail(res.message)
+            }
+        })
+    }
     $('#username').mousemove(function () {
 
         $('.register').show()
@@ -584,7 +668,31 @@
         $('.register').hide()
         $('.logins').hide()
     })
+    var exit_count = 60;
+    // 发送短信
+    function send_code() {
+        var phone = $('.phone:last').val()
+        if (exit_count === 60) {
+            if (!phone) {
+                msg_fail('请输入手机号！')
+                return
+            }
+            $.post('/sms/send/', {phone: phone, code_id: 2, type: "用户"}, function (res) {
+                msg_ok("验证码已发送，2分钟内有效。")
+            })
 
+            var inter_exit = window.setInterval(function () {
+                exit_count--;
+                if (exit_count <= 0) {
+                    exit_count = 60;
+                    window.clearInterval(inter_exit);
+                    $(".pass-item-timer").text('发送验证码')
+                } else {
+                    $(".pass-item-timer").text(exit_count + 's')
+                }
+            }, 1000);
+        }
+    }
     function im() {
         var token = localStorage.getItem('Token');
         window.open(`https://www.ittest008.com/im/#/login?user_id=${token}`)

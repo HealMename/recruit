@@ -11,6 +11,8 @@ from libs.utils.common import Struct, render_template, num_to_ch
 from main.users_model import users
 from util.auth import Auth
 
+role_dict = {"管理员": 1, "出题专家": 2, "面试官": 3, "用户": 4, "公司": 5}
+
 
 def checkout_user_type(request):
     """
@@ -82,3 +84,19 @@ def gongsi_login(req_dict):
 
     req_dict['id'] = datas[0].get('id')
     return Auth.authenticate(Auth, gongsi, req_dict)
+
+
+def menu_list(request):
+    """获取权限列表"""
+    type_ = request.QUERY.get('role')
+    role = role_dict[type_]
+    sql = f"""
+        select m.* from recruit.sys_m_module m
+        join recruit.sys_m_role_module ro on ro.module_id =m.id and ro.role_id ={role}
+    """
+    data = db.default.fetchall_dict(sql)
+    parent_obj = [x for x in data if x['parent_id'] == 0]
+    for obj in parent_obj:
+        obj['child'] = [x for x in data if x['parent_id'] == obj['id']]
+    return ajax.ajax_ok(parent_obj)
+

@@ -19,8 +19,8 @@ export default {
     };
   },
   mounted() {
-    let menus = menu.list();
-    this.menuList = menus;
+    // let menus = menu.list();
+    // this.menuList = menus;
     this.role = this.$storage.get("role");
   },
   created() {

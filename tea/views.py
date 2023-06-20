@@ -1,16 +1,13 @@
 import time
 
-from django.http import JsonResponse
-from django.shortcuts import render
 
 from dj2.common import get_user_id
 from libs.utils.auth_token import get_random_string
 from libs.utils.redis_com import rd
 from main.models import yonghu, gongsi
-from util.codes import *
 
 from libs.utils import ajax, db, auth_token
-from libs.utils.common import Struct, render_template, num_to_ch
+from libs.utils.common import Struct, render_template
 from main.users_model import users
 from util.auth import Auth
 
@@ -29,7 +26,8 @@ def add_tea(request):
         code = args.pop('code', 0)
         args.pop('token', '')
         phone_number = args['phone_number']
-        if get_user_id(phone_number, 2, id_):
+        user_id, _ = get_user_id(phone_number, 2, id_)
+        if user_id:
             return ajax.ajax_fail(message='手机号已注册教师身份')
         if not verify_(code, phone_number, 3):
             return ajax.ajax_fail(message='验证码错误')
@@ -90,15 +88,21 @@ def login(request):
     if request.method == 'POST':
         args = {k: v for k, v in request.QUERY.items()}
         role = args.pop("role")
+        login_type = int(args.pop("login_type", 2))  # 1 密码登陆 2验证码登陆
         args['type'] = role_dict[role]
         phone = args['username']
         code = args['password']
         type_ = args['type']
-        user_id = get_user_id(phone, type_)
+        user_id, password = get_user_id(phone, type_)
         if not user_id:
             return ajax.ajax_fail(message='账号不存在')
-        if not verify_(code, phone, 2):
-            return ajax.ajax_fail(message='验证码错误')
+        if login_type == 1:
+            if code != password:
+                if not auth_token.verify_password(code, password):
+                    return ajax.ajax_fail(message='密码错误')
+        else:
+            if not verify_(code, phone, 2):
+                return ajax.ajax_fail(message='验证码错误')
         args = {'id': user_id}
         args['id'] = user_id
         if type_ in [1, 2, 3]:

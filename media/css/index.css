@@ -61,23 +61,80 @@ img.logo_qr {
 .login-type-tab .switch-item.active:last-child {
     margin-left: 53px;
     position: relative;
-    left: -21px;
+    left: -31px;
+}
+.code_title{
+    position: relative;
+    left: 112px;
+    top: -20px;
+    color: #858585;
+    font-weight: 400;
+}
+.pass-item-timer:hover{
+    color: #4662d9;
+}
+.pass-item-timer{
+    text-align: center;
+        display: block;
+    position: absolute;
+    right: 14px;
+    top: 16px;
+    width: 100px;
+    font-size: 14px;
+    line-height: 12px;
+    transition: .3s;
+    color: #4e6ef2;
+    border: 0;
+    border-left: 1px solid #dedede;
+    background-color: #fff;
+    cursor: pointer;
+    z-index: 100;
+}
+.tang-pass-sms-agreement{
+    text-align: center;
+}
+.tang-pass-sms-agreement a{
+    color: #4e6ef2;
+}
+.tang-pass-sms-agreement a:hover{
+    color: #4662d9;
 }
 .login-type-tab .switch-item:last-child {
     position: relative;
     left: 21px;
 }
-
+.pass-fgtpwd{
+    text-decoration: none;
+    color: #4e6ef2;
+    float: right;
+}
+.pass-register{
+    text-decoration: none;
+    color: #4e6ef2;
+    float: left;
+    margin-left: 5px;
+}
 .login-type-tab .switch-item.active::after {
     content: '';
     display: inline-block;
     height: 2px;
     width: 63px;
     position: absolute;
-    top: 55px;
+    top: 56px;
     background: #4e6ef2;
     border-radius: 1px;
     left: 306px;
+}
+.login-type-tab .switch-item.active2::after {
+    content: '';
+    display: inline-block;
+    height: 2px;
+    width: 63px;
+    position: absolute;
+    top: 24px;
+    background: #4e6ef2;
+    border-radius: 1px;
+    left: 4px;
 }
 .layui-layer {
     border-radius: 14px !important;

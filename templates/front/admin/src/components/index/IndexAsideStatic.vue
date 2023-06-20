@@ -1,7 +1,7 @@
 <template>
   <el-aside class="index-aside" width="210px">
     <div class="index-aside-inner menulist">
-      <div v-for="item in menuList" :key="item.roleName" v-if="role===item.roleName" class="menulist-item">
+      <div class="menulist-item">
 
         <el-menu :mode="2 == 1? 'horizontal':'vertical'" :unique-opened="true" class="el-menu-demo" default-active="0">
           <el-menu-item index="0" @click="menuHandler('')"><i v-if="true" class="el-icon-menu el-icon-s-home"/>首页
@@ -14,13 +14,14 @@
             <el-menu-item :index="1-1" @click="menuHandler('updatePassword')">修改密码</el-menu-item>
             <el-menu-item :index="1-2" @click="menuHandler('center')">个人信息</el-menu-item>
           </el-submenu>
-          <el-submenu v-for=" (menu,index) in item.backMenu" :key="menu.menu" :index="index+2+''" style="border-color: rgb(50, 65, 87) !important">
+          <el-submenu v-for=" (menu,index) in menuList" :key="menu.id" :index="index+2+''"
+                      style="border-color: rgb(50, 65, 87) !important">
             <template slot="title">
               <i v-if="true" class="el-icon-menu" :class="icons[index]"/>
-              <span>{{ menu.menu }}</span>
+              <span>{{ menu.mod_name }}</span>
             </template>
             <el-menu-item v-for=" (child,sort) in menu.child" :key="sort" :index="(index+2)+'-'+sort"
-                          @click="menuHandler(child.tableName)">{{ child.menu }}
+                          @click="menuHandler(child.mod_path)">{{ child.mod_name }}
             </el-menu-item>
           </el-submenu>
         </el-menu>
@@ -84,28 +85,18 @@ export default {
     }
   },
   mounted() {
-    const menus = menu.list()
-    if (menus) {
-      this.menuList = menus
-    } else {
-      let params = {
-        page: 1,
-        limit: 1,
-        sort: 'id',
+    let params = {
+        role: this.$storage.get('role'),
       }
       this.$http({
-        url: "menu/list",
+        url: `${DOMAIN_API_SYS}/django7681v/menu_list/?role=${this.$storage.get('role')}`,
         method: "get",
         params: params
-      }).then(({
-                 data
-               }) => {
-        if (data && data.code === 0) {
-          this.menuList = JSON.parse(data.data.list[0].menujson);
+      }).then(({data}) => {
+        this.menuList = data.data;
+        console.log(this.menuList)
           this.$storage.set("menus", this.menuList);
-        }
       })
-    }
     this.role = this.$storage.get('role')
   },
   created() {
@@ -326,7 +317,7 @@ export default {
       border-radius: 0;
       border-width: 0 0 1px 0;
       border-style: solid;
-      border-color:rgba(218, 218, 218, 0.15) !important;
+      border-color: rgba(218, 218, 218, 0.15) !important;
       background-color: rgb(50, 65, 87) !important;
       box-shadow: 0 0 6px rgba(255, 255, 255, 0);
       box-sizing: initial;
@@ -413,7 +404,7 @@ export default {
           border-width: 0;
           border-style: solid;
           border-color: rgba(0, 0, 0, 0);
-          background-color: #409eff!important;
+          background-color: #409eff !important;
           box-shadow: 0 0 6px rgba(30, 144, 255, 0);
           text-align: left;
         }
@@ -430,7 +421,7 @@ export default {
           border-width: 0;
           border-style: solid;
           border-color: rgba(0, 0, 0, 0);
-          background-color: #409eff!important;
+          background-color: #409eff !important;
           box-shadow: 0 0 6px rgba(30, 144, 255, 0);
           text-align: left;
         }
@@ -485,7 +476,7 @@ export default {
   border-width: 0;
   border-style: solid;
   border-color: rgba(0, 0, 0, 0);
-  background-color: #409eff!important;
+  background-color: #409eff !important;
   box-shadow: 0 0 6px rgba(30, 144, 255, 0);
   text-align: left;
 }
