@@ -35,8 +35,7 @@ class Auth(object):
         msg = {'code': normal_code, 'msg': mes.normal_code, 'data': {}}
         # django的header被处理过了
         token = token or request.QUERY.get("token") \
-                or request.META.get('HTTP_TOKEN') \
-                or request.COOKIES.get('token')
+                or request.META.get('HTTP_TOKEN')
         if token and token != "null":
             user_info = auth_token.decode_token(token)
             if not user_info:

@@ -105,8 +105,7 @@ class Xauth(MiddlewareMixin):
                 '/sms/send/'
             ]  # 免认证list
             token = request.QUERY.get("token") \
-                    or request.META.get('HTTP_TOKEN') \
-                    or request.COOKIES.get('token')
+                    or request.META.get('HTTP_TOKEN')
             if fullPath not in post_list and "register" not in fullPath and "login" not in fullPath \
                     and request.path not in post_list or (token and len(token) > 10):  # 注册时不检测token。
                 result = Auth.identify(Auth, request, token)
