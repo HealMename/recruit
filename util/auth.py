@@ -34,16 +34,23 @@ class Auth(object):
 
         msg = {'code': normal_code, 'msg': mes.normal_code, 'data': {}}
         # django的header被处理过了
-        token = token or request.QUERY.get("token") \
-                or request.META.get('HTTP_TOKEN')
+        token = token or request.QUERY.get("token") or request.META.get('HTTP_TOKEN')
+        print(token)
         if token and token != "null":
             user_info = auth_token.decode_token(token)
+            print(user_info)
             if not user_info:
                 msg['code'] = username_error_code
                 msg['msg'] = '找不到该用户信息'
                 result = msg
                 return result
             tablename = user_info.get('tablename')
+            if tablename in ['2', '3']:
+                tablename = 'users'
+            elif tablename in ['1']:
+                tablename = 'yonghu'
+            else:
+                tablename = 'gongsi'
             datas = None
             allModels = apps.get_app_config('main').get_models()
             for model in allModels:

@@ -109,7 +109,7 @@ class Xauth(MiddlewareMixin):
             if fullPath not in post_list and "register" not in fullPath and "login" not in fullPath \
                     and request.path not in post_list or (token and len(token) > 10):  # 注册时不检测token。
                 result = Auth.identify(Auth, request, token)
-
+                print(result)
                 if result.get('code') != normal_code:
                     print('jwt auth fail')
                     return JsonResponse(result)
