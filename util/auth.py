@@ -49,7 +49,7 @@ class Auth(object):
                 tablename = 'users'
             elif tablename in ['1']:
                 tablename = 'yonghu'
-            else:
+            elif tablename in ['4']:
                 tablename = 'gongsi'
             datas = None
             allModels = apps.get_app_config('main').get_models()
