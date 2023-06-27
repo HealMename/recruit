@@ -117,7 +117,7 @@ export default {
     // 获取项目空间
     get_namespace: function () {
       var thsi = this;
-      this.$.get(DOMAIN_API_SYS + "/k8/namespace_api/", function (res) {
+      this.$.get(DOMAIN_API_SYS + "/s8k/namespace_api/", function (res) {
         thsi.namespace = res.data;
       })
     },

@@ -83,7 +83,7 @@ urlpatterns.extend([
 ])
 
 urlpatterns += [
-    url(r'k8/', include('k8s.urls')),
+    url(r's8k/', include('k8s.urls')),
     url(r'tea/', include('tea.urls')),
     url(r'user/', include('user.urls')),
     url(r'interviewer/', include('interviewer.urls')),
