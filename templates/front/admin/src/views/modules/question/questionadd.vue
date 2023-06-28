@@ -73,6 +73,25 @@
 <script>
 export default {
   data() {
+    var checkdo_time = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('请输入做题时间'));
+        }
+        setTimeout(() => {
+          console.log(value)
+          if (!Number.isInteger(value)) {
+            callback(new Error('请输入数字值'));
+          } else {
+            if (value > 100) {
+              callback(new Error('做题时间必须控制在1至100分钟'));
+            } else if (value <= 0){
+              callback(new Error('做题时间必须控制在1至100分钟'));
+            }else {
+              callback();
+            }
+          }
+        }, 1000);
+      };
     return {
       loading: false,
       role: this.$storage.get("role"),
@@ -88,16 +107,20 @@ export default {
         content: "",
         desc: "",
         size: "1",
+        status: "0",
         add_user: this.$storage.get("userId"),
-
       },
       rules: {
-        do_time: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
-        version: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
-        title: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
-        do_points: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
-        desc: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
-        content: [{ required: true, message: '请输入做题时间', trigger: 'blur' }],
+        do_time: [{ validator: checkdo_time, trigger: 'blur' }],
+        version: [{ required: true, message: '请输入版本', trigger: 'blur' },
+        { min: 1, max: 5, message: '长度在 1 到 5 个字符', trigger: 'blur' }],
+        title: [{ required: true, message: '请输入题目标题', trigger: 'blur' },
+        { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }],
+        do_points: [{ required: true, message: '请输入考点', trigger: 'blur' },
+        { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }],
+        desc: [{ required: true, message: '请输入题目描述', trigger: 'blur' },
+        { min: 1, max: 200, message: '长度在 1 到 200 个字符', trigger: 'blur' }],
+        content: [{ required: true, message: '请输入题目详情', trigger: 'blur' }],
       }
 
     }

@@ -76,6 +76,9 @@
         .mp_accounts_type_item .mp_accounts_type_desc {
     color: #9a9a9a;
 }
+        .layui-btn-disabled:hover{
+            cursor:no-drop!important;
+        }
     </style>
     <div id="wrapper">
         <div id="main">
@@ -113,13 +116,13 @@
                                 <dd class="mp_accounts_type_desc">适合快速提升个人技能</dd>
                             </dl>
                         </a></li>
-                        <li class="mp_accounts_type_item"><a href="javascript:" onclick="go_register(1)">
+                        <li class="mp_accounts_type_item  layui-btn-disabled"><a href="javascript:" onclick="go_register(4)">
                             <dl>
                                 <dt class="mp_accounts_type_title subscribe">
                                     <span>企业入驻</span>
                                 </dt>
                                 <dd class="mp_accounts_type_desc">具有使用实操环境培训及模拟面试的能力</dd>
-                                <dd class="mp_accounts_type_desc">适合快速提升个人技能</dd>
+                                <dd class="mp_accounts_type_desc" style="color: red;">暂未开放</dd>
                             </dl>
                         </a></li>
                     </ul>

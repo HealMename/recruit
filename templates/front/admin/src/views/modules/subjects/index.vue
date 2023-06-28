@@ -64,23 +64,23 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="total">
       </el-pagination>
-<el-dialog title="学科" :visible.sync="dialogFormVisible">
-      <el-form :model="subject">
-        <el-form-item label="名称" label-width="80px">
-          <el-input v-model="subject.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="项目空间" label-width="80px">
-          <el-select v-model="subject.namespace" placeholder="请选择项目空间">
-            <el-option :label="item.name" :value="item.name" v-for="item in namespace"
-                  v-bind:key="item.name"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="save()">确 定</el-button>
-      </div>
-    </el-dialog>
+      <el-dialog title="学科" :visible.sync="dialogFormVisible">
+        <el-form ref="subject" :model="subject" :rules="rules">
+          <el-form-item label="名称" label-width="80px" prop="name">
+            <el-input v-model="subject.name" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="项目空间" label-width="80px">
+            <el-select v-model="subject.namespace" placeholder="请选择项目空间">
+              <el-option :label="item.name" :value="item.name" v-for="item in namespace"
+                         v-bind:key="item.name"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="save('subject')">确 定</el-button>
+        </div>
+      </el-dialog>
     </el-col>
 
   </el-row>
@@ -91,7 +91,7 @@
 export default {
   data() {
     return {
-      dialogFormVisible:false,
+      dialogFormVisible: false,
       loading: false,
       currentPage: 1,
       total: 0,
@@ -102,6 +102,10 @@ export default {
         id: '',
         status: '',
         type: '',
+      },
+      rules: {
+        name: [{required: true, message: '请输入名称', trigger: 'blur'},
+          {min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur'}]
       },
       tableData: []
     }
@@ -150,12 +154,20 @@ export default {
         thsi.subject = res.data;
       })
     },
-    save(){
+    save: function (formName) {
       var thsi = this;
-      this.$http.post(DOMAIN_API_SYS + "/tea/subject/add/", thsi.subject).then(res => {
-        thsi.dialogFormVisible = false;
-        this.onSubmit()
-      })
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$http.post(DOMAIN_API_SYS + "/tea/subject/add/", thsi.subject).then(res => {
+            thsi.dialogFormVisible = false;
+            this.onSubmit()
+          })
+        } else {
+          return false;
+        }
+      });
+
+
     },
     delQ(id_, status) {
       this.$confirm('确定执行吗, 是否继续?', '提示', {
