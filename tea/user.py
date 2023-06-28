@@ -101,11 +101,7 @@ def get_user_test_det(request):
         q['level'] = level_name[str(q['level'])]
         q['size'] = size_name[str(q['size'])]
         q.content = json.loads(q.content)
-        content = ""
-        for x in q.content:
-            content += str(x['msg']).replace('\u0007', '').replace(
-                '\r\n', r'<br \>')
-        q.content = content
+
     return ajax.ajax_ok(data[:])
 
 

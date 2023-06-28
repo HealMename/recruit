@@ -79,7 +79,6 @@ def get_paper_question(request):
         q['level_name'] = level_name[str(q['level'])]
         q['size'] = str(q['size'])
         q['size_name'] = size_name[str(q['size'])]
-        q['urls'] = [{'value': x} for x in json.loads(q.pop('link_url'))]
     return ajax.ajax_ok(data)
 
 
@@ -161,8 +160,6 @@ def question_add(request):
     args.pop('level_name', '')
     args.pop('size_name', '')
     args.pop('sid_name', '')
-    urls = args.pop('urls')
-    args.link_url = json.dumps([x['value'] for x in urls])
     if not id_:
         db.default.question.create(add_time=now, **args)
     else:
@@ -229,7 +226,6 @@ def paper_det(request):
         q['sid'] = str(q['sid'])
         q['level'] = str(q['level'])
         q['size'] = str(q['size'])
-        q['urls'] = [{'value': x} for x in json.loads(q.pop('link_url'))]
     data = Struct()
     data.page_data = page_data
     d_paper = db.default.paper.get(id=paper_id)

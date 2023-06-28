@@ -17,17 +17,14 @@
 
           <el-descriptions-item label="详情">
 
-            <el-button type="text" @click="dialogVisible = true;content=item.content;" style="padding-top: 5px;">查看详情</el-button>
+            <el-button type="text" @click="dialogVisible = true;content=item.content;initTerm();" style="padding-top: 5px;">查看详情</el-button>
             <el-dialog
                 title="详情"
                 :visible.sync="dialogVisible"
                 width="50%">
-              <el-card class="box-card dia-card" >
-                <div v-html="content"></div>
-              </el-card>
+              <div id="xterm" class="xterm" ></div>
               <span slot="footer" class="dialog-footer">
-                  <el-button @click="dialogVisible = false">取 消</el-button>
-                  <el-button  @click="dialogVisible = false">确 定</el-button>
+                  <el-button  @click="dialogVisible = false;">关 闭</el-button>
                 </span>
             </el-dialog>
           </el-descriptions-item>
@@ -40,10 +37,15 @@
 </template>
 
 <script>
+import 'xterm/css/xterm.css'
+import { Terminal } from 'xterm'
+import { FitAddon } from 'xterm-addon-fit'
 export default {
+
   data() {
     return {
       content: [],
+      term: '',
       dialogVisible: false,
       loading: false,
       id: this.$route.params.id,
@@ -52,11 +54,29 @@ export default {
   },
   mounted() {
 
+
   },
   created() {
     this.onSubmit()
   },
   methods: {
+    initTerm() {
+        var term = new Terminal({
+        fontSize: 14,
+        cursorBlink: true,
+        rows:24
+      });
+      this.$nextTick(()=>{
+        if (!this.term){
+          this.term = term;
+          term.open(document.getElementById('xterm'));
+        }
+        this.content.forEach(el=>{
+          term.write(el.msg)
+        })
+
+      })
+    },
     onSubmit: function () {
       this.loading = true;
       this.$http.post(DOMAIN_API_SYS + "/tea/user/user_test_det/", {id: this.id}).then(res => {
@@ -84,5 +104,9 @@ export default {
   }
   .dia-card::-webkit-scrollbar {
       display: none; /* Chrome Safari */
+  }
+
+  .el-dialog__wrapper{
+    overflow: hidden;
   }
 </style>

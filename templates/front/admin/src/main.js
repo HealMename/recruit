@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from '@/App.vue'
 // element ui 完全引入
+
 import ElementUI from 'element-ui'
 import '@/assets/css/element-variables.scss'
 import '@/assets/css/style.scss'
@@ -19,6 +20,9 @@ import http from '@/utils/http.js'
 // 基础配置
 import base from '@/utils/base'
 // 工具类
+import Terminal from 'vue-web-terminal'
+
+
 import { isAuth, getCurDate, getCurDateTime } from '@/utils/utils'
 // storage 封装
 import storage from "@/utils/storage";
@@ -58,7 +62,8 @@ Vue.prototype.$base = base.get()
 Vue.prototype.$project = base.getProjectName()
 Vue.prototype.$storage = storage
 Vue.prototype.$api = api
-
+Vue.config.productionTip = false
+Vue.use(Terminal)
 Vue.prototype.$ = $
 // 判断权限方法
 Vue.prototype.isAuth = isAuth
