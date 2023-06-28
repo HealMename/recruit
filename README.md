@@ -1,4 +1,4 @@
-# it学霸
+# IT学霸
 - recruit
   - db
   - dj2

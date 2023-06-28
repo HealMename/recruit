@@ -9,7 +9,7 @@ const base = {
     },
     getProjectName(){
         return {
-            projectName: "it学霸"
+            projectName: "IT学霸"
         } 
     }
 }
