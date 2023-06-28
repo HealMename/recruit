@@ -215,7 +215,7 @@ def toudijilu_page(request):
                     params = request.session.get("params")
                     # 
                     break
-        print(req_dict)
+        req_dict['yonghuzhanghao'] = request.user.username
         msg['data']['list'], msg['data']['currPage'], msg['data']['totalPage'], msg['data']['total'], \
         msg['data']['pageSize']  =toudijilu.page(toudijilu, toudijilu, req_dict, request)
 

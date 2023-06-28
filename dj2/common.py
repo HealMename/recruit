@@ -4,7 +4,7 @@ from libs.utils import db
 def get_user_id(phone, type_, id_=0):
     """获取用户id"""
     where_sql = ''
-    if type_ in [1, 2, 3]:
+    if type_ in [1, 2, 3, 4]:
         if id_:
             where_sql += f" u.id != {id_}"
         sql = f"""

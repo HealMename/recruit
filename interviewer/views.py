@@ -111,14 +111,16 @@ def save_info(request):
             data.form = Struct()
             data.form.nickname = user_det.nickname
             data.form.phone = user_det.phone_number
-            data.form.imageUrl1 = user_media.front
-            data.form.imageUrl2 = user_media.back
+            if user_media:
+                data.form.imageUrl1 = user_media.front
+                data.form.imageUrl2 = user_media.back
+                data.form.ocr_front = json.loads(user_media.ocr_info_front)
+                data.form.ocr_back = json.loads(user_media.ocr_info_back)
             data.form.name = user_det.name
             data.form.number_id = user_det.number_id
             data.form.start_time = user_det.start_time
             data.form.end_time = user_det.end_time
-            data.form.ocr_front = json.loads(user_media.ocr_info_front)
-            data.form.ocr_back = json.loads(user_media.ocr_info_back)
+
             # 步骤 2
             data.school_list = []
             for obj in db.default.user_school_list.filter(user_id=user_id, status=1):

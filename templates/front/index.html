@@ -259,18 +259,18 @@
                     <a href="javascript:" id="login" class="menumain" @click="link_me()">联系我们</a> <br>
                 </li>
                 <li class='current right' v-if="!username">
-                    <a href="javascript:" id="register" class="menumain">注册</a>
-                    <div class="register" style="display: none">
-                        <p><a href="javascript:navPage('/pages/yonghu/register.html?tablename=yonghu')">个人注册</a></p>
-                        <p><a href="javascript:navPage('/tea/add/')">出题专家注册</a></p>
-                        <p><a href="javascript:navPage('/interviewer/add/')">面试官注册</a></p>
-                        <p><a href="javascript:navPage('/pages/gongsi/register.html?tablename=gongsi')">企业注册</a></p>
-                    </div>
+                    <a href="javascript:navPage('/tea/register_role/');layer.closeAll();" id="register" class="menumain">注册</a>
+{#                    <div class="register" style="display: none">#}
+{#                        <p><a href="javascript:navPage('/pages/yonghu/register.html?tablename=yonghu')">个人注册</a></p>#}
+{#                        <p><a href="javascript:navPage('/tea/add/')">出题专家注册</a></p>#}
+{#                        <p><a href="javascript:navPage('/interviewer/add/')">面试官注册</a></p>#}
+{#                        <p><a href="javascript:navPage('/pages/gongsi/register.html?tablename=gongsi')">企业注册</a></p>#}
+{#                    </div>#}
                 </li>
                 <li class='current right' v-if="!username">
                     <a href="javascript:" id="login" class="menumain" @click="login_layer()">登录</a> <br>
                 </li>
-                <li class='current right user'>
+                <li class='current right user' style="margin-top: 13px;">
                     <a href="/admin/#/index" id="userrole" class="menumain" target="_blank"></a> <br>
                 </li>
                 <li class='current right user'>
@@ -364,7 +364,7 @@
                                placeholder="密码"
                                class="layui-input password">
                         <i class="layui-icon pass-clearbtn pass-password" onclick="empty_input('password')">&#x1006;</i>
-                        <a href="javascript:" class="pass-register">立即注册</a>
+                        <a href="javascript:navPage('/tea/register_role/');layer.closeAll();" class="pass-register">立即注册</a>
                         <a href="javascript:" class="pass-fgtpwd">忘记密码？</a>
                     </div>
                 </div>
@@ -571,9 +571,10 @@
                 vue.username = res.nickname
                 vue.role = res.role
                 vue.id = res.id
+                vue.phone = res.username
                 $("#username").text(vue.username.replaceAll('"', ''))
                 $(".user").show()
-                $("#userrole").text(vue.role.replaceAll('"', ''))
+                $("#userrole").text(`${vue.phone.replaceAll('"', '').slice(0, 3)}****${vue.phone.replaceAll('"', '').slice(7, 11)}`)
             }
         })
 

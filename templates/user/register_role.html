@@ -1,0 +1,151 @@
+<!-- 注册角色选择 -->
+{% extends "base.html" %}
+{% block body %}
+    <style>
+        .title {
+            font-size: 25px;
+            margin-left: 100px;
+        }
+
+        .content {
+            width: 1400px;
+            height: 600px;
+            margin: 0 auto;
+        }
+
+        .desct {
+            text-align: center;
+            padding-top: 50px;
+            margin-bottom: 20px;
+            color: #9a9a9a;
+            font-size: 14px;
+
+        }
+
+        .mp_accounts_type_list {
+            overflow: hidden;
+        }
+
+        .mp_accounts_type_item {
+            border: 1px solid #E7E7EB;
+            border-radius: 3px;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            text-align: center;
+            width: 330px;
+            box-sizing: border-box;
+            float: left;
+            margin: 10px;
+        }
+
+        ul, ol {
+            padding-left: 0;
+            list-style-type: none;
+        }
+
+        .mp_register_bd {
+            width: 700px;
+            margin: 0 auto;
+        }
+
+        .mp_accounts_type_item a {
+            display: block;
+            padding: 25px 10px;
+        }
+
+        .mp_accounts_type_list a {
+            color: #222;
+            text-decoration: none;
+        }
+
+        .mp_accounts_type_item .mp_accounts_type_title {
+            font-size: 0;
+            height: 44px;
+            line-height: normal;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .mp_accounts_type_item .mp_accounts_type_title span {
+            font-size: 16px;
+            vertical-align: middle;
+        }
+        .mp_accounts_type_item:hover{
+            background: #E7E7EB;
+        }
+        .mp_accounts_type_item .mp_accounts_type_desc {
+    color: #9a9a9a;
+}
+    </style>
+    <div id="wrapper">
+        <div id="main">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>注册</legend>
+        </fieldset>
+            <div class="content">
+                <p class="desct">请选择注册身份</p>
+                <div class="mp_register_bd">
+                    <ul class="mp_accounts_type_list">
+                        <li class="mp_accounts_type_item"><a href="javascript:" onclick="go_register(1)">
+                            <dl>
+                                <dt class="mp_accounts_type_title subscribe">
+                                    <span>普通用户</span>
+                                </dt>
+                                <dd class="mp_accounts_type_desc">具有使用实操环境培训及模拟面试的能力</dd>
+                                <dd class="mp_accounts_type_desc">适合快速提升个人技能</dd>
+                            </dl>
+                        </a></li>
+                        <li class="mp_accounts_type_item"><a href="javascript:" onclick="go_register(2)">
+                            <dl>
+                                <dt class="mp_accounts_type_title subscribe">
+                                    <span>出题专家</span>
+                                </dt>
+                                <dd class="mp_accounts_type_desc">具有使用实操环境培训及模拟面试的能力</dd>
+                                <dd class="mp_accounts_type_desc">适合快速提升个人技能</dd>
+                            </dl>
+                        </a></li>
+                        <li class="mp_accounts_type_item"><a href="javascript:" onclick="go_register(3)">
+                            <dl>
+                                <dt class="mp_accounts_type_title subscribe">
+                                    <span>面试专家</span>
+                                </dt>
+                                <dd class="mp_accounts_type_desc">具有使用实操环境培训及模拟面试的能力</dd>
+                                <dd class="mp_accounts_type_desc">适合快速提升个人技能</dd>
+                            </dl>
+                        </a></li>
+                        <li class="mp_accounts_type_item"><a href="javascript:" onclick="go_register(1)">
+                            <dl>
+                                <dt class="mp_accounts_type_title subscribe">
+                                    <span>企业入驻</span>
+                                </dt>
+                                <dd class="mp_accounts_type_desc">具有使用实操环境培训及模拟面试的能力</dd>
+                                <dd class="mp_accounts_type_desc">适合快速提升个人技能</dd>
+                            </dl>
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        $(function () {
+
+        })
+        function go_register(role_id) {
+            if (role_id === 1){
+                // 普通用户注册
+                window.parent.document.getElementById('iframe').src = '/tea/register_yonghu/';
+            }
+            else if (role_id === 2){
+                // 出题专家注册
+                window.parent.document.getElementById('iframe').src = '/tea/add/';
+            }
+            else if (role_id === 3){
+                // 面试官
+                window.parent.document.getElementById('iframe').src = '/interviewer/add/';
+            }
+        }
+    </script>
+{% endblock %}

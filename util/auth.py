@@ -35,10 +35,8 @@ class Auth(object):
         msg = {'code': normal_code, 'msg': mes.normal_code, 'data': {}}
         # django的header被处理过了
         token = token or request.QUERY.get("token") or request.META.get('HTTP_TOKEN')
-        print(token)
         if token and token != "null":
             user_info = auth_token.decode_token(token)
-            print(user_info)
             if not user_info:
                 msg['code'] = username_error_code
                 msg['msg'] = '找不到该用户信息'
@@ -69,8 +67,7 @@ class Auth(object):
                     request.user.username = request.user.yonghuzhanghao
                     datas[0]['username'] = request.user.yonghuzhanghao
                     datas[0]['nickname'] = request.user.yonghuzhanghao
-                elif request.user.role in ['教师', '面试官', '管理员']:
-                    print(111)
+                elif request.user.role in ['教师', '面试官', '管理员', '用户']:
                     det = db.default.user_tea_det.get(user_id=request.user.id)
                     request.user.shouji = det.phone_number
                     datas[0]['nickname'] = det.nickname

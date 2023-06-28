@@ -88,11 +88,11 @@ def gongsi_login(req_dict):
 
 def menu_list(request):
     """获取权限列表"""
-    type_ = request.QUERY.get('role')
-    role = role_dict[type_]
     sql = f"""
-        select m.* from recruit.sys_m_module m
-        join recruit.sys_m_role_module ro on ro.module_id =m.id and ro.role_id ={role}
+        select distinct m.* from recruit.sys_m_module m
+        join recruit.sys_m_role_module ro on ro.module_id =m.id
+        join recruit.users u on u.`type` =ro.role_id 
+       	join recruit.user_tea_det det on det.user_id =u.id and det.phone_number ='{request.user.shouji}' order by m.mod_order ;
     """
     data = db.default.fetchall_dict(sql)
     parent_obj = [x for x in data if x['parent_id'] == 0]

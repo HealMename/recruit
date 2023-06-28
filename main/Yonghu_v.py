@@ -16,6 +16,9 @@ from alipay import AliPayConfig, AliPay
 from django.conf import settings
 from django.shortcuts import redirect
 
+from .users_model import users
+
+
 def yonghu_register(request):
     if request.method in ["POST", "GET"]:
         msg = {'code': normal_code, "msg": mes.normal_code}
@@ -109,7 +112,7 @@ def yonghu_session(request):
         msg = {"code": normal_code,"msg": mes.normal_code, "data": {}}
 
         req_dict={"id":request.GET.get('id')}
-        msg['data']  = yonghu.getbyparams(yonghu, yonghu, req_dict)[0]
+        msg['data']  = yonghu.getbyparams(users, users, req_dict)[0]
 
         return JsonResponse(msg)
 

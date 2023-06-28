@@ -9,6 +9,8 @@ from tea import views, question, user, subject
 urlpatterns = [
     path(r'userinfo/', views.user_info),
     path(r'add/', views.add_tea),
+    path(r'register_role/', views.register_role),  # 注册选择角色
+    path(r'register_yonghu/', views.register_yonghu),  # 注册选择用户角色
     path(r'login/', views.login),
 ]
 
