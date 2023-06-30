@@ -273,12 +273,12 @@
                 <li class='current right user' style="margin-top: 13px;">
                     <a href="/admin/#/index" id="userrole" class="menumain" target="_blank"></a> <br>
                 </li>
-                <li class='current right user'>
+                <li class='current right user' style="margin-top: 13px;">
                     <a href="javascript:" id="username" class="menumain"></a>
                     <div class="register" style="display: none">
                         <p><a href="/admin/#/index" target="_blank">我的后台管理</a></p>
-                        <p><a href="javascript:navPage('/interviewer/add/')">完善信息</a></p>
-                        <p><a href="javascript:im()">通信平台</a></p>
+{#                        <p><a href="javascript:navPage('/interviewer/add/')">完善信息</a></p>#}
+{#                        <p><a href="javascript:im()">通信平台</a></p>#}
                         <p v-if="role!=='用户'"><a href="javascript:"
                                                  @click="checkout_user_type(1, '用户', 'users')">切换普通用户</a></p>
                         <p v-if="role!=='出题专家'"><a href="javascript:" @click="checkout_user_type(2, '出题专家', 'users')">切换出题专家</a>
@@ -572,9 +572,9 @@
                 vue.role = res.role
                 vue.id = res.id
                 vue.phone = res.username
-                $("#username").text(vue.username.replaceAll('"', ''))
+                $("#username").text(`${vue.phone.replaceAll('"', '').slice(0, 3)}****${vue.phone.replaceAll('"', '').slice(7, 11)}`)
                 $(".user").show()
-                $("#userrole").text(`${vue.phone.replaceAll('"', '').slice(0, 3)}****${vue.phone.replaceAll('"', '').slice(7, 11)}`)
+                $("#userrole").hide()
             }
         })
 
@@ -611,8 +611,6 @@
         if (!phone){
             return msg_fail('请输入手机号')
         }
-        console.log(phone)
-        console.log(password)
         if (login_type === 1 && !password){
             return msg_fail('请输入密码')
         }else if (login_type === 2 && !password){

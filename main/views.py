@@ -21,24 +21,26 @@ def checkout_user_type(request):
     type_ = int(request.QUERY.get('type'))  # 用户要切换的身份 1普通用户 2教师 3面试官 4企业用户
     user = request.user
     phone = user.shouji
-    print(phone)
     if type_ == 1:
         # 普通用户
         yonghu = db.default.yonghu.filter(shouji=phone).first()
         if yonghu:
             return yonghu_login({'shouji': phone})
         else:
-            return ajax.ajax_fail(message='您还没有注册该身份，请前往注册')
+            return ajax.ajax_fail(message='您还没有注册')
     elif type_ in (2, 3):
         # 教师
         sql = f"""
-                select u.id from recruit.users u
-                join recruit.user_tea_det d on d.user_id=u.id 
-                and u.`type` ={type_} and d.phone_number ='{phone}'
+                select u.id, status from recruit.users u where u.`type` ={type_} and username ='{phone}'
         """
+        print(sql)
         tea = db.default.fetchone_dict(sql)
-        if tea:
+        if tea and tea.status == 1:
             return tea_login({'id': tea.id})
+        elif tea and tea.status == 0:
+            return ajax.ajax_fail(message='该身份正在审核中!')
+        elif tea and tea.status == -1:
+            return ajax.ajax_fail(message='该身份审核被拒绝请重新提交审核！')
         else:
             return ajax.ajax_fail(message='您还没有注册该身份，请前往注册')
     elif type_ == 4:

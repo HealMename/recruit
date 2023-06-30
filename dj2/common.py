@@ -14,6 +14,7 @@ def get_user_id(phone, type_, id_=0):
             {where_sql}
             LIMIT 1;
         """
+        print(sql)
         user = db.default.fetchone_dict(sql)
     elif type_ == 4:
         sql = f"""

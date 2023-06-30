@@ -1,17 +1,20 @@
+import json
 import time
 
 
 from dj2.common import get_user_id
+from dj2.settings import UPLOAD_URL, web_file_url
 from libs.utils.auth_token import get_random_string
 from libs.utils.redis_com import rd
 from main.models import yonghu, gongsi
 
 from libs.utils import ajax, db, auth_token
-from libs.utils.common import Struct, render_template
+from libs.utils.common import Struct, render_template, get_upload_key
 from main.users_model import users
 from util.auth import Auth
 
 role_dict = {"管理员": 1, "出题专家": 2, "面试官": 3, "用户": 4, "公司": 5}
+level = {1: "大专", 2: "本科", 3: "硕士", 4: "博士"}
 
 
 def add_tea(request):
@@ -21,37 +24,63 @@ def add_tea(request):
     data = Struct()
     if request.method == 'POST':
         args = {k: v for k, v in request.QUERY.items()}
-        username = args.pop('username')
-        id_ = args.pop('id', 0)
-        code = args.pop('code', 0)
-        args.pop('token', '')
-        phone_number = args['phone_number']
+        id_ = request.QUERY.get('id')
+        phone_number = request.QUERY.get('phone_number')
+        code = request.QUERY.get('code')
+        password = request.QUERY.get('password1')
+        ocr_front_img = request.QUERY.get('ocr_front_img')
+        ocr_back_img = request.QUERY.get('ocr_back_img')
+        number_id = request.QUERY.get('number_id')
+        address = request.QUERY.get('address')
+        expire = request.QUERY.get('expire')
+        school = request.QUERY.get('school')
+        school_level = request.QUERY.get('school_level')
+        speciality = request.QUERY.get('speciality')
+        ocr_front = json.loads(request.QUERY.get('ocr_front'))
+        ocr_back = json.loads(request.QUERY.get('ocr_back'))
         user_id, _ = get_user_id(phone_number, 2, id_)
         if user_id:
             return ajax.ajax_fail(message='手机号已注册教师身份')
         if not verify_(code, phone_number, 3):
             return ajax.ajax_fail(message='验证码错误')
         now = int(time.time())
+        expire = [x.strip() for x in expire.split('-')]
+        start_time = ''.join(expire[:3])
+        end_time = ''.join(expire[3:])
+        tea_det = dict(nickname=phone_number,
+                       phone_number=phone_number,
+                       number_id=number_id,
+                       school=school,
+                       school_level=school_level,
+                       step_id=0,
+                       status=1, speciality=speciality, start_time=start_time, end_time=end_time)
         if not id_:
-            password = get_random_string(length=6, allowed_chars='0123456789')
+            db.default.yonghu.create(yonghuzhanghao=phone_number, mima=password,
+                                     shouji=phone_number, yonghuxingming=phone_number)
             password = auth_token.sha1_encode_password(password)  # 加密密码
-            id_ = db.default.users.create(username=phone_number, password=password, role='教师', type=2, status=0)
-            db.default.user_tea_det.create(user_id=id_, nickname=username, add_time=now, **args)
-        else:
-            args['add_time'] = now
-            db.default.users.filter(id=id_).update(username=phone_number)
-            db.default.user_tea_det.filter(user_id=id_).update(**args)
+            db.default.users.create(username=phone_number, password=password, role='教师', type=2, status=0)
+            yonghu_id = db.default.users.create(username=phone_number, password=password, role='用户', type=4, status=1)
+            db.default.user_tea_det.create(user_id=yonghu_id, add_time=now, **tea_det)
+            # 身份信息
+            media_args = dict(
+                address=address, add_time=now, front=ocr_front_img, back=ocr_back_img, ocr_info_front=json.dumps(ocr_front),
+                ocr_info_back=json.dumps(ocr_back), status=1)
+            db.default.user_media_det.create(user_id=yonghu_id, **media_args)
+            # 学历信息
+            education = level[int(school_level)]
+            school_obj = dict(user_id=yonghu_id, school=school, education=education, speciality=speciality)
+            if not db.default.user_school_list.filter(**school_obj):
+                db.default.user_school_list.create(**school_obj, add_time=now, status=1)
+
         return ajax.ajax_ok(message='注册成功')
     else:
-        user_id = request.QUERY.get('user_id')
-        if user_id:
+        if request.user and request.user.id:
             sql = f"""
-                select  d.* , u.status from recruit.users u 
-                join recruit.user_tea_det d on d.user_id =u.id and u.`type` =2
-                where u.id= {user_id}
+                select  u.id , u.status from recruit.users u where u.type=2 and u.username='{request.user.shouji}'
             """
-            data.user = db.default.fetchone_dict(sql)
-            return ajax.ajax_ok(data)
+            data.status = db.default.fetchone_dict(sql).status
+        data.upload_url = f"{UPLOAD_URL}?upcheck={get_upload_key()}&up_type=number_id_img"
+        data.web_file_url = web_file_url
         return render_template(request, 'tea/index.html', data)
 
 
@@ -94,6 +123,7 @@ def login(request):
         code = args['password']
         # type_ = args['type']
         type_ = 4
+        print(phone)
         user_id, password = get_user_id(phone, type_)
         if not user_id:
             return ajax.ajax_fail(message='账号不存在')

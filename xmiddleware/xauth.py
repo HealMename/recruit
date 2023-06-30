@@ -1,4 +1,4 @@
-#coding:utf-8
+# coding:utf-8
 __author__ = "ila"
 
 from django.utils.deprecation import MiddlewareMixin
@@ -11,17 +11,19 @@ from dj2.settings import dbName as schemaName
 
 
 class Xauth(MiddlewareMixin):
-    def process_request(self,request):
+    def process_request(self, request):
         fullPath = request.get_full_path()
 
         # token=request.META.get("HTTP_TOKEN")
         # print("token=============>",token)
         # request.session['token']=token
 
-
+        token = request.QUERY.get("token") \
+                or request.META.get('HTTP_TOKEN')
+        print(token)
         if request.method == 'GET':
 
-            filterList=[
+            filterList = [
                 "/index",
                 "/favicon.ico",
                 "/login",
@@ -56,8 +58,8 @@ class Xauth(MiddlewareMixin):
                 "/admin",
                 "/xadmin",
                 "/file/download",
-                 "/{}/remind/".format(schemaName),
-                  "/{}/option/".format(schemaName),
+                "/{}/remind/".format(schemaName),
+                "/{}/option/".format(schemaName),
                 "resetPass",
                 "/tea/add/",
                 "/tea/get_question_class/"
@@ -66,28 +68,30 @@ class Xauth(MiddlewareMixin):
             allModels = apps.get_app_config('main').get_models()
             for m in allModels:
                 try:
-                    foreEndList=m.__foreEndList__
+                    foreEndList = m.__foreEndList__
                 except:
-                    foreEndList=None
-                if  foreEndList is not None and foreEndList != "前要登":
+                    foreEndList = None
+                if foreEndList is not None and foreEndList != "前要登":
                     filterList.append("/{}/sendemail".format(m.__tablename__))
                     filterList.append("/{}/list".format(m.__tablename__))
 
             auth = True
 
-            if fullPath=='/':
+            if fullPath == '/':
                 pass
             else:
                 for i in filterList:
                     if i in fullPath:
-                        auth=False
-                if auth==True:
+                        auth = False
+                if token and len(token) > 10:
+                    auth = True
+                if auth == True:
                     result = Auth.identify(Auth, request)
 
                     if result.get('code') != normal_code:
                         pass
-                        #print('jwt auth success')
-                        #return JsonResponse(result)
+                        # print('jwt auth success')
+                        # return JsonResponse(result)
         elif request.method == 'POST':
             post_list = [
                 '/{}/defaultuser/register'.format(schemaName),
@@ -104,8 +108,7 @@ class Xauth(MiddlewareMixin):
                 "/tea/login/",
                 '/sms/send/'
             ]  # 免认证list
-            token = request.QUERY.get("token") \
-                    or request.META.get('HTTP_TOKEN')
+
             if fullPath not in post_list and "register" not in fullPath and "login" not in fullPath \
                     and request.path not in post_list or (token and len(token) > 10):  # 注册时不检测token。
                 result = Auth.identify(Auth, request, token)
