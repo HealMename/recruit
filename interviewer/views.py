@@ -19,7 +19,7 @@ def save_info(request):
     if request.method == 'POST':
         # 保存个人信息
         if step_id == 1:
-            name = request.QUERY.get('name')
+            password = request.QUERY.get('password1')
             phone = request.QUERY.get('phone')
             code = request.QUERY.get('code')  # 验证码
             is_ver = verify_(code, phone, 1)
@@ -31,12 +31,12 @@ def save_info(request):
             info_back = Struct(json.loads(request.QUERY.get('info_back')))
             ocr_info_front = Struct(json.loads(request.QUERY.get('ocr_info_front')))
             ocr_info_back = Struct(json.loads(request.QUERY.get('ocr_info_back')))
-            if db.default.users.filter(username=phone, type=3, status=0, id__ne=user_id):
+            if db.default.users.filter(username=phone, type=4, status=0, id__ne=user_id):
                 return ajax.ajax_fail(message='手机号已被注册')
-            password = get_random_string(length=6, allowed_chars='0123456789')
             password = auth_token.sha1_encode_password(password)  # 加密密码
             if not user_id:
-                user_id = db.default.users.create(username=phone, type=3, status=1, role='面试官', password=password)
+                db.default.users.create(username=phone, type=3, status=0, role='面试官', password=password)
+                user_id = db.default.users.create(username=phone, type=4, status=1, role='用户', password=password)
             data.token = auth_token.create_token('users', user_id)
             media_args = dict(
                 add_time=now, front=front, back=back, ocr_info_front=json.dumps(ocr_info_front),
@@ -53,7 +53,7 @@ def save_info(request):
                 # 判断用户是否修改过识别的内容
                 is_update = 1
             det_args = dict(phone_number=phone, name=info_front.name, step_id=1, status=1, add_time=now,
-                            nickname=name, number_id=info_front.number_id, is_update=is_update,
+                            nickname=phone, number_id=info_front.number_id, is_update=is_update,
                             start_time=info_back.start_time, end_time=info_back.end_time)
             if not db.default.user_tea_det.filter(user_id=user_id):
                 db.default.user_tea_det.create(user_id=user_id, **det_args)
@@ -105,11 +105,14 @@ def save_info(request):
         user_id = request.GET.get('cms_user_id', 0) or request.user.id
         if user_id:
             # 步骤 1
-            data.status = db.default.users.get(id=user_id).status
+            username = db.default.users.get(id=user_id).username
+            if db.default.users.get(id=user_id).type == 3:
+                user_id = db.default.users.get(username=username, type=4).id
+            data.status = db.default.users.get(id=db.default.users.get(username=username, type=3).id).status
             user_det = db.default.user_tea_det.get(user_id=user_id)
             user_media = db.default.user_media_det.get(user_id=user_id)
+            data.step_id = user_det.step_id
             data.form = Struct()
-            data.form.nickname = user_det.nickname
             data.form.phone = user_det.phone_number
             if user_media:
                 data.form.imageUrl1 = user_media.front

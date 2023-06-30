@@ -42,13 +42,7 @@ class Auth(object):
                 msg['msg'] = '找不到该用户信息'
                 result = msg
                 return result
-            tablename = user_info.get('tablename')
-            if tablename in ['2', '3']:
-                tablename = 'users'
-            elif tablename in ['1']:
-                tablename = 'yonghu'
-            elif tablename in ['4']:
-                tablename = 'gongsi'
+            tablename = 'users'
             datas = None
             allModels = apps.get_app_config('main').get_models()
             for model in allModels:
@@ -68,9 +62,8 @@ class Auth(object):
                     datas[0]['username'] = request.user.yonghuzhanghao
                     datas[0]['nickname'] = request.user.yonghuzhanghao
                 elif request.user.role in ['教师', '面试官', '管理员', '用户']:
-                    det = db.default.user_tea_det.get(user_id=request.user.id)
-                    request.user.shouji = det.phone_number
-                    datas[0]['nickname'] = det.nickname
+                    request.user.shouji = request.user.username
+                    datas[0]['nickname'] = request.user.username
                 else:
                     datas[0]['nickname'] = request.user.gongsimingcheng
                 request.session['tablename'] = tablename

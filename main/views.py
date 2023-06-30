@@ -67,7 +67,6 @@ def yonghu_login(req_dict):
 
 def tea_login(args):
     "教师登录"
-    args['type'] = 2
     datas = users.getbyparams(users, users, args)
     if not datas:
         return ajax.ajax_fail(message='您还没有出题专家身份，请前往注册！')

@@ -95,17 +95,21 @@
                             <span>身份信息</span>
                         </div>
                         <el-form ref="form" :model="form" label-width="100px" :rules="rules1">
-                            <el-form-item label="昵称:" prop="name">
-                                <el-input v-model="form.name" maxlength="10"></el-input>
-                            </el-form-item>
+
                             <el-form-item label="手机号:" prop="phone">
-                                <el-input v-model.number="form.phone" maxlength="11" id="phone"></el-input>
+                                <el-input v-model.number="form.phone" maxlength="11" id="phone" type="number" oninput="if(value.length > 11)value = value.slice(0, 11)"></el-input>
                                 <el-button @click="send_code()" style="margin-top: 10px;" id="send_code"
                                            :disabled="disabled" size="small">
                                     获取验证码 <span class="code_time"></span></el-button>
                             </el-form-item>
                             <el-form-item label="验证码:" prop="code">
-                                <el-input v-model.number="form.code" maxlength="6"></el-input>
+                                <el-input v-model.number="form.code" maxlength="6" oninput="if(value.length > 11)value = value.slice(0, 6)"></el-input>
+                            </el-form-item>
+                            <el-form-item label="密码:" prop="password1">
+                                <el-input v-model="form.password1" maxlength="12" type="password"></el-input>
+                            </el-form-item>
+                            <el-form-item label="确认密码:" prop="password2">
+                                <el-input v-model="form.password2" maxlength="12" type="password"></el-input>
                             </el-form-item>
                             <el-form-item label="身份证(正面):" prop="imageUrl1">
                                 <el-upload
@@ -385,14 +389,6 @@
                         <el-descriptions-item>
                             <template slot="label">
                                 <i class="el-icon-user"></i>
-                                昵称
-                            </template>
-                            <p v-text="form.name"></p>
-                        </el-descriptions-item>
-
-                        <el-descriptions-item>
-                            <template slot="label">
-                                <i class="el-icon-user"></i>
                                 姓名
                             </template>
                             <p v-text="form.ocr_info_front.name"></p>
@@ -564,6 +560,26 @@
 
         var number_id_img1 = "";
         var number_id_img2 = "";
+        var password1 = ''
+        var checkPassword1 = (rule, value, callback) => {
+            password1 = value
+            if (!value) {
+                return callback(new Error('密码不能为空'));
+            }
+            if (value.length < 6 || value.length > 12){
+                return callback(new Error('密码长度在 6 到 12 个字符'));
+            }
+            callback();
+        };
+        var checkPassword2 = (rule, value, callback) => {
+            if (!value) {
+                return callback(new Error('确认密码不能为空'));
+            }
+            if (value !== password1) {
+                return callback(new Error('两次输入密码不一致'));
+            }
+            callback();
+        };
         var vue = new Vue({
             el: "#app",
             data: {
@@ -666,9 +682,11 @@
                 },
                 // 第一步基础信息验证
                 rules1: {
-                    name: [
-                        {required: true, message: '请输入昵称', trigger: 'blur'},
-                        {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
+                    password1: [
+                        { validator: checkPassword1, trigger: 'blur' }
+                    ],
+                    password2: [
+                        { validator: checkPassword2, trigger: 'blur' }
                     ],
                     code: [{required: true, message: '请填写验证码', trigger: 'blur'}],
                     phone: [
@@ -677,7 +695,8 @@
 
                 },
                 form: {
-                    name: '',
+                    password1: '',
+                    password2: '',
                     code: '',
                     phone: '',
                     ocr_info_front: {
@@ -704,20 +723,19 @@
             created() {
 
                 if (this.active !== 5) {
-
-
                     var thsi = this;
                     this.loading_post = true;
                     $.get("/interviewer/save/", function (res) {
                         thsi.loading_post = false;
                         if (res.response === 'ok') {
                             var data = res.data;
+                            if (data){
                             // 第一步
-                            thsi.form.name = data.form.nickname;
                             thsi.form.phone = data.form.phone;
                             thsi.imageUrl1 = data.form.imageUrl1
+                            thsi.active = data.step_id
                             thsi.imageUrl2 = data.form.imageUrl2
-                            if (data.form.phone){
+                            if (data.form.phone) {
                                 $("#phone").attr('disabled', '')
                             }
                             if (data.form.ocr_front) {
@@ -761,6 +779,7 @@
                             })
                             thsi.work_list = data.work_list
                             thsi.prove = data.prove
+                                }
                         } else {
                             msg_fail(res.message)
                         }
@@ -891,12 +910,8 @@
                                         if (res.response === 'ok') {
                                             thsi.active++
                                         } else {
-                                            const h = thsi.$createElement;
-                                            thsi.$notify({
-                                                title: '保存失败',
-                                                position: 'bottom-left',
-                                                message: h('i', {style: 'color: teal'}, res.message)
-                                            });
+                                            
+                                            thsi.$message.error(res.message);
                                         }
                                     })
                                     this.$message({
@@ -962,7 +977,7 @@
                     var post_data = {
                         token: this.token || localStorage.getItem("Token"),
                         step_id: this.active + 1,
-                        name: this.form.name,
+                        password1: this.form.password1,
                         phone: this.form.phone,
                         code: this.form.code,
                         front: this.imageUrl1,
@@ -980,12 +995,8 @@
                             thsi.token = res.data.token
                             thsi.active++
                         } else {
-                            const h = thsi.$createElement;
-                            thsi.$notify({
-                                title: '保存失败',
-                                position: 'bottom-left',
-                                message: h('i', {style: 'color: teal'}, res.message)
-                            });
+                            thsi.$message.error(res.message);
+
                         }
                     })
                 },
@@ -1009,12 +1020,8 @@
                         if (res.response === 'ok') {
                             thsi.active++
                         } else {
-                            const h = thsi.$createElement;
-                            thsi.$notify({
-                                title: '保存失败',
-                                position: 'bottom-left',
-                                message: h('i', {style: 'color: teal'}, res.message)
-                            });
+                            
+                            thsi.$message.error(res.message);
                         }
                     })
 
@@ -1038,12 +1045,8 @@
                         if (res.response === 'ok') {
                             thsi.active++
                         } else {
-                            const h = thsi.$createElement;
-                            thsi.$notify({
-                                title: '保存失败',
-                                position: 'bottom-left',
-                                message: h('i', {style: 'color: teal'}, res.message)
-                            });
+                            
+                            thsi.$message.error(res.message);
                         }
                     })
 
@@ -1059,12 +1062,8 @@
                         if (res.response === 'ok') {
                             thsi.active++
                         } else {
-                            const h = thsi.$createElement;
-                            thsi.$notify({
-                                title: '保存失败',
-                                position: 'bottom-left',
-                                message: h('i', {style: 'color: teal'}, res.message)
-                            });
+                            
+                            thsi.$message.error(res.message);
                         }
                     })
                 },

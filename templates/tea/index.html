@@ -138,7 +138,7 @@
                 <label class="layui-form-label">联系地址</label>
                 <div class="layui-input-block">
                     <input type="text" name="address" lay-verify="address" autocomplete="off" placeholder="上传身份证自动识别"
-                           class="layui-input" maxlength="18">
+                           class="layui-input" maxlength="50">
                 </div>
             </div>
             <div class="layui-form-item ocr_info_back ocr_back_img">
@@ -208,6 +208,16 @@
         var ocr_info_back = {};
         var ocr_back = {};
         $(function () {
+                $('input').bind('input propertychange', function () {
+                    if ($(this).attr("type") == "number") {
+                        //获取输入框的最大长度
+                        var mxaL = $(this).attr("maxlength");
+                        //如果输入的长度超过最大长度
+                        if ($(this).val().length > mxaL) {
+                            $(this).val($(this).val().slice(0, mxaL));
+                        }
+                    }
+                });
             // 滑动验证码
             if (status === '0') {
                 $('.layui-form').hide()

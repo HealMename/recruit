@@ -25,6 +25,15 @@
 
     }
 
+    ::v-deep input[type='number'] {
+        -moz-appearance: textfield;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
     #iframe {
         width: 100%;
         margin-top: 00px;
@@ -259,13 +268,14 @@
                     <a href="javascript:" id="login" class="menumain" @click="link_me()">联系我们</a> <br>
                 </li>
                 <li class='current right' v-if="!username">
-                    <a href="javascript:navPage('/tea/register_role/');layer.closeAll();" id="register" class="menumain">注册</a>
-{#                    <div class="register" style="display: none">#}
-{#                        <p><a href="javascript:navPage('/pages/yonghu/register.html?tablename=yonghu')">个人注册</a></p>#}
-{#                        <p><a href="javascript:navPage('/tea/add/')">出题专家注册</a></p>#}
-{#                        <p><a href="javascript:navPage('/interviewer/add/')">面试官注册</a></p>#}
-{#                        <p><a href="javascript:navPage('/pages/gongsi/register.html?tablename=gongsi')">企业注册</a></p>#}
-{#                    </div>#}
+                    <a href="javascript:navPage('/tea/register_role/');layer.closeAll();" id="register"
+                       class="menumain">注册</a>
+                    {#                    <div class="register" style="display: none">#}
+                    {#                        <p><a href="javascript:navPage('/pages/yonghu/register.html?tablename=yonghu')">个人注册</a></p>#}
+                    {#                        <p><a href="javascript:navPage('/tea/add/')">出题专家注册</a></p>#}
+                    {#                        <p><a href="javascript:navPage('/interviewer/add/')">面试官注册</a></p>#}
+                    {#                        <p><a href="javascript:navPage('/pages/gongsi/register.html?tablename=gongsi')">企业注册</a></p>#}
+                    {#                    </div>#}
                 </li>
                 <li class='current right' v-if="!username">
                     <a href="javascript:" id="login" class="menumain" @click="login_layer()">登录</a> <br>
@@ -277,8 +287,8 @@
                     <a href="javascript:" id="username" class="menumain"></a>
                     <div class="register" style="display: none">
                         <p><a href="/admin/#/index" target="_blank">我的后台管理</a></p>
-{#                        <p><a href="javascript:navPage('/interviewer/add/')">完善信息</a></p>#}
-{#                        <p><a href="javascript:im()">通信平台</a></p>#}
+                        {#                        <p><a href="javascript:navPage('/interviewer/add/')">完善信息</a></p>#}
+                        {#                        <p><a href="javascript:im()">通信平台</a></p>#}
                         <p v-if="role!=='用户'"><a href="javascript:"
                                                  @click="checkout_user_type(1, '用户', 'users')">切换普通用户</a></p>
                         <p v-if="role!=='出题专家'"><a href="javascript:" @click="checkout_user_type(2, '出题专家', 'users')">切换出题专家</a>
@@ -350,11 +360,12 @@
         </p>
         <form class="layui-form" action="">
             <!-- 密码登录-->
-            <div class="password_login" >
+            <div class="password_login">
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <input type="text" name="phone" lay-verify="title" autocomplete="new-password" placeholder="手机号"
-                               class="layui-input phone">
+                        <input type="number" name="phone" lay-verify="title" autocomplete="new-password"
+                               placeholder="手机号"
+                               class="layui-input phone" maxlength="11">
                         <i class="layui-icon pass-clearbtn pass-phone" onclick="empty_input('phone')">&#x1006;</i>
                     </div>
                 </div>
@@ -362,9 +373,10 @@
                     <div class="layui-input-block">
                         <input type="password" name="password" lay-verify="title" autocomplete="new-password"
                                placeholder="密码"
-                               class="layui-input password">
+                               class="layui-input password" maxlength="12">
                         <i class="layui-icon pass-clearbtn pass-password" onclick="empty_input('password')">&#x1006;</i>
-                        <a href="javascript:navPage('/tea/register_role/');layer.closeAll();" class="pass-register">立即注册</a>
+                        <a href="javascript:navPage('/tea/register_role/');layer.closeAll();"
+                           class="pass-register">立即注册</a>
                         <a href="javascript:" class="pass-fgtpwd">忘记密码？</a>
                     </div>
                 </div>
@@ -375,16 +387,16 @@
                 <div class="layui-form-item">
                     <div class="layui-input-block">
 
-                        <input type="text" name="phone" lay-verify="title" autocomplete="new-password" placeholder="手机号"
-                               class="layui-input phone" >
+                        <input type="number" name="phone" lay-verify="title" autocomplete="new-password" placeholder="手机号"
+                               class="layui-input phone" maxlength="11">
                         <i class="layui-icon pass-clearbtn pass-phone" onclick="empty_input('phone')">&#x1006;</i>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <input type="text" name="code" lay-verify="title" autocomplete="new-password"
+                        <input type="number" name="code" lay-verify="title" autocomplete="new-password"
                                placeholder="验证码"
-                               class="layui-input password">
+                               class="layui-input password" maxlength="6">
                         <a href="javascript:" class="pass-item-timer" onclick="send_code()">发送验证码</a>
                         <i class="layui-icon pass-clearbtn pass-code" onclick="empty_input('code')">&#x1006;</i>
                     </div>
@@ -397,7 +409,8 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block ">
-                    <p class="tang-pass-sms-agreement">阅读并接受 <a href="javascript:">用户协议</a> 和 <a href="javascript:">隐私政策</a></p>
+                    <p class="tang-pass-sms-agreement">阅读并接受 <a href="javascript:">用户协议</a> 和 <a
+                            href="javascript:">隐私政策</a></p>
                 </div>
             </div>
         </form>
@@ -483,6 +496,35 @@
                     shade: 0.5,
                     area: ['800px', '325px'],
                     content: $(".login_layer").html(),
+                    success: function () {
+                        $(".phone").bind("input propertychange", function (e) {
+                            //获取input输入的值
+                            if (e.delegateTarget.value) {
+                                $('.pass-phone').show()
+                            } else {
+                                $('.pass-phone').hide()
+                            }
+                            var mxaL = $(this).attr("maxlength");
+                            //如果输入的长度超过最大长度
+                            if ($(this).val().length > mxaL) {
+                                $(this).val($(this).val().slice(0, mxaL));
+                            }
+                        });
+                        $(".password").bind("input propertychange", function (e) {
+                            //获取input输入的值
+                            if (e.delegateTarget.value) {
+                                $('.pass-password').show()
+                            } else {
+                                $('.pass-password').hide()
+                            }
+                            var mxaL = $(this).attr("maxlength");
+                            //如果输入的长度超过最大长度
+                            if ($(this).val().length > mxaL) {
+                                $(this).val($(this).val().slice(0, mxaL));
+                            }
+
+                        });
+                    },
                     title: ''
                 });
             },
@@ -529,38 +571,25 @@
         $(`.${elem}`).val('')
         $(`.pass-${elem}`).hide()
     }
+
     // 切换登录方式
-    function checkout_login(elem, type){
+    function checkout_login(elem, type) {
         login_type = type
         $(elem).siblings().removeClass('active')
         $(elem).addClass('active')
-        if (type === 1){
+        if (type === 1) {
             $(elem).siblings().removeClass('active2')
             $('.password_login').show()
             $('.code_login').hide()
-        }else{
+        } else {
             $(elem).addClass('active2')
             $('.password_login').hide()
             $('.code_login').show()
         }
     }
+
     layui.use(['layer', 'element', 'carousel', 'laypage', 'jquery', 'laydate'], function () {
-        $(".phone").bind("input propertychange", function (e) {
-            //获取input输入的值
-            if (e.delegateTarget.value) {
-                $('.pass-phone').show()
-            } else {
-                $('.pass-phone').hide()
-            }
-        });
-        $(".password").bind("input propertychange", function (e) {
-            //获取input输入的值
-            if (e.delegateTarget.value) {
-                $('.pass-password').show()
-            } else {
-                $('.pass-password').hide()
-            }
-        });
+
         $.get('/user/info/?token=' + localStorage.getItem('Token'), function (res) {
             if (!res.data.user) {
                 $(".user").hide()
@@ -597,40 +626,47 @@
 
 
     });
+
     function login() {
         var phone = ''
         var password = ''
-        if (login_type === 1){
+        if (login_type === 1) {
             phone = $('.phone:eq(2)').val()
             password = $('.password:eq(2)').val()
-        }else{
+        } else {
             phone = $('.phone:last').val()
             password = $('.password:last').val()
         }
 
-        if (!phone){
+        if (!phone) {
             return msg_fail('请输入手机号')
         }
-        if (login_type === 1 && !password){
+        if (login_type === 1 && !password) {
             return msg_fail('请输入密码')
-        }else if (login_type === 2 && !password){
+        } else if (login_type === 2 && !password) {
             return msg_fail('请输入验证码')
         }
-        $.post('/tea/login/', {username: phone, password: password, login_type:login_type, role:'出题专家'}, function (res) {
-            if (res.msg === '正常'){
+        $.post('/tea/login/', {
+            username: phone,
+            password: password,
+            login_type: login_type,
+            role: '出题专家'
+        }, function (res) {
+            if (res.msg === '正常') {
                 msg_ok("登录成功", function () {
-                  localStorage.setItem("Token", res.token);
-                  localStorage.setItem("userId", res.id);
-                  localStorage.setItem("role", '用户');
-                  localStorage.setItem("sessionTable", 'yonghu');
-                  localStorage.setItem("adminName", phone);
-                  window.location.href = `/`
+                    localStorage.setItem("Token", res.token);
+                    localStorage.setItem("userId", res.id);
+                    localStorage.setItem("role", '用户');
+                    localStorage.setItem("sessionTable", 'yonghu');
+                    localStorage.setItem("adminName", phone);
+                    window.location.href = `/`
                 })
-            }else{
+            } else {
                 return msg_fail(res.message)
             }
         })
     }
+
     $('#username').mousemove(function () {
 
         $('.register').show()
@@ -668,6 +704,7 @@
         $('.logins').hide()
     })
     var exit_count = 60;
+
     // 发送短信
     function send_code() {
         var phone = $('.phone:last').val()
@@ -692,6 +729,7 @@
             }, 1000);
         }
     }
+
     function im() {
         var token = localStorage.getItem('Token');
         window.open(`https://www.ittest008.com/im/#/login?user_id=${token}`)

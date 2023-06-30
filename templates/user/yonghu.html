@@ -20,14 +20,6 @@
         </fieldset>
         <form class="layui-form" action="">
             <div class="layui-form-item">
-                <label class="layui-form-label">昵称</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" lay-verify="username" autocomplete="off"
-                           placeholder="请输入昵称" maxlength="20"
-                           class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
                 <label class="layui-form-label">手机号</label>
                 <div class="layui-input-block">
                     <input type="number" name="phone_number" lay-verify="phone_number" autocomplete="off"
@@ -78,6 +70,16 @@
 
     <script>
         $(function () {
+            $('input').bind('input propertychange', function () {
+                    if ($(this).attr("type") == "number") {
+                        //获取输入框的最大长度
+                        var mxaL = $(this).attr("maxlength");
+                        //如果输入的长度超过最大长度
+                        if ($(this).val().length > mxaL) {
+                            $(this).val($(this).val().slice(0, mxaL));
+                        }
+                    }
+                });
             var nc_token = ["CF_APP_1", (new Date()).getTime(), Math.random()].join(':');
             var NC_Opt = {
                 renderTo: "#your-dom-id",
@@ -124,11 +126,6 @@
 
         //自定义验证规则
         form.verify({
-            username: function (value) {
-                if (value.length < 2) {
-                    return '昵称至少2个字符';
-                }
-            },
             phone_number: function (value) {
                 if (value.length !== 11) {
                     return '请输入11为手机号码';

@@ -23,10 +23,7 @@ def index(request):
     page_size = request.QUERY.get('page_size', 5)
     where_sql = ""
     if id_:
-        if id_.isdigit():
-            where_sql += f" and (u.id = {id_} or d.phone_number like '%{id_}%')"
-        else:
-            where_sql += f" and d.name like '%{id_}%'"
+        where_sql += f" and (u.id = {id_} or u.username like '%{id_}%')"
     if type_:
         where_sql += f" and u.type = {type_}"
     else:
@@ -34,9 +31,8 @@ def index(request):
     if status:
         where_sql += f" and u.status = {status}"
     sql = f"""
-            select u.id, u.type, d.name, u.addtime as add_time, u.status, d.phone_number phone  
-            from recruit.users u
-            join recruit.user_tea_det d on d.user_id=u.id
+            select u.id, u.type, u.addtime as add_time, u.status, u.username phone  
+            from recruit.users u where status>=-1
             {where_sql} 
             order by -u.id
             limit {(page_id - 1) * page_size}, {page_size} ;

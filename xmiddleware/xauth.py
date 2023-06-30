@@ -15,12 +15,10 @@ class Xauth(MiddlewareMixin):
         fullPath = request.get_full_path()
 
         # token=request.META.get("HTTP_TOKEN")
-        # print("token=============>",token)
         # request.session['token']=token
 
         token = request.QUERY.get("token") \
                 or request.META.get('HTTP_TOKEN')
-        print(token)
         if request.method == 'GET':
 
             filterList = [
@@ -90,7 +88,6 @@ class Xauth(MiddlewareMixin):
 
                     if result.get('code') != normal_code:
                         pass
-                        # print('jwt auth success')
                         # return JsonResponse(result)
         elif request.method == 'POST':
             post_list = [
