@@ -1,212 +1,72 @@
 <template>
-  <div>
-    <el-form
-        v-loading="loading"
-        class="detail-form-content"
-        ref="ruleForm"
-        :model="ruleForm"
-        label-width="80px"
-        style="background: transparent;"
-    >
-      <el-row>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='yonghu'" label="用户账号" prop="yonghuzhanghao">
-            <el-input v-model="ruleForm.yonghuzhanghao" readonly placeholder="用户账号" clearable></el-input>
+  <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tab-pane label="基本信息" name="first">
+      <div>
+        <el-form
+            v-loading="loading"
+            class="detail-form-content"
+            ref="ruleForm"
+            :model="ruleForm"
+            label-width="120px"
+            style="background: transparent;"
+        >
+          <el-form-item label="手机" prop="shouji">
+            <el-input v-model="ruleForm.phone_number" placeholder="手机" clearable :disabled="true"></el-input> <el-button type="primary" icon="el-icon-edit" circle></el-button>
           </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='yonghu'" label="用户姓名" prop="yonghuxingming">
-            <el-input v-model="ruleForm.yonghuxingming" placeholder="用户姓名" clearable></el-input>
+          <el-form-item label="邮箱" prop="youxiang">
+            <el-input v-model="ruleForm.youxiang" placeholder="邮箱" clearable :disabled="true"></el-input> <el-button type="primary" icon="el-icon-edit" circle></el-button>
           </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='yonghu'" label="性别" prop="xingbie">
-            <el-select v-model="ruleForm.xingbie" placeholder="请选择性别">
-              <el-option
-                  v-for="(item,index) in yonghuxingbieOptions"
-                  v-bind:key="index"
-                  :label="item"
-                  :value="item">
-              </el-option>
-            </el-select>
+          <el-form-item label="姓名" prop="yonghuxingming">
+            <el-input v-model="ruleForm.name" placeholder="用户姓名" clearable></el-input>
           </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='yonghu'" label="手机" prop="shouji">
-            <el-input v-model="ruleForm.shouji" placeholder="手机" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='yonghu'" label="邮箱" prop="youxiang">
-            <el-input v-model="ruleForm.youxiang" placeholder="邮箱" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='yonghu'" label="身份证" prop="shenfenzheng">
-            <el-input v-model="ruleForm.shenfenzheng" placeholder="身份证" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item v-if="flag==='yonghu'" label="照片" prop="zhaopian">
-            <file-upload
-                tip="点击上传照片"
-                action="file/upload"
-                :limit="3"
-                :multiple="true"
-                :fileUrls="ruleForm.zhaopian?ruleForm.zhaopian:''"
-                @change="yonghuzhaopianUploadChange"
-            ></file-upload>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='yonghu'" label="毕业院校" prop="biyeyuanxiao">
-            <el-input v-model="ruleForm.biyeyuanxiao" placeholder="毕业院校" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='yonghu'" label="学历" prop="xueli">
-            <el-input v-model="ruleForm.xueli" placeholder="学历" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='yonghu'" label="专业" prop="zhuanye">
-            <el-input v-model="ruleForm.zhuanye" placeholder="专业" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='gongsi'" label="公司账号" prop="gongsizhanghao">
-            <el-input v-model="ruleForm.gongsizhanghao" readonly placeholder="公司账号" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='gongsi'" label="公司名称" prop="gongsimingcheng">
-            <el-input v-model="ruleForm.gongsimingcheng" placeholder="公司名称" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='gongsi'" label="注册编号" prop="zhucebianhao">
-            <el-input v-model="ruleForm.zhucebianhao" placeholder="注册编号" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='gongsi'" label="注册时间" prop="zhuceshijian">
-            <el-input v-model="ruleForm.zhuceshijian" placeholder="注册时间" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='gongsi'" label="公司地址" prop="gongsidizhi">
-            <el-input v-model="ruleForm.gongsidizhi" placeholder="公司地址" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='gongsi'" label="负责人姓名" prop="fuzerenxingming">
-            <el-input v-model="ruleForm.fuzerenxingming" placeholder="负责人姓名" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='gongsi'" label="性别" prop="xingbie">
-            <el-select v-model="ruleForm.xingbie" placeholder="请选择性别">
-              <el-option
-                  v-for="(item,index) in gongsixingbieOptions"
-                  v-bind:key="index"
-                  :label="item"
-                  :value="item">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='gongsi'" label="身份证" prop="shenfenzheng">
-            <el-input v-model="ruleForm.shenfenzheng" placeholder="身份证" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='gongsi'" label="手机" prop="shouji">
-            <el-input v-model="ruleForm.shouji" placeholder="手机" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item v-if="flag==='gongsi'" label="邮箱" prop="youxiang">
-            <el-input v-model="ruleForm.youxiang" placeholder="邮箱" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item v-if="flag==='gongsi'" label="照片" prop="zhaopian">
-            <file-upload
-                tip="点击上传照片"
-                action="file/upload"
-                :limit="3"
-                :multiple="true"
-                :fileUrls="ruleForm.zhaopian?ruleForm.zhaopian:''"
-                @change="gongsizhaopianUploadChange"
-            ></file-upload>
-          </el-form-item>
-        </el-col>
-        <el-form-item v-if="flag==='users' && role === '管理员'" label="用户名" prop="username">
-          <el-input v-model="ruleForm.username"
-                    placeholder="用户名"></el-input>
-        </el-form-item>
-
-        <!--       出题专家 开始-->
-        <el-form-item v-if="role === '出题专家'" label="用户名" prop="username">
-          <el-input v-model="ruleForm.username"
-                    placeholder="账号"></el-input>
-        </el-form-item>
-
-        <el-form-item v-if="role === '出题专家'" label="姓名" prop="name">
-          <el-input v-model="ruleForm.name"
-                    placeholder="姓名"></el-input>
-        </el-form-item>
-
-        <el-form-item v-if="role === '出题专家'" label="性别" prop="age">
-          <el-select v-model="ruleForm.age" placeholder="请选择性别">
-            <el-option label="男" :value="1">男</el-option>
-            <el-option label="女" :value="2">女</el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item v-if="role === '出题专家'" label="手机号" prop="phone_number">
-          <el-input v-model="ruleForm.phone_number"
-                    placeholder="手机号"></el-input>
-        </el-form-item>
-
-        <el-form-item v-if="role === '出题专家'" label="邮箱" prop="email">
-          <el-input v-model="ruleForm.email"
-                    placeholder="邮箱"></el-input>
-        </el-form-item>
 
 
-        <el-form-item v-if="role === '出题专家'" label="身份证" prop="number_id">
-          <el-input v-model="ruleForm.number_id"
-                    placeholder="身份证"></el-input>
-        </el-form-item>
-        <el-form-item v-if="role === '出题专家'" label="毕业院校" prop="school">
-          <el-input v-model="ruleForm.school"
-                    placeholder="毕业院校"></el-input>
-        </el-form-item>
+          <el-form-item label="身份证(正面)" prop="zhaopian">
+            <el-upload
+                v-loading="loading"
+                element-loading-text="拼命识别中"
+                element-loading-spinner="el-icon-loading"
+                class="avatar-uploader"
+                :action="upload_url"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload">
+              <img v-if="ruleForm.form.imageUrl1" :src="ruleForm.form.imageUrl1" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+          <el-form-item label="身份证" prop="shenfenzheng">
+            <el-input v-model="ruleForm.number_id" placeholder="身份证" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="身份证(背面)" prop="zhaopian">
+            <el-upload
+                v-loading="loading"
+                element-loading-text="拼命识别中"
+                element-loading-spinner="el-icon-loading"
+                class="avatar-uploader"
+                :action="upload_url"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload">
+              <img v-if="ruleForm.form.imageUrl2" :src="ruleForm.form.imageUrl2" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
 
-        <el-form-item v-if="role === '出题专家'" label="学历" prop="school_level">
-          <el-select v-model="ruleForm.school_level" placeholder="请选择学历">
-            <el-option label="大专" value="1">大专</el-option>
-            <el-option label="本科" value="2">本科</el-option>
-            <el-option label="硕士" value="3">硕士</el-option>
-            <el-option label="博士" value="4">博士</el-option>
-          </el-select>
-        </el-form-item>
 
-        <el-form-item v-if="role === '出题专家'" label="专业" prop="speciality">
-          <el-input v-model="ruleForm.speciality"
-                    placeholder="专业"></el-input>
-        </el-form-item>
 
-        <el-col :span="24">
           <el-form-item>
             <el-button type="primary" @click="onUpdateHandler">修 改</el-button>
           </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
-  </div>
+        </el-form>
+      </div>
+
+    </el-tab-pane>
+    <el-tab-pane label="学历信息" name="second">学历信息</el-tab-pane>
+    <el-tab-pane label="工作经历" name="third">工作经历</el-tab-pane>
+    <el-tab-pane label="其他" name="fourth">其他</el-tab-pane>
+  </el-tabs>
+
 </template>
 <script>
 // 数字，邮件，手机，url，身份证校验
@@ -215,6 +75,8 @@ import {isNumber, isIntNumer, isEmail, isMobile, isPhone, isURL, checkIdCard} fr
 export default {
   data() {
     return {
+      upload_url: "",
+      activeName: "first",
       loading: false,
       ruleForm: {},
       flag: '',
@@ -229,27 +91,36 @@ export default {
     this.role = this.$storage.get("role");
     this.flag = table;
     this.loading = true;
-    if (this.role === '出题专家') {
-      this.$http.get(DOMAIN_API_SYS + "/tea/userinfo/?id=" + this.$storage.get("userId")).then(res => {
-        console.log(res.data.data)
-        this.loading = false;
-        this.ruleForm = res.data.data;
-      })
-    } else {
-      this.$http({
-        url: `${this.$storage.get("sessionTable")}/session?id=${this.$storage.get('userId')}`,
-        method: "get"
-      }).then(({data}) => {
-        this.loading = false;
-        if (data && data.code === 0) {
-          this.ruleForm = data.data;
-        } else {
-          this.$message.error(data.msg);
-        }
-      });
-    }
+    this.$http.get(DOMAIN_API_SYS + "/tea/userinfo/?id=" + this.$storage.get("userId")).then(res => {
+      console.log(res.data.data)
+      this.loading = false;
+      this.ruleForm = res.data.data;
+      this.upload_url = res.data.data.upload_url;
+    })
   },
   methods: {
+    // 上传验证
+                beforeAvatarUpload(file) {
+                    const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
+                    const isLt2M = file.size / 1024 / 1024 < 2;
+
+                    if (!isJPG) {
+                        this.$message.error('上传图片只能是 JPG 或 png 格式!');
+                    }
+                    if (!isLt2M) {
+                        this.$message.error('上传图片大小不能超过 2MB!');
+                    }
+                    return isJPG && isLt2M;
+                },
+    handleClick(tab, event) {
+      console.log(tab, event);
+    },
+    // 识别身份证正面
+    handleAvatarSuccess(res) {
+      this.imageUrl1 = this.web_file_url + res.data[0].file_url
+      this.loading = true;
+
+    },
     yonghuzhaopianUploadChange(fileUrls) {
       this.ruleForm.zhaopian = fileUrls;
     },
@@ -361,4 +232,18 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 328px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+
+.avatar {
+  width: 328px;
+  height: 178px;
+  display: block;
+}
 </style>

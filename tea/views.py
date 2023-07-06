@@ -93,8 +93,56 @@ def user_info(request):
     data = {
         'username': user.username,
     }
+    data = Struct(data)
     data.update(info)
     data['id'] = id_
+    user_id = id_
+    # 步骤 1
+    username = db.default.users.get(id=user_id).username
+    print(username)
+    if db.default.users.get(id=user_id).type == 3:
+        user_id = db.default.users.get(username=username, type=4).id
+    user_det = db.default.user_tea_det.get(user_id=user_id)
+    user_media = db.default.user_media_det.get(user_id=user_id)
+    data.step_id = user_det.step_id
+    data.form = Struct()
+    data.form.phone = user_det.phone_number
+    if user_media:
+        data.form.imageUrl1 = user_media.front
+        data.form.imageUrl2 = user_media.back
+        data.form.ocr_front = json.loads(user_media.ocr_info_front)
+        data.form.ocr_back = json.loads(user_media.ocr_info_back)
+    data.form.name = user_det.name
+    data.form.number_id = user_det.number_id
+    data.form.start_time = user_det.start_time
+    data.form.end_time = user_det.end_time
+
+    # 步骤 2
+    data.school_list = []
+    for obj in db.default.user_school_list.filter(user_id=user_id, status=1):
+        data.school_list.append({
+            "education": obj.education,
+            "school": obj.school,
+            "speciality": obj.speciality,
+            "time": [obj.start_time, obj.end_time],
+            "diploma": obj.diploma,
+            "degree": obj.degree,
+        })
+    # 步骤 3
+    data.work_list = []
+    for obj in db.default.user_work_list.filter(user_id=user_id, status=1):
+        data.work_list.append({
+            "name": obj.name,
+            "industry": obj.industry,
+            "post": obj.post,
+            "time": [obj.start_time, obj.end_time],
+            "start_time": obj.start_time,
+            "end_time": obj.end_time,
+            "keyword": obj.keyword,
+        })
+    # 步骤 4
+    data.prove = db.default.user_prove_list.filter(user_id=user_id, status=1).select(
+        'other', 'security', 'work').first()
     return ajax.ajax_ok(data)
 
 
