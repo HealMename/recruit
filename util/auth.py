@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.apps import apps
 
 from libs.utils import Struct, db, auth_token
+from main.users_model import users
 from util.codes import *
 from util import message as mes
 
@@ -41,32 +42,25 @@ class Auth(object):
                 msg['msg'] = '找不到该用户信息'
                 result = msg
                 return result
-            tablename = 'users'
-
-            datas = None
-            allModels = apps.get_app_config('main').get_models()
-            for model in allModels:
-                if model.__tablename__ == tablename:
-                    datas = model.getbyparams(model, model, {'id': user_info['user_id']})
-                    break
+            datas = users.getbyparams(users, users, {'id': user_info['user_id']})
             if not datas:
-                msg['code'] = username_error_code
                 msg['msg'] = '找不到该用户信息'
                 result = msg
             else:
                 request.user = Struct(datas[0])
 
-                if request.user.yonghuzhanghao:
-                    request.user.role = '用户'
-                    request.user.username = request.user.yonghuzhanghao
-                    datas[0]['username'] = request.user.yonghuzhanghao
-                    datas[0]['nickname'] = request.user.yonghuzhanghao
-                elif request.user.role in ['教师', '面试官', '管理员', '用户']:
+                if request.user.role == '用户':
                     request.user.shouji = request.user.username
                     datas[0]['nickname'] = request.user.username
+                    datas[0]['open_role'] = []
+                    if db.default.users.get(username=request.user.username, type=3, status=1):
+                        datas[0]['open_role'].append('3')
+                    if db.default.users.get(username=request.user.username, type=2, status=1):
+                        datas[0]['open_role'].append('2')
+                    datas[0]['open_role'] = ','.join(datas[0]['open_role'])
                 else:
                     datas[0]['nickname'] = request.user.gongsimingcheng
-                request.session['tablename'] = tablename
+                request.session['tablename'] = 'users'
                 msg['msg'] = '身份验证通过。'
                 msg['user'] = Struct(datas[0])
                 result = msg

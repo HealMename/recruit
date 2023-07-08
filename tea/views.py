@@ -174,6 +174,13 @@ def login(request):
         type_ = 4
         print(phone)
         user_id, password = get_user_id(phone, type_)
+        if not user_id and login_type == 2:
+            password = get_random_string(length=6, allowed_chars='0123456789')
+            password = auth_token.sha1_encode_password(password)
+            user_id = db.default.users.create(username=phone, password=password, role='用户', type=4, status=1)
+            now = int(time.time())
+            db.default.user_tea_det.create(
+                user_id=user_id, nickname=phone, add_time=now, phone_number=phone, status=1, step_id=0)
         if not user_id:
             return ajax.ajax_fail(message='账号不存在')
         if login_type == 1:

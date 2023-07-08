@@ -10,8 +10,8 @@ const sha256 = data => crypto.createHash('SHA256').update(data).digest('hex')
 const hmacsha256 = (data, key) => crypto.createHmac('sha256', key).update(data).digest('hex')
 
 // SETUP1:获取AccessKey和SecurityKey
-const securityKey = 'f3f220c94cb242f2b51065a92485ca3f'
-const accessKey = '65038a8f227242ab987efef3acea40dd'
+const securityKey = 'cf1c39f0daec49068e5e41e3ca9b28a7'
+const accessKey = 'aebd6dd671c44bb78e61a06840a5e434'
 
 const body = {
     "action": "QuerySmsSignList",

@@ -290,9 +290,9 @@
                         {#                        <p><a href="javascript:navPage('/interviewer/add/')">完善信息</a></p>#}
                         {#                        <p><a href="javascript:im()">通信平台</a></p>#}
 
-                        <p v-if="role!=='出题专家'"><a href="javascript:" @click="checkout_user_type(2, '出题专家', 'users')">申请出题专家</a>
+                        <p v-if="open_role.indexOf('2') === -1"><a href="javascript:" @click="checkout_user_type(2, '出题专家', 'users')">申请出题专家</a>
                         </p>
-                        <p v-if="role!=='面试官'"><a href="javascript:" @click="checkout_user_type(3, '面试官', 'users')">申请面试官</a>
+                        <p v-if="open_role.indexOf('3') === -1"><a href="javascript:" @click="checkout_user_type(3, '面试官', 'users')">申请面试专家</a>
                         </p>
 {#                        <p v-if="role!=='企业用户'"><a href="javascript:" @click="checkout_user_type(4, '公司', 'gongsi')">企业入驻</a>#}
 {#                        </p>#}
@@ -440,6 +440,7 @@
     var vue = new Vue({
         el: '#header',
         data: {
+            open_role: "",
             iconArr: ['layui-icon-gift', 'layui-icon-email', 'layui-icon-logout', 'layui-icon-transfer', 'layui-icon-slider', 'layui-icon-print', 'layui-icon-cols', 'layui-icon-snowflake', 'layui-icon-note', 'layui-icon-flag', 'layui-icon-theme', 'layui-icon-website', 'layui-icon-console', 'layui-icon-face-surprised', 'layui-icon-template-1', 'layui-icon-app', 'layui-icon-read', 'layui-icon-component', 'layui-icon-file-b', 'layui-icon-unlink', 'layui-icon-tabs', 'layui-icon-form', 'layui-icon-chat'],
             indexNav: indexNav,
             cartFlag: cartFlag,
@@ -603,6 +604,8 @@
                 $("#username").text(`${vue.phone.replaceAll('"', '').slice(0, 3)}****${vue.phone.replaceAll('"', '').slice(7, 11)}`)
                 $(".user").show()
                 $("#userrole").hide()
+                vue.open_role = res.open_role
+
             }
         })
 

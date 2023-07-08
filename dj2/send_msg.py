@@ -76,9 +76,9 @@ def index(request):
     id_ = db.default.mobile_mt.create(send_phone=send_phone, phone=phone, content=code)
     body = {
         "action": "SendSms",
-        "signName": "天翼云测试",
+        "signName": "云数智学堂",
         "phoneNumber": phone,
-        "templateCode": "SMS64124870510",
+        "templateCode": "SMS44785239911",
         "templateParam": "{\"code\":\"%s\"}" % code,
         "extendCode": str(id_)
     }
