@@ -278,3 +278,25 @@ def safe(path):
                 return r
         return wrap
     return _safe
+
+
+
+def get_client_ip(request):
+    """
+    获取客户端id
+    :param request:
+    :return:
+    """
+    remote_ip = request.META.get('HTTP_REMOTEIP')
+    if remote_ip and remote_ip != 'unknown':
+        return remote_ip
+    clent_ip = request.META.get('HTTP_CLIENT_IP')
+    if clent_ip and clent_ip != 'unknown':
+        return clent_ip
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for and x_forwarded_for != 'unknown':
+        return x_forwarded_for
+    remote_addr = request.META.get('REMOTE_ADDR')
+    if remote_addr and remote_addr != 'unknown':
+        return remote_addr
+    return ''

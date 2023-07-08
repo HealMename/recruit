@@ -2,7 +2,7 @@ import time
 
 from libs.WeChat.user import WebChatUser
 from libs.utils import ajax, db, auth_token, Struct
-from tbkt.settings import GHAT_ID
+from dj2.settings import GHAT_ID
 
 #
 # def r_user_info(request):

@@ -13,7 +13,7 @@ from django.http import HttpResponse
 from libs.WeChat.pay import WxPayConfig
 from libs.WeChat.user import WebChatUser
 from libs.utils import ajax, get_client_ip, db, Struct, render_template
-from tbkt.settings import GHAT_ID
+from dj2.settings import GHAT_ID
 
 ROOT_URL = settings.ROOT_URL
 

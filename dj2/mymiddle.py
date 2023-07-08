@@ -2,10 +2,12 @@ import json
 
 from django.http import HttpResponse, HttpRequest
 from django.utils.deprecation import MiddlewareMixin
+from django.http.request import QueryDict
+
 import logging as log
 
-from libs.utils import ajax, Struct
-
+from libs.utils import ajax, Struct, casts
+QueryDict.casts = casts
 write_list = ['/']
 
 
@@ -45,7 +47,7 @@ class CoreMiddle(MiddlewareMixin):
         response['Access-Control-Allow-Credentials'] = 'true'
         response['Access-Control-Allow-Headers'] = 'x-requested-with,content-type,HTTP_TOKEN,Token,App-Type,platform'
         response['Access-Control-Max-Age'] = '1728000'
-        # response['X-Frame-Options'] = 'allow-from *'
+        response['X-Frame-Options'] = 'SAMEORIGIN'
         return response
 
     def _process_request(self, request):

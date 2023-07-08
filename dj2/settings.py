@@ -40,7 +40,7 @@ UPLOAD_URL = "https://www.ittest008.com/uploads/"  # 上传地址
 web_file_url = "https://www.ittest008.com/file/"  # 文件域名
 K8S_URL = "https://www.ittest008.com/k8workload/terminal_index/"  # 终端项目
 SMS_API = "http://www.ittest008.com:3000/sms/send/"  # 短信接口
-
+FILE_UPLOAD_URLROOT = "https://www.ittest008.com/uploads/"
 # 华为云
 # UPLOAD_URL = "http://liudeli.top:8087/uploads/"  # 上传地址
 # web_file_url = "http://liudeli.top:8087/file/"  # 文件域名
@@ -57,6 +57,7 @@ REDIS_DB = DATABASES_CONFIG['REDIS_DB']
 
 GHAT_ID = 1
 APIDOC_DIR = os.path.join(BASE_DIR, './apidoc/')
+ROOT_URL = "https://www.ittest008.com"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -75,6 +76,8 @@ INSTALLED_APPS = [
     "main",
     "sslserver"
 ]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 MIDDLEWARE = [
     'dj2.mymiddle.CoreMiddle',
     'django.middleware.security.SecurityMiddleware',
@@ -89,6 +92,8 @@ MIDDLEWARE = [
     "xmiddleware.xauth.Xauth",
 
 ]
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 MEDIA_SITE = os.path.join(BASE_DIR, 'media/')
 DB_WAIT_TIMEOUT = 20  # 单个连接最长维持时间
 DB_POOL_SIZE = 2  # 连接池最大连接数

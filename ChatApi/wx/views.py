@@ -1,18 +1,14 @@
-import json
-import logging
-import os
+
 import time
 
-import requests
-from rest_framework.views import APIView
 import hashlib
 from django.http import HttpResponse
 
-from ChatApi.wx.utils import parse_xml, detail_img_one_school
+from ChatApi.wx.utils import parse_xml
 from dj2.settings import GHAT_ID
 from libs.WeChat import config
 from libs.WeChat.user import WebChatUser
-from libs.utils import ajax, db, auth_token, Struct, get_key
+from libs.utils import ajax, Struct
 
 
 def r_index(request):
@@ -85,44 +81,7 @@ def r_user_info(request):
         if not open_id:
             return ajax.ajax_fail(message='not found open_id')
         res = wx.get_unionid(open_id)
-        unionid = res.get('unionid', '-1')
-        user = db.wechat_lzfd.auth_user.filter(open_id=open_id, type=2)
-        if not user:
-            user_id = db.wechat_lzfd.auth_user.create(
-                name='微信用户', open_id=open_id, type=2, unionid=unionid, add_time=now)
-        else:
-            user_id = user.first().id
-    db.wechat_lzfd.auth_user.filter(id=user_id).update(last_login=now)
-    token = auth_token.create_token(user_id)
     data = Struct()
-    data.key = give(user_id)
-    data.token = token
     return ajax.ajax_ok(data)
-
-
-def give(user_id):
-    """赠送3天十次"""
-    now = int(time.time())
-    user_open = db.wechat_lzfd.chatapi_open_detail.filter(user_id=user_id)
-    if user_open:
-        user_open = user_open.first()
-        # if now > user_open.cancel_date:
-        #     """已过期"""
-        #     cancel_date = now + 86400 * 3
-        # else:
-        #     cancel_date = user_open.cancel_date + 86400 * 3
-        #
-        # if user_open.speak_num == 0:
-        #     speak_num = 10
-        # else:
-        #     speak_num = user_open.speak_num + 10
-        # db.wechat_lzfd.chatapi_open_detail.filter(user_id=user_id).update(cancel_date=cancel_date, speak_num=speak_num)
-        key = user_open.key
-    else:
-        key = get_key()
-        db.wechat_lzfd.chatapi_open_detail.create(
-            user_id=user_id, cancel_date=now + 86400 * 3, speak_num=10, add_date=now, key=key)
-    return key
-
 
 

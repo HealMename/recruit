@@ -4,7 +4,7 @@ import requests
 import sys
 import os
 # 设置工作目录
-from tbkt.settings import GHAT_ID
+from dj2.settings import GHAT_ID
 
 sys_base_path = os.path.abspath(__file__)
 sys.path.append(os.path.normpath(os.path.join(sys_base_path, '../..')))
