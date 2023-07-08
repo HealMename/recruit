@@ -11,6 +11,7 @@ urlpatterns = [
     path(r'add/', views.add_tea),
     path(r'register_role/', views.register_role),  # 注册选择角色
     path(r'register_yonghu/', views.register_yonghu),  # 注册选择用户角色
+    path(r'find_password/', views.find_password),  # 找回密码
     path(r'login/', views.login),
 ]
 
