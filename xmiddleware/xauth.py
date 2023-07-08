@@ -94,6 +94,7 @@ class Xauth(MiddlewareMixin):
                         # return JsonResponse(result)
         elif request.method == 'POST':
             post_list = [
+                '/chat/wx/index/',
                 '/{}/defaultuser/register'.format(schemaName),
                 '/{}/defaultuser/login'.format(schemaName),
                 '/{}/users/register'.format(schemaName),
