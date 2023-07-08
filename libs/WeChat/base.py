@@ -55,6 +55,7 @@ class WebChatBase(object):
     def request_api(self, path, query_string='', data='', body={}, headers={}, method='get'):
         # 请求微信服务基础接口
         url = 'https://%s/%s?%s' % (self.webChat_domain, path, query_string)
+        print(url)
         args = [url]
         if data and method == 'post':
             args.append(data)

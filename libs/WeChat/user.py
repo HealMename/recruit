@@ -95,7 +95,7 @@ class WebChatUser(WebChatBase):
         """获取登陆二维码"""
         access_token = self.get_access_token()
         args = f"access_token={access_token}"
-        path = f"wxa/getwxacodeunlimit?"
+        path = f"wxa/getwxacodeunlimit"
         body = {
             "page": "pages/index/index",
             "scene": "a=1",
