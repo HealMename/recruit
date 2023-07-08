@@ -55,7 +55,8 @@ REDIS_PORT = DATABASES_CONFIG['REDIS_PORT']
 REDIS_PASSWORD = DATABASES_CONFIG['REDIS_PASSWORD']
 REDIS_DB = DATABASES_CONFIG['REDIS_DB']
 
-
+GHAT_ID = 1
+APIDOC_DIR = os.path.join(BASE_DIR, './apidoc/')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

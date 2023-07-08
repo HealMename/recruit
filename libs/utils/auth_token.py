@@ -23,7 +23,7 @@ def get_random_string(length=12,
 
 def sha1_encode_password(password, salt=''):
     if not salt:
-        salt = get_random_string()
+        salt = get_random_string()  # 随机字符串
     hash = hashlib.sha1((salt + password).encode()).hexdigest()
     return "sha1$%s$%s" % (salt, hash)
 

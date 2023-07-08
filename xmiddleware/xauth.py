@@ -60,7 +60,10 @@ class Xauth(MiddlewareMixin):
                 "/{}/option/".format(schemaName),
                 "resetPass",
                 "/tea/add/",
-                "/tea/get_question_class/"
+                "/tea/get_question_class/",
+                "create_login_img",
+                "encode_password"
+                "encode_password"
             ]
 
             allModels = apps.get_app_config('main').get_models()

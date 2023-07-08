@@ -23,15 +23,17 @@ from django.conf import settings
 
 from . import views, send_msg
 from dj2.settings import dbName as schemaName
-
+from user import views as user
 urlpatterns = [
-
+    url(r'^apidoc/(?P<path>.*)$', serve, {'document_root': settings.APIDOC_DIR}),  # 接口文档
     url(r'^file/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_URL}),  # 静态文件路径
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_SITE}),  # 静态文件路径
     url(r'^upload/(?P<path>.*)$', serve, {'document_root': 'templates/front/'}),  # 静态文件路径
 
     path('xadmin/', admin.site.urls),
     path(r'index/', views.index),
+    path(r'encode_password/', user.encode_password),
+    path(r'verify_password/', user.request_verify_password),
     path(r'call/index/', send_msg.call_index),  # 面试间
     path(r'sms/send/', send_msg.index),  # 发短信接口
     re_path(r'admin/lib/(?P<p1>.*)/(?P<p2>.*)$', views.admin_lib2),

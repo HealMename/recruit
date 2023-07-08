@@ -23,4 +23,49 @@ def info(request):
     return ajax.ajax_ok(Auth.identify(request, request))
 
 
+def encode_password(request):
+    """
+    @api {post} /encode_password/ [公共接口]加密密码
+    @apiGroup common
+    @apiParamExample {json} 请求示例
+    {
+        "password": "123456"  密码
+    }
+
+    @apiSuccessExample {json} 成功返回
+    {
+        "response": "ok",
+        "data": "sha1$4EPUN9mYQcWJ$fd217c695073f27e9a1ea21f7c8ba6d9576d1181",
+        "error": "",
+        "next": "",
+        "message": ""
+    }
+    """
+    password = request.QUERY.get('password')
+    password = auth_token.sha1_encode_password(password)
+    return ajax.ajax_ok(password)
+
+
+def request_verify_password(request):
+    """
+    @api {post} /verify_password/ [公共接口]验证密码是否正确
+    @apiGroup common
+    @apiParamExample {json} 请求示例
+    {
+        "password": "123456",  # 登陆密码
+        "encoded": "sha1$awnulEq41wMD$e9ac1787d66808c1c431268f7ed779ba1d8d05a4"    # 加密密码
+    }
+    @apiSuccessExample {json} 成功返回
+    {
+        "response": "ok",
+        "data": 1,  1正确 0错误
+        "error": "",
+        "next": "",
+        "message": ""
+    }
+    """
+    password = request.QUERY.get('password')
+    encoded = request.QUERY.get('encoded')
+    verify = int(auth_token.verify_password(password, encoded))
+    return ajax.ajax_ok(verify)
 

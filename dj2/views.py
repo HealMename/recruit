@@ -8,8 +8,10 @@ from django.http import JsonResponse, HttpResponse
 from django.apps import apps
 
 from libs.utils import ajax
+from libs.utils import auth_token
 
 AK = "2nOEspppjFSaRClGqWE66FNK2eF81TFy"
+
 
 
 def index(request):
