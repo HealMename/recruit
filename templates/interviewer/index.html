@@ -70,10 +70,11 @@
         }
 
     </style>
-    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>面试专家注册</legend>
-    </fieldset>
+
     <div id="app">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend><span  v-text="role_name"></span>注册</legend>
+    </fieldset>
         <el-steps :active="active">
             <el-step title="步骤 1" description="身份信息"></el-step>
             <el-step title="步骤 2" description="学历信息"></el-step>
@@ -96,19 +97,25 @@
                         </div>
                         <el-form ref="form" :model="form" label-width="100px" :rules="rules1">
 
-                            <el-form-item label="手机号:" prop="phone">
-                                <el-input v-model.number="form.phone" maxlength="11" id="phone" type="number" oninput="if(value.length > 11)value = value.slice(0, 11)"></el-input>
+                            <el-form-item label="手机号:" prop="phone" v-if="!token">
+                                <el-input v-model.number="form.phone" maxlength="11" id="phone" type="number"
+                                          oninput="if(value.length > 11)value = value.slice(0, 11)"></el-input>
                                 <el-button @click="send_code()" style="margin-top: 10px;" id="send_code"
-                                           :disabled="disabled" size="small">
+                                           :disabled="disabled" size="small" v-if="!token">
                                     获取验证码 <span class="code_time"></span></el-button>
                             </el-form-item>
-                            <el-form-item label="验证码:" prop="code">
-                                <el-input v-model.number="form.code" maxlength="6" oninput="if(value.length > 11)value = value.slice(0, 6)"></el-input>
+                            <el-form-item label="手机号:" prop="phone" v-if="token">
+                                <el-input v-model.number="form.phone" maxlength="11" id="phone" type="number"
+                                          oninput="if(value.length > 11)value = value.slice(0, 11)" disabled="disabled"></el-input>
                             </el-form-item>
-                            <el-form-item label="密码:" prop="password1">
+                            <el-form-item label="验证码:" prop="code" v-if="!token">
+                                <el-input v-model.number="form.code" maxlength="6"
+                                          oninput="if(value.length > 11)value = value.slice(0, 6)"></el-input>
+                            </el-form-item>
+                            <el-form-item label="密码:" prop="password1" v-if="!token">
                                 <el-input v-model="form.password1" maxlength="12" type="password"></el-input>
                             </el-form-item>
-                            <el-form-item label="确认密码:" prop="password2">
+                            <el-form-item label="确认密码:" prop="password2" v-if="!token">
                                 <el-input v-model="form.password2" maxlength="12" type="password"></el-input>
                             </el-form-item>
                             <el-form-item label="身份证(正面):" prop="imageUrl1">
@@ -320,7 +327,7 @@
             <!-- 第四步 -->
             <transition name="el-fade-in-linear" v-if="active === 3">
                 <div>
-                    <div v-for="(item,i) in work_list" :key="i" class="text item">
+                    <div  class="text item">
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
                                 <span>其他证明</span>
@@ -335,7 +342,7 @@
                                             class="avatar-uploader"
                                             :action="upload_url"
                                             :show-file-list="false"
-                                            :on-success="(response) =>handleAvatarSuccess3(response, i, 3)"
+                                            :on-success="(response) =>handleAvatarSuccess3(response, 0, 3)"
                                             :before-upload="beforeAvatarUpload">
                                         <img v-if="prove.work" :src="prove.work" class="avatar">
                                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -348,7 +355,7 @@
                                             class="avatar-uploader"
                                             :action="upload_url"
                                             :show-file-list="false"
-                                            :on-success="(response) =>handleAvatarSuccess3(response, i, 4)"
+                                            :on-success="(response) =>handleAvatarSuccess3(response, 0, 4)"
                                             :before-upload="beforeAvatarUpload">
                                         <img v-if="prove.security" :src="prove.security" class="avatar">
                                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -361,7 +368,7 @@
                                             class="avatar-uploader"
                                             :action="upload_url"
                                             :show-file-list="false"
-                                            :on-success="(response) =>handleAvatarSuccess3(response, i, 5)"
+                                            :on-success="(response) =>handleAvatarSuccess3(response, 0, 5)"
                                             :before-upload="beforeAvatarUpload">
                                         <img v-if="prove.other" :src="prove.other" class="avatar">
                                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -566,7 +573,7 @@
             if (!value) {
                 return callback(new Error('密码不能为空'));
             }
-            if (value.length < 6 || value.length > 12){
+            if (value.length < 6 || value.length > 12) {
                 return callback(new Error('密码长度在 6 到 12 个字符'));
             }
             callback();
@@ -583,6 +590,8 @@
         var vue = new Vue({
             el: "#app",
             data: {
+                role_id: 2,
+                role_name: '11',
                 // 其他证明验证
                 prove_rules: {
                     work: [
@@ -683,10 +692,10 @@
                 // 第一步基础信息验证
                 rules1: {
                     password1: [
-                        { validator: checkPassword1, trigger: 'blur' }
+                        {validator: checkPassword1, trigger: 'blur'}
                     ],
                     password2: [
-                        { validator: checkPassword2, trigger: 'blur' }
+                        {validator: checkPassword2, trigger: 'blur'}
                     ],
                     code: [{required: true, message: '请填写验证码', trigger: 'blur'}],
                     phone: [
@@ -721,65 +730,76 @@
 
             },
             created() {
-
+                this.token = localStorage.getItem("Token")
+                this.role_id = {{ request.GET.role_id }}
+                if (this.role_id == 3){
+                    this.role_name = '面试专家'
+                }else if (this.role_id == 2){
+                    this.role_name = '出题专家'
+                }
                 if (this.active !== 5) {
                     var thsi = this;
                     this.loading_post = true;
-                    $.get("/interviewer/save/", function (res) {
+                    $.get("/interviewer/save/?role_id=" + thsi.role_id, function (res) {
                         thsi.loading_post = false;
                         if (res.response === 'ok') {
                             var data = res.data;
-                            if (data){
-                            // 第一步
-                            thsi.form.phone = data.form.phone;
-                            thsi.imageUrl1 = data.form.imageUrl1
-                            thsi.active = data.step_id
-                            thsi.imageUrl2 = data.form.imageUrl2
-                            if (data.form.phone) {
-                                $("#phone").attr('disabled', '')
-                            }
-                            if (data.form.ocr_front) {
-                                thsi.form.ocr_info_front.name = data.form.name
-                                thsi.form.ocr_info_front.address = data.form.ocr_front.address || ''
-                                thsi.form.ocr_info_front.number_id = data.form.number_id
-                                thsi.form.ocr_info_back.start_time = data.form.start_time
-                                thsi.form.ocr_info_back.end_time = data.form.end_time
-                                thsi.form.ocr_info_back.time = [
-                                    new Date(data.form.start_time.substring(0, 4),
-                                        parseInt(data.form.start_time.substring(4, 6)) - 1,
-                                        data.form.start_time.substring(6, 8)),
-                                    new Date(data.form.end_time.substring(0, 4),
-                                        parseInt(data.form.end_time.substring(4, 6)) - 1,
-                                        data.form.end_time.substring(6, 8))]
-                                thsi.ocr_front = data.form.ocr_front
-                                thsi.ocr_back = data.form.ocr_back
-                            }
-
-                            $.each(data.school_list, function (i) {
-                                this.time = [
-                                    new Date(this.time[0].substring(0, 4),
-                                        parseInt(this.time[0].substring(4, 6)) - 1,
-                                        this.time[0].substring(6, 8)),
-                                    new Date(this.time[1].substring(0, 4),
-                                        parseInt(this.time[1].substring(4, 6)) - 1,
-                                        this.time[1].substring(6, 8))
-                                ]
-                            })
-                            thsi.school_list = data.school_list
-
-                            $.each(data.work_list, function (i) {
-                                this.time = [
-                                    new Date(this.time[0].substring(0, 4),
-                                        parseInt(this.time[0].substring(4, 6)) - 1,
-                                        this.time[0].substring(6, 8)),
-                                    new Date(this.time[1].substring(0, 4),
-                                        parseInt(this.time[1].substring(4, 6)) - 1,
-                                        this.time[1].substring(6, 8))
-                                ]
-                            })
-                            thsi.work_list = data.work_list
-                            thsi.prove = data.prove
+                            if (data) {
+                                // 第一步
+                                thsi.form.phone = data.form.phone;
+                                thsi.imageUrl1 = data.form.imageUrl1
+                                thsi.active = data.step_id
+                                thsi.imageUrl2 = data.form.imageUrl2
+                                if (data.form.phone) {
+                                    $("#phone").attr('disabled', '')
                                 }
+                                if (data.form.ocr_front) {
+                                    thsi.form.ocr_info_front.name = data.form.name
+                                    thsi.form.ocr_info_front.address = data.form.ocr_front.address || ''
+                                    thsi.form.ocr_info_front.number_id = data.form.number_id
+                                    thsi.form.ocr_info_back.start_time = data.form.start_time
+                                    thsi.form.ocr_info_back.end_time = data.form.end_time
+                                    thsi.form.ocr_info_back.time = [
+                                        new Date(data.form.start_time.substring(0, 4),
+                                            parseInt(data.form.start_time.substring(4, 6)) - 1,
+                                            data.form.start_time.substring(6, 8)),
+                                        new Date(data.form.end_time.substring(0, 4),
+                                            parseInt(data.form.end_time.substring(4, 6)) - 1,
+                                            data.form.end_time.substring(6, 8))]
+                                    thsi.ocr_front = data.form.ocr_front
+                                    thsi.ocr_back = data.form.ocr_back
+                                }
+                                if (data.school_list.length) {
+                                    $.each(data.school_list, function (i) {
+                                        this.time = [
+                                            new Date(this.time[0].substring(0, 4),
+                                                parseInt(this.time[0].substring(4, 6)) - 1,
+                                                this.time[0].substring(6, 8)),
+                                            new Date(this.time[1].substring(0, 4),
+                                                parseInt(this.time[1].substring(4, 6)) - 1,
+                                                this.time[1].substring(6, 8))
+                                        ]
+                                    })
+                                    thsi.school_list = data.school_list
+                                }
+
+                                if (data.work_list.length){
+
+
+                                        $.each(data.work_list, function (i) {
+                                            this.time = [
+                                                new Date(this.time[0].substring(0, 4),
+                                                    parseInt(this.time[0].substring(4, 6)) - 1,
+                                                    this.time[0].substring(6, 8)),
+                                                new Date(this.time[1].substring(0, 4),
+                                                    parseInt(this.time[1].substring(4, 6)) - 1,
+                                                    this.time[1].substring(6, 8))
+                                            ]
+                                        })
+                                        thsi.work_list = data.work_list
+                                    }
+                                thsi.prove = data.prove || thsi.prove
+                            }
                         } else {
                             msg_fail(res.message)
                         }
@@ -888,7 +908,7 @@
                                 }
                             } else if (this.active === 3) {
 
-                                this.$refs[formName][0].validate((valid) => {
+                                this.$refs[formName].validate((valid) => {
                                     if (valid) {
                                         // 第4步
                                         this.save_step4()
@@ -902,7 +922,7 @@
                                     cancelButtonText: '取消',
                                     type: 'warning'
                                 }).then(() => {
-                                    $.post("/interviewer/save/", {
+                                    $.post("/interviewer/save/?role_id=" + thsi.role_id, {
                                         token: this.token || localStorage.getItem("Token"),
                                         step_id: this.active + 1,
                                     }, function (res) {
@@ -910,7 +930,7 @@
                                         if (res.response === 'ok') {
                                             thsi.active++
                                         } else {
-                                            
+
                                             thsi.$message.error(res.message);
                                         }
                                     })
@@ -988,12 +1008,16 @@
                         ocr_info_back: JSON.stringify(this.ocr_back)
                     }
                     var thsi = this;
-                    $.post("/interviewer/save/", post_data, function (res) {
+                    $.post("/interviewer/save/?role_id=" + thsi.role_id, post_data, function (res) {
                         thsi.loading_post = false;
                         if (res.response === 'ok') {
                             localStorage.setItem("Token", res.data.token);
                             thsi.token = res.data.token
                             thsi.active++
+                            localStorage.setItem("userId", res.data.user_id);
+                            localStorage.setItem("role", '用户');
+                            localStorage.setItem("sessionTable", 'yonghu');
+                            localStorage.setItem("adminName", this.form.phone);
                         } else {
                             thsi.$message.error(res.message);
 
@@ -1015,12 +1039,12 @@
                         step_id: this.active + 1,
                         data: JSON.stringify(this.school_list)
                     }
-                    $.post("/interviewer/save/", post_data, function (res) {
+                    $.post("/interviewer/save/?role_id=" + thsi.role_id, post_data, function (res) {
                         thsi.loading_post = false;
                         if (res.response === 'ok') {
                             thsi.active++
                         } else {
-                            
+
                             thsi.$message.error(res.message);
                         }
                     })
@@ -1034,18 +1058,17 @@
                         this.start_time = time[0]
                         this.end_time = time[1]
                     })
-                    console.log(this.work_list)
                     var post_data = {
                         token: this.token || localStorage.getItem("Token"),
                         step_id: this.active + 1,
                         data: JSON.stringify(this.work_list)
                     }
-                    $.post("/interviewer/save/", post_data, function (res) {
+                    $.post("/interviewer/save/?role_id=" + thsi.role_id, post_data, function (res) {
                         thsi.loading_post = false;
                         if (res.response === 'ok') {
                             thsi.active++
                         } else {
-                            
+
                             thsi.$message.error(res.message);
                         }
                     })
@@ -1054,7 +1077,7 @@
                 // 第4步
                 save_step4() {
                     var thsi = this;
-                    $.post("/interviewer/save/", {
+                    $.post("/interviewer/save/?role_id=" + thsi.role_id, {
                         token: this.token || localStorage.getItem("Token"),
                         step_id: this.active + 1, prove: JSON.stringify(this.prove)
                     }, function (res) {
@@ -1062,7 +1085,7 @@
                         if (res.response === 'ok') {
                             thsi.active++
                         } else {
-                            
+
                             thsi.$message.error(res.message);
                         }
                     })
@@ -1110,7 +1133,9 @@
                 // 上传毕业证\学位证
                 handleAvatarSuccess3(res, i, type) {
                     if (type === 1) {
+
                         this.school_list[i].diploma = this.web_file_url + res.data[0].file_url
+                        console.log(i, this.school_list)
                     } else if (type === 2) {
                         this.school_list[i].degree = this.web_file_url + res.data[0].file_url
                     } else if (type === 3) {
@@ -1120,18 +1145,20 @@
                     } else if (type === 5) {
                         this.prove.other = this.web_file_url + res.data[0].file_url
                     }
+                    this.$forceUpdate();
                 },
 
                 // 新增学历信息
                 add_school_det() {
                     if (this.school_list.length < 5) {
                         this.school_list.push({
-                            name: "",
-                            industry: "",
-                            post: "",
-                            time: {},
-                            keyword: "",
-                        })
+                        education: "",
+                        school: "",
+                        speciality: "",
+                        time: [],
+                        diploma: "",
+                        degree: "",
+                    })
                     } else {
                         msg_fail("最多添加五个")
                     }
@@ -1183,13 +1210,14 @@
                 add_work_det() {
                     if (this.work_list.length < 5) {
                         this.work_list.push({
-                            education: "",
-                            school: "",
-                            speciality: "",
-                            time: {},
-                            diploma: "",
-                            degree: "",
-                        })
+                        name: "",
+                        industry: "",
+                        post: "",
+                        time: [],
+                        start_time: "",
+                        end_time: "",
+                        keyword: "",
+                    })
                     } else {
                         msg_fail("最多添加五个")
                     }

@@ -9,10 +9,12 @@ from libs.utils import ajax, db, auth_token
 from libs.utils.auth_token import get_random_string
 from libs.utils.common import Struct, render_template, get_upload_key
 
+role_name = {2: "出题专家", 3: "面试专家"}
 
 def save_info(request):
     """保存信息"""
     step_id = int(request.QUERY.get('step_id', 0))
+    role_id = int(request.QUERY.get('role_id', 0))
     now = int(time.time())
     data = Struct()
     user_id = request.user.id or 0
@@ -23,7 +25,7 @@ def save_info(request):
             phone = request.QUERY.get('phone')
             code = request.QUERY.get('code')  # 验证码
             is_ver = verify_(code, phone, 1)
-            if not is_ver:
+            if not is_ver and not user_id:
                 return ajax.ajax_fail(message='验证码错误')
             front = request.QUERY.get('front')
             back = request.QUERY.get('back')
@@ -35,9 +37,12 @@ def save_info(request):
                 return ajax.ajax_fail(message='手机号已被注册')
             password = auth_token.sha1_encode_password(password)  # 加密密码
             if not user_id:
-                db.default.users.create(username=phone, type=3, status=0, role='面试官', password=password)
+                db.default.users.create(username=phone, type=role_id, status=0, role=role_name[role_id], password=password)
                 user_id = db.default.users.create(username=phone, type=4, status=1, role='用户', password=password)
+            if not db.default.users.filter(username=phone, type=role_id):
+                db.default.users.create(username=phone, type=role_id, status=0, role=role_name[role_id], password=password)
             data.token = auth_token.create_token('users', user_id)
+            data.user_id = user_id
             media_args = dict(
                 add_time=now, front=front, back=back, ocr_info_front=json.dumps(ocr_info_front),
                 ocr_info_back=json.dumps(ocr_info_back), status=1)
@@ -71,6 +76,7 @@ def save_info(request):
                 obj['user_id'] = user_id
                 obj['add_time'] = now
                 objs.append(obj)
+            print(objs)
             db.default.user_school_list.bulk_create(objs)
             db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
         elif step_id == 3:
@@ -108,10 +114,13 @@ def save_info(request):
             username = db.default.users.get(id=user_id).username
             if db.default.users.get(id=user_id).type == 3:
                 user_id = db.default.users.get(username=username, type=4).id
-            data.status = db.default.users.get(id=db.default.users.get(username=username, type=3).id).status
+            if db.default.users.get(username=username, type=role_id):
+                data.status = db.default.users.get(username=username, type=role_id).status
+            else:
+                data.status = 0
+
             user_det = db.default.user_tea_det.get(user_id=user_id)
             user_media = db.default.user_media_det.get(user_id=user_id)
-            data.step_id = user_det.step_id
             data.form = Struct()
             data.form.phone = user_det.phone_number
             if user_media:
@@ -119,6 +128,7 @@ def save_info(request):
                 data.form.imageUrl2 = user_media.back
                 data.form.ocr_front = json.loads(user_media.ocr_info_front)
                 data.form.ocr_back = json.loads(user_media.ocr_info_back)
+                data.step_id = 2
             data.form.name = user_det.name
             data.form.number_id = user_det.number_id
             data.form.start_time = user_det.start_time
@@ -135,6 +145,7 @@ def save_info(request):
                         "diploma": obj.diploma,
                         "degree": obj.degree,
                     })
+                data.step_id = 3
             # 步骤 3
             data.work_list = []
             for obj in db.default.user_work_list.filter(user_id=user_id, status=1):
@@ -147,6 +158,7 @@ def save_info(request):
                         "end_time": obj.end_time,
                         "keyword": obj.keyword,
                     })
+                data.step_id = 4
             # 步骤 4
             data.prove = db.default.user_prove_list.filter(user_id=user_id, status=1).select(
                 'other', 'security', 'work').first()
