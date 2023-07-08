@@ -1,6 +1,6 @@
 [
   {
-    "type": "post",
+    "type": "get",
     "url": "/encode_password/",
     "title": "[公共接口]加密密码",
     "group": "common",
@@ -25,10 +25,10 @@
     "version": "0.0.0",
     "filename": "user/views.py",
     "groupTitle": "common",
-    "name": "PostEncode_password"
+    "name": "GetEncode_password"
   },
   {
-    "type": "post",
+    "type": "get",
     "url": "/verify_password/",
     "title": "[公共接口]验证密码是否正确",
     "group": "common",
@@ -53,6 +53,6 @@
     "version": "0.0.0",
     "filename": "user/views.py",
     "groupTitle": "common",
-    "name": "PostVerify_password"
+    "name": "GetVerify_password"
   }
 ]

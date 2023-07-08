@@ -25,7 +25,7 @@ def info(request):
 
 def encode_password(request):
     """
-    @api {post} /encode_password/ [公共接口]加密密码
+    @api {get} /encode_password/ [公共接口]加密密码
     @apiGroup common
     @apiParamExample {json} 请求示例
     {
@@ -48,7 +48,7 @@ def encode_password(request):
 
 def request_verify_password(request):
     """
-    @api {post} /verify_password/ [公共接口]验证密码是否正确
+    @api {get} /verify_password/ [公共接口]验证密码是否正确
     @apiGroup common
     @apiParamExample {json} 请求示例
     {
