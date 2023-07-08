@@ -92,9 +92,9 @@ def menu_list(request):
     sql = f"""
         select distinct m.* from recruit.sys_m_module m
         join recruit.sys_m_role_module ro on ro.module_id =m.id
-        join recruit.users u on u.`type` =ro.role_id 
-       	join recruit.user_tea_det det on det.user_id =u.id and det.phone_number ='{request.user.shouji}' order by m.mod_order ;
+        join recruit.users u on u.`type` =ro.role_id and u.username ='{request.user.shouji}' order by m.mod_order ;
     """
+    print(sql)
     data = db.default.fetchall_dict(sql)
     parent_obj = [x for x in data if x['parent_id'] == 0]
     for obj in parent_obj:

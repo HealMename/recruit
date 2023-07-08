@@ -207,10 +207,6 @@ def register_yonghu(request):
         password = request.QUERY.get('password1')
         if not verify_(code, phone, 4):
             return ajax.ajax_fail(message='验证码错误')
-        if db.default.yonghu.filter(yonghuzhanghao=phone):
-            return ajax.ajax_ok(message='手机号已被注册')
-        db.default.yonghu.create(yonghuzhanghao=phone, mima=password,
-                                 shouji=phone, yonghuxingming=phone)
         password = auth_token.sha1_encode_password(password)
         id_ = db.default.users.create(username=phone, password=password, role='用户', type=4, status=1)
         now = int(time.time())

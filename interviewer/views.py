@@ -40,7 +40,7 @@ def save_info(request):
                 db.default.users.create(username=phone, type=role_id, status=0, role=role_name[role_id], password=password)
                 user_id = db.default.users.create(username=phone, type=4, status=1, role='用户', password=password)
             if not db.default.users.filter(username=phone, type=role_id):
-                db.default.users.create(username=phone, type=role_id, status=0, role=role_name[role_id], password=password)
+                db.default.users.create(username=phone, type=role_id, status=0, role=role_name[role_id], password='')
             data.token = auth_token.create_token('users', user_id)
             data.user_id = user_id
             media_args = dict(
@@ -76,7 +76,6 @@ def save_info(request):
                 obj['user_id'] = user_id
                 obj['add_time'] = now
                 objs.append(obj)
-            print(objs)
             db.default.user_school_list.bulk_create(objs)
             db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
         elif step_id == 3:
@@ -109,11 +108,14 @@ def save_info(request):
     else:
         """获取提交步骤内容"""
         user_id = request.GET.get('cms_user_id', 0) or request.user.id
+        is_cms = 0
+        if request.GET.get('cms_user_id', 0):
+            is_cms = 1  # 后台过来的
+
         if user_id:
             # 步骤 1
             username = db.default.users.get(id=user_id).username
-            if db.default.users.get(id=user_id).type == 3:
-                user_id = db.default.users.get(username=username, type=4).id
+            user_id = db.default.users.get(username=username, type=4).id
             if db.default.users.get(username=username, type=role_id):
                 data.status = db.default.users.get(username=username, type=role_id).status
             else:
@@ -123,12 +125,15 @@ def save_info(request):
             user_media = db.default.user_media_det.get(user_id=user_id)
             data.form = Struct()
             data.form.phone = user_det.phone_number
+            data.step_id = 0
             if user_media:
                 data.form.imageUrl1 = user_media.front
                 data.form.imageUrl2 = user_media.back
                 data.form.ocr_front = json.loads(user_media.ocr_info_front)
                 data.form.ocr_back = json.loads(user_media.ocr_info_back)
-                data.step_id = 2
+                data.step_id = 1
+                if not db.default.users.get(username=username, type=role_id) and not is_cms:
+                    db.default.users.create(username=username, type=role_id, status=0, role=role_name[role_id], password='')
             data.form.name = user_det.name
             data.form.number_id = user_det.number_id
             data.form.start_time = user_det.start_time
@@ -145,7 +150,7 @@ def save_info(request):
                         "diploma": obj.diploma,
                         "degree": obj.degree,
                     })
-                data.step_id = 3
+                data.step_id = 2
             # 步骤 3
             data.work_list = []
             for obj in db.default.user_work_list.filter(user_id=user_id, status=1):
@@ -158,10 +163,14 @@ def save_info(request):
                         "end_time": obj.end_time,
                         "keyword": obj.keyword,
                     })
-                data.step_id = 4
+                data.step_id = 3
             # 步骤 4
             data.prove = db.default.user_prove_list.filter(user_id=user_id, status=1).select(
                 'other', 'security', 'work').first()
+            if data.prove:
+                data.step_id = 4
+            if data.step_id == 4 and data.status == 0:
+                data.step_id = 5
         return ajax.ajax_ok(data)
 
 
@@ -172,9 +181,6 @@ def add_tea(request):
     data = Struct()
     data.upload_url = f"{UPLOAD_URL}?upcheck={get_upload_key()}&up_type=number_id_img"
     data.web_file_url = web_file_url
-    data.step_id = 0
-    if request.user.id:
-        data.step_id = db.default.user_tea_det.get(user_id=request.user.id).step_id
     return render_template(request, 'interviewer/index.html', data)
 
 

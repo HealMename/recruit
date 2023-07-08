@@ -114,7 +114,7 @@
             $.post(location.href, data.field, function (res) {
                 if (res.response === 'ok') {
                     msg_ok(res.message, function () {
-                        window.parent.document.getElementById('iframe').src = './pages/zhaopinxinxi/list.html';
+                        {#window.parent.document.getElementById('iframe').src = './pages/zhaopinxinxi/list.html';#}
                     })
 
                 } else {

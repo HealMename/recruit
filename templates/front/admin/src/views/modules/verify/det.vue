@@ -1,17 +1,8 @@
 <template>
   <el-row v-loading="loading">
     <!--面试官-->
-    <el-col :span="24" v-if="type === '3'">
+    <el-col :span="24" >
       <el-descriptions class="margin-top" title="" :column="3" border>
-
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-user"></i>
-            昵称
-          </template>
-          <p v-text="form.name"></p>
-        </el-descriptions-item>
-
         <el-descriptions-item>
           <template slot="label">
             <i class="el-icon-user"></i>
@@ -161,84 +152,7 @@
         <el-button @click="go_bank()">返回</el-button>
       </div>
     </el-col>
-    <!--出题专家-->
-    <el-col :span="24" v-if="type === '2'">
-      <el-descriptions class="margin-top" title="" :column="3" border>
-        <el-descriptions-item>
-          <template slot="label" >
-            <i class="el-icon-user"></i>
-            昵称
-          </template>
-          <p v-text="tea.nickname"></p>
-        </el-descriptions-item>
 
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-user"></i>
-            姓名
-          </template>
-          <p v-text="tea.name"></p>
-
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-mobile-phone"></i>
-            手机号
-          </template>
-          <p v-text="tea.phone_number"></p>
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-tickets"></i>
-            身份证号
-          </template>
-          <p v-text="tea.number_id"></p>
-        </el-descriptions-item>
-        <el-descriptions-item span="2">
-          <template slot="label">
-            <i class="el-icon-office-building"></i>
-            性别
-          </template>
-          <p v-text="tea.age"></p>
-        </el-descriptions-item>
-
-        <el-descriptions-item span="3">
-          <template slot="label">
-            <i class="el-icon-office-building"></i>
-            邮箱
-          </template>
-          <p v-text="tea.email"></p>
-        </el-descriptions-item>
-        <el-descriptions-item span="1">
-            <template slot="label">
-              <i class="el-icon-office-building"></i>
-              毕业院校
-            </template>
-            <p v-text="tea.school"></p>
-
-          </el-descriptions-item>
-          <el-descriptions-item span="1">
-            <template slot="label">
-              <i class="el-icon-office-building"></i>
-              学历
-            </template>
-            <p v-text="tea.school_level"></p>
-          </el-descriptions-item>
-          <el-descriptions-item span="2">
-            <template slot="label">
-              <i class="el-icon-office-building"></i>
-              专业
-            </template>
-            <p v-text="tea.speciality"></p>
-          </el-descriptions-item>
-      </el-descriptions>
-
-      <div style="margin: 20px">
-        <el-button type="danger" @click="verify_(1)" v-if="status === 0">拒绝</el-button>
-        <el-button type="warning" @click="verify_(2)" v-if="status === 0">通过</el-button>
-        <el-button @click="go_bank()">返回</el-button>
-      </div>
-    </el-col>
   </el-row>
 
 </template>
@@ -249,7 +163,6 @@ export default {
     return {
       status: 1,
       id: this.$route.params.id,
-      type: this.$route.params.type,
       // 出题专家
       tea: {
 
@@ -315,7 +228,7 @@ export default {
   },
   methods: {
     init_data: function () {
-      if (this.type === '3') {
+
         this.loading = true;
         this.$http.get(DOMAIN_API_SYS + "/interviewer/save/?cms_user_id=" + this.id).then(res => {
           res = res.data
@@ -370,19 +283,7 @@ export default {
           }
 
         })
-      }else{
-        this.loading = true;
-        this.$http.get(DOMAIN_API_SYS + "/tea/add/?user_id=" + this.id).then(res => {
-          res = res.data
-          console.log(res)
-          if (res.response === 'ok') {
-            this.tea = res.data.user;
-            this.status = this.tea.status
-            this.loading = false;
-          }
-        }
-        )
-      }
+
     },
     go_bank: function () {
       this.$router.replace({path: "/verify/"});

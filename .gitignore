@@ -21,3 +21,4 @@ settings_dawang.py
 __pycache__/
 /test
 venv/
+env.js
