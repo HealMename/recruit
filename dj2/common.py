@@ -16,11 +16,7 @@ def get_user_id(phone, type_, id_=0):
         """
         print(sql)
         user = db.default.fetchone_dict(sql)
-    elif type_ == 4:
-        sql = f"""
-            select id, mima as password from recruit.yonghu where shouji='{phone}'
-        """
-        user = db.default.fetchone_dict(sql)
+
     elif type_ == 5:
         sql = f"""
             select id, mima as password from recruit.gongsi where shouji='{phone}'

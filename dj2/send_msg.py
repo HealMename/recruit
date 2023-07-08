@@ -57,11 +57,9 @@ def index(request):
     content = request.QUERY.get('content')  # 发送内容
     code = 0
     redis_key = f"{phone}:{code_id}"
-    if code_id in [2, ]:
+    if code_id in [2, 5]:
         # 登录验证码
-        role = request.QUERY.get('type')  # 角色
-        type_ = ROLE_ID[role]
-        user_id, _ = get_user_id(phone, type_)
+        user_id, _ = get_user_id(phone, 4)
         if not user_id:
             return ajax.ajax_fail(message='账号不存在')
 

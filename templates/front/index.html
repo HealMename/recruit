@@ -296,7 +296,7 @@
                         </p>
 {#                        <p v-if="role!=='企业用户'"><a href="javascript:" @click="checkout_user_type(4, '公司', 'gongsi')">企业入驻</a>#}
 {#                        </p>#}
-                        <p><a href="/admin/#/updatePassword" target="_blank">修改密码</a></p>
+                        <p><a href="javascript:navPage('/tea/register_yonghu/?type=3');" >修改密码</a></p>
                         <p><a href="javascript:localStorage.clear();location.reload()">退出登录</a></p>
                     </div>
                 </li>
@@ -376,7 +376,7 @@
                         <i class="layui-icon pass-clearbtn pass-password" onclick="empty_input('password')">&#x1006;</i>
                         <a href="javascript:navPage('/tea/register_role/');layer.closeAll();"
                            class="pass-register">立即注册</a>
-                        <a href="javascript:" class="pass-fgtpwd">忘记密码？</a>
+                        <a href="javascript:navPage('/tea/register_yonghu/?type=2');layer.closeAll();" class="pass-fgtpwd">忘记密码？</a>
                     </div>
                 </div>
             </div>
@@ -497,6 +497,7 @@
                     area: ['800px', '325px'],
                     content: $(".login_layer").html(),
                     success: function () {
+                        checkout_login($('.switch-item').first(), 1)
                         $(".phone").bind("input propertychange", function (e) {
                             //获取input输入的值
                             if (e.delegateTarget.value) {

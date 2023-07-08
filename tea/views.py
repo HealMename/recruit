@@ -208,35 +208,31 @@ def register_role(request):
 def register_yonghu(request):
     """角色选择普通用户注册"""
     data = Struct()
+    type_ = int(request.QUERY.get('type', 1))
+    code_id = int(type_) + 3
     if request.method == 'POST':
         code = request.QUERY.get('code')
         phone = request.QUERY.get('phone_number')
         password = request.QUERY.get('password1')
-        if not verify_(code, phone, 4):
+        if not verify_(code, phone, code_id):
             return ajax.ajax_fail(message='验证码错误')
         password = auth_token.sha1_encode_password(password)
-        id_ = db.default.users.create(username=phone, password=password, role='用户', type=4, status=1)
-        now = int(time.time())
-        db.default.user_tea_det.create(user_id=id_, nickname=phone, add_time=now,
-                                       phone_number=phone, status=1, step_id=0)
-        return ajax.ajax_ok(message='注册成功')
+        if type_ == 1:
+            id_ = db.default.users.create(username=phone, password=password, role='用户', type=4, status=1)
+            now = int(time.time())
+            db.default.user_tea_det.create(user_id=id_, nickname=phone, add_time=now,
+                                           phone_number=phone, status=1, step_id=0)
+            return ajax.ajax_ok(message='注册成功')
+        else:
+            db.default.users.filter(username=phone).update(password=password)
+            return ajax.ajax_ok(message='修改成功')
     else:
+
+        title = {1: '用户注册', 2: "找回密码", 3: "修改密码"}[int(type_)]
+        data.title = title
+        data.code_id = code_id
         return render_template(request, 'user/yonghu.html', data)
 
 
-def find_password(request):
-    """找回密码"""
-    data = Struct()
-    if request.method == 'POST':
-        code = request.QUERY.get('code')
-        phone = request.QUERY.get('phone_number')
-        password = request.QUERY.get('password1')
-        if not verify_(code, phone, 5):
-            return ajax.ajax_fail(message='验证码错误')
-        password = auth_token.sha1_encode_password(password)
-        db.default.users.filter(username=phone).update(password=password)
-        return ajax.ajax_ok(message='修改成功')
-    else:
-        return render_template(request, 'user/find_password.html', data)
 
 
