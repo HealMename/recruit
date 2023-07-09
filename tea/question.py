@@ -3,8 +3,6 @@ import time
 
 import random
 
-from django.http import HttpResponseRedirect
-
 from dj2.settings import K8S_URL
 from libs.utils import ajax, db, auth_token
 from libs.utils.common import Struct, trancate_date
@@ -14,46 +12,6 @@ level_name = {'1': "初级", "2": "中级", "3": "高级"}
 size_name = {'1': '单机', "2": "集群", "3": "多集群"}
 
 ROLE = {"用户": 1, "教师": 2, "面试官": 3, "企业": 4}
-
-
-def get_question_class(request):
-    """
-    题目分类列表
-    """
-    data = Struct()
-    data.list = [
-        {
-            'id': 1,
-            'name': 'K8s',
-            'content': 'Kubernetes（通常被简称为K8s）是一个开源的容器编排平台，可以管理和部署容器化应用程序。'
-                       '它最初由Google设计并开源，目的是为了帮助开发人员更好地管理和扩展容器化应用程序。',
-            'image': '/media/img/k8s.png',
-        },
-        {
-            'id': 4,
-            'name': 'shell',
-            'content': 'Kubernetes（通常被简称为K8s）是一个开源的容器编排平台，可以管理和部署容器化应用程序。'
-                       '它最初由Google设计并开源，目的是为了帮助开发人员更好地管理和扩展容器化应用程序。',
-            'image': '/media/img/k8s.png',
-        },
-        {
-            'id': 2,
-            'name': 'Mysql',
-            'content': 'MySQL是一个开源的关系型数据库管理系统（RDBMS），它使用SQL（结构化查询语言）作为操作语言，'
-                       '可以在各种操作系统上运行。',
-            'image': '/media/img/mysql.png',
-        },
-        {
-            'id': 3,
-            'name': 'Vue',
-            'content': 'Vue是一种流行的JavaScript框架，由Evan You于2014年开发。'
-                       'Vue使用了响应式数据绑定和组件化的开发方式，可以帮助开发者更高效、更灵活地构建用户界面。',
-            'image': '/media/img/mysql.png',
-        },
-
-    ]
-    data.list = data.list * 2
-    return ajax.ajax_ok(data=data)
 
 
 def get_paper_question(request):
@@ -106,7 +64,7 @@ def question_list(request):
         where status in (0, 1)
         {where_sql}
         order by -id
-        limit {(page_id -1) * page_size}, {page_size} ;
+        limit {(page_id - 1) * page_size}, {page_size} ;
     """
     page_data = db.default.fetchall_dict(sql)
     sid_name = all_subjects()
@@ -153,21 +111,49 @@ def question_add(request):
     """
     args = Struct({k: v for k, v in request.QUERY.items()})
     user_id = request.user.id
-    id_ = int(args.pop('id', 0))
-    now = int(time.time())
-    args.pop('add_time', '')
-    args.pop('status_name', '')
-    args.pop('level_name', '')
-    args.pop('size_name', '')
-    args.pop('sid_name', '')
-    if not id_:
-        db.default.question.create(add_time=now, **args)
-    else:
-        if args.status == '1':
-            args.update(dict(verify_time=now, verify_user=user_id))
-        db.default.question.filter(id=id_).update(**args)
+    if request.method == 'POST':
+        id_ = int(args.pop('id', 0))
+        now = int(time.time())
+        step_data = json.loads(args.pop('step_data', '[]'))  # 步骤列表
+        args.pop('step_list', '')
+        args.pop('add_time', '')
+        args.pop('status_name', '')
+        args.pop('level_name', '')
+        args.pop('size_name', '')
+        args.pop('sid_name', '')
+        if not id_:
+            id_ = db.default.question.create(add_time=now, **args)
 
-    return ajax.ajax_ok()
+        else:
+            if args.status == '1':
+                args.update(dict(verify_time=now, verify_user=user_id))
+            db.default.question.filter(id=id_).update(**args)
+        db.default.question_step_detail.filter(question_id=id_, status=1).update(status=-1)
+        for obj in step_data:
+            obj['question_id'] = id_
+            obj['status'] = 1
+            obj['add_user'] = user_id
+            obj['add_time'] = now
+        db.default.question_step_detail.bulk_create(step_data)
+        return ajax.ajax_ok()
+    else:
+        q = db.default.question.get(id=args.id)
+        step_list = db.default.question_step_detail.filter(question_id=args.id, status=1)
+        data = {
+            "id": args.id,
+            "sid": q.sid,
+            "do_time": q.do_time,
+            "do_points": q.do_points,
+            "version": str(q.version),
+            "level": str(q.level),
+            "title": q.title,
+            "desc": q.desc,
+            "size": str(q.size),
+            "status": str(q.status),
+            "add_user": user_id,
+            "step_list": [{'content': x.content} for x in step_list]
+        }
+        return ajax.ajax_ok(data)
 
 
 def paper(request):
@@ -192,7 +178,7 @@ def paper(request):
         where status in (0, 1)
         {where_sql} 
         order by -id
-        limit {(page_id -1) * page_size}, {page_size} ;
+        limit {(page_id - 1) * page_size}, {page_size} ;
     """
     page_data = db.default.fetchall_dict(sql)
     sid_name = all_subjects()

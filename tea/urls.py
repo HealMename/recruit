@@ -15,7 +15,6 @@ urlpatterns = [
 
 # 题库
 urlpatterns += [
-    re_path(r'^get_question_class/$', question.get_question_class),
     re_path(r'^question/$', question.question_add),
     re_path(r'^paper/$', question.paper),
     re_path(r'^paper_question/$', question.paper_det),
@@ -28,7 +27,6 @@ urlpatterns += [
     re_path(r'^get_paper_question/$', question.get_paper_question),
     re_path(r'^redirect/$', question.redirect),  # 跳转到做题页
     re_path(r'^do_question/$', question.do_question),  # 单个题目做题
-
 ]
 
 urlpatterns += [

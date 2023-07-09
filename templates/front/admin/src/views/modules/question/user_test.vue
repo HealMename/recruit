@@ -8,12 +8,6 @@
         <el-form-item label="手机号">
           <el-input v-model="form.phone" placeholder=""></el-input>
         </el-form-item>
-        <el-form-item label="做题人：" >
-          <el-radio-group v-model="form.role">
-            <el-radio label="1" value="1">用户</el-radio>
-            <el-radio label="2" value="2">出题专家</el-radio>
-          </el-radio-group>
-        </el-form-item>
         <el-form-item>
           <el-button  @click="onSubmit(1)">搜索</el-button>
         </el-form-item>

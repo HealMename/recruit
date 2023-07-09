@@ -26,6 +26,7 @@ import Terminal from 'vue-web-terminal'
 import { isAuth, getCurDate, getCurDateTime } from '@/utils/utils'
 // storage 封装
 import storage from "@/utils/storage";
+import VueQuillEditor from 'vue-quill-editor';
 // 上传组件
 import FileUpload from "@/components/common/FileUpload";
 import ExcelFileUpload from "@/components/common/ExcelFileUpload";
@@ -43,6 +44,8 @@ import JsonExcel from 'vue-json-excel'
 //打印
 import printJS from 'print-js'
 //MD5
+
+
 import md5 from 'js-md5';
 import GlobalTools from './plugins/globalTools'
 
@@ -72,6 +75,7 @@ Vue.prototype.getCurDate = getCurDate
 // Vue.prototype.$base = base
 ElementUI.Dialog.props.lockScroll.default = false;
 Vue.use(ElementUI, { size: 'medium', zIndex: 3000 });
+Vue.use(VueQuillEditor, /* { default global options } */)
 Vue.config.productionTip = false
 // 组件全局组件
 // Vue.component('bread-crumbs', BreadCrumbs)

@@ -46,16 +46,20 @@ def user_test_list(request):
         obj['add_time'] = trancate_date(obj.add_time)
     data = Struct()
     data.page_data = page_data
-    data.sum_len = data.sum_len = get_page_len('paper', where_sql)
+    data.sum_len = data.sum_len = get_page_len(where_sql)
     return ajax.ajax_ok(data)
 
 
-def get_page_len(table, where_sql):
+def get_page_len(where_sql):
     """获取总页数"""
     sql = f"""
-    select count(1) as num from {table} 
-        where status in (0, 1) 
-        {where_sql} 
+    select count(distinct det.id) num
+            from recruit.user_test_det det
+            join recruit.users au on au.id =det.add_user and det.status!=-1
+            join user_tea_det tea on tea.user_id =det.add_user
+            join user_test_det_content c on c.det_id=det.id
+            {where_sql}
+            order by -det.id
     """
     num = db.default.fetchone_dict(sql)
     return num.num if num else 0
