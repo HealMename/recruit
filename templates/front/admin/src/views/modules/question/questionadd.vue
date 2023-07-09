@@ -5,7 +5,7 @@
       <el-form-item label="题目ID：">
         <el-input v-model="form.id" disabled></el-input>
       </el-form-item>
-      <el-form-item label="状态：" v-if="role ==='管理员'">
+      <el-form-item label="状态：" v-if="open_role.indexOf('1') !== -1">
         <el-radio-group v-model="form.status">
           <el-radio label="0" value="0">未审核</el-radio>
           <el-radio label="1" value="1">已审核</el-radio>
@@ -131,6 +131,7 @@ export default {
 
       loading: false,
       role: this.$storage.get("role"),
+      open_role: this.$storage.get("open_role"),
       subjects: [],
       form: {
         id: this.$route.params.id,

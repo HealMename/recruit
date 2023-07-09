@@ -606,6 +606,7 @@
                 $(".user").show()
                 $("#userrole").hide()
                 vue.open_role = res.open_role
+                localStorage.setItem("open_role", res.open_role);
 
             }
         })

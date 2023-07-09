@@ -52,12 +52,9 @@ class Auth(object):
                 if request.user.role == '用户':
                     request.user.shouji = request.user.username
                     datas[0]['nickname'] = request.user.username
-                    datas[0]['open_role'] = []
-                    if db.default.users.get(username=request.user.username, type=3, status=1):
-                        datas[0]['open_role'].append('3')
-                    if db.default.users.get(username=request.user.username, type=2, status=1):
-                        datas[0]['open_role'].append('2')
-                    datas[0]['open_role'] = ','.join(datas[0]['open_role'])
+                    datas[0]['open_role'] = ','.join(
+                        [str(x.type) for x in db.default.users.filter(
+                            username=request.user.username, status=1)])
                 else:
                     datas[0]['nickname'] = request.user.gongsimingcheng
                 request.session['tablename'] = 'users'
