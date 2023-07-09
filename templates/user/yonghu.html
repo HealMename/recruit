@@ -109,7 +109,12 @@
             $.post(location.href, data.field, function (res) {
                 if (res.response === 'ok') {
                     msg_ok(res.message, function () {
-                        window.parent.document.getElementById('iframe').src = './pages/zhaopinxinxi/list.html';
+                        localStorage.setItem("Token", res.data.token);
+                        localStorage.setItem("userId", res.data.user_id);
+                        localStorage.setItem("role", '用户');
+                        localStorage.setItem("sessionTable", 'yonghu');
+                        localStorage.setItem("adminName", res.data.phone);
+                        window.parent.location.href = `/`
                     })
 
                 } else {

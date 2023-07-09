@@ -222,7 +222,10 @@ def register_yonghu(request):
             now = int(time.time())
             db.default.user_tea_det.create(user_id=id_, nickname=phone, add_time=now,
                                            phone_number=phone, status=1, step_id=0)
-            return ajax.ajax_ok(message='注册成功')
+            data.token = auth_token.create_token('users', id_)
+            data.user_id = id_
+            data.phone = phone
+            return ajax.ajax_ok(data=data, message='注册成功')
         else:
             db.default.users.filter(username=phone).update(password=password)
             return ajax.ajax_ok(message='修改成功')
