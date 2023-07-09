@@ -62,8 +62,10 @@ class Xauth(MiddlewareMixin):
                 "/tea/add/",
                 "/tea/get_question_class/",
                 "create_login_img",
-                "encode_password"
-                "encode_password"
+                "encode_password",
+                "/chat/wx/menu/",
+                "/chat/wx/index/",
+                "verify_password"
             ]
 
             allModels = apps.get_app_config('main').get_models()
@@ -107,6 +109,7 @@ class Xauth(MiddlewareMixin):
                 "/interviewer/save/",
                 "/interviewer/add/",
                 "/tea/login/",
+                "/chat/wx/index/",
                 '/sms/send/'
             ]  # 免认证list
 

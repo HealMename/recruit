@@ -20,7 +20,6 @@ def user_test_list(request):
     """获取做题记录"""
     id_ = request.QUERY.get('id')
     phone = request.QUERY.get('phone', 0)
-    role = int(request.QUERY.get('role', 2))
     page_id = request.QUERY.get('page_id', 1)
     page_size = request.QUERY.get('page_size', 5)
     where_sql = ""
@@ -28,32 +27,20 @@ def user_test_list(request):
         if id_.isdigit():
             where_sql += f" and det.id = {id_}"
 
-    if role == 2:
-        # 教师
-        if phone:
-            where_sql += f" and tea.phone_number = '{phone}'"
-        sql = f"""
-                select distinct det.id ,au.username name, tea.phone_number phone, det.add_time  from recruit.user_test_det det
-                join recruit.users au on au.id =det.add_user  and det.`role` =2 and det.status!=-1
-                join user_tea_det tea on tea.user_id =det.add_user
-                join user_test_det_content c on c.det_id=det.id
-                {where_sql}
-                order by -det.id
-                limit {(page_id - 1) * page_size}, {page_size} ;
-            """
-    else:
-        if phone:
-            where_sql += f" and au.shouji = '{phone}'"
-        # 用户
-        sql = f"""
-            select distinct det.id ,au.shouji phone, au.yonghuxingming name, det.add_time  
+    # 教师
+    if phone:
+        where_sql += f" and tea.phone_number = '{phone}'"
+    sql = f"""
+            select distinct det.id ,tea.name name, tea.phone_number phone, det.add_time 
             from recruit.user_test_det det
-            join recruit.yonghu au on au.id =det.add_user  
+            join recruit.users au on au.id =det.add_user and det.status!=-1
+            join user_tea_det tea on tea.user_id =det.add_user
             join user_test_det_content c on c.det_id=det.id
-            and det.`role` =1 and det.status!=-1 {where_sql} 
+            {where_sql}
             order by -det.id
             limit {(page_id - 1) * page_size}, {page_size} ;
         """
+
     page_data = db.default.fetchall_dict(sql)
     for obj in page_data:
         obj['add_time'] = trancate_date(obj.add_time)
@@ -101,7 +88,9 @@ def get_user_test_det(request):
         q['level'] = level_name[str(q['level'])]
         q['size'] = size_name[str(q['size'])]
         q.content = json.loads(q.content)
-
+        for x in q.content:
+            if x['type'] == 1:
+                x['msg'] += '\r\n'
     return ajax.ajax_ok(data[:])
 
 
