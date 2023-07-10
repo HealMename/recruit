@@ -255,7 +255,8 @@ export default {
                   data.form.end_time.substring(6, 8))]
             this.ocr_front = data.form.ocr_front
             this.ocr_back = data.form.ocr_back
-            data.school_list.forEach(option => {
+            if (data.school_list.length){
+              data.school_list.forEach(option => {
               option.time = [
                 new Date(option.time[0].substring(0, 4),
                     parseInt(option.time[0].substring(4, 6)) - 1,
@@ -265,9 +266,12 @@ export default {
                     option.time[1].substring(6, 8))
               ]
             })
+              this.school_list = data.school_list
+            }
 
-            this.school_list = data.school_list
-            data.work_list.forEach(option => {
+
+            if (data.work_list.length){
+              data.work_list.forEach(option => {
               option.time = [
                 new Date(option.time[0].substring(0, 4),
                     parseInt(option.time[0].substring(4, 6)) - 1,
@@ -279,7 +283,9 @@ export default {
             })
 
             this.work_list = data.work_list
-            this.prove = data.prove
+            }
+
+            this.prove = data.prove || {}
           }
 
         })

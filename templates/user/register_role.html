@@ -2,6 +2,9 @@
 {% extends "base.html" %}
 {% block body %}
     <style>
+    .layui-input-block{
+        margin-left: 31px;
+    }
         .title {
             font-size: 25px;
             margin-left: 100px;
@@ -70,53 +73,94 @@
             font-size: 16px;
             vertical-align: middle;
         }
-        .mp_accounts_type_item:hover{
+
+        .mp_accounts_type_item:hover {
             background: #E7E7EB;
         }
+
         .mp_accounts_type_item .mp_accounts_type_desc {
-    color: #9a9a9a;
-}
-        .layui-btn-disabled:hover{
-            cursor:no-drop!important;
+            color: #9a9a9a;
+        }
+
+        .layui-btn-disabled:hover {
+            cursor: no-drop !important;
+        }
+        .go_register{
+            width: 679px;
+            height: 50px;
+            border: 1px solid #E7E7EB;
+            margin-left: 9px;
+        }
+        .go_register a{
+            display: block;
+            margin: 16px auto;
+            text-align: center;
+            color: #222;
+            text-decoration: none;
+        }
+        .go_register:hover{
+            background: #E7E7EB;
+            cursor: pointer;
         }
     </style>
     <div id="wrapper">
         <div id="main">
             <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-            <legend>注册</legend>
-        </fieldset>
+                <legend>注册</legend>
+            </fieldset>
             <div class="content">
-                <p class="desct">请选择注册身份</p>
+                <p class="desct">请选择您的权限</p>
                 <div class="mp_register_bd">
                     <ul class="mp_accounts_type_list">
-                        <li class="mp_accounts_type_item"><a href="javascript:" onclick="go_register(1)">
+                        <li class="mp_accounts_type_item"><a href="javascript:">
                             <dl>
                                 <dt class="mp_accounts_type_title subscribe">
-                                    <span>普通用户</span>
+                                    <span>
+                                        <form class="layui-form" action="">
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-block">
+                                              <input type="checkbox" name="user1" title="普通用户" value="1" checked>
+                                            </div>
+                                          </div>
+                                        </form>
+                                    </span>
                                 </dt>
                                 <dd class="mp_accounts_type_desc">具有使用实操环境培训及模拟面试的能力</dd>
                                 <dd class="mp_accounts_type_desc">适合快速提升个人技能</dd>
                             </dl>
                         </a></li>
-                        <li class="mp_accounts_type_item"><a href="javascript:" onclick="go_register(2)">
+                        <li class="mp_accounts_type_item"><a href="javascript:">
                             <dl>
                                 <dt class="mp_accounts_type_title subscribe">
-                                    <span>出题专家</span>
+                                    <span><form class="layui-form" action="">
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-block">
+                                              <input type="checkbox" name="user2" title="出题专家" value="2">
+                                            </div>
+                                          </div>
+                                        </form></span>
                                 </dt>
                                 <dd class="mp_accounts_type_desc">具有使用实操环境培训及模拟面试的能力</dd>
                                 <dd class="mp_accounts_type_desc">适合快速提升个人技能</dd>
                             </dl>
                         </a></li>
-                        <li class="mp_accounts_type_item"><a href="javascript:" onclick="go_register(3)">
+                        <li class="mp_accounts_type_item"><a href="javascript:">
                             <dl>
                                 <dt class="mp_accounts_type_title subscribe">
-                                    <span>面试专家</span>
+                                    <span><form class="layui-form" action="">
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-block">
+                                              <input type="checkbox" name="user3" title="面试专家" value="3">
+                                            </div>
+                                          </div>
+                                        </form></span>
                                 </dt>
                                 <dd class="mp_accounts_type_desc">具有使用实操环境培训及模拟面试的能力</dd>
                                 <dd class="mp_accounts_type_desc">适合快速提升个人技能</dd>
                             </dl>
                         </a></li>
-                        <li class="mp_accounts_type_item  layui-btn-disabled"><a href="javascript:" onclick="go_register(4)">
+                        <li class="mp_accounts_type_item  layui-btn-disabled"><a href="javascript:"
+                                                                                 onclick="go_register(4)">
                             <dl>
                                 <dt class="mp_accounts_type_title subscribe">
                                     <span>企业入驻</span>
@@ -126,6 +170,8 @@
                             </dl>
                         </a></li>
                     </ul>
+
+                    <div class="go_register"><a href="javascript:">开始注册</a></div>
                 </div>
             </div>
         </div>
@@ -136,16 +182,15 @@
         $(function () {
 
         })
+
         function go_register(role_id) {
-            if (role_id === 1){
+            if (role_id === 1) {
                 // 普通用户注册
                 window.parent.document.getElementById('iframe').src = '/tea/register_yonghu/';
-            }
-            else if (role_id === 2){
+            } else if (role_id === 2) {
                 // 出题专家注册
                 window.parent.document.getElementById('iframe').src = '/interviewer/add/?role_id=2';
-            }
-            else if (role_id === 3){
+            } else if (role_id === 3) {
                 // 面试官
                 window.parent.document.getElementById('iframe').src = '/interviewer/add/?role_id=3';
             }

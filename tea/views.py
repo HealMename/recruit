@@ -218,6 +218,8 @@ def register_yonghu(request):
             return ajax.ajax_fail(message='验证码错误')
         password = auth_token.sha1_encode_password(password)
         if type_ == 1:
+            if db.default.users.filter(username=phone, role='用户', type=4, status=1):
+                return ajax.ajax_fail(message='手机号已被注册！')
             id_ = db.default.users.create(username=phone, password=password, role='用户', type=4, status=1)
             now = int(time.time())
             db.default.user_tea_det.create(user_id=id_, nickname=phone, add_time=now,
