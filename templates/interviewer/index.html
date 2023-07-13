@@ -73,7 +73,7 @@
 
     <div id="app">
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend><span  v-text="role_name"></span>注册</legend>
+        <legend><span  v-text="role_name"></span></legend>
     </fieldset>
         <el-steps :active="active">
             <el-step title="步骤 1" description="身份信息"></el-step>
@@ -731,11 +731,13 @@
             },
             created() {
                 this.token = localStorage.getItem("Token")
-                this.role_id = {{ request.GET.role_id }}
+                this.role_id = "{{ role_id }}"
                 if (this.role_id == 3){
                     this.role_name = '面试专家'
                 }else if (this.role_id == 2){
                     this.role_name = '出题专家'
+                }else{
+                    this.role_name = '出题专家 + 面试专家'
                 }
                 if (this.active !== 5) {
                     var thsi = this;
@@ -744,7 +746,7 @@
                         thsi.loading_post = false;
                         if (res.response === 'ok') {
                             var data = res.data;
-                            if (data) {
+                            if (data.form) {
                                 // 第一步
                                 thsi.form.phone = data.form.phone;
                                 thsi.imageUrl1 = data.form.imageUrl1

@@ -14,7 +14,12 @@ role_name = {2: "出题专家", 3: "面试专家"}
 def save_info(request):
     """保存信息"""
     step_id = int(request.QUERY.get('step_id', 0))
-    role_id = int(request.QUERY.get('role_id', 0))
+
+    role_id = request.QUERY.get('role_id')
+    role_type = 0
+    if role_id == '2,3':
+        role_id = 2
+        role_type = 3
     now = int(time.time())
     data = Struct()
     user_id = request.user.id or 0
@@ -41,6 +46,15 @@ def save_info(request):
                 user_id = db.default.users.create(username=phone, type=4, status=1, role='用户', password=password)
             if not db.default.users.filter(username=phone, type=role_id):
                 db.default.users.create(username=phone, type=role_id, status=0, role=role_name[role_id], password='')
+            if role_type:
+                # 双角色同时注册
+                if not user_id:
+                    db.default.users.create(username=phone, type=role_type, status=0, role=role_name[role_type],
+                                            password=password)
+                    user_id = db.default.users.create(username=phone, type=4, status=1, role='用户', password=password)
+                if not db.default.users.filter(username=phone, type=role_type):
+                    db.default.users.create(username=phone, type=role_type, status=0, role=role_name[role_type],
+                                            password='')
             data.token = auth_token.create_token('users', user_id)
             data.user_id = user_id
             media_args = dict(
@@ -179,6 +193,8 @@ def add_tea(request):
     面试官注册页面
     """
     data = Struct()
+    role_id = request.GET.get('role_id')
+    data.role_id = role_id
     data.upload_url = f"{UPLOAD_URL}?upcheck={get_upload_key()}&up_type=number_id_img"
     data.web_file_url = web_file_url
     return render_template(request, 'interviewer/index.html', data)

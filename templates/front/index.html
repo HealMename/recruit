@@ -11,9 +11,39 @@
     <link rel="stylesheet" href="/media/css/common.css"/>
     <link rel="stylesheet" href="/media/css/style.css"/>
     <link rel="stylesheet" href="/media/css/index.css?v=1"/>
+    <link rel="stylesheet" href="/media/slidercaptcha/disk/slidercaptcha.css">
+    <link rel="stylesheet" href="/media/slidercaptcha/lib/font-awesome/css/font-awesome.min.css">
 
 </head>
 <style type="text/css">
+    .container {
+        display: none;
+    }
+
+    .slidercaptcha {
+        margin: 0 auto;
+        width: 314px;
+        height: 286px;
+    }
+
+    .slidercaptcha .card-body {
+        padding: 1rem;
+    }
+
+    .slidercaptcha canvas:first-child {
+        border-radius: 4px;
+        border: 1px solid #e6e8eb;
+    }
+
+    .slidercaptcha.card .card-header {
+        background-image: none;
+        background-color: rgba(0, 0, 0, 0.03);
+    }
+
+    .refreshIcon {
+        top: -54px;
+    }
+
     html, body {
         height: 100%;
     }
@@ -290,13 +320,15 @@
                         {#                        <p><a href="javascript:navPage('/interviewer/add/')">完善信息</a></p>#}
                         {#                        <p><a href="javascript:im()">通信平台</a></p>#}
 
-                        <p v-if="open_role.indexOf('2') === -1"><a href="javascript:" @click="checkout_user_type(2, '出题专家', 'users')">申请出题专家</a>
+                        <p v-if="open_role.indexOf('2') === -1"><a href="javascript:"
+                                                                   @click="checkout_user_type(2, '出题专家', 'users')">申请出题专家</a>
                         </p>
-                        <p v-if="open_role.indexOf('3') === -1"><a href="javascript:" @click="checkout_user_type(3, '面试官', 'users')">申请面试专家</a>
+                        <p v-if="open_role.indexOf('3') === -1"><a href="javascript:"
+                                                                   @click="checkout_user_type(3, '面试官', 'users')">申请面试专家</a>
                         </p>
-{#                        <p v-if="role!=='企业用户'"><a href="javascript:" @click="checkout_user_type(4, '公司', 'gongsi')">企业入驻</a>#}
-{#                        </p>#}
-                        <p><a href="javascript:navPage('/tea/register_yonghu/?type=3');" >修改密码</a></p>
+                        {#                        <p v-if="role!=='企业用户'"><a href="javascript:" @click="checkout_user_type(4, '公司', 'gongsi')">企业入驻</a>#}
+                        {#                        </p>#}
+                        <p><a href="javascript:navPage('/tea/register_yonghu/?type=3');">修改密码</a></p>
                         <p><a href="javascript:localStorage.clear();location.reload()">退出登录</a></p>
                     </div>
                 </li>
@@ -376,7 +408,8 @@
                         <i class="layui-icon pass-clearbtn pass-password" onclick="empty_input('password')">&#x1006;</i>
                         <a href="javascript:navPage('/tea/register_role/');layer.closeAll();"
                            class="pass-register">立即注册</a>
-                        <a href="javascript:navPage('/tea/register_yonghu/?type=2');layer.closeAll();" class="pass-fgtpwd">忘记密码？</a>
+                        <a href="javascript:navPage('/tea/register_yonghu/?type=2');layer.closeAll();"
+                           class="pass-fgtpwd">忘记密码？</a>
                     </div>
                 </div>
             </div>
@@ -386,7 +419,8 @@
                 <div class="layui-form-item">
                     <div class="layui-input-block">
 
-                        <input type="number" name="phone" lay-verify="title" autocomplete="new-password" placeholder="手机号"
+                        <input type="number" name="phone" lay-verify="title" autocomplete="new-password"
+                               placeholder="手机号"
                                class="layui-input phone" maxlength="11">
                         <i class="layui-icon pass-clearbtn pass-phone" onclick="empty_input('phone')">&#x1006;</i>
                     </div>
@@ -396,7 +430,7 @@
                         <input type="number" name="code" lay-verify="title" autocomplete="new-password"
                                placeholder="验证码"
                                class="layui-input password" maxlength="6">
-                        <a href="javascript:" class="pass-item-timer" onclick="send_code()">发送验证码</a>
+                        <a href="javascript:" class="pass-item-timer" onclick="open_captcha()">发送验证码</a>
                         <i class="layui-icon pass-clearbtn pass-code" onclick="empty_input('code')">&#x1006;</i>
                     </div>
                 </div>
@@ -415,6 +449,22 @@
         </form>
     </div>
 </div>
+<div class="container">
+    <div class="container-fluid">
+        <div class="form-row">
+            <div class="col-12">
+                <div class="slidercaptcha card">
+                    <div class="card-header">
+                        <span>请完成安全验证!</span>
+                    </div>
+                    <div class="card-body">
+                        <div id="captcha"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="/media/js/jquery-1.11.3.min.js"></script>
 <script src="/media/layui-v2.7.6/layui/layui.js"></script>
@@ -428,11 +478,11 @@
         }
     }
 </script>
-
+<script src="/media/slidercaptcha/disk/longbow.slidercaptcha.js"></script>
 <script src="//whois.pconline.com.cn/ipJson.jsp?callback=ipJson" type="text/javascript"></script>
 <script>
+    var captcha_laye;
     $(function () {
-
 
     })
     var vue1 = new Vue({el: '#tabbar'})
@@ -707,6 +757,66 @@
         $('.register').hide()
         $('.logins').hide()
     })
+
+    function open_captcha() {
+        var phone = ''
+        var password = ''
+        if (login_type === 1) {
+            phone = $('.phone:eq(2)').val()
+        } else {
+            phone = $('.phone:last').val()
+        }
+
+        if (!phone) {
+            return msg_fail('请输入手机号')
+        }
+        captcha_layer = layer.open({
+            type: 1,
+            shade: 0,
+            skin: 'alert-skin',
+            area: ['314px', '286px'],
+            content: $(".container").html(),
+            title: '',
+            success: function (obj, index) {
+                obj.css({'box-shadow': '', 'height': '', 'width': ''})
+                obj.find('.layui-layer-setwin').css({'display': 'none'})
+                var captcha = sliderCaptcha({
+                    id: obj.find('#captcha')[0],
+                    width: 280,
+                    height: 150,
+                    sliderL: 42,
+                    sliderR: 9,
+                    offset: 5,
+                    loadingText: '正在加载中...',
+                    failedText: '再试一次',
+                    barText: '向右滑动填充拼图',
+                    localImages: function () {
+                        return 'http://127.0.0.1:8087/upload/picture2.jpg';
+                    },
+                    setSrc: function () {
+                        // return 'http://127.0.0.1:8087/upload/picture2.jpg';
+                        return 'http://imgs.blazor.zone/images/Pic' + Math.round(Math.random() * 136) + '.jpg';
+                    },
+                    onSuccess: function () {
+                        var handler = setTimeout(function () {
+                            window.clearTimeout(handler);
+                            captcha.reset();
+                        }, 500);
+                        console.log('验证成功')
+                        layer.close(index)
+                        send_code()
+                    },
+                    onFail: function () {
+                        console.log('验证失败')
+                    },
+                    onRefresh: function () {
+
+                    }
+                });
+            }
+        });
+    }
+
     var exit_count = 60;
 
     // 发送短信
@@ -741,7 +851,7 @@
 
     // 导航栏跳转
     function navPage(url) {
-        url = url.indexOf('?') !== -1 ?  url + '&token=' + localStorage.getItem("Token"): url + '?token=' + localStorage.getItem("Token");
+        url = url.indexOf('?') !== -1 ? url + '&token=' + localStorage.getItem("Token") : url + '?token=' + localStorage.getItem("Token");
         localStorage.setItem('iframeUrl', url);
         document.getElementById('iframe').src = url;
     }
