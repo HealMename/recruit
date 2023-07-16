@@ -39,7 +39,7 @@ def save_info(request):
             ocr_info_front = Struct(json.loads(request.QUERY.get('ocr_info_front')))
             ocr_info_back = Struct(json.loads(request.QUERY.get('ocr_info_back')))
             if db.default.users.filter(username=phone, type=4, id__ne=user_id, status=1):
-                return ajax.ajax_fail(message='手机号已被注册')
+                return ajax.ajax_fail(message='手机号已被注册请登录后再申请开通权限!')
             password = auth_token.sha1_encode_password(password)  # 加密密码
             if not user_id:
                 db.default.users.create(username=phone, type=role_id, status=0, role=role_name[role_id], password=password)
