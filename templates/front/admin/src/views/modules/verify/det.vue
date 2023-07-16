@@ -144,6 +144,33 @@
           </template>
           <img v-if="prove.other" :src="prove.other" class="avatar">
         </el-descriptions-item>
+
+        <template v-for="(item,i) in knowledge_list">
+          <el-descriptions-item span="1" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              技能名称
+            </template>
+            <p v-text="item.name"></p>
+          </el-descriptions-item>
+          <el-descriptions-item span="1" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              使用时长
+            </template>
+            <p v-text="item.use_month"></p>
+          </el-descriptions-item>
+          <el-descriptions-item span="1" :key="i">
+            <template slot="label">
+              <i class="el-icon-office-building"></i>
+              掌握程度
+            </template>
+            <p v-text="item.level"></p>
+          </el-descriptions-item>
+
+        </template>
+
+
       </el-descriptions>
 
       <div style="margin: 20px">
@@ -163,6 +190,7 @@ export default {
     return {
       status: 1,
       id: this.$route.params.id,
+      knowledge_list:[],
       // 出题专家
       tea: {
 
@@ -282,8 +310,10 @@ export default {
               ]
             })
 
+
             this.work_list = data.work_list
             }
+            this.knowledge_list = data.knowledge_list
 
             this.prove = data.prove || {}
           }

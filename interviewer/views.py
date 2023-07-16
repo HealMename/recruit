@@ -20,6 +20,7 @@ def save_info(request):
     if role_id == '2,3':
         role_id = 2
         role_type = 3
+
     now = int(time.time())
     data = Struct()
     user_id = request.user.id or 0
@@ -42,10 +43,10 @@ def save_info(request):
                 return ajax.ajax_fail(message='手机号已被注册请登录后再申请开通权限!')
             password = auth_token.sha1_encode_password(password)  # 加密密码
             if not user_id:
-                db.default.users.create(username=phone, type=role_id, status=0, role=role_name[role_id], password=password)
+                db.default.users.create(username=phone, type=role_id, status=0, role=role_name[int(role_id)], password=password)
                 user_id = db.default.users.create(username=phone, type=4, status=1, role='用户', password=password)
             if not db.default.users.filter(username=phone, type=role_id):
-                db.default.users.create(username=phone, type=role_id, status=0, role=role_name[role_id], password='')
+                db.default.users.create(username=phone, type=role_id, status=0, role=role_name[int(role_id)], password='')
             if role_type:
                 # 双角色同时注册
                 if not user_id:
@@ -116,6 +117,21 @@ def save_info(request):
             db.default.user_prove_list.create(user_id=user_id, add_time=now, **prove)
             db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
         elif step_id == 5:
+            # 步骤 5
+            data = json.loads(request.QUERY.get('data'))
+            if not user_id:
+                return ajax.ajax_fail(message='请登陆后重试!')
+            db.default.user_knowledge_list.filter(user_id=user_id, status=1).update(status=-1)
+            objs = []
+            sub = {x.name: x.id for x in db.default.subjects.filter(status=1).select('id', 'name')}
+            for obj in data:
+                obj['sid'] = sub.get(obj['name'], 0)
+                obj['user_id'] = user_id
+                obj['add_time'] = now
+                objs.append(obj)
+            db.default.user_knowledge_list.bulk_create(objs)
+            db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
+        elif step_id == 6:
             # 步骤 5 确定审核
             db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
         return ajax.ajax_ok(data)
@@ -147,7 +163,7 @@ def save_info(request):
                 data.form.ocr_back = json.loads(user_media.ocr_info_back)
                 data.step_id = 1
                 if not db.default.users.get(username=username, type=role_id) and not is_cms:
-                    db.default.users.create(username=username, type=role_id, status=0, role=role_name[role_id], password='')
+                    db.default.users.create(username=username, type=role_id, status=0, role=role_name[int(role_id)], password='')
             data.form.name = user_det.name
             data.form.number_id = user_det.number_id
             data.form.start_time = user_det.start_time
@@ -183,8 +199,20 @@ def save_info(request):
                 'other', 'security', 'work').first()
             if data.prove:
                 data.step_id = 4
-            if data.step_id == 4 and data.status == 0:
+            # 步骤 5
+            data.knowledge_list = []
+            for obj in db.default.user_knowledge_list.filter(user_id=user_id, status=1):
+                data.knowledge_list.append({
+                    "name": obj.name,
+                    "sid": str(obj.sid),
+                    "level": str(obj.level),
+                    "type": str(obj.type),
+                    "use_month": obj.use_month
+                })
                 data.step_id = 5
+
+            if data.step_id == 6 and data.status == 0:
+                data.step_id = 6
         return ajax.ajax_ok(data)
 
 
@@ -197,6 +225,7 @@ def add_tea(request):
     data.role_id = role_id
     data.upload_url = f"{UPLOAD_URL}?upcheck={get_upload_key()}&up_type=number_id_img"
     data.web_file_url = web_file_url
+    data.subjects = db.default.subjects.filter(status=1).select('id', 'name')[:]
     return render_template(request, 'interviewer/index.html', data)
 
 

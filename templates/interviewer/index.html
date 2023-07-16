@@ -8,7 +8,7 @@
         }
 
         #wrapper {
-            width: 800px;
+            width: 888px;
             margin: 0 auto;
             margin-top: 20px;
         }
@@ -100,8 +100,9 @@
             <el-step title="步骤 2" description="学历信息"></el-step>
             <el-step title="步骤 3" description="工作经历"></el-step>
             <el-step title="步骤 4" description="其他证明"></el-step>
-            <el-step title="步骤 5" description="提交"></el-step>
-            <el-step title="步骤 6" description="审核"></el-step>
+            <el-step title="步骤 5" description="拥有技能"></el-step>
+            <el-step title="步骤 6" description="提交"></el-step>
+            <el-step title="步骤 7" description="审核"></el-step>
         </el-steps>
         <div id="wrapper"
              v-loading="loading_post"
@@ -109,108 +110,109 @@
              element-loading-spinner="el-icon-loading"
         >
             <!-- 第一步 -->
-
-            <div class="step1">
-                <el-card class="box-card">
-                    <div slot="header" class="clearfix">
-                        <span>身份信息</span>
-                    </div>
-                    <el-form ref="form" :model="form" label-width="100px" :rules="rules1">
-
-                        <el-form-item label="手机号:" prop="phone" v-if="!token">
-                            <el-input v-model.number="form.phone" maxlength="11" id="phone" type="number"
-                                      oninput="if(value.length > 11)value = value.slice(0, 11)"></el-input>
-                            <el-button @click="code_layer()" style="margin-top: 10px;" id="send_code"
-                                       :disabled="disabled" size="small" v-if="!token">
-                                获取验证码 <span class="code_time"></span></el-button>
-                        </el-form-item>
-                        <el-form-item label="手机号:" prop="phone" v-if="token">
-                            <el-input v-model.number="form.phone" maxlength="11" id="phone" type="number"
-                                      oninput="if(value.length > 11)value = value.slice(0, 11)"
-                                      disabled="disabled"></el-input>
-                        </el-form-item>
-                        <el-form-item label="验证码:" prop="code" v-if="!token">
-                            <el-input v-model.number="form.code" maxlength="6"
-                                      oninput="if(value.length > 11)value = value.slice(0, 6)"></el-input>
-                        </el-form-item>
-                        <el-form-item label="密码:" prop="password1" v-if="!token">
-                            <el-input v-model="form.password1" maxlength="12" type="password"></el-input>
-                        </el-form-item>
-                        <el-form-item label="确认密码:" prop="password2" v-if="!token">
-                            <el-input v-model="form.password2" maxlength="12" type="password"></el-input>
-                        </el-form-item>
-                        <el-form-item label="身份证(正面):" prop="imageUrl1">
-                            <el-upload
-                                    v-loading="loading"
-                                    element-loading-text="拼命识别中"
-                                    element-loading-spinner="el-icon-loading"
-                                    class="avatar-uploader"
-                                    :action="upload_url"
-                                    :show-file-list="false"
-                                    :on-success="handleAvatarSuccess"
-                                    :before-upload="beforeAvatarUpload">
-                                <img v-if="imageUrl1" :src="imageUrl1" class="avatar">
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
-                        </el-form-item>
-
-                        <el-form-item label="身份证(反面):" prop="imageUrl2">
-                            <el-upload
-                                    v-loading="loading2"
-                                    element-loading-text="拼命识别中"
-                                    element-loading-spinner="el-icon-loading"
-                                    class="avatar-uploader"
-                                    :action="upload_url"
-                                    :show-file-list="false"
-                                    :on-success="handleAvatarSuccess2"
-                                    :before-upload="beforeAvatarUpload">
-                                <img v-if="imageUrl2" :src="imageUrl2" class="avatar">
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
-                        </el-form-item>
-                        <div v-if="imageUrl1">
-                            <el-form ref="ocr_info" :model="form.ocr_info_front" label-width="100px"
-                                     :rules="rulesocr1">
-                                <el-form-item label="">
-                                    <el-divider>请核对您的身份信息，如有错误请点击图片重新上传</el-divider>
-                                </el-form-item>
-                                <el-form-item label="姓名:" prop="username">
-                                    <el-input v-model="form.ocr_info_front.name" maxlength="5"></el-input>
-                                </el-form-item>
-                                <el-form-item label="身份号码:" prop="number_id">
-                                    <el-input v-model="form.ocr_info_front.number_id" maxlength="18"></el-input>
-                                </el-form-item>
-                            </el-form>
-
-
+            <transition name="el-fade-in-linear" v-if="active === 0">
+                <div class="step1">
+                    <el-card class="box-card">
+                        <div slot="header" class="clearfix">
+                            <span>身份信息</span>
                         </div>
-                        <div v-if="imageUrl2">
+                        <el-form ref="form" :model="form" label-width="100px" :rules="rules1">
 
-                            <el-form-item label="有效期:" prop="back_time">
-                                <el-date-picker
-                                        v-model="form.ocr_info_back.time"
-                                        type="daterange"
-                                        range-separator="至"
-                                        start-placeholder="开始日期"
-                                        end-placeholder="结束日期">
-                                </el-date-picker>
+                            <el-form-item label="手机号:" prop="phone" v-if="!token">
+                                <el-input v-model.number="form.phone" maxlength="11" id="phone" type="number"
+                                          oninput="if(value.length > 11)value = value.slice(0, 11)"></el-input>
+                                <el-button @click="code_layer()" style="margin-top: 10px;" id="send_code"
+                                           :disabled="disabled" size="small" v-if="!token">
+                                    获取验证码 <span class="code_time"></span></el-button>
                             </el-form-item>
-                        </div>
-                        <el-form-item>
+                            <el-form-item label="手机号:" prop="phone" v-if="token">
+                                <el-input v-model.number="form.phone" maxlength="11" id="phone" type="number"
+                                          oninput="if(value.length > 11)value = value.slice(0, 11)"
+                                          disabled="disabled"></el-input>
+                            </el-form-item>
+                            <el-form-item label="验证码:" prop="code" v-if="!token">
+                                <el-input v-model.number="form.code" maxlength="6"
+                                          oninput="if(value.length > 11)value = value.slice(0, 6)"></el-input>
+                            </el-form-item>
+                            <el-form-item label="密码:" prop="password1" v-if="!token">
+                                <el-input v-model="form.password1" maxlength="12" type="password"></el-input>
+                            </el-form-item>
+                            <el-form-item label="确认密码:" prop="password2" v-if="!token">
+                                <el-input v-model="form.password2" maxlength="12" type="password"></el-input>
+                            </el-form-item>
+                            <el-form-item label="身份证(正面):" prop="imageUrl1">
+                                <el-upload
+                                        v-loading="loading"
+                                        element-loading-text="拼命识别中"
+                                        element-loading-spinner="el-icon-loading"
+                                        class="avatar-uploader"
+                                        :action="upload_url"
+                                        :show-file-list="false"
+                                        :on-success="handleAvatarSuccess"
+                                        :before-upload="beforeAvatarUpload">
+                                    <img v-if="imageUrl1" :src="imageUrl1" class="avatar">
+                                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                </el-upload>
+                            </el-form-item>
 
-                        </el-form-item>
-                    </el-form>
-                </el-card>
-                <div class="next2">
-                    <el-button type="primary" size="small" @click="next(-1)" v-if="active > 1 && active <= 5">上一步
-                    </el-button>
-                    <el-button type="primary" size="small" @click="next(1, 'form', 'ocr_info')" v-if="active < 5"
-                               style="float: right">下一步
-                    </el-button>
+                            <el-form-item label="身份证(反面):" prop="imageUrl2">
+                                <el-upload
+                                        v-loading="loading2"
+                                        element-loading-text="拼命识别中"
+                                        element-loading-spinner="el-icon-loading"
+                                        class="avatar-uploader"
+                                        :action="upload_url"
+                                        :show-file-list="false"
+                                        :on-success="handleAvatarSuccess2"
+                                        :before-upload="beforeAvatarUpload">
+                                    <img v-if="imageUrl2" :src="imageUrl2" class="avatar">
+                                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                </el-upload>
+                            </el-form-item>
+                            <div v-if="imageUrl1">
+                                <el-form ref="ocr_info" :model="form.ocr_info_front" label-width="100px"
+                                         :rules="rulesocr1">
+                                    <el-form-item label="">
+                                        <el-divider>请核对您的身份信息，如有错误请点击图片重新上传</el-divider>
+                                    </el-form-item>
+                                    <el-form-item label="姓名:" prop="username">
+                                        <el-input v-model="form.ocr_info_front.name" maxlength="5"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="身份号码:" prop="number_id">
+                                        <el-input v-model="form.ocr_info_front.number_id" maxlength="18"></el-input>
+                                    </el-form-item>
+                                </el-form>
+
+
+                            </div>
+                            <div v-if="imageUrl2">
+
+                                <el-form-item label="有效期:" prop="back_time">
+                                    <el-date-picker
+                                            v-model="form.ocr_info_back.time"
+                                            type="daterange"
+                                            range-separator="至"
+                                            start-placeholder="开始日期"
+                                            end-placeholder="结束日期">
+                                    </el-date-picker>
+                                </el-form-item>
+                            </div>
+                            <el-form-item>
+
+                            </el-form-item>
+                        </el-form>
+                    </el-card>
+                    <div class="next2">
+                        <el-button type="primary" size="small" @click="next(-1)" v-if="active > 1 && active <= 5">上一步
+                        </el-button>
+                        <el-button type="primary" size="small" @click="next(1, 'form', 'ocr_info')" v-if="active < 5"
+                                   style="float: right">下一步
+                        </el-button>
+                    </div>
+
                 </div>
-
-            </div>
             </transition>
+
             <!-- 第二步 -->
             <transition name="el-fade-in-linear" v-if="active === 1">
                 <div>
@@ -408,9 +410,70 @@
                     </div>
                 </div>
             </transition>
-
             <!-- 第五步 -->
             <transition name="el-fade-in-linear" v-if="active === 4">
+                <div>
+                    <div v-for="(item,i) in knowledge_list" :key="i" class="text item">
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <span>专业技能</span>
+                                <a href="javascript:" style="float: right; color: red;" v-if="i!=0"
+                                   @click="del_knowledge_det(i)">删除
+                                </a>
+                            </div>
+                            <el-form ref="knowledge_rules" :model="item" label-width="120px" :rules="knowledge_rules">
+                                <el-divider>专业技能</el-divider>
+                                <el-form-item label="技能类型:">
+                                    <template>
+                                        <el-radio v-model="item.type" label="1">平台技能</el-radio>
+                                        <el-radio v-model="item.type" label="2">其他技能</el-radio>
+                                    </template>
+                                </el-form-item>
+                                <el-form-item label="技能名称:" prop="name" v-if="item.type == 1">
+                                    <template>
+                                        <el-select v-model="item.name" placeholder="请选择">
+                                            <el-option
+                                                    v-for="item in subjects"
+                                                    :key="item.id"
+                                                    :label="item.name"
+                                                    :value="item.name">
+                                            </el-option>
+                                        </el-select>
+                                    </template>
+                                </el-form-item>
+                                <el-form-item label="技能名称:" prop="name" v-if="item.type == 2">
+                                    <el-input v-model="item.name" maxlength="10"></el-input>
+                                </el-form-item>
+                                <el-form-item label="使用时长(月):" prop="use_month">
+                                    <el-input v-model.number="item.use_month" maxlength="10"></el-input>
+                                </el-form-item>
+                                <el-form-item label="掌握程度:" prop="level">
+                                    <template>
+                                        <el-radio v-model="item.level" label="1">一般</el-radio>
+                                        <el-radio v-model="item.level" label="2">熟练</el-radio>
+                                        <el-radio v-model="item.level" label="3">良好</el-radio>
+                                        <el-radio v-model="item.level" label="4">精通</el-radio>
+                                    </template>
+                                </el-form-item>
+                                <el-form-item label="" prop="back_time">
+                                    <el-button style="float: left;" type="primary" size="small"
+                                               v-if="i===knowledge_list.length-1"
+                                               @click="add_knowledge_det()" icon="el-icon-plus" circle>
+                                    </el-button>
+
+                                </el-form-item>
+                            </el-form>
+                        </el-card>
+                    </div>
+                    <div class="next2">
+                        <el-button type="primary" @click="next(-1)" size="small">上一步</el-button>
+                        <el-button type="primary" @click="next(1, 'knowledge_rules')" size="small" style="float: right">下一步
+                        </el-button>
+                    </div>
+                </div>
+            </transition>
+            <!-- 第6步 -->
+            <transition name="el-fade-in-linear" v-if="active === 5">
                 <div class="step4">
                     <el-descriptions class="margin-top" title="" :column="3" border>
 
@@ -555,6 +618,30 @@
                             </template>
                             <img v-if="prove.other" :src="prove.other" class="avatar">
                         </el-descriptions-item>
+
+                        <template v-for="(item,i) in knowledge_list">
+                            <el-descriptions-item span="1" :key="i">
+                                <template slot="label">
+                                    <i class="el-icon-office-building"></i>技能名称
+                                </template>
+                                <p v-text="item.name"></p>
+                            </el-descriptions-item>
+                            <el-descriptions-item span="1" :key="i">
+                                <template slot="label">
+                                    <i class="el-icon-office-building"></i>
+                                    使用时长
+                                </template>
+                                <p v-text="item.use_month"></p>
+                            </el-descriptions-item>
+                            <el-descriptions-item span="1" :key="i">
+                                <template slot="label">
+                                    <i class="el-icon-office-building"></i>
+                                    掌握程度
+                                </template>
+                                <p v-text="item.level"></p>
+                            </el-descriptions-item>
+
+                        </template>
                     </el-descriptions>
                     <div class="next4">
                         <el-button type="primary" @click="next(-1)" size="small">上一步</el-button>
@@ -564,9 +651,8 @@
                     </div>
                 </div>
             </transition>
-
-            <!-- 第六步 -->
-            <transition name="el-fade-in-linear" v-if="active === 5">
+            <!-- 第7步 -->
+            <transition name="el-fade-in-linear" v-if="active === 6">
                 <div class="step5">
                     <el-result title="提交审核成功, 扫码关注“云数智学”公众号及时获取审核信息！" subTitle="请根据提示进行操作">
                         <template slot="icon">
@@ -684,17 +770,40 @@
                         name: "",
                         industry: "",
                         post: "",
-                        time: [],
+                        time: ['', ''],
                         start_time: "",
                         end_time: "",
                         keyword: "",
                     }
                 ],
+                // 技能信息
+                knowledge_list: [
+                    {
+                        use_month: "",
+                        level: "",
+                        type: "1",  // 1固定 2其他
+                        name: "",
+                    }
+                ],
+                // 技能信息验证
+                knowledge_rules: {
+                    name: [
+                        {required: true, message: '请选择或输入技能名称', trigger: 'blur'},
+                    ],
+                    use_month: [
+                        {required: true, message: '请输入使用时长', trigger: 'blur'},
+                    ],
+                    level: [
+                        {required: true, message: '请选择掌握程度', trigger: 'blur'},
+                    ],
+                },
+                subjects: [],
                 disabled: false,
                 loading_post: false,
                 loading: false,
                 loading2: false,
                 active: {{ step_id|default:0 }},
+                // active: 4,
                 token: "",
                 // 第一步的ocr信息验证
                 rulesocr1: {
@@ -752,7 +861,7 @@
             },
             created() {
 
-
+                this.subjects = {{ subjects|safe }}
                 this.token = localStorage.getItem("Token")
                 this.role_id = "{{ role_id }}"
                 if (this.role_id == 3) {
@@ -809,8 +918,6 @@
                                 }
 
                                 if (data.work_list.length) {
-
-
                                     $.each(data.work_list, function (i) {
                                         this.time = [
                                             new Date(this.time[0].substring(0, 4),
@@ -823,6 +930,7 @@
                                     })
                                     thsi.work_list = data.work_list
                                 }
+                                thsi.knowledge_list = data.knowledge_list
                                 thsi.prove = data.prove || thsi.prove
                             }
                         } else {
@@ -923,21 +1031,27 @@
                             return
                         }
                         var thsi = this;
-                        var inter_exit = window.setInterval(function () {
-                            thsi.exit_count--;
-                            if (thsi.exit_count <= 0) {
-                                thsi.exit_count = 60;
-                                thsi.disabled = false;
-                                window.clearInterval(inter_exit);
-                                $("#send_code .code_time").text('')
-                            } else {
-                                thsi.disabled = true;
-                                $("#send_code .code_time").text(thsi.exit_count + 's')
-                            }
-                        }, 1000);
-                        msg_ok("验证码已发送，2分钟内有效。")
-                        $.post('/sms/send/', {phone: this.form.phone, code_id: 1}, function (res) {
 
+                        $.post('/sms/send/', {phone: this.form.phone, code_id: 1}, function (res) {
+                            if (res.response === 'ok') {
+                                var inter_exit = window.setInterval(function () {
+                                    thsi.exit_count--;
+                                    if (thsi.exit_count <= 0) {
+                                        thsi.exit_count = 60;
+                                        thsi.disabled = false;
+                                        window.clearInterval(inter_exit);
+                                        $("#send_code .code_time").text('')
+                                    } else {
+                                        thsi.disabled = true;
+                                        $("#send_code .code_time").text(thsi.exit_count + 's')
+                                    }
+                                }, 1000);
+                                msg_ok("验证码已发送，2分钟内有效。")
+                                msg_ok("验证码已发送，2分钟内有效。", function () {
+                                })
+                            } else {
+                                msg_fail(res.message)
+                            }
                         })
 
 
@@ -998,6 +1112,22 @@
                                     }
                                 });
                             } else if (this.active === 4) {
+
+                                $.each(this.$refs[formName], function (i) {
+                                    this.validate((valid) => {
+                                        if (valid) {
+                                            is_val = true;
+                                        } else {
+                                            is_val = false;
+                                        }
+                                    });
+                                })
+                                if (is_val) {
+                                    // 第3步
+                                    this.save_step5()
+                                }
+
+                            } else if (this.active === 5) {
                                 this.$confirm('确认提交审核?', '提示', {
                                     confirmButtonText: '确定',
                                     cancelButtonText: '取消',
@@ -1154,6 +1284,25 @@
                     })
 
                 },
+                // save_step5
+                save_step5() {
+                    var thsi = this;
+
+                    var post_data = {
+                        token: this.token || localStorage.getItem("Token"),
+                        step_id: this.active + 1,
+                        data: JSON.stringify(this.knowledge_list)
+                    }
+                    $.post("/interviewer/save/?role_id=" + thsi.role_id, post_data, function (res) {
+                        thsi.loading_post = false;
+                        if (res.response === 'ok') {
+                            thsi.active++
+                        } else {
+                            thsi.$message.error(res.message);
+                        }
+                    })
+
+                },
                 // 第4步
                 save_step4() {
                     var thsi = this;
@@ -1299,8 +1448,42 @@
                             keyword: "",
                         })
                     } else {
-                        msg_fail("最多添加五个")
+                        msg_fail("最多添加5个")
                     }
+                },
+                // 新增技能
+                add_knowledge_det() {
+                    if (this.knowledge_list.length < 20) {
+                        this.knowledge_list.push({
+                            sid: "",
+                            use_month: "",
+                            level: "",
+                            type: "1",
+                            name: "",
+                        })
+                    } else {
+                        msg_fail("最多添加20个技能")
+                    }
+                },
+                // 删除技能
+                del_knowledge_det(index) {
+                    this.$confirm('确定删除此信息?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.knowledge_list.splice(index, 1)
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+
                 },
             }
         })

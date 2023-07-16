@@ -9,12 +9,10 @@ def get_user_id(phone, type_, id_=0):
             where_sql += f" u.id != {id_}"
         sql = f"""
             select DISTINCT u.id, u.password from recruit.users u 
-            join recruit.user_tea_det d on u.id=d.user_id 
-            and d.phone_number ='{phone}' and u.`type` ={type_} 
+            where u.username ='{phone}' and u.`type` ={type_} 
             {where_sql}
             LIMIT 1;
         """
-        print(sql)
         user = db.default.fetchone_dict(sql)
 
     elif type_ == 5:
