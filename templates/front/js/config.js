@@ -1,5 +1,5 @@
 
-var projectName = 'IT学霸';
+var projectName = '云数智学堂';
 /**
  * 轮播图配置
  */
