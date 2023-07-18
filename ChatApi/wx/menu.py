@@ -37,34 +37,34 @@ lzkx_data = {
     "button": [
         {
             "name": "题库浏览",
-            "type": "miniprogram",
-            "url": "http://mp.weixin.qq.com",
-            "appid": "wx8df523611cfc0418",
-            "pagepath": "pages/index/index"
+            "type": "view",
+            "url": "https://mp.weixin.qq.com",
+            # "appid": "wx8df523611cfc0418",
+            # "pagepath": "pages/index/index"
         },
         {
             "name": "个人中心",
             "sub_button": [
                 {
                     "name": "个人中心",
-                    "type": "miniprogram",
-                    "url": "http://mp.weixin.qq.com",
-                    "appid": "wx8df523611cfc0418",
-                    "pagepath": "pages/index/index"
+                    "type": "view",
+                    "url": "https://mp.weixin.qq.com",
+                    # "appid": "wx8df523611cfc0418",
+                    # "pagepath": "pages/index/index"
                 },
                 {
                     "name": "联系客服",
-                    "type": "miniprogram",
-                    "url": "http://mp.weixin.qq.com",
-                    "appid": "wx8df523611cfc0418",
-                    "pagepath": "pages/index/index"
+                    "type": "view",
+                    "url": "https://mp.weixin.qq.com",
+                    # "appid": "wx8df523611cfc0418",
+                    # "pagepath": "pages/index/index"
                 },
                 {
                     "name": "投诉建议",
-                    "type": "miniprogram",
-                    "url": "http://mp.weixin.qq.com",
-                    "appid": "wx8df523611cfc0418",
-                    "pagepath": "pages/index/index"
+                    "type": "view",
+                    "url": "https://mp.weixin.qq.com",
+                    # "appid": "wx8df523611cfc0418",
+                    # "pagepath": "pages/index/index"
                 }
 
             ]

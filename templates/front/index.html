@@ -270,7 +270,7 @@
 <div id="header">
 
     <div class="navs">
-        <div class="title" v-text="projectName"></div>
+        <div class="title" >云数智学堂</div>
         <div class="title2" v-text="city" @click="city_list()"></div>
         <span class="title2" style="margin-right: 20px" @click="city_list()">[切换城市]</span>
         <div class="list">
@@ -794,8 +794,8 @@
                         return 'http://127.0.0.1:8087/upload/picture2.jpg';
                     },
                     setSrc: function () {
-                        // return 'http://127.0.0.1:8087/upload/picture2.jpg';
-                        return 'http://imgs.blazor.zone/images/Pic' + Math.round(Math.random() * 136) + '.jpg';
+                        return 'https://www.ittest008.com/file/number_id_img/2023/07/18/20230718012314522296.png';
+                        // return 'http://imgs.blazor.zone/images/Pic' + Math.round(Math.random() * 136) + '.jpg';
                     },
                     onSuccess: function () {
                         var handler = setTimeout(function () {
