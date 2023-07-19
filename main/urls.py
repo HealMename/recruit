@@ -31,7 +31,7 @@ urlpatterns = [
 ]
 # main app的路径
 mainDir = os.path.join(os.getcwd(), "main")
-
+print(mainDir)
 # 过滤文件的列表
 excludeList = [
     "schema_v.py",

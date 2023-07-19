@@ -102,6 +102,7 @@ def save_info(request):
             objs = []
             for obj in data:
                 obj.pop('time')
+                obj.pop('keyword_new')
                 obj['user_id'] = user_id
                 obj['add_time'] = now
                 objs.append(obj)
