@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
+    <meta name="format-detection" content="telephone=no"/>
+    <title>云数智学堂</title>
+    <link rel="shortcut icon" href="/media/img/favicon.ico">
+    <link rel="stylesheet" href="/media/layui-v2.7.6/layui/css/layui.css">
+    <link rel="stylesheet" href="/media/h5/layer/layer.css">
+    <link rel="stylesheet" href="/media/h5/css/mobileSelect.css">
+    <link rel="stylesheet" href="/media/css/common.css"/>
+    <link rel="stylesheet" href="/media/css/style.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.15.13/lib/theme-chalk/index.css"/>
+    <link rel="stylesheet" href="/media/slidercaptcha/disk/slidercaptcha.css">
+    <link rel="stylesheet" href="/media/slidercaptcha/lib/font-awesome/css/font-awesome.min.css">
+    <script src="/media/js/jquery-1.11.3.min.js"></script>
+    <script src="/media/layui-v2.7.6/layui/layui.js"></script>
+    <script src="/media/js/vue.js"></script>
+    <script src="/media/h5/layer/layer.js"></script>
+    <script src="/media/js/config.js"></script>
+    <script src="/media/js/common.js"></script>
+    <script src="/media/h5/js/mobileSelect.min.js"></script>
+    <script src="/media/h5/js/size.js"></script>
+    <script src="/media/h5/js/zepto.js"></script>
+    <script src="/media/js/element-ui@2.15.13.js"></script>
+    <script src="/media/slidercaptcha/disk/longbow.slidercaptcha.js"></script>
+    <script>
+        init(720);
+    </script>
+    {% block css %}
+        <style>
+
+        </style>
+    {% endblock %}
+</head>
+<style type="text/css">
+</style>
+<body class="fixed-sidebar full-height-layout gray-bg">
+<script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+<script>
+    var is_wx = navigator.userAgent.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
+
+    // judgewx();
+
+    function judgewx() {
+
+        if (is_wx) {
+            //微信浏览器
+            $.post("/qm/js/ticket/", {url: location.href}, function (res) {
+                var data = res.data;
+                wx.config({
+                    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                    appId: data.appId, // 必填，公众号的唯一标识
+                    timestamp: data.timestamp, // 必填，生成签名的时间戳
+                    nonceStr: data.nonceStr, // 必填，生成签名的随机串
+                    signature: data.signature,// 必填，签名
+                    jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', "updateAppMessageShareData", "updateTimelineShareData"] // 必填，需要使用的JS接口列表
+                });
+                wx.ready(function () {      //需在用户可能点击分享按钮前就先调用
+                    wx.onMenuShareTimeline({
+                        title: share_name, // 分享标题
+                        link: share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: rooturl + '/site_media/login/img/sf_logo.png', // 分享图标
+                        success: function () {
+                            // 用户点击了分享后执行的回调函数
+                        }
+                    })
+                    wx.onMenuShareAppMessage({
+                        title: share_name, // 分享标题
+                        desc: desc, // 分享描述
+                        link: share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: rooturl + '/site_media/login/img/sf_logo.png', // 分享图标
+                        success: function () {
+                            // 用户点击了分享后执行的回调函数
+                        }
+                    });
+                    wx.updateAppMessageShareData({
+                        title: share_name, // 分享标题
+                        desc: desc, // 分享描述
+                        link: share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: rooturl + '/site_media/login/img/sf_logo.png', // 分享图标
+                        success: function () {
+
+                        }
+                    })
+                    wx.updateTimelineShareData({
+                        title: share_name + '书法作业', // 分享标题
+                        link: share_url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: rooturl + '/site_media/login/img/sf_logo.png', // 分享图标
+                        success: function () {
+                            // 设置成功
+                        }
+                    })
+                });
+            })
+        }
+    }
+</script>
+{% block body %} {% endblock %}
+{% block js %} {% endblock %}
+</body>
+
+</html>

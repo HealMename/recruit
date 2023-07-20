@@ -4,6 +4,7 @@ from ChatApi.wx import views, pay, menu
 
 urlpatterns = [
     url(r'^index/$', views.r_index),
+    url(r'^login/$', views.login),
     url(r'^menu/$', menu.menu),
     url(r'^pay_index/$', pay.index),
     url(r'^oauth/$', views.r_oauth),  # 网页授权跳转

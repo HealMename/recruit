@@ -25,6 +25,8 @@ from . import views, send_msg, index
 from dj2.settings import dbName as schemaName
 from user import views as user
 urlpatterns = [
+    url(r'^MP_verify_VU4YHpDMWh6Roltx.txt$', TemplateView.as_view(template_name="MP_verify_VU4YHpDMWh6Roltx.txt")),
+
     url(r'^apidoc/(?P<path>.*)$', serve, {'document_root': settings.APIDOC_DIR}),  # 接口文档
     url(r'^file/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_URL}),  # 静态文件路径
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_SITE}),  # 静态文件路径
@@ -37,6 +39,7 @@ urlpatterns = [
     path(r'verify_password/', user.request_verify_password),
     path(r'call/index/', send_msg.call_index),  # 面试间
     path(r'sms/send/', send_msg.index),  # 发短信接口
+    path(r'sms/verify_code/', send_msg.verify_code),  # 发短信接口
     re_path(r'admin/lib/(?P<p1>.*)/(?P<p2>.*)$', views.admin_lib2),
     re_path(r'admin/lib/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)$', views.admin_lib3),
     re_path(r'admin/lib/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)/(?P<p4>.*)$', views.admin_lib4),
@@ -92,5 +95,4 @@ urlpatterns += [
     url(r'user/', include('user.urls')),
     url(r'interviewer/', include('interviewer.urls')),
     url(r'uploads/', include('upload.urls')),
-
 ]

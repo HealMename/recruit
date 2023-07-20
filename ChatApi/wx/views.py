@@ -8,7 +8,7 @@ from ChatApi.wx.utils import parse_xml
 from dj2.settings import GHAT_ID
 from libs.WeChat import config
 from libs.WeChat.user import WebChatUser
-from libs.utils import ajax, Struct
+from libs.utils import ajax, Struct, render_template
 
 
 def r_index(request):
@@ -85,3 +85,12 @@ def r_user_info(request):
     return ajax.ajax_ok(data)
 
 
+def login(request):
+    """登陆"""
+    data = Struct()
+    if request.method == "GET":
+        code = request.GET.get('code')
+        data.code = code
+    else:
+        return ajax.ajax_ok()
+    return render_template(request, 'h5/index.html')
