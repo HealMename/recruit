@@ -69,8 +69,7 @@ def r_user_info(request):
     :return:
     """
     args = request.QUERY.casts(code=str)
-    user_id = request.user_id
-    now = int(time.time())
+    data = Struct()
     if not request.user_id:
         code = args.code
         if not code:
@@ -78,10 +77,9 @@ def r_user_info(request):
         wx = WebChatUser(GHAT_ID)
         user = wx.user(code)
         open_id = user.get('openid', '')
+        data.open_id = open_id
         if not open_id:
             return ajax.ajax_fail(message='not found open_id')
-        res = wx.get_unionid(open_id)
-    data = Struct()
     return ajax.ajax_ok(data)
 
 

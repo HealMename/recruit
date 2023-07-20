@@ -37,7 +37,7 @@
         var exit = '{{ request.GET.exit }}';
         var open_id = localStorage.getItem("ZXT_OPEN_ID") || "";
         var share_url = "{{ share_url|safe }}";
-        var code_info = "{{ code }}";
+        var code_info = '{{request.GET.code|safe}}';
         if (is_wx) {
             layer.open({type: 2, shadeClose: false});
             if (open_id) {

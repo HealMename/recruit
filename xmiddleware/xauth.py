@@ -110,7 +110,8 @@ class Xauth(MiddlewareMixin):
                 "/interviewer/add/",
                 "/tea/login/",
                 "/chat/wx/index/",
-                '/sms/send/'
+                '/sms/send/',
+                "/oauth/user"
             ]  # 免认证list
 
             if fullPath not in post_list and "register" not in fullPath and "login" not in fullPath \
