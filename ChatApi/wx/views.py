@@ -89,5 +89,9 @@ def login(request):
         code = request.GET.get('code')
         data.code = code
     else:
+        args = request.QUERY.casts(open_id=str, phone=str)
+        open_id = args.open_id
+        phone = args.phone
+
         return ajax.ajax_ok()
     return render_template(request, 'h5/index.html')
