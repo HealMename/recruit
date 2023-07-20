@@ -19,8 +19,16 @@
 
         .qr {
             width: 211px;
-            margin-left: 230px;
-            margin-bottom: 20px
+        }
+        .wexin_qr{
+            display: inline-block;
+            margin-top: 20px;
+            float: right;
+
+        }
+        .link_qr{
+            float: left;
+            margin-top: 20px;
         }
     </style>
     <div id="wrapper">
@@ -31,8 +39,14 @@
         <br>
         <p style="text-align: center">联系电话：13161883018</p>
         <p style="text-align: center">邮箱：yp2007@126.com</p>
-        <p style="text-align: center">微信公众号</p>
-        <img src="/media/img/gzh.jpg" alt="" class="qr">
+        <div class="wexin_qr">
+            <p style="text-align: center">微信公众号</p>
+            <img src="/media/img/link_weixin.png" alt="" class="qr">
+        </div>
+        <div class="link_qr">
+            <p style="text-align: center">联系人微信</p>
+            <img src="/media/img/weixin_me.png" alt="" class="qr">
+        </div>
     </div>
 {% endblock %}
 {% block js %}
