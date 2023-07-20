@@ -73,7 +73,7 @@ def r_user_info(request):
     code = args.code
     if not code:
         return ajax.jsonp_fail(request, message='not found code!')
-    wx = WebChatUser(GHAT_ID)
+    wx = WebChatUser(2)
     user = wx.user(code)
     open_id = user.get('openid', '')
     data.open_id = open_id
