@@ -21,7 +21,7 @@ from django.views.static import serve
 from django.views.generic import TemplateView
 from django.conf import settings
 
-from . import views, send_msg
+from . import views, send_msg, index
 from dj2.settings import dbName as schemaName
 from user import views as user
 urlpatterns = [
@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^upload/(?P<path>.*)$', serve, {'document_root': 'templates/front/'}),  # 静态文件路径
 
     path('xadmin/', admin.site.urls),
+    path(r'about/', index.about),
     path(r'index/', views.index),
     path(r'encode_password/', user.encode_password),
     path(r'verify_password/', user.request_verify_password),

@@ -247,6 +247,7 @@
         background-color: #009688;
         position: relative;
         left: -10px;
+        margin-bottom: 0;
     }
 
     .logins p:hover, .register p:hover {
@@ -298,17 +299,11 @@
                 <li class='current'>
                     <a href="javascript:" class="menumain">直播</a></li>
                 <li class='current right'>
-                    <a href="javascript:" id="login" class="menumain" @click="link_me()">联系我们</a> <br>
+                    <a href="javascript:navPage('/about/')" class="menumain">关于我们</a> <br>
                 </li>
                 <li class='current right' v-if="!username">
                     <a href="javascript:navPage('/tea/register_role/');layer.closeAll();" id="register"
                        class="menumain">注册</a>
-                    {#                    <div class="register" style="display: none">#}
-                    {#                        <p><a href="javascript:navPage('/pages/yonghu/register.html?tablename=yonghu')">个人注册</a></p>#}
-                    {#                        <p><a href="javascript:navPage('/tea/add/')">出题专家注册</a></p>#}
-                    {#                        <p><a href="javascript:navPage('/interviewer/add/')">面试官注册</a></p>#}
-                    {#                        <p><a href="javascript:navPage('/pages/gongsi/register.html?tablename=gongsi')">企业注册</a></p>#}
-                    {#                    </div>#}
                 </li>
                 <li class='current right' v-if="!username">
                     <a href="javascript:" id="login" class="menumain" @click="login_layer()">登录</a> <br>
