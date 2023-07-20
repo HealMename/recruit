@@ -46,7 +46,7 @@
                 $.post("/chat/wx/oauth/user/?code_info=" + code_info, {code: code_info}, function (res) {
                         if (res.response == 'ok') {
                             var _d = res.data;
-                            open_id = _d.openid;
+                            open_id = _d.open_id;
                             localStorage.setItem("TBCP_TEA_OPEN_ID", open_id);
                             if (!open_id) {
                                 layer.closeAll();
