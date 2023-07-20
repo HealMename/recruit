@@ -70,16 +70,15 @@ def r_user_info(request):
     """
     args = request.QUERY.casts(code=str)
     data = Struct()
-    if not request.user_id:
-        code = args.code
-        if not code:
-            return ajax.jsonp_fail(request, message='not found code!')
-        wx = WebChatUser(GHAT_ID)
-        user = wx.user(code)
-        open_id = user.get('openid', '')
-        data.open_id = open_id
-        if not open_id:
-            return ajax.ajax_fail(message='not found open_id')
+    code = args.code
+    if not code:
+        return ajax.jsonp_fail(request, message='not found code!')
+    wx = WebChatUser(GHAT_ID)
+    user = wx.user(code)
+    open_id = user.get('openid', '')
+    data.open_id = open_id
+    if not open_id:
+        return ajax.ajax_fail(message='not found open_id')
     return ajax.ajax_ok(data)
 
 
