@@ -174,9 +174,9 @@ def question_add(request):
             "size": str(q.size),
             "status": str(q.status),
             "add_user": user_id,
-            "step_list": [{'content': x.content} for x in step_list],
-            "answer_list": [{'content': x.content} for x in step_answer],
-            "os_detail": [{'content': x.content} for x in os_detail]
+            "step_list": [{'content': x.content} for x in step_list] if step_list else [{'content': ''}],
+            "answer_list": [{'content': x.content} for x in step_answer] if step_answer else [{'content': ''}],
+            "os_detail": [{'content': x.content} for x in os_detail] if os_detail else [{'content': ''}],
         }
         return ajax.ajax_ok(data)
 
