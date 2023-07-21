@@ -62,10 +62,6 @@
             v-for="(domain, index) in form.os_detail"
             :label="'环境' + (index+1) + '：'"
             :key="index"
-            :prop="domain.content"
-            :rules="{
-            required: true, message: '内容不能为空', trigger: 'blur'
-          }"
         >
           <el-input v-model="domain.content" style="width: 500px; margin-right: 10px;" maxlength="100"></el-input>
           <el-button @click.prevent="removeOsDetail(domain)" v-if="index !== 0" type="warning">删除</el-button>
