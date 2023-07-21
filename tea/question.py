@@ -114,8 +114,12 @@ def question_add(request):
     if request.method == 'POST':
         id_ = int(args.pop('id', 0))
         now = int(time.time())
-        step_data = json.loads(args.pop('step_data', '[]'))  # 步骤列表
+        os_detail = json.loads(args.pop('os_detail_data', '[]'))  # 解题步骤列表
+        step_data = json.loads(args.pop('step_data', '[]'))  # 解题步骤列表
+        answer_step = json.loads(args.pop('answer_step', '[]'))  # 答题步骤列表
+        args.pop('os_detail', '')
         args.pop('step_list', '')
+        args.pop('answer_list', '')
         args.pop('add_time', '')
         args.pop('status_name', '')
         args.pop('level_name', '')
@@ -129,16 +133,35 @@ def question_add(request):
                 args.update(dict(verify_time=now, verify_user=user_id))
             db.default.question.filter(id=id_).update(**args)
         db.default.question_step_detail.filter(question_id=id_, status=1).update(status=-1)
-        for obj in step_data:
+        db.default.question_step_answer.filter(question_id=id_, status=1).update(status=-1)
+        db.default.question_os_detail.filter(question_id=id_, status=1).update(status=-1)
+        for eq, obj in enumerate(step_data, 1):
+            obj['sequence'] = eq
+            obj['question_id'] = id_
+            obj['status'] = 1
+            obj['add_user'] = user_id
+            obj['add_time'] = now
+        for eq, obj in enumerate(answer_step, 1):
+            obj['sequence'] = eq
+            obj['question_id'] = id_
+            obj['status'] = 1
+            obj['add_user'] = user_id
+            obj['add_time'] = now
+        for eq, obj in enumerate(os_detail, 1):
+            obj['sequence'] = eq
             obj['question_id'] = id_
             obj['status'] = 1
             obj['add_user'] = user_id
             obj['add_time'] = now
         db.default.question_step_detail.bulk_create(step_data)
+        db.default.question_step_answer.bulk_create(answer_step)
+        db.default.question_os_detail.bulk_create(os_detail)
         return ajax.ajax_ok()
     else:
         q = db.default.question.get(id=args.id)
         step_list = db.default.question_step_detail.filter(question_id=args.id, status=1)
+        step_answer = db.default.question_step_answer.filter(question_id=args.id, status=1)
+        os_detail = db.default.question_os_detail.filter(question_id=args.id, status=1)
         data = {
             "id": args.id,
             "sid": q.sid,
@@ -151,7 +174,9 @@ def question_add(request):
             "size": str(q.size),
             "status": str(q.status),
             "add_user": user_id,
-            "step_list": [{'content': x.content} for x in step_list]
+            "step_list": [{'content': x.content} for x in step_list],
+            "answer_list": [{'content': x.content} for x in step_answer],
+            "os_detail": [{'content': x.content} for x in os_detail]
         }
         return ajax.ajax_ok(data)
 
