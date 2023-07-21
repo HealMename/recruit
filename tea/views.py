@@ -11,6 +11,7 @@ from main.models import yonghu, gongsi
 from libs.utils import ajax, db, auth_token
 from libs.utils.common import Struct, render_template, get_upload_key
 from main.users_model import users
+from tea.common import all_subjects
 from util.auth import Auth
 
 role_dict = {"管理员": 1, "出题专家": 2, "面试官": 3, "用户": 4, "公司": 5}
@@ -87,11 +88,13 @@ def add_tea(request):
 
 def user_info(request):
     """用户信息"""
-    id_ = request.QUERY.get('id')
+    id_ = request.user.id
     user = db.default.users.get(id=id_)
     info = db.default.user_tea_det.get(user_id=id_)
     data = {
         'username': user.username,
+        'upload_url': f"{UPLOAD_URL}?upcheck={get_upload_key()}&up_type=number_id_img",
+        "subjects": db.default.subjects.filter(status=1).select('id', 'name')[:]
     }
     data = Struct(data)
     data.update(info)
@@ -99,7 +102,6 @@ def user_info(request):
     user_id = id_
     # 步骤 1
     username = db.default.users.get(id=user_id).username
-    print(username)
     if db.default.users.get(id=user_id).type == 3:
         user_id = db.default.users.get(username=username, type=4).id
     user_det = db.default.user_tea_det.get(user_id=user_id)
@@ -140,7 +142,17 @@ def user_info(request):
             "end_time": obj.end_time,
             "keyword": obj.keyword,
         })
-    # 步骤 4
+
+    data.knowledge_list = []
+    for obj in db.default.user_knowledge_list.filter(user_id=user_id, status=1):
+        data.knowledge_list.append({
+            "name": obj.name,
+            "sid": str(obj.sid),
+            "level": str(obj.level),
+            "type": str(obj.type),
+            "use_month": obj.use_month
+        })
+
     data.prove = db.default.user_prove_list.filter(user_id=user_id, status=1).select(
         'other', 'security', 'work').first()
     return ajax.ajax_ok(data)
