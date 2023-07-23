@@ -15,6 +15,16 @@
     <script type="text/javascript" src="/media/js/jquery.SuperSlide.2.1.1.js"></script>
 </head>
 <style>
+     ::-webkit-scrollbar {
+        display: none; /* Chrome Safari */
+        -ms-overflow-style: none; /* IE 10+ */
+        scrollbar-width: none; /* Firefox */
+
+    }
+    .st_name span{
+        margin-right: 10px;
+
+    }
     ::v-deep input[type='number'] {
         -moz-appearance: textfield;
     }
@@ -41,31 +51,8 @@
         background-position: center;
     }
 
-    #test1 {
-        overflow: hidden;
-    }
 
-    #test1 .layui-carousel-ind li {
-        width: 16px;
-        height: 4px;
-        border-width: 0;
-        border-style: solid;
-        border-color: rgba(0, 0, 0, .3);
-        border-radius: 20px;
-        background-color: rgba(255, 255, 255, 1);
-        box-shadow: 0 0 0 rgba(255, 0, 0, .8);
-    }
 
-    #test1 .layui-carousel-ind li.layui-this {
-        width: 16px;
-        height: 4px;
-        border-width: 0;
-        border-style: solid;
-        border-color: rgba(0, 0, 0, .3);
-        border-radius: 20px;
-        background-color: #009688;
-        box-shadow: 0 0 0 #009688;
-    }
 
     {#列表#}
     .recommend {
@@ -75,33 +62,6 @@
         background-repeat: no-repeat;
         background-position: center center;
         background-size: cover;
-    }
-
-    .recommend .box {
-        width: 1002px;
-        margin: 0 auto;
-    }
-
-    .recommend .box .title {
-        padding: 10px 5px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-sizing: border-box;
-    }
-
-    .recommend .box .title span {
-        padding: 0 10px;
-        font-size: 16px;
-        line-height: 1.4;
-    }
-
-    .recommend .box .filter #user_paper {
-        width: 100%;
-        margin-top: 10px;
-        font-size: 15px;
-        cursor: pointer;
-        margin-left: 48px;
     }
 
     .recommend .box .filter p span:hover {
@@ -119,172 +79,10 @@
         margin-left: 20px;
     }
 
-    .recommend .box .filter .item-list {
-        display: flex;
-        align-items: center;
-    }
-
-    .recommend .box .filter .item-list .lable {
-        font-size: 14px;
-        color: #333;
-        box-sizing: border-box;
-    }
-
-    .recommend .box .filter .item-list input {
-        padding: 0 10px;
-        box-sizing: border-box;
-        outline: none;
-    }
-
-    .recommend .box .filter button {
-        display: flex;
-        padding: 0 10px;
-        box-sizing: border-box;
-        align-items: center;
-        justify-content: center;
-        outline: none;
-    }
-
-    .recommend .box .filter button i {
-        margin-right: 4px;
-    }
-
-    .recommend .box .list {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .recommend .box .list .list-item {
-        flex: 0 0 25%;
-        padding: 0 5px;
-        box-sizing: border-box;
-    }
-
-    .recommend .box .list .list-item .list-item-body {
-        cursor: pointer;
-        border: 1px solid rgba(0, 0, 0, 3);
-        padding: 5px;
-        box-sizing: border-box;
-    }
-
-
-    .recommend .box .list .list-item-body .info {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .recommend .box .list .list-item-body .info .price {
-        padding-top: 5px;
-        color: red;
-        font-size: 14px;
-        text-align: center;
-        box-sizing: border-box;
-    }
-
-    .recommend .box .list .list-item-body .info .name {
-        padding-top: 5px;
-        color: red;
-        font-size: 14px;
-        text-align: center;
-        box-sizing: border-box;
-    }
-
-    .recommend .box .list .list-item3 {
-        flex: 0 0 33.33%;
-    }
-
-    .recommend .box .list .list-item5 {
-        flex: 0 0 20%;
-    }
-
-    .recommend .box .news {
-        display: flex;
-        flex-wrap: wrap;
-        padding: 0;
-        width: 100%;
-    }
-
-    .recommend .box .news .list-item {
-        flex: 0 0 50%;
-        padding: 0 10px;
-        box-sizing: border-box;
-    }
-
-    .recommend .box .news .list-item .list-item-body {
-        cursor: pointer;
-        border: 1px solid rgba(0, 0, 0, 3);
-        padding: 10px;
-        box-sizing: border-box;
-        display: flex;
-    }
-
-    .recommend .box .news .list-item .list-item-body img {
-        width: 120px;
-        height: 100%;
-        display: block;
-        margin: 0 auto;
-    }
-
-    .recommend .box .news .list-item .list-item-body .item-info {
-        flex: 1;
-        display: flex;
-        justify-content: space-between;
-        flex-direction: column;
-        padding-left: 10px;
-        box-sizing: border-box;
-    }
-
-    .recommend .box .news .list-item .list-item-body .item-info .name {
-        padding-top: 5px;
-        color: red;
-        font-size: 14px;
-        box-sizing: border-box;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-    }
-
-    .recommend .box .news .list-item .list-item-body .item-info .time {
-        padding-top: 5px;
-        color: red;
-        font-size: 14px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        box-sizing: border-box;
-    }
-
-    .recommend .box .news .list-item1 {
-        flex: 0 0 100%;
-    }
-
-    .recommend .box .news .list-item3 {
-        flex: 0 0 33.33%;
-    }
-
-    .index-pv1 .animation-box:hover {
-    {#transform: perspective(1000px) translate3d(0px, 0px, 0px) scale(1.05) rotate(0deg) skew(0deg, 0deg);#}{#transition: all 0.1s;#}
-    }
-
-    .index-pv1 .animation-box img:hover {
-        transform: perspective(1000px) translate3d(0px, 0px, 0px) scale(1) rotate(0deg) skew(0deg, 0deg);
-        transition: all 0.3s;
-    }
-
-    .layui-laypage .layui-laypage-count {
-        padding: 0 10px;
-    }
-
-    .layui-laypage .layui-laypage-skip {
-        padding-left: 10px;
-    }
 
     .list-item-body .station {
-        width: 100%;
+        width: 373px;
+        float: left;
         border-color: rgba(0, 0, 0, 0.1);
         border-radius: 6px 6px 6px 6px;
         border-width: 1px;
@@ -292,7 +90,8 @@
         padding: 5px;
         text-shadow: 0 0 1px rgba(246, 246, 248, 0.1);;
         background: rgba(246, 246, 248, 0.17);
-        box-shadow: rgba(0, 0, 0, 0.2) 0 0 3px;
+        box-shadow: rgba(0, 0, 0, 0.2) 0 0 1px;
+        margin: 10px;
     }
 
     .list-item-body p {
@@ -305,37 +104,17 @@
         font-weight: 500;
         line-height: 22px;
         transition: all .2s linear;
-        width: 241px;
-        overflow: hidden;
-        height: 22px;
-        text-overflow: ellipsis;
-        -webkit-line-clamp: 3;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
+
     }
 
     .gs_name {
         font-size: 12px;
-        height: 63px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        -webkit-line-clamp: 3;
+        height: 42px;
         display: -webkit-box;
         -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 
-    .category-search {
-        box-shadow: rgba(0, 0, 0, 0.2) 0 0 3px !important;
-        border-color: rgba(0, 0, 0, 0.1) !important;
-        border-radius: 6px 6px 6px 6px !important;
-        border-width: 1px !important;
-        border-style: solid !important;
-        width: 102px !important;
-    }
-
-    .category-search:hover {
-        background: rgba(246, 246, 248, 0.2);
-    }
 
     .station .st_tag span, .gs_tag span {
         display: inline-block;
@@ -348,26 +127,7 @@
         height: 18px;
     }
 
-    .station .score {
-        float: right;
-        font-size: 20px;
-        color: darkred;
-        position: relative;
-        top: -142px;
-        left: -4px;
-    }
 
-    .gs_img {
-        width: 52px;
-        float: left;
-        margin: 0 10px 20px 10px;
-    }
-
-
-    .inputs{
-        float: left;
-        text-align: left;
-    }
     .filter{
         font-size: 15px;
         position: relative;
@@ -386,6 +146,27 @@
         color: #2a8a15;
         border-bottom-width: 1px;
         border-bottom-style: solid;
+    }
+    .is_free{
+        float: right;
+            background-color: #f0f9eb;
+    border-color: #e1f3d8;
+    color: #67c23a;
+    padding: 10px;
+    position: relative;
+    left: 25px;
+    top: -16px;
+        border-radius: 6px 6px 6px 6px;
+    }
+    .sname{
+        font-size: 20px;
+    }
+    .os_detail{
+        font-size: 12px;
+        height: 42px;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 </style>
 <body>
@@ -441,29 +222,33 @@
             </form>
             <!-- 样式一 -->
             <div class="list" style="position: relative;">
-                <div @click="do_question(item.id)" v-for="(item,index) in dataList"
-                     :key="index" class="list-item" :class="4=='3'?'list-item3':4=='5'?'list-item5':''">
-                    <div class="list-item-body animation-box"
-                         :style='{"padding":"10px","boxShadow":"0 0 0px ","margin":"0 0 10px 0","borderColor":"rgba(0,0,0,.1)","backgroundColor":"#fff","borderRadius":"4px","borderWidth":"0","borderStyle":"solid"}'>
+                <div v-for="(item,index) in dataList"
+                     :key="index" class="list-item" >
+                    <div class="list-item-body animation-box">
                         <div class="station">
-                            <p class="st_name">题目ID: {{ item.id }} <span
-                                    style="float: right;">科目:{{ item.sid_name }}</span></p>
+                            <p class="st_name">
+                                <span class="sname">{{ item.sid_name }} （{{ item.level_name }}）</span>
+                                <span class="is_free" v-if="item.is_free == 1">试</span>
+                            </p>
                             <p class="st_name">{{ item.title }}</p>
-                            <p class="gs_name">
-                                {{ item.desc }}
-                            </p>
-                            <p style="text-align: center;">
-                                <button class="layui-btn" style="width: 80%">进入实操环境</button>
-                            </p>
+                            <p class="q_count">做题人数：{{ item.q_count }}</p>
+                            <p class="gs_name">{{ item.desc }}</p>
 
+                            <p class="os_detail">
+                                <span>环境信息：</span>
+                                {{ item.os_detail }}</p>
+                            <p>
+                                <button class="layui-btn layui-btn-sm" @click="do_question(item.id)" style="float: left">查看详情</button>
+                                <button class="layui-btn layui-btn-sm" @click="do_question(item.id)" style="float: right">分享题目</button>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="pager" id="pager" :style="{textAlign:1==1?'left':1==2?'center':'right'}"></div>
+
         </div>
     </div>
-
+    <div class="pager" id="pager" ></div>
     <div style="display: none;" id="user_paper_det">
         <form class="layui-form" action="">
             <div class="layui-form-item sid">
@@ -488,22 +273,9 @@
                     </select>
                 </div>
             </div>
-            <!--
-            <div class="layui-form-item">
-                <label class="layui-form-label">题目数量</label>
-                <div class="layui-input-block">
-                    <input type="number" name="phone_number" lay-verify="phone_number" autocomplete="off"
-                           placeholder="题目数量"
-                           class="layui-input" max="10">
-                </div>
-            </div> -->
         </form>
     </div>
-
-
 </div>
-
-
 <script src="/media/js/jquery-1.11.3.min.js"></script>
 <script src="/media/layui-v2.7.6/layui/layui.js"></script>
 <script src="/media/js/vue.js"></script>
@@ -513,6 +285,7 @@
 <script src="/media/js/utils.js"></script>
 
 <script type="text/javascript">
+
     var vue = new Vue({
         el: '#app',
         data: {
@@ -535,6 +308,10 @@
                 }
                 return '';
             }
+        },
+        created(){
+           let parentWindow = window.parent
+           parentWindow.scrollTo(0,0)
         },
         methods: {
             isAuth(tablename, button) {
@@ -632,6 +409,15 @@
             }
             $.get('/tea/question_list/', param, function (res) {
                 vue.dataList = res.data.page_data
+                var timer = setTimeout(function () {
+                    window.parent.document.getElementById('iframe').height = 0
+                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
+                    // height = height > 1000 ? height : 1000
+                    console.log(height)
+                    window.parent.document.getElementById('iframe').height = height
+                    clearTimeout(timer)
+                }, 200)
+
                 // 分页
                 laypage.render({
                     elem: 'pager',
@@ -647,7 +433,6 @@
                             $.get('/tea/question_list/', param, function (res) {
                                 vue.dataList = res.data.page_data
                             })
-
                         }
                     }
                 });
@@ -656,27 +441,6 @@
         }
     });
 
-    window.xznSlide = function () {
-        jQuery(".banner").slide({mainCell: ".bd ul", autoPlay: true, interTime: 5000});
-        jQuery("#ifocus").slide({
-            titCell: "#ifocus_btn li",
-            mainCell: "#ifocus_piclist ul",
-            effect: "leftLoop",
-            delayTime: 200,
-            autoPlay: true,
-            triggerTime: 0
-        });
-        jQuery("#ifocus").slide({titCell: "#ifocus_btn li", mainCell: "#ifocus_tx ul", delayTime: 0, autoPlay: true});
-        jQuery(".product_list").slide({
-            mainCell: ".bd ul",
-            autoPage: true,
-            effect: "leftLoop",
-            autoPlay: true,
-            vis: 5,
-            trigger: "click",
-            interTime: 4000
-        });
-    };
 </script>
 </body>
 </html>

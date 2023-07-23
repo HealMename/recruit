@@ -20,10 +20,13 @@ class Auth(object):
         """
         msg = {'code': normal_code, 'msg': mes.normal_code, 'data': {}}
         tablename = model.__tablename__
+        phone = req_dict.pop('phone', '')
         token = auth_token.create_token(tablename, req_dict.get("id"))
         msg['data']["id"] = req_dict.get("id")
         msg["id"] = req_dict.get("id")
         msg['token'] = token
+        msg['open_role'] = ','.join([str(x.type) for x in db.default.users.filter(
+                            username=phone, status=1)])
         return JsonResponse(msg)
 
     def identify(self, request, token=''):

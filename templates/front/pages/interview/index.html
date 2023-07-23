@@ -19,6 +19,12 @@
         -moz-appearance: textfield;
     }
 
+    ::-webkit-scrollbar {
+        display: none; /* Chrome Safari */
+        -ms-overflow-style: none; /* IE 10+ */
+        scrollbar-width: none; /* Firefox */
+
+    }
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;
@@ -743,6 +749,14 @@
             }
             $.get('/tea/question_list/', param, function (res) {
                 vue.dataList = res.data.page_data
+                var timer = setTimeout(function () {
+                    window.parent.document.getElementById('iframe').height = 0
+                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
+                    // height = height > 1000 ? height : 1000
+                    console.log(height)
+                    window.parent.document.getElementById('iframe').height = height
+                    clearTimeout(timer)
+                }, 200)
                 // 分页
                 laypage.render({
                     elem: 'pager',

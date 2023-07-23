@@ -2,6 +2,7 @@ import json
 import time
 
 import random
+from collections import defaultdict
 
 from dj2.settings import K8S_URL
 from libs.utils import ajax, db, auth_token
@@ -68,19 +69,45 @@ def question_list(request):
     """
     page_data = db.default.fetchall_dict(sql)
     sid_name = all_subjects()
+    qids = [x.id for x in page_data]
+    os_dict = get_os_detail(qids)
+    q_count = get_q_count(qids)
     for q in page_data:
         q['status_name'] = {1: '已审核', 0: '未审核'}[q['status']]
         q['status'] = str(q['status'])
+        q['is_free'] = str(q['is_free'])
         q['add_time'] = trancate_date(q['add_time'])
         q['sid_name'] = sid_name[q['sid']]
         q['level'] = str(q['level'])
         q['level_name'] = level_name[str(q['level'])]
         q['size'] = str(q['size'])
         q['size_name'] = size_name[str(q['size'])]
+        q['os_detail'] = '、'.join(os_dict.get(q.id, []))
+        q['q_count'] = q_count.get(q.id, 0)
     data = Struct()
     data.page_data = page_data
     data.sum_len = get_page_len('question', where_sql)
     return ajax.ajax_ok(data)
+
+
+def get_q_count(qids):
+    """获取做题人数"""
+    sql = f"""
+        select question_id, count(d.add_user) num  from recruit.user_test_det_content  det
+        join recruit.user_test_det d on d.id =det.det_id where det.question_id in ({','.join(map(str, qids))})
+        group by question_id;
+    """
+    return {x.question_id: x.num for x in db.default.fetchall_dict(sql)}
+
+
+def get_os_detail(qids):
+    """获取环境信息"""
+    data = defaultdict(list)
+    for x in db.default.question_os_detail.filter(
+            question_id__in=qids, status=1).select('content', 'question_id').order_by('sequence'):
+        data[x.question_id].append(x.content)
+
+    return data
 
 
 def get_page_len(table, where_sql):
@@ -168,6 +195,7 @@ def question_add(request):
             "do_time": q.do_time,
             "do_points": q.do_points,
             "version": str(q.version),
+            "is_free": str(q.is_free),
             "level": str(q.level),
             "title": q.title,
             "desc": q.desc,

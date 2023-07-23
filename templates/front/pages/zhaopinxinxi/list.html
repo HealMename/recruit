@@ -15,7 +15,12 @@
     <script type="text/javascript" src="/media/js/jquery.SuperSlide.2.1.1.js"></script>
 </head>
 <style>
+    ::-webkit-scrollbar {
+        display: none; /* Chrome Safari */
+        -ms-overflow-style: none; /* IE 10+ */
+        scrollbar-width: none; /* Firefox */
 
+    }
     html::after {
         position: fixed;
         top: 0;
@@ -575,6 +580,14 @@
             // 获取列表数据
             http.request('zhaopinxinxi/list', 'get', param, function (res) {
                 vue.dataList = res.data.list
+                var timer = setTimeout(function () {
+                    window.parent.document.getElementById('iframe').height = 0
+                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
+                    // height = height > 1000 ? height : 1000
+                    console.log(height)
+                    window.parent.document.getElementById('iframe').height = height
+                    clearTimeout(timer)
+                }, 200)
                 // 分页
                 laypage.render({
                     elem: 'pager',

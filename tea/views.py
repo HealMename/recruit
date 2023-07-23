@@ -202,7 +202,7 @@ def login(request):
         else:
             if not verify_(code, phone, 2):
                 return ajax.ajax_fail(message='验证码错误')
-        args = {'id': user_id}
+        args = {'id': user_id, 'phone': phone}
         args['id'] = user_id
         if type_ in [1, 2, 3, 4]:
             args['status'] = 1
