@@ -38,9 +38,12 @@ def index(request):
             limit {(page_id - 1) * page_size}, {page_size} ;
         """
     page_data = db.default.fetchall_dict(sql)
+    phones = [x.phone for x in page_data]
+    name_dict = {x.phone_number: x.name for x in db.default.user_tea_det.filter(phone_number__in=phones, status=1, name__ne='')}
     for q in page_data:
         q['type_name'] = {2: '出题专家', 3: '面试官'}[q['type']]
         q['status'] = {-1: "未通过", 0: "未审核", 1: "已通过"}[q['status']]
+        q['name'] = name_dict.get(q.phone, '')
     data = Struct()
     data.page_data = page_data
     data.sum_len = data.sum_len = get_page_len(where_sql)

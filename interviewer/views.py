@@ -160,8 +160,8 @@ def save_info(request):
             if user_media:
                 data.form.imageUrl1 = user_media.front
                 data.form.imageUrl2 = user_media.back
-                data.form.ocr_front = json.loads(user_media.ocr_info_front)
-                data.form.ocr_back = json.loads(user_media.ocr_info_back)
+                data.form.ocr_front = json.loads(user_media.ocr_info_front or '{}')
+                data.form.ocr_back = json.loads(user_media.ocr_info_back or '{}')
                 data.step_id = 1
                 if not db.default.users.get(username=username, type=role_id) and not is_cms:
                     db.default.users.create(username=username, type=role_id, status=0, role=role_name[int(role_id)], password='')
