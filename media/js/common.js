@@ -11,6 +11,15 @@ function msg_ok(message, callback) {
 function msg_fail(message, callback) {
     layer.msg(message, {icon: 2, time: 1500}, callback)
 }
+// 成功提醒
+function parent_msg_ok(message, callback) {
+    parent.layer.msg(message, {icon: 1, time: 1500}, callback)
+}
+
+// 失败提醒
+function parent_msg_fail(message, callback) {
+    parent.layer.msg(message, {icon: 2, time: 1500}, callback)
+}
 
 // 在接口请求的同时  在每个接口之前加上tbkt_token  用于跨域
 var Token = localStorage.getItem('Token') || '';

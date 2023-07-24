@@ -15,16 +15,18 @@
     <script type="text/javascript" src="/media/js/jquery.SuperSlide.2.1.1.js"></script>
 </head>
 <style>
-     ::-webkit-scrollbar {
+    ::-webkit-scrollbar {
         display: none; /* Chrome Safari */
         -ms-overflow-style: none; /* IE 10+ */
         scrollbar-width: none; /* Firefox */
 
     }
-    .st_name span{
+
+    .st_name span {
         margin-right: 10px;
 
     }
+
     ::v-deep input[type='number'] {
         -moz-appearance: textfield;
     }
@@ -52,18 +54,6 @@
     }
 
 
-
-
-    {#列表#}
-    .recommend {
-        padding: 10px 0;
-        display: flex;
-        justify-content: center;
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: cover;
-    }
-
     .recommend .box .filter p span:hover {
         color: #2a8a15;
         border-bottom-width: 1px;
@@ -79,26 +69,30 @@
         margin-left: 20px;
     }
 
+    .layui-form-item {
+        margin-bottom: 0;
+    }
 
-    .list-item-body .station {
-        width: 373px;
+    .station {
+        width: 410px;
         float: left;
         border-color: rgba(0, 0, 0, 0.1);
         border-radius: 6px 6px 6px 6px;
         border-width: 1px;
         border-style: solid;
-        padding: 5px;
-        text-shadow: 0 0 1px rgba(246, 246, 248, 0.1);;
+        padding: 3px;
+        text-shadow: 0 0 1px rgba(246, 246, 248, 0.1);
         background: rgba(246, 246, 248, 0.17);
         box-shadow: rgba(0, 0, 0, 0.2) 0 0 1px;
+        margin-left: 10px;
+        margin-bottom: 10px;
+    }
+
+    .list p {
         margin: 10px;
     }
 
-    .list-item-body p {
-        margin: 10px;
-    }
-
-    .list-item-body .st_name, .gs_name {
+    .list .st_name, .gs_name {
         color: #222;
         font-size: 15px;
         font-weight: 500;
@@ -128,53 +122,76 @@
     }
 
 
-    .filter{
+    .filter {
         font-size: 15px;
         position: relative;
         left: -32px;
     }
-    .filter a{
+
+    .filter a {
         margin-top: 9px;
         margin-left: 10px;
         display: inline-block;
         margin-right: 10px;
     }
-    .filter a:first-child{
+
+    .filter a:first-child {
         color: #2a8a15;
     }
-    .filter a:hover{
+
+    .filter a:hover {
         color: #2a8a15;
         border-bottom-width: 1px;
         border-bottom-style: solid;
     }
-    .is_free{
+
+    .is_free {
         float: right;
-            background-color: #f0f9eb;
-    border-color: #e1f3d8;
-    color: #67c23a;
-    padding: 10px;
-    position: relative;
-    left: 25px;
-    top: -16px;
+        background-color: #f0f9eb;
+        border-color: #e1f3d8;
+        color: #67c23a;
+        padding: 10px;
+        position: relative;
+        left: 25px;
+        top: -16px;
         border-radius: 6px 6px 6px 6px;
     }
-    .sname{
+
+    .sname {
         font-size: 20px;
     }
-    .os_detail{
+
+    .os_detail {
         font-size: 12px;
-        height: 42px;
+        height: 16px;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         overflow: hidden;
+    }
+
+    .recommend {
+        padding: 10px 0px;
+
+        margin: 0 auto;
+        width: 1300px;
+    }
+
+    .layui-btn.layui-btn {
+        margin-left: 3px;
+    }
+    .q_desc_info{
+        float: left;
+            background-color: #f4f4f5;
+    border-color: #e9e9eb;
+    color: #909399;
+        padding: 7px;
     }
 </style>
 <body>
 <div id="app">
 
-    <div class="recommend index-pv1"
-         :style='{"padding":"10px 0 10px 0","boxShadow":"0 0 0px ","margin":"0px 0 0 0","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#009688","borderRadius":"0","borderWidth":"0","background":"white","borderStyle":"solid"}'>
-        <div class="box" style='width:80%'>
+    <div class="recommend index-pv1">
+        <div class="box">
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-md12">
                     <div class="layui-panel">
@@ -186,7 +203,9 @@
             <form class="layui-form filter">
                 <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="搜索题目" v-model="title"
                        class="layui-input" style="width: 200px;display: inline-block;margin-left: 48px;">
-                <button type="button" class="layui-btn" id="btn-search" lay-submit="" lay-filter="demo1" style="display: inline-block;">搜索</button>
+                <button type="button" class="layui-btn" id="btn-search" lay-submit="" lay-filter="demo1"
+                        style="display: inline-block;">搜索
+                </button>
                 </button>
                 <div class="layui-form-item">
                     <label class="layui-form-label">科目：</label>
@@ -198,7 +217,7 @@
                         <a href="javascript:">Python</a>/
                         <a href="javascript:">其他</a>
                     </div>
-                  </div>
+                </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">级别：</label>
                     <div class="layui-input-block">
@@ -208,7 +227,7 @@
                         <a href="javascript:">高级</a>/
                         <a href="javascript:">其他</a>
                     </div>
-                  </div>
+                </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">规模：</label>
                     <div class="layui-input-block">
@@ -218,37 +237,43 @@
                         <a href="javascript:">多集群</a>/
                         <a href="javascript:">其他</a>
                     </div>
-                  </div>
+                </div>
             </form>
             <!-- 样式一 -->
             <div class="list" style="position: relative;">
-                <div v-for="(item,index) in dataList"
-                     :key="index" class="list-item" >
-                    <div class="list-item-body animation-box">
-                        <div class="station">
-                            <p class="st_name">
-                                <span class="sname">{{ item.sid_name }} （{{ item.level_name }}）</span>
-                                <span class="is_free" v-if="item.is_free == 1">试</span>
-                            </p>
-                            <p class="st_name">{{ item.title }}</p>
-                            <p class="q_count">做题人数：{{ item.q_count }}</p>
-                            <p class="gs_name">{{ item.desc }}</p>
+                <div class="station" v-for="(item,index) in dataList"
+                     :key="index">
+                    <p class="st_name">
+                        <span class="sname">{{ item.sid_name }} （{{ item.level_name }}）</span>
+                        <span class="is_free" v-if="item.is_free == 1">试</span>
+                    </p>
+                    <p class="st_name">{{ item.title }}</p>
+                    <p class="q_count"></p>
+                    <p class="gs_name">{{ item.desc }}</p>
 
-                            <p class="os_detail">
-                                <span>环境信息：</span>
-                                {{ item.os_detail }}</p>
-                            <p>
-                                <button class="layui-btn layui-btn-sm" @click="do_question(item.id)" style="float: left">查看详情</button>
-                                <button class="layui-btn layui-btn-sm" @click="do_question(item.id)" style="float: right">分享题目</button>
-                            </p>
-                        </div>
-                    </div>
+                    <p class="os_detail">
+                        <span>环境信息：</span>
+                        {{ item.os_detail }}</p>
+                    <p>
+                        <span class="q_desc_info">做题次数：{{ item.q_count }} &nbsp;ID：{{ item.id}}</span>
+                        <button class="layui-btn layui-btn-sm" @click="do_question(item.id)"
+                                style="float: right">进入实操环境
+                        </button>
+                        <button class="layui-btn layui-btn-sm" @click=""
+                                style="float: right">查看详情
+                        </button>
+                        <button class="layui-btn layui-btn-sm" @click=""
+                                style="float: right">分享题目
+                        </button>
+
+
+                    </p>
                 </div>
             </div>
 
         </div>
     </div>
-    <div class="pager" id="pager" ></div>
+    <div class="pager" id="pager"></div>
     <div style="display: none;" id="user_paper_det">
         <form class="layui-form" action="">
             <div class="layui-form-item sid">
@@ -309,9 +334,9 @@
                 return '';
             }
         },
-        created(){
-           let parentWindow = window.parent
-           parentWindow.scrollTo(0,0)
+        created() {
+            let parentWindow = window.parent
+            parentWindow.scrollTo(0, 0)
         },
         methods: {
             isAuth(tablename, button) {
@@ -320,29 +345,19 @@
             jump(url) {
                 jump(url)
             },
-            do_question(qid){
-                document.cookie = 'token' +"="+ localStorage.getItem('Token');
-                if (localStorage.getItem('role') === '"管理员"'){
-                    msg_fail("请切换用户或出题专家")
-                }else{
-                    msg_ok("容器创建中，请稍后")
-                    $.post('/tea/do_question/', {type: 1, qid: qid}, function (res) {
+            do_question(qid) {
+                document.cookie = 'token' + "=" + localStorage.getItem('Token');
+                 $.post('/tea/do_question/', {type: 1, qid: qid}, function (res) {
                         console.log(res)
-                        if (res.response === 'ok') {
+                        if (res.code === 401) {
+                            parent_msg_fail("请登录后重试")
+                        } else if (res.response === 'ok') {
+                            msg_ok("容器创建中，请稍后")
                             window.open(res.data)
-                        } else {
-                            if (res.code === 401){
-                                msg_fail("请登录后重试")
-                            }else{
-                                 msg_fail(res.message)
-                            }
-
-                            return false
+                        }else{
+                            parent_msg_fail(res.message)
                         }
-
                     })
-                }
-
             }
         }
     });
@@ -376,16 +391,16 @@
                 yes: function (index, layero) {
                     var sid = $(".sid").find('.layui-this').attr('lay-value')
                     var level = $(".level").find('.layui-this').attr('lay-value')
-                    document.cookie = 'token' +"="+ localStorage.getItem('Token');
+                    document.cookie = 'token' + "=" + localStorage.getItem('Token');
                     msg_ok("容器创建中，请稍后")
                     $.post('/tea/create_user_question/', {sid: sid, level: level, q_num: 5}, function (res) {
                         if (res.response === 'ok') {
                             window.open(res.data)
                         } else {
-                            if (res.code === 401){
+                            if (res.code === 401) {
                                 msg_fail("请登录后重试")
-                            }else{
-                                 msg_fail(res.message)
+                            } else {
+                                msg_fail(res.message)
                             }
 
                             return false
@@ -405,7 +420,7 @@
                 page_id: 1,
                 page_size: limit,
                 // sid: vue.sid,
-                status:1
+                status: 1
             }
             $.get('/tea/question_list/', param, function (res) {
                 vue.dataList = res.data.page_data

@@ -93,8 +93,7 @@ def question_list(request):
 def get_q_count(qids):
     """获取做题人数"""
     sql = f"""
-        select question_id, count(d.add_user) num  from recruit.user_test_det_content  det
-        join recruit.user_test_det d on d.id =det.det_id where det.question_id in ({','.join(map(str, qids))})
+        select question_id, count(id) num  from recruit.user_test_det_content where question_id in ({','.join(map(str, qids))})
         group by question_id;
     """
     return {x.question_id: x.num for x in db.default.fetchall_dict(sql)}
