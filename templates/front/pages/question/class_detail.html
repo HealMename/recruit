@@ -54,7 +54,7 @@
     }
 
 
-    .recommend .box .filter p span:hover {
+    .recommend .filter p span:hover {
         color: #2a8a15;
         border-bottom-width: 1px;
         border-bottom-style: solid;
@@ -186,12 +186,18 @@
     color: #909399;
         padding: 7px;
     }
+    .layui-laypage{
+        position: relative;
+    top: 193px;
+    left: -249px;
+}
+
 </style>
 <body>
 <div id="app">
 
     <div class="recommend index-pv1">
-        <div class="box">
+
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-md12">
                     <div class="layui-panel">
@@ -240,7 +246,7 @@
                 </div>
             </form>
             <!-- 样式一 -->
-            <div class="list" style="position: relative;">
+            <div class="list" >
                 <div class="station" v-for="(item,index) in dataList"
                      :key="index">
                     <p class="st_name">
@@ -269,11 +275,13 @@
 
                     </p>
                 </div>
-            </div>
 
-        </div>
+            </div>
+            <div class="pager" id="pager"></div>
+
     </div>
-    <div class="pager" id="pager"></div>
+    <br>
+
     <div style="display: none;" id="user_paper_det">
         <form class="layui-form" action="">
             <div class="layui-form-item sid">
@@ -445,6 +453,14 @@
                         param.page_id = obj.curr;
                         //首次不执行
                         if (!first) {
+                            var timer = setTimeout(function () {
+                                window.parent.document.getElementById('iframe').height = 0
+                                let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
+                                // height = height > 1000 ? height : 1000
+                                console.log(height)
+                                window.parent.document.getElementById('iframe').height = height
+                                clearTimeout(timer)
+                            }, 200)
                             $.get('/tea/question_list/', param, function (res) {
                                 vue.dataList = res.data.page_data
                             })
