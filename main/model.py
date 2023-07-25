@@ -183,9 +183,6 @@ class BaseModel(models.Model):
         :param params:
         :return:
         '''
-        if model.__tablename__ != 'users':
-            params['id'] = int(float(time.time()) * 1000)
-
         column_list = []
         for col in model._meta.fields:
             if str(col.get_internal_type()).lower() == "bigintegerfield":
