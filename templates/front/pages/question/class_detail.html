@@ -186,12 +186,12 @@
     color: #909399;
         padding: 7px;
     }
-    .layui-laypage{
-        position: relative;
-    top: 193px;
-    left: -249px;
-}
 
+    #pager{
+        width: 800px;
+        margin: 0 auto;
+        text-align: center;
+    }
 </style>
 <body>
 <div id="app">
@@ -277,10 +277,10 @@
                 </div>
 
             </div>
-            <div class="pager" id="pager"></div>
+
 
     </div>
-    <br>
+
 
     <div style="display: none;" id="user_paper_det">
         <form class="layui-form" action="">
@@ -308,7 +308,9 @@
             </div>
         </form>
     </div>
+    <div class="pager" id="pager"></div>
 </div>
+
 <script src="/media/js/jquery-1.11.3.min.js"></script>
 <script src="/media/layui-v2.7.6/layui/layui.js"></script>
 <script src="/media/js/vue.js"></script>
@@ -379,7 +381,7 @@
         vue.type = http.getParam('type')
         vue.sid = http.getParam('id')
         var jquery = layui.jquery;
-        var limit = 20;
+        var limit = 21;
         // 分页列表
         pageList();
         // 搜索按钮
@@ -453,7 +455,10 @@
                         param.page_id = obj.curr;
                         //首次不执行
                         if (!first) {
-                            var timer = setTimeout(function () {
+
+                            $.get('/tea/question_list/', param, function (res) {
+                                vue.dataList = res.data.page_data
+                                var timer = setTimeout(function () {
                                 window.parent.document.getElementById('iframe').height = 0
                                 let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
                                 // height = height > 1000 ? height : 1000
@@ -461,8 +466,6 @@
                                 window.parent.document.getElementById('iframe').height = height
                                 clearTimeout(timer)
                             }, 200)
-                            $.get('/tea/question_list/', param, function (res) {
-                                vue.dataList = res.data.page_data
                             })
                         }
                     }
