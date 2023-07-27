@@ -52,6 +52,11 @@
 {% block js %}
 
     <script>
-
+var timer = setTimeout(function () {
+                        window.parent.document.getElementById('iframe').height = 0
+                        let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 140
+                        window.parent.document.getElementById('iframe').height = height
+                        clearTimeout(timer)
+                    }, 200)
     </script>
 {% endblock %}
