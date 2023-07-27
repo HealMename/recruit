@@ -46,8 +46,11 @@ def question_list(request):
     题目列表
     """
     id_ = request.QUERY.get('id')
-    sid = request.QUERY.get('sid')
+    sid = int(request.QUERY.get('sid', 0))
+    is_web = int(request.QUERY.get('is_web', 0))
     status = request.QUERY.get('status')
+    level = int(request.QUERY.get('level', 0))
+    size = int(request.QUERY.get('size', 0))
     page_id = int(request.QUERY.get('page_id', 1))
     page_size = int(request.QUERY.get('page_size', 5))
     where_sql = ""
@@ -58,20 +61,27 @@ def question_list(request):
             where_sql += f" and (title like '%{id_}%' or content like '%{id_}%')"
     if sid:
         where_sql += f" and sid= {sid}"
+    if level:
+        where_sql += f" and level= {level}"
+    if size:
+        where_sql += f" and size= {size}"
     if status:
         where_sql += f" and status = {status}"
+    order_sql = "order by -id"
+    if is_web:
+        order_sql = f"order by -is_free,-id"
     sql = f"""
         select * from question 
         where status in (0, 1)
         {where_sql}
-        order by -id
+        {order_sql}
         limit {(page_id - 1) * page_size}, {page_size} ;
     """
     page_data = db.default.fetchall_dict(sql)
     sid_name = all_subjects()
     qids = [x.id for x in page_data]
     os_dict = get_os_detail(qids)
-    q_count = get_q_count(qids)
+    q_count = get_q_count(qids) if qids else 0
     for q in page_data:
         q['status_name'] = {1: '已审核', 0: '未审核'}[q['status']]
         q['status'] = str(q['status'])
@@ -84,6 +94,8 @@ def question_list(request):
         q['size_name'] = size_name[str(q['size'])]
         q['os_detail'] = '、'.join(os_dict.get(q.id, []))
         q['q_count'] = q_count.get(q.id, 0)
+        if q['q_count'] >= 10000:
+            q['q_count'] = f"{round(q['q_count'] / 10000, 2)}w"
     data = Struct()
     data.page_data = page_data
     data.sum_len = get_page_len('question', where_sql)
@@ -96,7 +108,8 @@ def get_q_count(qids):
         select question_id, count(id) num  from recruit.user_test_det_content where question_id in ({','.join(map(str, qids))})
         group by question_id;
     """
-    return {x.question_id: x.num for x in db.default.fetchall_dict(sql)}
+    data = db.default.fetchall_dict(sql)
+    return {x.question_id: x.num for x in data}
 
 
 def get_os_detail(qids):
@@ -333,9 +346,7 @@ def do_question(request):
     qid = request.QUERY.get('qid')  # 题目id
     city = request.QUERY.get('city', '')  # 城市
     role_id = 1
-    user_id = 0
-    if not request.user:
-        user_id = request.user.id
+    user_id = request.user.id or 0
     q = db.default.question.get(id=qid)
     if not user_id and q.is_free != 1:
         return ajax.ajax_fail(message='请先登录账号!')

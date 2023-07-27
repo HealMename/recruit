@@ -15,6 +15,10 @@
     <script type="text/javascript" src="/media/js/jquery.SuperSlide.2.1.1.js"></script>
 </head>
 <style>
+    .list{
+        overflow: auto;
+        width: 1300px;
+    }
     ::-webkit-scrollbar {
         display: none; /* Chrome Safari */
         -ms-overflow-style: none; /* IE 10+ */
@@ -74,7 +78,7 @@
     }
 
     .station {
-        width: 410px;
+        width: 413px;
         float: left;
         border-color: rgba(0, 0, 0, 0.1);
         border-radius: 6px 6px 6px 6px;
@@ -124,8 +128,6 @@
 
     .filter {
         font-size: 15px;
-        position: relative;
-        left: -32px;
     }
 
     .filter a {
@@ -135,9 +137,6 @@
         margin-right: 10px;
     }
 
-    .filter a:first-child {
-        color: #2a8a15;
-    }
 
     .filter a:hover {
         color: #2a8a15;
@@ -179,18 +178,31 @@
     .layui-btn.layui-btn {
         margin-left: 3px;
     }
-    .q_desc_info{
+
+    .q_desc_info {
         float: left;
-            background-color: #f4f4f5;
-    border-color: #e9e9eb;
-    color: #909399;
+        background-color: #f4f4f5;
+        border-color: #e9e9eb;
+        color: #909399;
         padding: 7px;
     }
 
-    #pager{
+    #pager {
         width: 800px;
         margin: 0 auto;
         text-align: center;
+    }
+
+    .use {
+        color: #2a8a15;
+    }
+
+    .select {
+        margin-bottom: 5px;
+    }
+    .q_id{
+        font-size: 7px;
+        color: #909399;
     }
 </style>
 <body>
@@ -198,87 +210,98 @@
 
     <div class="recommend index-pv1">
 
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-panel">
+                    <div style="padding: 30px;text-align: center;">领先的在线IT技能实训基地——掌握技能,赢在起跑线</div>
+                    <div style="padding: 30px;text-align: center;">技能不止步于知,教不止于书——在线实操,学习焕然一新</div>
+                </div>
+            </div>
+        </div>
+        <form class="layui-form filter">
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-md12">
                     <div class="layui-panel">
-                        <div style="padding: 30px;text-align: center;">领先的在线IT技能实训基地——掌握技能,赢在起跑线</div>
-                        <div style="padding: 30px;text-align: center;">技能不止步于知,教不止于书——在线实操,学习焕然一新</div>
+                        <div class="layui-form-item sid">
+                            <label class="layui-form-label">科目：</label>
+                            <div class="layui-input-block">
+                                <a href="javascript:" @click="sid_select(1, 0)" class="use sid_select">不限</a>/
+                                <template v-for="(item,index) in subjects">
+                                    <a href="javascript:" @click="sid_select(1, index+1)"
+                                       class="sid_select">{{ item.name }}</a><span
+                                        v-if="index+1 !== subjects.length">/</span>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">级别：</label>
+                            <div class="layui-input-block">
+                                <a href="javascript:" class="use level_select" @click="sid_select(2, 0)">不限</a>/
+                                <a href="javascript:" class="level_select" @click="sid_select(2, 1)">初级</a>/
+                                <a href="javascript:" class="level_select" @click="sid_select(2, 2)">中级</a>/
+                                <a href="javascript:" class="level_select" @click="sid_select(2, 3)">高级</a>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">规模：</label>
+                            <div class="layui-input-block">
+                                <a href="javascript:" class="use size_select" @click="sid_select(3, 0)">不限</a>/
+                                <a href="javascript:" class="size_select" @click="sid_select(3, 1)">单机</a>/
+                                <a href="javascript:" class="size_select" @click="sid_select(3, 2)">集群</a>/
+                                <a href="javascript:" class="size_select" @click="sid_select(3, 3)">多集群</a>
+                            </div>
+                        </div>
+                         <div class="layui-form-item select">
+                            <input type="text" name="title" lay-verify="title" autocomplete="off"
+                                   placeholder="题目ID/题目名称" v-model="title"
+                                   class="layui-input" style="width: 200px;display: inline-block;margin-left: 48px;">
+
+                            <button type="button" class="layui-btn" id="btn-search" lay-submit="" lay-filter="demo1"
+                                    style="display: inline-block;" @click="page_list()">搜索
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <form class="layui-form filter">
-                <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="搜索题目" v-model="title"
-                       class="layui-input" style="width: 200px;display: inline-block;margin-left: 48px;">
-                <button type="button" class="layui-btn" id="btn-search" lay-submit="" lay-filter="demo1"
-                        style="display: inline-block;">搜索
-                </button>
-                </button>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">科目：</label>
-                    <div class="layui-input-block">
-                        <a href="javascript:">不限</a>/
-                        <a href="javascript:">k8s</a>/
-                        <a href="javascript:">shell</a>/
-                        <a href="javascript:">Mysql</a>/
-                        <a href="javascript:">Python</a>/
-                        <a href="javascript:">其他</a>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">级别：</label>
-                    <div class="layui-input-block">
-                        <a href="javascript:">不限</a>/
-                        <a href="javascript:">初级</a>/
-                        <a href="javascript:">中级</a>/
-                        <a href="javascript:">高级</a>/
-                        <a href="javascript:">其他</a>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">规模：</label>
-                    <div class="layui-input-block">
-                        <a href="javascript:">不限</a>/
-                        <a href="javascript:">单机</a>/
-                        <a href="javascript:">集群</a>/
-                        <a href="javascript:">多集群</a>/
-                        <a href="javascript:">其他</a>
-                    </div>
-                </div>
-            </form>
-            <!-- 样式一 -->
-            <div class="list" >
-                <div class="station" v-for="(item,index) in dataList"
-                     :key="index">
-                    <p class="st_name">
-                        <span class="sname">{{ item.sid_name }} （{{ item.level_name }}）</span>
-                        <span class="is_free" v-if="item.is_free == 1">试</span>
-                    </p>
-                    <p class="st_name">{{ item.title }}</p>
-                    <p class="q_count"></p>
-                    <p class="gs_name">{{ item.desc }}</p>
 
-                    <p class="os_detail">
-                        <span>环境信息：</span>
-                        {{ item.os_detail }}</p>
-                    <p>
-                        <span class="q_desc_info">做题次数：{{ item.q_count }} &nbsp;ID：{{ item.id}}</span>
-                        <button class="layui-btn layui-btn-sm" @click="do_question(item.id)"
-                                style="float: right">进入实操环境
-                        </button>
-                        <button class="layui-btn layui-btn-sm" @click=""
-                                style="float: right">查看详情
-                        </button>
-                        <button class="layui-btn layui-btn-sm" @click=""
-                                style="float: right">分享题目
-                        </button>
+        </form>
+        <!-- 样式一 -->
+        <div class="list">
+            <div class="station"  v-for="(item,index) in dataList"
+                 :key="index">
+                <p class="st_name">
+                    <span class="sname">{{ item.title }}</span>
+                    <span class="is_free" v-if="item.is_free == 1">试</span>
+                </p>
+                <p class="st_name">
+                    {{ item.sid_name }} （{{ item.level_name }}）
+                    <span class="q_id">{{ item.size_name }}</span>
+                </p>
+                <p class="q_count"></p>
+                <p class="gs_name">{{ item.desc }}</p>
+
+                <p class="os_detail">
+                    <span>环境信息：</span>
+                    {{ item.os_detail }}</p>
+                <p>
+                    <span class="q_desc_info">做题次数：{{ item.q_count }} ID：{{ item.id }}</span>
+                    <button class="layui-btn layui-btn-sm" @click="do_question(item.id)"
+                            style="float: right">进入实操环境
+                    </button>
+                    <button class="layui-btn layui-btn-sm" @click=""
+                            style="float: right">查看详情
+                    </button>
+                    <button class="layui-btn layui-btn-sm" @click=""
+                            style="float: right">分享题目
+                    </button>
 
 
-                    </p>
-                </div>
-
+                </p>
             </div>
-
-
+            <div class="layui-panel" v-if="!dataList.length">
+                <div style="padding: 50px 30px;text-align: center;font-size: 18px;">暂无资源</div>
+              </div>
+        </div>
     </div>
 
 
@@ -324,12 +347,16 @@
     var vue = new Vue({
         el: '#app',
         data: {
+            loading: true,
             title: '',
             swiperList: [],
             dataList: [],
             baseurl: '',
             type: 1,
-            sid: 1,
+            sid: 0,
+            level: 0,
+            size: 0,
+            subjects: [],
             swiperIndex: '-1'
         },
         filters: {
@@ -348,27 +375,97 @@
             let parentWindow = window.parent
             parentWindow.scrollTo(0, 0)
             this.city = localStorage.getItem("city")
+            this.get_subjects();
+            this.page_list();
         },
         methods: {
-            isAuth(tablename, button) {
-                return isFrontAuth(tablename, button)
+            page_list() {
+                let thsi = this;
+                var laypage = layui.laypage;
+                var param = {
+                    is_web: 1,
+                    id: thsi.title,
+                    page_id: 1,
+                    page_size: 21,
+                    sid: thsi.sid,
+                    level: thsi.level,
+                    size: thsi.size,
+                    status: 1
+                }
+                $.get('/tea/question_list/', param, function (res) {
+                    // thsi.loading = false;
+                    thsi.dataList = res.data.page_data
+                    var timer = setTimeout(function () {
+                        window.parent.document.getElementById('iframe').height = 0
+                        let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
+                        window.parent.document.getElementById('iframe').height = height
+                        clearTimeout(timer)
+                    }, 200)
+
+                    // 分页
+                    laypage.render({
+                        elem: 'pager',
+                        count: res.data.sum_len, 'id': 1,
+                        limit: 21,
+                        groups: 3,
+                        layout: ["prev", "page", "next"],
+                        theme: '#009688',
+                        jump: function (obj, first) {
+                            param.page_id = obj.curr;
+                            //首次不执行
+                            if (!first) {
+
+                                $.get('/tea/question_list/', param, function (res) {
+                                    // thsi.loading = false;
+                                    thsi.dataList = res.data.page_data
+                                    var timer = setTimeout(function () {
+                                        window.parent.document.getElementById('iframe').height = 0
+                                        let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
+                                        window.parent.document.getElementById('iframe').height = height
+                                        clearTimeout(timer)
+                                    }, 200)
+                                })
+                            }
+                        }
+                    });
+                })
             },
-            jump(url) {
-                jump(url)
+            sid_select(type, index) {
+                if (type === 1){
+                    this.sid = index !== 0 ? this.subjects[index - 1].id : 0;
+                    $('.sid_select').removeClass('use');
+                    $('.sid_select:eq(' + index + ')').addClass('use');
+                }else if (type === 2){
+                    this.level = index
+                    $('.level_select').removeClass('use');
+                    $('.level_select:eq(' + index + ')').addClass('use');
+                }else if (type === 3){
+                    this.size = index
+                    $('.size_select').removeClass('use');
+                    $('.size_select:eq(' + index + ')').addClass('use');
+                }
+
+                this.page_list()
+            },
+            get_subjects() {
+                var thsi = this;
+                $.get('/tea/subject/all/', function (res) {
+                    thsi.subjects = res.data;
+                })
             },
             do_question(qid) {
                 document.cookie = 'token' + "=" + localStorage.getItem('Token');
-                 $.post('/tea/do_question/', {type: 1, qid: qid, city: this.city}, function (res) {
-                        console.log(res)
-                        if (res.code === 401) {
-                            parent_msg_fail("请登录后重试")
-                        } else if (res.response === 'ok') {
-                            msg_ok("容器创建中，请稍后")
-                            window.open(res.data)
-                        }else{
-                            parent_msg_fail(res.message)
-                        }
-                    })
+                $.post('/tea/do_question/', {type: 1, qid: qid, city: this.city}, function (res) {
+                    console.log(res)
+                    if (res.code === 401) {
+                        parent_msg_fail("请登录后重试")
+                    } else if (res.response === 'ok') {
+                        msg_ok("容器创建中，请稍后")
+                        window.open(res.data)
+                    } else {
+                        parent_msg_fail(res.message)
+                    }
+                })
             }
         }
     });
@@ -376,19 +473,10 @@
     layui.use(['form', 'layer', 'element', 'carousel', 'laypage', 'http', 'jquery', 'laydate'], function () {
         var form = layui.form;
 
-
-        var laypage = layui.laypage;
         var http = layui.http;
         vue.type = http.getParam('type')
-        vue.sid = http.getParam('id')
         var jquery = layui.jquery;
-        var limit = 21;
-        // 分页列表
-        pageList();
-        // 搜索按钮
-        jquery('#btn-search').click(function (e) {
-            pageList();
-        });
+
         jquery('#user_paper').click(function (e) {
             layer.open({
                 type: 1,
@@ -424,56 +512,6 @@
 
         });
 
-
-        function pageList() {
-            var param = {
-                // id: vue.title,
-                page_id: 1,
-                page_size: limit,
-                // sid: vue.sid,
-                status: 1
-            }
-            $.get('/tea/question_list/', param, function (res) {
-                vue.dataList = res.data.page_data
-                var timer = setTimeout(function () {
-                    window.parent.document.getElementById('iframe').height = 0
-                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
-                    // height = height > 1000 ? height : 1000
-                    console.log(height)
-                    window.parent.document.getElementById('iframe').height = height
-                    clearTimeout(timer)
-                }, 200)
-
-                // 分页
-                laypage.render({
-                    elem: 'pager',
-                    count: res.data.sum_len, 'id': 1,
-                    limit: limit,
-                    groups: 3,
-                    layout: ["prev", "page", "next"],
-                    theme: '#009688',
-                    jump: function (obj, first) {
-                        param.page_id = obj.curr;
-                        //首次不执行
-                        if (!first) {
-
-                            $.get('/tea/question_list/', param, function (res) {
-                                vue.dataList = res.data.page_data
-                                var timer = setTimeout(function () {
-                                    window.parent.document.getElementById('iframe').height = 0
-                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
-                                    // height = height > 1000 ? height : 1000
-                                    console.log(height)
-                                    window.parent.document.getElementById('iframe').height = height
-                                    clearTimeout(timer)
-                                }, 200)
-                            })
-                        }
-                    }
-                });
-            })
-
-        }
     });
 
 </script>
