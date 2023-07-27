@@ -111,7 +111,8 @@ class Xauth(MiddlewareMixin):
                 "/tea/login/",
                 "/chat/wx/index/",
                 '/sms/send/',
-                "/chat/wx/oauth/user/"
+                "/chat/wx/oauth/user/",
+                "/tea/do_question/"
             ]  # 免认证list
             if fullPath not in post_list and "register" not in fullPath and "login" not in fullPath \
                     and request.path not in post_list or (token and len(token) > 10):  # 注册时不检测token。

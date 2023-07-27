@@ -150,11 +150,7 @@ i, em {
 	display: block;
 	margin: 0 auto
 }
-#header {
-	height: 90px;
-	background: #d42e3b;
-	border-bottom: 19px solid #06897d
-}
+
 #header .top {
 	width: 1002px;
 	margin: 0 auto;

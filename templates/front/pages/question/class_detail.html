@@ -347,6 +347,7 @@
         created() {
             let parentWindow = window.parent
             parentWindow.scrollTo(0, 0)
+            this.city = localStorage.getItem("city")
         },
         methods: {
             isAuth(tablename, button) {
@@ -357,7 +358,7 @@
             },
             do_question(qid) {
                 document.cookie = 'token' + "=" + localStorage.getItem('Token');
-                 $.post('/tea/do_question/', {type: 1, qid: qid}, function (res) {
+                 $.post('/tea/do_question/', {type: 1, qid: qid, city: this.city}, function (res) {
                         console.log(res)
                         if (res.code === 401) {
                             parent_msg_fail("请登录后重试")
@@ -459,13 +460,13 @@
                             $.get('/tea/question_list/', param, function (res) {
                                 vue.dataList = res.data.page_data
                                 var timer = setTimeout(function () {
-                                window.parent.document.getElementById('iframe').height = 0
-                                let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
-                                // height = height > 1000 ? height : 1000
-                                console.log(height)
-                                window.parent.document.getElementById('iframe').height = height
-                                clearTimeout(timer)
-                            }, 200)
+                                    window.parent.document.getElementById('iframe').height = 0
+                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
+                                    // height = height > 1000 ? height : 1000
+                                    console.log(height)
+                                    window.parent.document.getElementById('iframe').height = height
+                                    clearTimeout(timer)
+                                }, 200)
                             })
                         }
                     }

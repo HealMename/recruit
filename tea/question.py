@@ -1,11 +1,11 @@
 import json
 import time
-
 import random
 from collections import defaultdict
 
 from dj2.settings import K8S_URL
 from libs.utils import ajax, db, auth_token
+from libs.utils.auth_token import get_random_string
 from libs.utils.common import Struct, trancate_date
 from tea.common import all_subjects
 
@@ -328,16 +328,26 @@ def redirect(role_id, user_id, message_id):
 
 def do_question(request):
     """生成做题url"""
-    user_id = request.user.id
     now = int(time.time())
     type_ = int(request.QUERY.get('type'))  # 1 单题练习
     qid = request.QUERY.get('qid')  # 题目id
-    role_id = ROLE[request.user.role]
+    city = request.QUERY.get('city', '')  # 城市
+    role_id = 1
+    user_id = 0
+    if not request.user:
+        user_id = request.user.id
+    q = db.default.question.get(id=qid)
+    if not user_id and q.is_free != 1:
+        return ajax.ajax_fail(message='请先登录账号!')
+    if not user_id:
+        role_id = 2
+        user_id = int(get_random_string(length=6, allowed_chars='0123456789'))
     if type_ == 1:
         # 单题练习
         content = json.dumps([{"id": qid, "is_right": 0}])
         message_id = db.default.user_test_det.create(
-            type=1, content=content, status=0, add_user=user_id, add_time=now, do_time=0, role=role_id)
+            type=1, content=content, status=0, add_user=user_id, add_time=now,
+            do_time=0, role=role_id, city=city)
         url = redirect(role_id, user_id, message_id)
         return ajax.ajax_ok(url)
 

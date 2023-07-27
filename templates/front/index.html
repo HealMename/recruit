@@ -11,7 +11,7 @@
     <title>云数智学堂</title>
     <link rel="shortcut icon" href="/media/img/favicon.ico">
     <link rel="stylesheet" href="/media/layui-v2.7.6/layui/css/layui.css">
-    <link rel="stylesheet" href="/media/css/common.css"/>
+    <link rel="stylesheet" href="/media/css/common.css?v=1"/>
     <link rel="stylesheet" href="/media/css/style.css"/>
     <link rel="stylesheet" href="/media/css/index.css?v=1"/>
     <link rel="stylesheet" href="/media/slidercaptcha/disk/slidercaptcha.css">
@@ -38,14 +38,7 @@
         border: 1px solid #e6e8eb;
     }
 
-    .slidercaptcha.card .card-header {
-        background-image: none;
-        background-color: rgba(0, 0, 0, 0.03);
-    }
 
-    .refreshIcon {
-        top: -54px;
-    }
 
     html, body {
         height: 100%;
@@ -65,109 +58,22 @@
     #iframe {
         width: 100%;
         margin-top: 00px;
-        padding-top: 41px;
+        padding-top: 5px;
     }
 
-    #header {
-        height: auto;
-        background: #fff;
-        border-bottom: 0;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1;
-    }
 
-    #header .nav-top {
-        display: flex;
-        align-items: center;
-        padding: 0 20px;
-        font-size: 16px;
-        color: #2a8a15;
-        box-sizing: border-box;
-        height: 00px;
-        background: #f7f7f7;
-        box-shadow: 0 10px 8px #fff143;
-        justify-content: space-between;
-        position: relative;
-        z-index: 1;
-    }
 
-    #header .nav-top-img {
-        width: 124px;
-        height: 40px;
-        padding: 0;
-        margin: 0;
-        border-radius: 6px;
-        border-width: 0;
-        border-style: solid;
-        border-color: rgba(0, 0, 0, .3);
-        box-shadow: 0 0 6px rgba(0, 0, 0, .3);
-    }
-
-    #header .nav-top-title {
-        line-height: 40px;
-        font-size: 20px;
-        color: rgba(255, 251, 240, 1);
-        padding: 0 10px;
-        margin: 0 10px;
-        border-radius: 6px;
-        border-width: 0;
-        border-style: solid;
-        border-color: rgba(0, 0, 0, .3);
-        background-color: rgba(0, 0, 0, 0);
-        box-shadow: 0 0 0px;
-    }
-
-    #header .nav-top-tel {
-        line-height: 40px;
-        font-size: 18px;
-        color: rgba(240, 252, 255, 1);
-        padding: 0 10px;
-        margin: 0;
-        border-radius: 6px;
-        border-width: 0;
-        border-style: solid;
-        border-color: rgba(0, 0, 0, .3);
-        box-shadow: 0 0 0px;
-    }
 
     #header .navs {
-        display: flex;
-        align-items: center;
-        box-sizing: border-box;
-        height: 40px;
         background: #009688;
-        box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
-        justify-content: flex-start;
     }
 
-    #header .navs1 {
-        width: 200px;
-        height: 100vh;
-        background: darkgoldenrod;
-        position: absolute;
-        top: 0;
-        display: block;
-        padding: 0;
-        overflow-y: scroll;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-    #header .navs.navs1::-webkit-scrollbar {
-        display: none;
-    }
 
     #header .navs1 .list {
         display: flex;
         flex-direction: column;
     }
 
-    .list {
-        width: 80%;
-    }
 
     .list > ul {
         margin-right: 100px;
@@ -178,17 +84,20 @@
     }
 
     #header .navs .title {
-        width: auto;
-        line-height: 40px;
+        width: 123px;
         font-size: 16px;
         color: white;
-        margin: 32px;
+        margin: 7px;
+        text-align: center;
+        float: left;
 
     }
 
     #header .navs .title2 {
-        line-height: 40px;
         color: white;
+        width: 38px;
+        float: left;
+        margin: 10px 0;
 
     }
 
@@ -228,9 +137,8 @@
     }
 
     .logins, .register {
-        display: inline;
         position: absolute;
-        margin-top: 10px;
+        right: 173px;
     }
 
     .logins p, .register p {
@@ -243,7 +151,7 @@
 
     .logins p:hover, .register p:hover {
         color: #fff;
-        font-size: 14px;
+        {#font-size: 14px;#}
         border-radius: 0;
         border-width: 0;
         border-bottom-width: 1px;
@@ -267,7 +175,7 @@
     <div class="navs">
         <div class="title" >云数智学堂</div>
         <div class="title2" v-text="city" @click="city_list()"></div>
-        <span class="title2" style="margin-right: 20px" @click="city_list()">[切换城市]</span>
+        <span class="title2" style="margin-right: 20px" @click="city_list()">[切换]</span>
         <div class="list">
             <ul>
                 <li class='current'>
@@ -482,24 +390,16 @@
         el: '#header',
         data: {
             open_role: "",
-            iconArr: ['layui-icon-gift', 'layui-icon-email', 'layui-icon-logout', 'layui-icon-transfer', 'layui-icon-slider', 'layui-icon-print', 'layui-icon-cols', 'layui-icon-snowflake', 'layui-icon-note', 'layui-icon-flag', 'layui-icon-theme', 'layui-icon-website', 'layui-icon-console', 'layui-icon-face-surprised', 'layui-icon-template-1', 'layui-icon-app', 'layui-icon-read', 'layui-icon-component', 'layui-icon-file-b', 'layui-icon-unlink', 'layui-icon-tabs', 'layui-icon-form', 'layui-icon-chat'],
-            indexNav: indexNav,
-            cartFlag: cartFlag,
-            adminurl: adminurl,
-            chatFlag: chatFlag,
-            projectName: projectName,
             username: '',
             role: '',
             city: "",
             chengshiOptions: [],
         },
         mounted: function () {
-            this.bindClickOnLi();
+            // this.bindClickOnLi();
         },
         created() {
-            this.iconArr.sort(() => {
-                return (0.5 - Math.random())
-            })
+
             this.city = localStorage.getItem("city")
             // this.login_layer()
         },
@@ -507,15 +407,7 @@
             jump(url) {
                 jump(url)
             },
-            bindClickOnLi() {
-                let list = document.getElementsByTagName("li");
-                for (var i = 0; i < list.length; i++) {
-                    list[i].onclick = function () {
-                        $(this).addClass("current").siblings().removeClass("current");
-                        localStorage.setItem("checkedLiIndex", $(this).index());
-                    }
-                }
-            },
+
             city_list() {
                 $('.now_city').text(this.city)
                 layer.open({
