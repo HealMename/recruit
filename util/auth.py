@@ -42,12 +42,14 @@ class Auth(object):
         if token and token != "null":
             user_info = auth_token.decode_token(token)
             if not user_info:
-                msg['msg'] = '找不到该用户信息'
+                msg['msg'] = '登陆信息已失效'
+                msg['code'] = 401
                 result = msg
                 return result
             datas = users.getbyparams(users, users, {'id': user_info['user_id']})
             if not datas:
-                msg['msg'] = '找不到该用户信息'
+                msg['msg'] = '登陆信息已失效'
+                msg['code'] = 401
                 result = msg
             else:
                 request.user = Struct(datas[0])
@@ -67,6 +69,6 @@ class Auth(object):
 
         else:
             msg['code'] = 401
-            msg['msg'] = 'headers未包含认证信息。'
+            msg['msg'] = 'not user'
             result = msg
         return result

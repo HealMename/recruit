@@ -1,6 +1,8 @@
 # coding:utf-8
 __author__ = "ila"
 
+import logging
+
 from django.utils.deprecation import MiddlewareMixin
 from django.http import JsonResponse
 from django.apps import apps
@@ -65,7 +67,13 @@ class Xauth(MiddlewareMixin):
                 "encode_password",
                 "/chat/wx/menu/",
                 "/chat/wx/index/",
-                "verify_password"
+                "verify_password",
+                "config/list",
+                "/tea/subject/all/",
+                "/tea/question_list/",
+                "/user/info/",
+                "/interviewer/add/",
+                "/interviewer/save/"
             ]
 
             allModels = apps.get_app_config('main').get_models()
@@ -92,8 +100,8 @@ class Xauth(MiddlewareMixin):
                     result = Auth.identify(Auth, request)
 
                     if result.get('code') != normal_code:
-                        pass
-                        # return JsonResponse(result)
+                        logging.error(fullPath, result)
+                        return JsonResponse(result)
         elif request.method == 'POST':
             post_list = [
                 '/chat/wx/index/',
