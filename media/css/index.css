@@ -22,8 +22,8 @@ img.logo_qr {
 }
 
 #componseRight {
-    float: right;
-    width: 548px;
+        width: 507px;
+    float: left;
 }
 
 .layui-layer-setwin .layui-layer-close2 {
@@ -65,10 +65,13 @@ img.logo_qr {
 }
 .code_title{
     position: relative;
-    left: 112px;
     top: -20px;
     color: #858585;
     font-weight: 400;
+}
+.layui-input-block{
+    margin-left:0;
+    margin-right: 44px;
 }
 .pass-item-timer:hover{
     color: #4662d9;
@@ -158,7 +161,7 @@ img.logo_qr {
 #componseRight .layui-form{
     position: relative;
     top: 46px;
-    left: -62px;
+    left: 41px;
 }
 #componseRight .layui-input{
     border-radius: 10px;
