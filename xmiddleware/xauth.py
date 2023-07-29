@@ -98,7 +98,6 @@ class Xauth(MiddlewareMixin):
                     auth = True
                 if auth == True:
                     result = Auth.identify(Auth, request)
-
                     if result.get('code') != normal_code:
                         logging.error(fullPath, result)
                         return JsonResponse(result)

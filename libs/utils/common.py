@@ -300,3 +300,12 @@ def get_client_ip(request):
     if remote_addr and remote_addr != 'unknown':
         return remote_addr
     return ''
+
+
+
+def get_today_zero_timestamp(now_time):
+    timeArray = time.localtime(now_time)
+    zeroTime = time.strftime("%Y-%m-%d 00:00:00", timeArray)
+    # 时间字符串再转为时间戳
+    timeArray_ex = time.strptime(zeroTime, "%Y-%m-%d %H:%M:%S")
+    return int(time.mktime(timeArray_ex))

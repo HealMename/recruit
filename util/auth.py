@@ -53,15 +53,12 @@ class Auth(object):
                 result = msg
             else:
                 request.user = Struct(datas[0])
-
-                if request.user.role == '用户':
-                    request.user.shouji = request.user.username
-                    datas[0]['nickname'] = request.user.username
-                    datas[0]['open_role'] = ','.join(
-                        [str(x.type) for x in db.default.users.filter(
-                            username=request.user.username, status=1)])
-                else:
-                    datas[0]['nickname'] = request.user.gongsimingcheng
+                datas[0]['nickname'] = request.user.username
+                datas[0]['open_role'] = ','.join(
+                    [str(x.type) for x in db.default.users.filter(
+                        username=request.user.username, status=1)])
+                request.user = Struct(datas[0])
+                request.user.shouji = request.user.username
                 request.session['tablename'] = 'users'
                 msg['msg'] = '身份验证通过。'
                 msg['user'] = Struct(datas[0])

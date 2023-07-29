@@ -46,11 +46,12 @@ def question_list(request):
     题目列表
     """
     id_ = request.QUERY.get('id')
-    sid = int(request.QUERY.get('sid', 0))
-    is_web = int(request.QUERY.get('is_web', 0))
+    is_cms = request.QUERY.get('is_cms')
+    sid = int(request.QUERY.get('sid', 0) or 0)
+    is_web = int(request.QUERY.get('is_web', 0) or 0)
     status = request.QUERY.get('status')
-    level = int(request.QUERY.get('level', 0))
-    size = int(request.QUERY.get('size', 0))
+    level = int(request.QUERY.get('level', 0) or 0)
+    size = int(request.QUERY.get('size', 0) or 0)
     page_id = int(request.QUERY.get('page_id', 1))
     page_size = int(request.QUERY.get('page_size', 5))
     where_sql = ""
@@ -70,6 +71,8 @@ def question_list(request):
     order_sql = "order by -id"
     if is_web:
         order_sql = f"order by -is_free,-id"
+    if is_cms and '1' not in request.user.open_role:
+        where_sql += f' and add_user={request.user.id}'
     sql = f"""
         select * from question 
         where status in (0, 1)
@@ -82,11 +85,17 @@ def question_list(request):
     qids = [x.id for x in page_data]
     os_dict = get_os_detail(qids)
     q_count = get_q_count(qids) if qids else 0
+    user_ids = [x.add_user for x in page_data] + [x.verify_user for x in page_data]
+    userdata = db.default.user_tea_det.filter(user_id__in=user_ids)
+    username_dict = {x.user_id: x.name for x in userdata}
     for q in page_data:
         q['status_name'] = {1: '已审核', 0: '未审核'}[q['status']]
+        q['add_user'] = username_dict.get(q['add_user'], '/')
         q['status'] = str(q['status'])
         q['is_free'] = str(q['is_free'])
         q['add_time'] = trancate_date(q['add_time'])
+        q['verify_time'] = trancate_date(q['verify_time']) if q['status'] == '1' else '/'
+        q['verify_user'] = username_dict.get(q['verify_user'], '/') if q['status'] == '1' else '/'
         q['sid_name'] = sid_name[q['sid']]
         q['level'] = str(q['level'])
         q['level_name'] = level_name[str(q['level'])]
@@ -140,7 +149,12 @@ def question_del(request):
     """
     id_ = request.QUERY.get('id')
     status = request.QUERY.get('status')
-    db.default.question.filter(id=id_).update(status=status)
+    args = dict(status=status)
+    if status == 1:
+        now = int(time.time())
+        user_id = request.user.id
+        args.update(dict(verify_time=now, verify_user=user_id))
+    db.default.question.filter(id=id_).update(**args)
     return ajax.ajax_ok()
 
 
@@ -157,6 +171,7 @@ def question_add(request):
         step_data = json.loads(args.pop('step_data', '[]'))  # 解题步骤列表
         answer_step = json.loads(args.pop('answer_step', '[]'))  # 答题步骤列表
         args.pop('os_detail', '')
+        args.pop('status', '')
         args.pop('step_list', '')
         args.pop('answer_list', '')
         args.pop('add_time', '')
@@ -164,16 +179,12 @@ def question_add(request):
         args.pop('level_name', '')
         args.pop('size_name', '')
         args.pop('sid_name', '')
-        if not id_:
-            id_ = db.default.question.create(add_time=now, **args)
-
-        else:
-            if args.status == '1':
-                args.update(dict(verify_time=now, verify_user=user_id))
-            db.default.question.filter(id=id_).update(**args)
-        db.default.question_step_detail.filter(question_id=id_, status=1).update(status=-1)
-        db.default.question_step_answer.filter(question_id=id_, status=1).update(status=-1)
-        db.default.question_os_detail.filter(question_id=id_, status=1).update(status=-1)
+        if id_:
+            db.default.question.filter(id=id_).update(status=-1)
+        id_ = db.default.question.create(add_time=now, status=0, **args)
+        # db.default.question_step_detail.filter(question_id=id_, status=1).update(status=-1)
+        # db.default.question_step_answer.filter(question_id=id_, status=1).update(status=-1)
+        # db.default.question_os_detail.filter(question_id=id_, status=1).update(status=-1)
         for eq, obj in enumerate(step_data, 1):
             obj['sequence'] = eq
             obj['question_id'] = id_
@@ -201,6 +212,12 @@ def question_add(request):
         step_list = db.default.question_step_detail.filter(question_id=args.id, status=1)
         step_answer = db.default.question_step_answer.filter(question_id=args.id, status=1)
         os_detail = db.default.question_os_detail.filter(question_id=args.id, status=1)
+        """
+        args.pop('status_name', '')
+        args.pop('level_name', '')
+        args.pop('size_name', '')
+        args.pop('sid_name', '')
+        """
         data = {
             "id": args.id,
             "sid": q.sid,
@@ -218,6 +235,12 @@ def question_add(request):
             "answer_list": [{'content': x.content} for x in step_answer] if step_answer else [{'content': ''}],
             "os_detail": [{'content': x.content} for x in os_detail] if os_detail else [{'content': ''}],
         }
+        if args.is_view:
+            sid_name = all_subjects()
+            data['status_name'] = {1: '已审核', 0: '未审核'}[q['status']]
+            data['level_name'] = level_name[str(q['level'])]
+            data['size_name'] = size_name[str(q['size'])]
+            data['sid_name'] = sid_name[q['sid']]
         return ajax.ajax_ok(data)
 
 
