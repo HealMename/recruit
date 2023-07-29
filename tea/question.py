@@ -6,7 +6,7 @@ from collections import defaultdict
 from dj2.settings import K8S_URL
 from libs.utils import ajax, db, auth_token
 from libs.utils.auth_token import get_random_string
-from libs.utils.common import Struct, trancate_date
+from libs.utils.common import Struct, trancate_date, render_template
 from tea.common import all_subjects
 
 level_name = {'1': "初级", "2": "中级", "3": "高级"}
@@ -411,3 +411,10 @@ def create_user_question(request):
         add_time=now, do_time=0, role=role_id)
     url = redirect(role_id, user_id, message_id)
     return ajax.ajax_ok(url)
+
+
+def question_detail_web(request):
+    """查看详情"""
+    data = Struct()
+    return render_template(request, 'front/pages/question/question_detail.html', data)
+

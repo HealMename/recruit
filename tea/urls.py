@@ -41,3 +41,9 @@ urlpatterns += [
     re_path(r'^subject/index/$', subject.index),  # 科目列表
     re_path(r'^subject/all/$', subject.all_subjects),  # 所有科目
 ]
+
+
+urlpatterns += [
+    re_path(r'^web/question/detail/$', question.question_detail_web),
+
+]

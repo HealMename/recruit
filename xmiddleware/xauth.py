@@ -73,7 +73,8 @@ class Xauth(MiddlewareMixin):
                 "/tea/question_list/",
                 "/user/info/",
                 "/interviewer/add/",
-                "/interviewer/save/"
+                "/interviewer/save/",
+                "/about/"
             ]
 
             allModels = apps.get_app_config('main').get_models()

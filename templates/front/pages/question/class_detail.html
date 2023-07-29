@@ -288,14 +288,12 @@
                     <button class="layui-btn layui-btn-sm" @click="do_question(item.id)"
                             style="float: right">进入实操环境
                     </button>
-                    <button class="layui-btn layui-btn-sm" @click=""
+                    <button class="layui-btn layui-btn-sm" @click="navPage('/tea/web/question/detail/')"
                             style="float: right">查看详情
                     </button>
                     <button class="layui-btn layui-btn-sm" @click=""
                             style="float: right">分享题目
                     </button>
-
-
                 </p>
             </div>
             <div class="layui-panel" v-if="!dataList.length">
@@ -379,6 +377,10 @@
             this.page_list();
         },
         methods: {
+            navPage(url) {
+                localStorage.setItem('iframeUrl', url);
+                window.parent.document.getElementById('iframe').src = url;
+            },
             page_list() {
                 let thsi = this;
                 var laypage = layui.laypage;

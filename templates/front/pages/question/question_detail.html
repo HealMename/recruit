@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <title>查看详情</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/media/layui-v2.7.6/layui/css/layui.css">
+    <link rel="stylesheet" href="/media/css/common.css"/>
+    <link rel="stylesheet" href="/media/css/style.css"/>
+    <script type="text/javascript" src="/media/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/media/js/jquery.SuperSlide.2.1.1.js"></script>
+</head>
+<style>
+    .list{
+        overflow: auto;
+        width: 1300px;
+    }
+    ::-webkit-scrollbar {
+        display: none; /* Chrome Safari */
+        -ms-overflow-style: none; /* IE 10+ */
+        scrollbar-width: none; /* Firefox */
+
+    }
+
+    ::v-deep input[type='number'] {
+        -moz-appearance: textfield;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    body {
+        min-height: 500px;
+    }
+
+    html::after {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        content: '';
+        display: block;
+        background-attachment: fixed;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .recommend {
+        padding: 10px 0px;
+
+        margin: 0 auto;
+        width: 1300px;
+    }
+
+</style>
+<body>
+<div id="app">
+
+    <div class="recommend index-pv1">
+
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-panel">
+                    <div style="padding: 30px;text-align: center;">领先的在线IT技能实训基地——掌握技能,赢在起跑线</div>
+                    <div style="padding: 30px;text-align: center;">技能不止步于知,教不止于书——在线实操,学习焕然一新</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/media/js/jquery-1.11.3.min.js"></script>
+<script src="/media/layui-v2.7.6/layui/layui.js"></script>
+<script src="/media/js/vue.js"></script>
+<script src="/media/js/config.js"></script>
+<script src="/media/js/common.js?v=1"></script>
+<script src="/media/modules/config.js"></script>
+<script src="/media/js/utils.js"></script>
+
+<script type="text/javascript">
+
+    var vue = new Vue({
+        el: '#app',
+        data: {
+            loading: true,
+            city: true,
+            question: {}
+        },
+        filters: {
+
+        },
+        created() {
+            let parentWindow = window.parent
+            parentWindow.scrollTo(0, 0)
+            this.city = localStorage.getItem("city")
+            this.get_question()
+
+        },
+        methods: {
+            get_question() {
+
+            },
+
+        }
+    });
+
+
+</script>
+</body>
+</html>
