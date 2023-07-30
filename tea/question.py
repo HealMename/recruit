@@ -377,8 +377,11 @@ def question_detail_web(request):
     """查看详情"""
     data = Struct()
     qid = request.QUERY.get('qid')
+    h5 = request.QUERY.get('h5')
     data.question = get_question(qid)
     data.q_count = get_q_count([qid]).get(int(qid), 0)
-    return render_template(request, 'front/pages/question/question_detail.html', data)
-
+    if h5:
+        return render_template(request, 'front/pages/question/question_detail_h5.html', data)
+    else:
+        return render_template(request, 'front/pages/question/question_detail.html', data)
 

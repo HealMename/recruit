@@ -53,15 +53,10 @@
         background-position: center;
     }
 
-    .recommend {
-        padding: 10px 0px;
-
-        margin: 0 auto;
-        width: 1300px;
-    }
-
     .layui-card-header, .layui-card-body {
         border: 1px solid #8f8787;
+        padding-right: 0;
+        padding-left: 15px;
     }
 
     .layui-card-body {
@@ -86,33 +81,41 @@
         background-color: #f0f9eb;
         border-color: #e1f3d8;
         color: #67c23a;
-        padding: 10px;
+        padding: 0 10px;
         position: relative;
         border-radius: 6px 6px 6px 6px;
+    }
+    .layui-card{
+        margin: 0.5rem;
+    }
+    pre{
+        margin-right: 15px;
+    }
+    .head{
+            text-align: center;
+    padding: 0.9rem;
+    background-color: #009688;
+    color: white;
+    font-size: 0.9rem;
     }
 </style>
 <body>
 <div id="app">
+    <div class="head">
+    <div class="title" >云数智学堂</div>
+    </div>
     <div class="recommend index-pv1">
         <div class="layui-card ">
             <div class="layui-card-header">
-                题目信息 <span class="q_desc_info">ID：{{ question.id }} &nbsp;&nbsp;做题次数：{{ q_count }}</span>
-                <p class="operate">
-                    <button class="layui-btn layui-btn-sm" @click="do_question({{ question.id }})"
-                            style="">进入实操环境
-                    </button>
-                    <button class="layui-btn layui-btn-sm" @click="copyUrl(`?target=1&qid=` + {{ question.id }})"
-                            style="">分享题目
-                    </button>
-                </p>
+                题目信息 <span class="q_desc_info">ID：{{ question.id }} &nbsp;&nbsp;做题次数：{{ q_count }} {% if question.is_free == '1' %}
+                    <span class="is_free" >试</span>
+                    {% endif %}</span>
             </div>
             <div class="layui-card-body">
                 <p style="font-size: 21px">{{ question.title }} <span >({{ question.level_name }})</span>
                     <span size="small" style="margin-right: 10px;">{{ question.sid_name }}</span>
                     <span size="small" style="font-size: 17px;color: #999;">{{ question.size_name }}</span>
-                    {% if question.is_free == '1' %}
-                    <span class="is_free" >试</span>
-                    {% endif %}
+
 
                 </p>
                 <p><span class="ta_title">时间: </span>{{ question.do_time }}(分)</p>

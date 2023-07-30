@@ -398,7 +398,9 @@
         },
         mounted: function () {
             // this.bindClickOnLi();
-
+            var is_wx = navigator.userAgent.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
+            var h5 = 0
+            if (is_wx){h5=1}
             var split_url = window.location.href.split('?')
             if (split_url.length > 1){
                 var cs_arr = split_url[1].split('&');                    //参数字符串分割为数组
@@ -409,8 +411,12 @@
                 console.log(get_arr)
 
                 if (get_arr.target === '1'){
-                    // 题目详情
-                    navPage(`/tea/web/question/detail/?qid=${get_arr.qid}`)
+                    if (is_wx){
+                        location.href = `/tea/web/question/detail/?qid=${get_arr.qid}&h5=1`
+                    }else{
+                        navPage(`/tea/web/question/detail/?qid=${get_arr.qid}`)
+                    }
+
                 }
             }else{
                 navPage('./pages/zhaopinxinxi/list.html')
