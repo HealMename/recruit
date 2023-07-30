@@ -152,12 +152,7 @@
 
         </div>
     <div v-html="wxHtml"></div>
-        <!--
-        <wx-open-launch-weapp type="text/wxtag-template" id="launch-btn" appid="wx8df523611cfc0418" path="pages/index/index">
-                <div>打开题库</div>
-            </wx-open-launch-weapp>
-       -->
-    </div>
+
 </div>
 
 <script src="/media/js/jquery-1.11.3.min.js"></script>
@@ -214,13 +209,13 @@
                     let script = document.createElement('script')
                     script.type = 'text/wxtag-template'
                     script.text = `<div style="text-align: center;
-    padding: 10px;
+    padding: 7px;
     margin: 5px 8px;
     background-color: #009688;
     color: white;
     border-radius: 5px;">打开题库</div>`
                     this.wxHtml =
-                        `<wx-open-launch-weapp id="launch-btn" appid="wx8df523611cfc0418" path="pages/index/index">
+                        `<wx-open-launch-weapp style="display: block;" id="launch-btn" appid="wx8df523611cfc0418" path="pages/index/index">
                             ${script.outerHTML}
                         </wx-open-launch-weapp>`
                     this.$nextTick(() => {
