@@ -15,10 +15,11 @@
     <script type="text/javascript" src="/media/js/jquery.SuperSlide.2.1.1.js"></script>
 </head>
 <style>
-    .list{
+    .list {
         overflow: auto;
         width: 1300px;
     }
+
     ::-webkit-scrollbar {
         display: none; /* Chrome Safari */
         -ms-overflow-style: none; /* IE 10+ */
@@ -151,13 +152,17 @@
         color: #67c23a;
         padding: 10px;
         position: relative;
-        left: 25px;
-        top: -16px;
+        left: 4px;
+        top: -47px;
         border-radius: 6px 6px 6px 6px;
     }
 
     .sname {
-        font-size: 20px;
+        font-size: 15px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        height: 23px;
+        overflow: hidden;
     }
 
     .os_detail {
@@ -200,7 +205,8 @@
     .select {
         margin-bottom: 5px;
     }
-    .q_id{
+
+    .q_id {
         font-size: 7px;
         color: #909399;
     }
@@ -251,7 +257,7 @@
                                 <a href="javascript:" class="size_select" @click="sid_select(3, 3)">多集群</a>
                             </div>
                         </div>
-                         <div class="layui-form-item select">
+                        <div class="layui-form-item select">
                             <input type="text" name="title" lay-verify="title" autocomplete="off"
                                    placeholder="题目ID/题目名称" v-model="title"
                                    class="layui-input" style="width: 200px;display: inline-block;margin-left: 48px;">
@@ -267,11 +273,11 @@
         </form>
         <!-- 样式一 -->
         <div class="list">
-            <div class="station"  v-for="(item,index) in dataList"
+            <div class="station" v-for="(item,index) in dataList"
                  :key="index">
                 <p class="st_name">
-                    <span class="sname">{{ item.title }}</span>
-                    <span class="is_free" v-if="item.is_free == 1">试</span>
+                <p class="sname">{{ item.title }}</p>
+                <span class="is_free" v-if="item.is_free == 1">试</span>
                 </p>
                 <p class="st_name">
                     {{ item.sid_name }} （{{ item.level_name }}）
@@ -288,17 +294,17 @@
                     <button class="layui-btn layui-btn-sm" @click="do_question(item.id)"
                             style="float: right">进入实操环境
                     </button>
-                    <button class="layui-btn layui-btn-sm" @click="navPage('/tea/web/question/detail/')"
-                            style="float: right">查看详情
-                    </button>
-                    <button class="layui-btn layui-btn-sm" @click=""
+                    <a class="layui-btn layui-btn-sm"
+                            style="float: right" :href="`/?target=1&qid=${item.id}`" target="_blank">查看详情
+                    </a>
+                    <button class="layui-btn layui-btn-sm" @click="copyUrl(`?target=1&qid=${item.id}`, item.sid_name)"
                             style="float: right">分享题目
                     </button>
                 </p>
             </div>
             <div class="layui-panel" v-if="!dataList.length">
                 <div style="padding: 50px 30px;text-align: center;font-size: 18px;">暂无资源</div>
-              </div>
+            </div>
         </div>
     </div>
 
@@ -329,7 +335,7 @@
             </div>
         </form>
     </div>
-    <div class="pager" id="pager" v-if="dataList.length"></div>
+    <div class="pager" id="pager" ></div>
 </div>
 
 <script src="/media/js/jquery-1.11.3.min.js"></script>
@@ -377,6 +383,18 @@
             this.page_list();
         },
         methods: {
+            // 复制
+            copyUrl(url, sname) {
+                 var input = document.createElement("input"); // 创建input对象
+                 let ms = `我正在云数智学堂实操练习${sname}题目，点击 https://${location.host + url} 查看题目！关注“云数智学”微信公众号获取更多经常内容。`
+                 input.value = ms; // 设置复制内容
+                 document.body.appendChild(input); // 添加临时实例
+                 input.select(); // 选择实例内容
+                 document.execCommand("Copy"); // 执行复制
+                 document.body.removeChild(input); // 删除临时实例
+                 parent_msg_ok("链接已复制到剪贴板，快去分享吧！")
+
+            },
             navPage(url) {
                 localStorage.setItem('iframeUrl', url);
                 window.parent.document.getElementById('iframe').src = url;
@@ -395,11 +413,11 @@
                     status: 1
                 }
                 $.get('/tea/question_list/', param, function (res) {
-                    // thsi.loading = false;
                     thsi.dataList = res.data.page_data
                     var timer = setTimeout(function () {
                         window.parent.document.getElementById('iframe').height = 0
                         let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
+                        height = window.parent.innerHeight > height ? window.parent.innerHeight : height
                         window.parent.document.getElementById('iframe').height = height
                         clearTimeout(timer)
                     }, 200)
@@ -423,6 +441,7 @@
                                     var timer = setTimeout(function () {
                                         window.parent.document.getElementById('iframe').height = 0
                                         let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
+                                        height = window.parent.innerHeight > height ? window.parent.innerHeight : height
                                         window.parent.document.getElementById('iframe').height = height
                                         clearTimeout(timer)
                                     }, 200)
@@ -433,15 +452,15 @@
                 })
             },
             sid_select(type, index) {
-                if (type === 1){
+                if (type === 1) {
                     this.sid = index !== 0 ? this.subjects[index - 1].id : 0;
                     $('.sid_select').removeClass('use');
                     $('.sid_select:eq(' + index + ')').addClass('use');
-                }else if (type === 2){
+                } else if (type === 2) {
                     this.level = index
                     $('.level_select').removeClass('use');
                     $('.level_select:eq(' + index + ')').addClass('use');
-                }else if (type === 3){
+                } else if (type === 3) {
                     this.size = index
                     $('.size_select').removeClass('use');
                     $('.size_select:eq(' + index + ')').addClass('use');

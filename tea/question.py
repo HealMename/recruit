@@ -7,7 +7,7 @@ from dj2.settings import K8S_URL
 from libs.utils import ajax, db, auth_token
 from libs.utils.auth_token import get_random_string
 from libs.utils.common import Struct, trancate_date, render_template
-from tea.common import all_subjects
+from tea.common import all_subjects, get_question, get_q_count
 
 level_name = {'1': "初级", "2": "中级", "3": "高级"}
 size_name = {'1': '单机', "2": "集群", "3": "多集群"}
@@ -111,15 +111,6 @@ def question_list(request):
     return ajax.ajax_ok(data)
 
 
-def get_q_count(qids):
-    """获取做题人数"""
-    sql = f"""
-        select question_id, count(id) num  from recruit.user_test_det_content where question_id in ({','.join(map(str, qids))})
-        group by question_id;
-    """
-    data = db.default.fetchall_dict(sql)
-    return {x.question_id: x.num for x in data}
-
 
 def get_os_detail(qids):
     """获取环境信息"""
@@ -179,6 +170,7 @@ def question_add(request):
         args.pop('level_name', '')
         args.pop('size_name', '')
         args.pop('sid_name', '')
+        args.add_user = user_id
         if id_:
             db.default.question.filter(id=id_).update(status=-1)
         id_ = db.default.question.create(add_time=now, status=0, **args)
@@ -208,39 +200,7 @@ def question_add(request):
         db.default.question_os_detail.bulk_create(os_detail)
         return ajax.ajax_ok()
     else:
-        q = db.default.question.get(id=args.id)
-        step_list = db.default.question_step_detail.filter(question_id=args.id, status=1)
-        step_answer = db.default.question_step_answer.filter(question_id=args.id, status=1)
-        os_detail = db.default.question_os_detail.filter(question_id=args.id, status=1)
-        """
-        args.pop('status_name', '')
-        args.pop('level_name', '')
-        args.pop('size_name', '')
-        args.pop('sid_name', '')
-        """
-        data = {
-            "id": args.id,
-            "sid": q.sid,
-            "do_time": q.do_time,
-            "do_points": q.do_points,
-            "version": str(q.version),
-            "is_free": str(q.is_free),
-            "level": str(q.level),
-            "title": q.title,
-            "desc": q.desc,
-            "size": str(q.size),
-            "status": str(q.status),
-            "add_user": user_id,
-            "step_list": [{'content': x.content} for x in step_list] if step_list else [{'content': ''}],
-            "answer_list": [{'content': x.content} for x in step_answer] if step_answer else [{'content': ''}],
-            "os_detail": [{'content': x.content} for x in os_detail] if os_detail else [{'content': ''}],
-        }
-        if args.is_view:
-            sid_name = all_subjects()
-            data['status_name'] = {1: '已审核', 0: '未审核'}[q['status']]
-            data['level_name'] = level_name[str(q['level'])]
-            data['size_name'] = size_name[str(q['size'])]
-            data['sid_name'] = sid_name[q['sid']]
+        data = get_question(args.id)
         return ajax.ajax_ok(data)
 
 
@@ -416,5 +376,9 @@ def create_user_question(request):
 def question_detail_web(request):
     """查看详情"""
     data = Struct()
+    qid = request.QUERY.get('qid')
+    data.question = get_question(qid)
+    data.q_count = get_q_count([qid]).get(int(qid), 0)
     return render_template(request, 'front/pages/question/question_detail.html', data)
+
 

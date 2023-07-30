@@ -583,8 +583,7 @@
                 var timer = setTimeout(function () {
                     window.parent.document.getElementById('iframe').height = 0
                     let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
-                    // height = height > 1000 ? height : 1000
-                    console.log(height)
+                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
                     window.parent.document.getElementById('iframe').height = height
                     clearTimeout(timer)
                 }, 200)

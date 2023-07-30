@@ -236,7 +236,7 @@
 </div>
 <!-- end 顶部导航栏 -->
 
-<iframe src="./pages/zhaopinxinxi/list.html" id="iframe" frameborder="0" width="100%" height="100%"
+<iframe src="" id="iframe" frameborder="0" width="100%" height="100%"
 ></iframe>
 <div id="tabbar" class="tabbar"
      :style='{"borderColor":"rgba(255, 255, 255, 0.3)","backgroundColor":"#009688","borderRadius":"0","borderWidth":"0","borderStyle":"solid"}'
@@ -382,8 +382,9 @@
     $(function () {
 
 
-
     })
+
+
     var vue1 = new Vue({el: '#tabbar'})
     var login_type = 1;
     var vue = new Vue({
@@ -397,11 +398,30 @@
         },
         mounted: function () {
             // this.bindClickOnLi();
+
+            var split_url = window.location.href.split('?')
+            if (split_url.length > 1){
+                var cs_arr = split_url[1].split('&');                    //参数字符串分割为数组
+                var get_arr={};
+                for(var i=0;i<cs_arr.length;i++){         //遍历数组，拿到json对象
+                  get_arr[cs_arr[i].split('=')[0]] = cs_arr[i].split('=')[1]
+                }
+                console.log(get_arr)
+
+                if (get_arr.target === '1'){
+                    // 题目详情
+                    navPage(`/tea/web/question/detail/?qid=${get_arr.qid}`)
+                }
+            }else{
+                navPage('./pages/zhaopinxinxi/list.html')
+            }
+
         },
         created() {
 
             this.city = localStorage.getItem("city")
-            // this.login_layer()
+
+
         },
         methods: {
             jump(url) {

@@ -150,7 +150,11 @@ i, em {
 	display: block;
 	margin: 0 auto
 }
-
+pre{
+	background-color: #393D49;
+	color: rgba(255,255,255,.7);
+	padding: 10px;
+}
 #header .top {
 	width: 1002px;
 	margin: 0 auto;

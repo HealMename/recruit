@@ -3,6 +3,7 @@ __author__ = "ila"
 
 import logging
 
+from django.shortcuts import redirect
 from django.utils.deprecation import MiddlewareMixin
 from django.http import JsonResponse
 from django.apps import apps
@@ -14,10 +15,7 @@ from dj2.settings import dbName as schemaName
 
 class Xauth(MiddlewareMixin):
     def process_request(self, request):
-        fullPath = request.get_full_path()
-
-        # token=request.META.get("HTTP_TOKEN")
-        # request.session['token']=token
+        fullPath = request.path
 
         token = request.QUERY.get("token") \
                 or request.META.get('HTTP_TOKEN')
@@ -74,7 +72,7 @@ class Xauth(MiddlewareMixin):
                 "/user/info/",
                 "/interviewer/add/",
                 "/interviewer/save/",
-                "/about/"
+                "/about/",
             ]
 
             allModels = apps.get_app_config('main').get_models()
@@ -88,7 +86,6 @@ class Xauth(MiddlewareMixin):
                     filterList.append("/{}/list".format(m.__tablename__))
 
             auth = True
-
             if fullPath == '/':
                 pass
             else:

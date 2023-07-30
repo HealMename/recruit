@@ -15,10 +15,11 @@
     <script type="text/javascript" src="/media/js/jquery.SuperSlide.2.1.1.js"></script>
 </head>
 <style>
-    .list{
+    .list {
         overflow: auto;
         width: 1300px;
     }
+
     ::-webkit-scrollbar {
         display: none; /* Chrome Safari */
         -ms-overflow-style: none; /* IE 10+ */
@@ -59,18 +60,93 @@
         width: 1300px;
     }
 
+    .layui-card-header, .layui-card-body {
+        border: 1px solid #8f8787;
+    }
+
+    .layui-card-body {
+        border-top: none;
+    }
+
+
+    .ta_title {
+        font-weight: bold;
+
+    }
+    .operate{
+        float: right;
+    }
+    .q_desc_info {
+        color: #909399;
+        font-size: 7px;
+        margin-left: 10px;
+    }
+    .is_free {
+        float: right;
+        background-color: #f0f9eb;
+        border-color: #e1f3d8;
+        color: #67c23a;
+        padding: 10px;
+        position: relative;
+        border-radius: 6px 6px 6px 6px;
+    }
 </style>
 <body>
 <div id="app">
-
     <div class="recommend index-pv1">
+        <div class="layui-card ">
+            <div class="layui-card-header">
+                题目信息 <span class="q_desc_info">ID：{{ question.id }} &nbsp;&nbsp;做题次数：{{ q_count }}</span>
+                <p class="operate">
+                    <button class="layui-btn layui-btn-sm" @click="do_question({{ question.id }})"
+                            style="">进入实操环境
+                    </button>
+                    <button class="layui-btn layui-btn-sm" @click=""
+                            style="">分享题目
+                    </button>
+                </p>
+            </div>
+            <div class="layui-card-body">
+                <p style="font-size: 21px">{{ question.title }} <span >({{ question.level_name }})</span>
+                    <span size="small" style="margin-right: 10px;">{{ question.sid_name }}</span>
+                    <span size="small" style="font-size: 17px;color: #999;">{{ question.size_name }}</span>
+                    {% if question.is_free %}
+                    <span class="is_free" >试</span>
+                    {% endif %}
 
-        <div class="layui-row layui-col-space15">
-            <div class="layui-col-md12">
-                <div class="layui-panel">
-                    <div style="padding: 30px;text-align: center;">领先的在线IT技能实训基地——掌握技能,赢在起跑线</div>
-                    <div style="padding: 30px;text-align: center;">技能不止步于知,教不止于书——在线实操,学习焕然一新</div>
+                </p>
+                <p><span class="ta_title">时间: </span>{{ question.do_time }}(分)</p>
+                <p><span class="ta_title">版本: </span>{{ question.version }}</p>
+                <p><span class="ta_title">描述: </span>{{ question.desc }}</p>
+                <div><span class="ta_title">环境信息: </span>
+                {% for os in question.os_detail %}
+                    <p>{{ forloop.counter }}、{{ os.content|safe }}</p>
+                {% endfor %}
                 </div>
+                <div>
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-card " >
+            <div class="layui-card-header">解题步骤</div>
+            <div class="layui-card-body">
+                {% for os in question.step_list %}
+                    <p>
+                    {% if question.step_list|length > 1 %}
+                        {{ forloop.counter }}、
+                    {% endif %}
+                        {{ os.content|safe }}
+                    </p>
+                {% endfor %}
+            </div>
+            <div class="layui-card-header" style="margin-top: 10px;">答题步骤</div>
+            <div class="layui-card-body">
+                {% for os in question.answer_list %}
+                    <p>{% if question.answer_list|length > 1 %}
+                        {{ forloop.counter }}、
+                    {% endif %} {{ os.content|safe }}</p>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -91,22 +167,36 @@
         data: {
             loading: true,
             city: true,
-            question: {}
         },
-        filters: {
-
-        },
+        filters: {},
         created() {
             let parentWindow = window.parent
             parentWindow.scrollTo(0, 0)
             this.city = localStorage.getItem("city")
-            this.get_question()
+            var timer = setTimeout(function () {
+                window.parent.document.getElementById('iframe').height = 0
+                let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
+                height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                window.parent.document.getElementById('iframe').height = height
+                clearTimeout(timer)
+            }, 200)
 
         },
         methods: {
-            get_question() {
-
-            },
+            do_question(qid) {
+                document.cookie = 'token' + "=" + localStorage.getItem('Token');
+                $.post('/tea/do_question/', {type: 1, qid: qid, city: this.city}, function (res) {
+                    console.log(res)
+                    if (res.code === 401) {
+                        parent_msg_fail("请登录后重试")
+                    } else if (res.response === 'ok') {
+                        parent_msg_ok("容器创建中，请稍后")
+                        window.open(res.data)
+                    } else {
+                        parent_msg_fail(res.message)
+                    }
+                })
+            }
 
         }
     });

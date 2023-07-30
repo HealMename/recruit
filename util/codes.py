@@ -25,3 +25,6 @@ non_authorized_code = 20003  # 无权限
 system_error_code = 40001  # 系统级错误
 request_expired_code = 40002  # 请求已过期
 repeated_request_code = 40003  # 重复请求
+
+
+
