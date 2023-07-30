@@ -155,6 +155,8 @@
             </div>
 
         </div>
+    <div v-html="wxHtml"></div>
+
         <wx-open-launch-weapp type="text/wxtag-template" id="launch-btn" appid="wx8df523611cfc0418" path="pages/index/index">
                 <button class="btn">打开小程序</button>
             </wx-open-launch-weapp>
@@ -176,45 +178,60 @@
         data: {
             loading: true,
             city: true,
+            wxHtml: "",
         },
         filters: {},
+        mounted() {
+            this.config()
+        },
         created() {
             let parentWindow = window.parent
             parentWindow.scrollTo(0, 0)
             this.city = localStorage.getItem("city")
 
-            //微信浏览器
-            $.get("/chat/wx/jsconfig/", { url: window.location.href }, function (res) {
-                var data = res.data;
-                wx.config({
-                    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                    appId: data.appId, // 必填，公众号的唯一标识
-                    timestamp: data.timestamp, // 必填，生成签名的时间戳
-                    nonceStr: data.nonceStr, // 必填，生成签名的随机串
-                    signature: data.signature,// 必填，签名
-                    jsApiList: ['chooseImage'], // 必填，需要使用的JS接口列表
-                    openTagList: ['wx-open-launch-weapp'], // 填入打开小程序的开放标签名
-                });
-
-                wx.ready(function () {
-                    var btn = document.getElementById('launch-btn');
-                    // launch 用户点击跳转按钮并对确认弹窗进行操作后触发
-                    btn.addEventListener('launch', function (e) {
-                        console.log(e, 'success');
-                    });
-                    // error 用户点击跳转按钮后出现错误
-                    btn.addEventListener('error', function (e) {
-                        console.log(e.detail, 'fail');
-                    });
-                });
-                wx.error(function (res) {
-                    console.log(res, 'error');
-                    // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名
-                });
-            })
 
         },
         methods: {
+            config(){
+                var thsi = this;
+            //微信浏览器
+            $.get("/chat/wx/jsconfig/", { url: window.location.href }, function (res) {
+                    var data = res.data;
+                    wx.config({
+                        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        appId: data.appId, // 必填，公众号的唯一标识
+                        timestamp: data.timestamp, // 必填，生成签名的时间戳
+                        nonceStr: data.nonceStr, // 必填，生成签名的随机串
+                        signature: data.signature,// 必填，签名
+                        jsApiList: ['chooseImage'], // 必填，需要使用的JS接口列表
+                        openTagList: ['wx-open-launch-weapp'], // 填入打开小程序的开放标签名
+                    });
+                    thsi.getHtml()
+                    wx.error(function (res) {
+                        console.log(res, 'error');
+                        // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名
+                    });
+                })
+            },
+            getHtml() {
+                    let script = document.createElement('script')
+                    script.type = 'text/wxtag-template'
+                    script.text = `<button class="btn blue mt1" style="height: 50px;width: 100px;">跳转小程序</button>`
+                    this.wxHtml =
+                        `<wx-open-launch-weapp id="launch-btn" appid="wx8df523611cfc0418" path="pages/index/index">
+                            ${script.outerHTML}
+                        </wx-open-launch-weapp>`
+                    this.$nextTick(() => {
+                        let launchButton = document.getElementById('launch-btn')
+                        launchButton.addEventListener('launch', function(e) {
+                            console.log('success', e)
+                        })
+
+                        launchButton.addEventListener('error', function(e) {
+                            console.log('fail', e)
+                        })
+                    })
+                },
             // 复制
             copyUrl(url) {
                  var input = document.createElement("input"); // 创建input对象
