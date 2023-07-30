@@ -73,6 +73,7 @@ class Xauth(MiddlewareMixin):
                 "/interviewer/add/",
                 "/interviewer/save/",
                 "/about/",
+                "/chat/wx/jsconfig/"
             ]
 
             allModels = apps.get_app_config('main').get_models()

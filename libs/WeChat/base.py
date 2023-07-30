@@ -1,13 +1,19 @@
 # coding: utf-8
+import hashlib
 import json
 import logging
+import random
+import string
+
 import requests
 import time
+
+from django.core.cache import cache
 
 from libs.WeChat import config
 from libs.utils import db
 from dj2.settings import GHAT_ID
-
+from libs.utils.redis_com import rd
 log = logging.getLogger(__name__)
 
 
@@ -96,3 +102,45 @@ class BaseClient(object):
         query_string = 'access_token=%s' % self.access_token
         d = WebChatBase(GHAT_ID).request_api(path, query_string, data=data, method="post")
         return d
+
+
+
+class JsSign(WebChatBase):
+    def __init__(self, url, wx_type=2):
+        self.wx_type = wx_type
+        self.ret = {
+            'nonceStr': self.__create_nonce_str(),
+            'timestamp': self.__create_timestamp(),
+            'url': url
+        }
+        WebChatBase.__init__(self, wx_type)
+
+    @staticmethod
+    def __create_nonce_str():
+        return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(15))
+
+    @staticmethod
+    def __create_timestamp():
+        return int(time.time())
+
+    def get_ticket(self):
+        ticket_name = "wx-ticket"
+        ticket = rd.user_code.get(ticket_name)  # 缓存验证码
+        if not ticket:
+            access_token = self.get_access_token()
+            path = "cgi-bin/ticket/getticket"
+            args = "access_token=%s&type=jsapi" % access_token
+            ticket = self.request_api(path, args).get("ticket")
+            rd.user_code.set(ticket_name, ticket, timeout=60 * 60)  # 设置缓存key 过期时间
+        return ticket
+
+    def sign(self):
+        out = self.ret
+        self.ret['jsapi_ticket'] = self.get_ticket()
+        keys = list(self.ret.keys())
+        keys.sort()
+        sign = "&".join("%s=%s" % (k.lower(), self.ret[k]) for k in keys)
+        sha1 = hashlib.sha1()
+        sha1.update(sign.encode())
+        out['signature'] = sha1.hexdigest()
+        return out

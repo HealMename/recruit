@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from ChatApi.wx.utils import parse_xml
 from dj2.settings import GHAT_ID
 from libs.WeChat import config
+from libs.WeChat.base import JsSign
 from libs.WeChat.user import WebChatUser
 from libs.utils import ajax, Struct, render_template
 
@@ -95,3 +96,18 @@ def login(request):
 
         return ajax.ajax_ok()
     return render_template(request, 'h5/index.html')
+
+
+def r_js_ticket(request):
+    """
+    获取jssdk签名
+    :param request:
+    :return:
+    """
+    args = request.QUERY.casts(url=str)
+    base = JsSign(args.url)
+    result = base.sign()
+    result["appId"] = config.WC_CONFIG[2]['app_id']
+    print(result)
+    return ajax.jsonp_ok(request, result)
+

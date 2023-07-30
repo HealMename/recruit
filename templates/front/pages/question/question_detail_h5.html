@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="/media/css/style.css"/>
     <script type="text/javascript" src="/media/js/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="/media/js/jquery.SuperSlide.2.1.1.js"></script>
+    <!-- 公众号 JSSDK -->
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
 </head>
 <style>
     .list {
@@ -151,7 +153,11 @@
                     {% endif %} {{ os.content|safe }}</p>
                 {% endfor %}
             </div>
+
         </div>
+        <wx-open-launch-weapp id="launch-btn" appid="wx8df523611cfc0418" path="pages/index/index">
+                <button class="btn">打开小程序</button>
+            </wx-open-launch-weapp>
     </div>
 </div>
 
@@ -176,13 +182,36 @@
             let parentWindow = window.parent
             parentWindow.scrollTo(0, 0)
             this.city = localStorage.getItem("city")
-            var timer = setTimeout(function () {
-                window.parent.document.getElementById('iframe').height = 0
-                let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
-                height = window.parent.innerHeight > height ? window.parent.innerHeight : height
-                window.parent.document.getElementById('iframe').height = height
-                clearTimeout(timer)
-            }, 200)
+
+            //微信浏览器
+            $.get("/chat/wx/jsconfig/", { url: window.location.href }, function (res) {
+                var data = res.data;
+                wx.config({
+                    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                    appId: data.appId, // 必填，公众号的唯一标识
+                    timestamp: data.timestamp, // 必填，生成签名的时间戳
+                    nonceStr: data.nonceStr, // 必填，生成签名的随机串
+                    signature: data.signature,// 必填，签名
+                    jsApiList: ['chooseImage'], // 必填，需要使用的JS接口列表
+                    openTagList: ['wx-open-launch-weapp'], // 填入打开小程序的开放标签名
+                });
+
+                wx.ready(function () {
+                    var btn = document.getElementById('launch-btn');
+                    // launch 用户点击跳转按钮并对确认弹窗进行操作后触发
+                    btn.addEventListener('launch', function (e) {
+                        console.log(e, 'success');
+                    });
+                    // error 用户点击跳转按钮后出现错误
+                    btn.addEventListener('error', function (e) {
+                        console.log(e.detail, 'fail');
+                    });
+                });
+                wx.error(function (res) {
+                    console.log(res, 'error');
+                    // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名
+                });
+            })
 
         },
         methods: {
