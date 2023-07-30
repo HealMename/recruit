@@ -39,7 +39,7 @@
     }
 
     body {
-        min-height: 500px;
+        background-color: #cccccc45;
     }
 
     html::after {
@@ -56,7 +56,6 @@
     }
 
     .layui-card-header, .layui-card-body {
-        border: 1px solid #8f8787;
         padding-right: 0;
         padding-left: 15px;
     }
@@ -114,12 +113,9 @@
                     {% endif %}</span>
             </div>
             <div class="layui-card-body">
-                <p style="font-size: 21px">{{ question.title }} <span >({{ question.level_name }})</span>
-                    <span size="small" style="margin-right: 10px;">{{ question.sid_name }}</span>
-                    <span size="small" style="font-size: 17px;color: #999;">{{ question.size_name }}</span>
-
-
-                </p>
+                <p style="font-size: 21px">{{ question.title }} <span >({{ question.level_name }})</span></p>
+                <p><span size="small" style="margin-right: 10px;">{{ question.sid_name }}</span>
+                <span size="small" style="color: #999;">{{ question.size_name }}</span></p>
                 <p><span class="ta_title">时间: </span>{{ question.do_time }}(分)</p>
                 <p><span class="ta_title">版本: </span>{{ question.version }}</p>
                 <p><span class="ta_title">描述: </span>{{ question.desc }}</p>
@@ -156,10 +152,11 @@
 
         </div>
     <div v-html="wxHtml"></div>
-
+        <!--
         <wx-open-launch-weapp type="text/wxtag-template" id="launch-btn" appid="wx8df523611cfc0418" path="pages/index/index">
-                <button class="btn">打开小程序</button>
+                <div>打开题库</div>
             </wx-open-launch-weapp>
+       -->
     </div>
 </div>
 
@@ -216,7 +213,12 @@
             getHtml() {
                     let script = document.createElement('script')
                     script.type = 'text/wxtag-template'
-                    script.text = `<button class="btn blue mt1" style="height: 50px;width: 100px;">跳转小程序</button>`
+                    script.text = `<div style="text-align: center;
+    padding: 10px;
+    margin: 5px 8px;
+    background-color: #009688;
+    color: white;
+    border-radius: 5px;">打开题库</div>`
                     this.wxHtml =
                         `<wx-open-launch-weapp id="launch-btn" appid="wx8df523611cfc0418" path="pages/index/index">
                             ${script.outerHTML}
