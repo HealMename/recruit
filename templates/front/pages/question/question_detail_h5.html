@@ -233,7 +233,7 @@
             copyUrl(url) {
                  var input = document.createElement("input"); // 创建input对象
                  let sname = '{{ question.sid_name }}'
-                 let ms = `我正在云数智学堂实操练习${sname}题目，点击 https://${location.host + url} 查看题目！关注“云数智学”微信公众号获取更多经常内容。`
+                 let ms = `我正在云数智学堂实操练习${sname}题目，点击 https://${location.host + url} 查看题目！关注“云数智学”微信公众号获取更多经常内容。邀请用户注册获现金奖励。`
                  input.value = ms; // 设置复制内容
                  document.body.appendChild(input); // 添加临时实例
                  input.select(); // 选择实例内容

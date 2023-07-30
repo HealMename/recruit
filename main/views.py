@@ -1,4 +1,5 @@
 import time
+from collections import defaultdict
 
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -99,4 +100,35 @@ def menu_list(request):
     for obj in parent_obj:
         obj['child'] = [x for x in data if x['parent_id'] == obj['id']]
     return ajax.ajax_ok(parent_obj)
+
+
+def sys_m_module(request):
+    """模块管理"""
+    module_list = db.default.sys_m_module.filter(status=1).order_by('mod_order')
+    module_dict = defaultdict(list)
+
+    parent_data = defaultdict(list)
+    for obj in module_list:
+        if obj.parent_id:
+            obj['is_del'] = 1
+            module_dict[obj.parent_id].append(obj)
+        else:
+            parent_data[obj.id] = [obj]
+    data = []
+    for parent_id, obj in parent_data.items():
+        obj[0]['is_del'] = 0
+        if not module_dict[parent_id]:
+            obj[0]['is_del'] = 1
+        obj = obj + module_dict[parent_id]
+        data.extend(obj)
+    return ajax.ajax_ok(data)
+
+
+def sys_m_module_del(request):
+    """删除菜单"""
+    data = Struct()
+    id_ = request.QUERY.get('id')
+    status = request.QUERY.get('status')
+    db.default.sys_m_module.filter(id=id_).update(status=status)
+    return ajax.ajax_ok(data=data)
 

@@ -75,6 +75,7 @@ urlpatterns = [
     path(r'null', views.null),
     path(r'get_ip_city/', views.get_ip_city),
     path('{}/'.format(schemaName), include('main.urls')),  # 导入schemaName
+    path(''.format(schemaName), include('main.urls')),  # 导入schemaName
 ]
 
 urlpatterns.extend([

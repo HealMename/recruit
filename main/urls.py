@@ -162,5 +162,7 @@ urlpatterns += [
     path(r'get_ip_city', config_v.get_ip_city),  # 百度api
     path(r'checkout_user_type/', views.checkout_user_type),  # 切换身份
     path(r'menu_list/', views.menu_list),  # 菜单列表
+    path(r'sys_m_module/', views.sys_m_module),  # 菜单列表
+    path(r'sys_m_module/del/', views.sys_m_module_del),  # 删除菜单
 ]
 
