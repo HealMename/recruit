@@ -1,3 +1,4 @@
+import json
 import time
 from collections import defaultdict
 
@@ -92,8 +93,9 @@ def menu_list(request):
     """获取权限列表"""
     sql = f"""
         select distinct m.* from recruit.sys_m_module m
-        join recruit.sys_m_role_module ro on ro.module_id =m.id
-        join recruit.users u on u.`type` =ro.role_id and u.username ='{request.user.username}' order by m.mod_order ;
+        join recruit.sys_m_role_module ro on ro.module_id =m.id and m.status=1
+        join recruit.users u on u.`type` =ro.role_id 
+        and u.username ='{request.user.username}' order by m.mod_order ;
     """
     data = db.default.fetchall_dict(sql)
     parent_obj = [x for x in data if x['parent_id'] == 0]
@@ -132,3 +134,48 @@ def sys_m_module_del(request):
     db.default.sys_m_module.filter(id=id_).update(status=status)
     return ajax.ajax_ok(data=data)
 
+
+def sys_m_module_add(request):
+    """添加菜单"""
+    id_ = request.QUERY.get('id')
+    parent_id = request.QUERY.get('parent_id')
+    mod_name = request.QUERY.get('mod_name')
+    mod_path = request.QUERY.get('mod_path')
+    mod_order = request.QUERY.get('mod_order')
+    icon = request.QUERY.get('icon')
+    if parent_id:
+        if not db.default.sys_m_module.filter(id=parent_id, parent_id=0):
+            return ajax.ajax_fail(message='无效的父级id')
+    if id_:
+        db.default.sys_m_module.filter(id=id_).update(
+            parent_id=parent_id, mod_name=mod_name, mod_path=mod_path, mod_order=mod_order, icon=icon, status=1)
+    else:
+        db.default.sys_m_module.create(parent_id=parent_id, mod_name=mod_name,
+                                       mod_path=mod_path, mod_order=mod_order, icon=icon, status=1)
+    return ajax.ajax_ok()
+
+
+def sys_m_module_role(request):
+    """角色权限"""
+    id_ = request.QUERY.get('id')
+    if request.method == 'GET':
+        sql = f"""
+                select distinct m.* from recruit.sys_m_module m
+                join recruit.sys_m_role_module ro on ro.module_id =m.id and m.status=1 and ro.role_id={id_} and m.parent_id != 0
+            """
+        data = db.default.fetchall_dict(sql)
+        return ajax.ajax_ok([x.id for x in data])
+    else:
+        role_moids = json.loads(request.QUERY.get('role_moids'))
+        db.default.sys_m_role_module.filter(role_id=id_, status=1).update(status=-1)
+        for module_id in role_moids:
+            if db.default.sys_m_role_module.filter(role_id=id_, module_id=module_id):
+                db.default.sys_m_role_module.filter(role_id=id_, module_id=module_id).update(status=1)
+            else:
+                db.default.sys_m_role_module.create(role_id=id_, module_id=module_id, status=1)
+            mo = db.default.sys_m_module.get(id=module_id)
+            if db.default.sys_m_role_module.filter(role_id=id_, module_id=mo.parent_id):
+                db.default.sys_m_role_module.filter(role_id=id_, module_id=mo.parent_id).update(status=1)
+            else:
+                db.default.sys_m_role_module.create(role_id=id_, module_id=mo.parent_id, status=1)
+    return ajax.ajax_ok()

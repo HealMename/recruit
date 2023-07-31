@@ -164,5 +164,7 @@ urlpatterns += [
     path(r'menu_list/', views.menu_list),  # 菜单列表
     path(r'sys_m_module/', views.sys_m_module),  # 菜单列表
     path(r'sys_m_module/del/', views.sys_m_module_del),  # 删除菜单
+    path(r'sys_m_module/add/', views.sys_m_module_add),  # 新增菜单
+    path(r'sys_m_module/role/', views.sys_m_module_role),  # 授权管理
 ]
 
