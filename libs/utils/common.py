@@ -1,12 +1,15 @@
-import datetime
 import time
-import json
 import logging
 import re
 import hashlib
 import traceback
 from django.conf import settings
 from django.http import HttpResponse
+import datetime
+import json
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 log = logging.getLogger(__name__)
 from django.template import loader
@@ -309,3 +312,35 @@ def get_today_zero_timestamp(now_time):
     # 时间字符串再转为时间戳
     timeArray_ex = time.strptime(zeroTime, "%Y-%m-%d %H:%M:%S")
     return int(time.mktime(timeArray_ex))
+
+
+def send_email_server(to_user, title, html_content):
+    """
+    发送邮件
+    to_user: 接受人 分号; 分割
+    title: 邮件标题
+    html_content: html邮件内容
+    """
+    # 邮件内容
+    print("开始发送邮件")
+    email = MIMEMultipart()
+    # 发送人
+    email['From'] = "yp2007@126.com"
+    # 接收人
+    to_user = to_user.split(',')
+    email['To'] = to_user[0]
+    email['Subject'] = f"【云数智学堂】{title}"
+    email.attach(MIMEText(html_content, 'html', 'utf-8'))
+    try:
+        # 发短信采用默认端口25,不然会报错
+        send_server = smtplib.SMTP_SSL("smtp.163.com", port=465)
+        send_server.login("18337221229@163.com", "MKMTLCKHTAXDRKEB")
+        to_address = to_user
+        send_server.sendmail("18337221229@163.com", to_address, email.as_string())
+        print("邮件发送成功!!!")
+        send_server.quit()
+        return True
+    except smtplib.SMTPException as e:
+        print("邮件发送失败")
+        log.error(f"邮件发送失败:{e}")
+        return False

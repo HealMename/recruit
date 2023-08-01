@@ -40,6 +40,7 @@ urlpatterns = [
     path(r'call/index/', send_msg.call_index),  # 面试间
     path(r'sms/send/', send_msg.index),  # 发短信接口
     path(r'sms/verify_code/', send_msg.verify_code),  # 发短信接口
+    path(r'sms/send_email/', send_msg.send_email),  # 发邮件接口
     re_path(r'admin/lib/(?P<p1>.*)/(?P<p2>.*)$', views.admin_lib2),
     re_path(r'admin/lib/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)$', views.admin_lib3),
     re_path(r'admin/lib/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)/(?P<p4>.*)$', views.admin_lib4),
