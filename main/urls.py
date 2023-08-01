@@ -166,5 +166,6 @@ urlpatterns += [
     path(r'sys_m_module/del/', views.sys_m_module_del),  # 删除菜单
     path(r'sys_m_module/add/', views.sys_m_module_add),  # 新增菜单
     path(r'sys_m_module/role/', views.sys_m_module_role),  # 授权管理
+    path(r'home/index/', views.home_index),  # 首页数据
 ]
 

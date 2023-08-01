@@ -224,7 +224,7 @@ def register_yonghu(request):
     code_id = int(type_) + 3
     if request.method == 'POST':
         code = request.QUERY.get('code')
-        phone = request.QUERY.get('phone_number')
+        phone = request.QUERY.get('username')
         password = request.QUERY.get('password1')
         if not verify_(code, phone, code_id):
             return ajax.ajax_fail(message='验证码错误')

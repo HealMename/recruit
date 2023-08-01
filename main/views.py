@@ -179,3 +179,22 @@ def sys_m_module_role(request):
             else:
                 db.default.sys_m_role_module.create(role_id=id_, module_id=mo.parent_id, status=1)
     return ajax.ajax_ok()
+
+
+def home_index(request):
+    """获取首页数据"""
+    sql = f"""
+        select s.name, if(t1.num, t1.num, 0) as num from recruit.subjects s 
+        left join (
+            select q.sid, count(det.id) num from question q 
+            join user_test_det_content det on det.question_id =q.id 
+        group by q.sid 
+        ) t1 on t1.sid=s.id
+        where s.status =1
+    """
+    subject_list = db.default.fetchall_dict(sql)
+    data = Struct()
+    data.subject_list = subject_list
+    return ajax.ajax_ok(data)
+
+
