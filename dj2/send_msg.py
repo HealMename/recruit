@@ -64,7 +64,7 @@ def send_email(request):
         send_phone='163.email', phone=email, status=0, content=code, add_time=now, code_id=code_id)
     html = f"""
         <pre>
-        您的验证码是{code}
+        您的验证码是{code}, 2分钟内有效。
         </pre>
     """
     is_send = send_email_server(email, "验证您的电子邮箱", html)

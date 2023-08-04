@@ -1,3 +1,4 @@
+import datetime
 import json
 import time
 
@@ -102,9 +103,10 @@ def save_info(request):
             objs = []
             for obj in data:
                 obj.pop('time')
-                obj.pop('keyword_new')
+                obj.pop('keyword_new', '')
                 obj['user_id'] = user_id
                 obj['add_time'] = now
+
                 objs.append(obj)
             db.default.user_work_list.bulk_create(objs)
             db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
@@ -135,6 +137,9 @@ def save_info(request):
         elif step_id == 6:
             # 步骤 5 确定审核
             db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
+
+        username = db.default.users.get(id=user_id).username
+        db.default.users.filter(username=username, type__in=[2, 3]).update(status=0, addtime=datetime.datetime.now())
         return ajax.ajax_ok(data)
     else:
         """获取提交步骤内容"""
@@ -180,7 +185,8 @@ def save_info(request):
                         "time": [obj.start_time, obj.end_time],
                         "diploma": obj.diploma,
                         "degree": obj.degree,
-                    })
+                        "stu_card": obj.stu_card,
+                })
                 data.step_id = 2
             # 步骤 3
             data.work_list = []

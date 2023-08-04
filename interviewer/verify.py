@@ -34,7 +34,7 @@ def index(request):
             select u.id, u.type, u.addtime as add_time, u.status, u.username phone  
             from recruit.users u where status>=-1
             {where_sql} 
-            order by -u.id
+            order by -u.addtime
             limit {(page_id - 1) * page_size}, {page_size} ;
         """
     page_data = db.default.fetchall_dict(sql)
@@ -54,8 +54,7 @@ def get_page_len(where_sql):
     """获取总页数"""
     sql = f"""
     select count(u.id) num
-    from recruit.users u
-    join recruit.user_tea_det d on d.user_id=u.id
+    from recruit.users u where status>=-1
         {where_sql} 
     """
     num = db.default.fetchone_dict(sql)

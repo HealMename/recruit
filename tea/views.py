@@ -129,6 +129,7 @@ def user_info(request):
             "time": [obj.start_time, obj.end_time],
             "diploma": obj.diploma,
             "degree": obj.degree,
+            "stu_card": obj.stu_card,
         })
     # 步骤 3
     data.work_list = []
