@@ -25,10 +25,14 @@ def user_test_list(request):
     end_time = request.QUERY.get('end_time', 0)
     page_id = request.QUERY.get('page_id', 1)
     page_size = request.QUERY.get('page_size', 5)
+    user_id = request.user.id
+    open_role = request.user.open_role
     where_sql = ""
     if id_ and id_.isdigit():
         if id_.isdigit():
             where_sql += f" and det.id = {id_}"
+    if '1' not in open_role:
+        where_sql += f" and det.add_user = {user_id}"
     if phone:
         user_id = db.default.users.get(username=phone, type=4) or {'id': -1}
         where_sql += f" and det.add_user = {user_id['id']}"
