@@ -379,6 +379,7 @@ def question_detail_web(request):
     qid = request.QUERY.get('qid')
     h5 = request.QUERY.get('h5')
     data.question = get_question(qid)
+    data.question["desc"] = data.question["desc"].replace('\r\n', '<br/>').replace('\n', '<br/>').replace('\s', '&nbsp;')
     data.q_count = get_q_count([qid]).get(int(qid), 0)
     if h5:
         return render_template(request, 'front/pages/question/question_detail_h5.html', data)

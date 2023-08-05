@@ -117,7 +117,7 @@
                 </p>
                 <p><span class="ta_title">时间: </span>{{ question.do_time }}(分)</p>
                 <p><span class="ta_title">版本: </span>{{ question.version }}</p>
-                <p><span class="ta_title">描述: </span>{{ question.desc }}</p>
+                <p><span class="ta_title">描述: </span>{{ question.desc|safe }}</p>
                 <div><span class="ta_title">环境信息: </span>
                 {% for os in question.os_detail %}
                     <p>{{ forloop.counter }}、{{ os.content|safe }}</p>
