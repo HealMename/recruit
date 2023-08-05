@@ -73,9 +73,10 @@ class Xauth(MiddlewareMixin):
                 "/interviewer/add/",
                 "/interviewer/save/",
                 "/about/",
-                "/chat/wx/jsconfig/"
+                "/chat/wx/jsconfig/",
+                "/django7681v/option/chengshi/chengshi",
+                "/pages/zhaopinxinxi/list.html"
             ]
-
             allModels = apps.get_app_config('main').get_models()
             for m in allModels:
                 try:
@@ -93,8 +94,8 @@ class Xauth(MiddlewareMixin):
                 for i in filterList:
                     if i in fullPath:
                         auth = False
-                if token and len(token) > 10:
-                    auth = True
+                # if token and len(token) > 10:
+                #     auth = True
                 if auth == True:
                     result = Auth.identify(Auth, request)
                     if result.get('code') != normal_code:
