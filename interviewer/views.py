@@ -147,7 +147,6 @@ def save_info(request):
         is_cms = 0
         if request.GET.get('cms_user_id', 0):
             is_cms = 1  # 后台过来的
-
         if user_id:
             # 步骤 1
             username = db.default.users.get(id=user_id).username
@@ -255,6 +254,8 @@ def ocr_sfz(request):
             data.nation = res_url['words_result']['民族']['words']
             data.address = res_url['words_result']['住址']['words']
             data.number_id = res_url['words_result']['公民身份号码']['words']
+            if db.default.user_tea_det.filter(number_id=data.number_id):
+                return ajax.ajax_fail(message='身份证已注册！')
             data.birthday = res_url['words_result']['出生']['words']
             data.sex = res_url['words_result']['性别']['words']
         else:

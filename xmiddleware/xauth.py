@@ -95,8 +95,8 @@ class Xauth(MiddlewareMixin):
                 for i in filterList:
                     if i in fullPath:
                         auth = False
-                # if token and len(token) > 10:
-                #     auth = True
+                if token and len(token) > 10:
+                    Auth.identify(Auth, request)
                 if auth == True:
                     result = Auth.identify(Auth, request)
                     if result.get('code') != normal_code:
@@ -124,6 +124,8 @@ class Xauth(MiddlewareMixin):
                 "/sms/verify_code/",
                 "/sms/send_email/"
             ]  # 免认证list
+            if fullPath in ['/tea/login/']:
+                return
             if fullPath not in post_list and "register" not in fullPath and "login" not in fullPath \
                     and request.path not in post_list or (token and len(token) > 10):  # 注册时不检测token。
                 result = Auth.identify(Auth, request, token)

@@ -6,12 +6,15 @@
             right: -12px;
             top: -51px;
         }
-        .el-form-item__content{
+
+        .el-form-item__content {
             width: 352px;
         }
-        .el-select{
+
+        .el-select {
             width: 352px;
         }
+
         #wrapper {
             width: 888px;
             margin: 0 auto;
@@ -258,7 +261,8 @@
                                     </el-date-picker>
 
                                 </el-form-item>
-                                <el-form-item label="毕业证:" prop="diploma" v-if="item.education != '在校学生' & item.education != ''">
+                                <el-form-item label="毕业证:" prop="diploma"
+                                              v-if="item.education != '在校学生' & item.education != ''">
                                     <el-upload
                                             element-loading-text="上传中"
                                             element-loading-spinner="el-icon-loading"
@@ -281,6 +285,20 @@
                                             :on-success="(response) =>handleAvatarSuccess3(response, i, 2)"
                                             :before-upload="beforeAvatarUpload">
                                         <img v-if="item.degree" :src="item.degree" class="avatar">
+                                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                    </el-upload>
+
+                                </el-form-item>
+                                <el-form-item prop="stu_card" label="学生证:" v-if="item.education === '在校学生'">
+                                    <el-upload
+                                            element-loading-text="上传中"
+                                            element-loading-spinner="el-icon-loading"
+                                            class="avatar-uploader"
+                                            :action="upload_url"
+                                            :show-file-list="false"
+                                            :on-success="(response) =>handleAvatarSuccess3(response, i, 6)"
+                                            :before-upload="beforeAvatarUpload">
+                                        <img v-if="item.stu_card" :src="item.stu_card" class="avatar">
                                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                                     </el-upload>
 
@@ -757,6 +775,9 @@
                     diploma: [
                         {required: true, message: '请上传毕业证', trigger: 'blur'},
                     ],
+                    stu_card: [
+                      {required: true, message: '请上传学生证', trigger: 'blur'},
+                    ],
                     time: [
                         {required: true, message: '请填写上学时间', trigger: 'blur'},
                     ]
@@ -770,6 +791,7 @@
                         time: [],
                         diploma: "",
                         degree: "",
+                        stu_card: ""
                     }
                 ],
                 // 工作信息验证
@@ -965,7 +987,21 @@
                                     thsi.knowledge_list = data.knowledge_list
                                 }
                                 thsi.prove = data.prove || thsi.prove
+                                let timer = setTimeout(function () {
+                                    window.parent.document.getElementById('iframe').height = 0
+                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                    window.parent.document.getElementById('iframe').height = height
+                                    clearTimeout(timer)
+                                }, 200)
                             }
+                            let timer = setTimeout(function () {
+                                window.parent.document.getElementById('iframe').height = 0
+                                let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                window.parent.document.getElementById('iframe').height = height
+                                clearTimeout(timer)
+                            }, 200)
                         } else {
                             msg_fail(res.message)
                         }
@@ -1101,6 +1137,13 @@
                                     if (valid) {
                                         // 第一步
                                         thsi.save_step1()
+                                        let timer = setTimeout(function () {
+                                            window.parent.document.getElementById('iframe').height = 0
+                                            let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                            height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                            window.parent.document.getElementById('iframe').height = height
+                                            clearTimeout(timer)
+                                        }, 200)
                                     } else {
                                         return false;
                                     }
@@ -1119,6 +1162,13 @@
                                 if (is_val) {
                                     // 第二步
                                     this.save_step2()
+                                    let timer = setTimeout(function () {
+                                        window.parent.document.getElementById('iframe').height = 0
+                                        let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                        height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                        window.parent.document.getElementById('iframe').height = height
+                                        clearTimeout(timer)
+                                    }, 200)
                                 }
                             } else if (this.active === 2) {
                                 $.each(this.$refs[formName], function (i) {
@@ -1133,6 +1183,13 @@
                                 if (is_val) {
                                     // 第3步
                                     this.save_step3()
+                                    let timer = setTimeout(function () {
+                                        window.parent.document.getElementById('iframe').height = 0
+                                        let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                        height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                        window.parent.document.getElementById('iframe').height = height
+                                        clearTimeout(timer)
+                                    }, 200)
                                 }
                             } else if (this.active === 3) {
 
@@ -1140,6 +1197,13 @@
                                     if (valid) {
                                         // 第4步
                                         this.save_step4()
+                                        let timer = setTimeout(function () {
+                                            window.parent.document.getElementById('iframe').height = 0
+                                            let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                            height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                            window.parent.document.getElementById('iframe').height = height
+                                            clearTimeout(timer)
+                                        }, 200)
                                     } else {
                                         return false;
                                     }
@@ -1158,6 +1222,13 @@
                                 if (is_val) {
                                     // 第3步
                                     this.save_step5()
+                                    let timer = setTimeout(function () {
+                                        window.parent.document.getElementById('iframe').height = 0
+                                        let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                        height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                        window.parent.document.getElementById('iframe').height = height
+                                        clearTimeout(timer)
+                                    }, 200)
                                 }
 
                             } else if (this.active === 5) {
@@ -1173,6 +1244,13 @@
                                         thsi.loading_post = false;
                                         if (res.response === 'ok') {
                                             thsi.active++
+                                            let timer = setTimeout(function () {
+                                                window.parent.document.getElementById('iframe').height = 0
+                                                let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                                height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                                window.parent.document.getElementById('iframe').height = height
+                                                clearTimeout(timer)
+                                            }, 200)
                                         } else {
 
                                             thsi.$message.error(res.message);
@@ -1193,6 +1271,13 @@
                     } else {
                         // 上一步
                         thsi.active--
+                        let timer = setTimeout(function () {
+                            window.parent.document.getElementById('iframe').height = 0
+                            let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                            height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                            window.parent.document.getElementById('iframe').height = height
+                            clearTimeout(timer)
+                        }, 200)
                     }
                 },
                 // 公共
@@ -1235,6 +1320,14 @@
                 },
                 // 第一步保存
                 save_step1() {
+                    if (!this.imageUrl1) {
+                        this.$message.error("请上传身份证(正面)");
+                        return false
+                    }
+                    if (!this.imageUrl2) {
+                        this.$message.error("请上传身份证(反面)");
+                        return false
+                    }
                     var time = this.handle_times(this.form.ocr_info_back.time)
                     this.form.ocr_info_back.start_time = time[0]
                     this.form.ocr_info_back.end_time = time[1]
@@ -1261,7 +1354,14 @@
                             localStorage.setItem("userId", res.data.user_id);
                             localStorage.setItem("role", '用户');
                             localStorage.setItem("sessionTable", 'yonghu');
-                            localStorage.setItem("adminName", this.form.phone);
+                            localStorage.setItem("adminName", thsi.form.phone);
+                            let timer = setTimeout(function () {
+                                    window.parent.document.getElementById('iframe').height = 0
+                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                    window.parent.document.getElementById('iframe').height = height
+                                    clearTimeout(timer)
+                                }, 200)
                         } else {
                             thsi.$message.error(res.message);
                         }
@@ -1286,6 +1386,13 @@
                         thsi.loading_post = false;
                         if (res.response === 'ok') {
                             thsi.active++
+                            let timer = setTimeout(function () {
+                                    window.parent.document.getElementById('iframe').height = 0
+                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                    window.parent.document.getElementById('iframe').height = height
+                                    clearTimeout(timer)
+                                }, 200)
                         } else {
 
                             thsi.$message.error(res.message);
@@ -1300,7 +1407,7 @@
                         var time = thsi.handle_times(this.time)
                         this.start_time = time[0]
                         this.end_time = time[1]
-                        if (this.keyword_new.length){
+                        if (this.keyword_new.length) {
                             this.keyword = this.keyword_new
                         }
                     })
@@ -1313,6 +1420,13 @@
                         thsi.loading_post = false;
                         if (res.response === 'ok') {
                             thsi.active++
+                            let timer = setTimeout(function () {
+                                    window.parent.document.getElementById('iframe').height = 0
+                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                    window.parent.document.getElementById('iframe').height = height
+                                    clearTimeout(timer)
+                                }, 200)
                         } else {
 
                             thsi.$message.error(res.message);
@@ -1333,6 +1447,13 @@
                         thsi.loading_post = false;
                         if (res.response === 'ok') {
                             thsi.active++
+                            let timer = setTimeout(function () {
+                                    window.parent.document.getElementById('iframe').height = 0
+                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                    window.parent.document.getElementById('iframe').height = height
+                                    clearTimeout(timer)
+                                }, 200)
                         } else {
                             thsi.$message.error(res.message);
                         }
@@ -1349,6 +1470,13 @@
                         thsi.loading_post = false;
                         if (res.response === 'ok') {
                             thsi.active++
+                            let timer = setTimeout(function () {
+                                    window.parent.document.getElementById('iframe').height = 0
+                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                    window.parent.document.getElementById('iframe').height = height
+                                    clearTimeout(timer)
+                                }, 200)
                         } else {
 
                             thsi.$message.error(res.message);
@@ -1358,15 +1486,24 @@
                 // 第一步
                 // 识别身份证正面
                 handleAvatarSuccess(res) {
-                    this.imageUrl1 = this.web_file_url + res.data[0].file_url
+                    let url = this.web_file_url + res.data[0].file_url
                     this.loading = true;
                     var thsi = this;
-                    $.post('/interviewer/ocr_sfz/', {idCardSide: 'front', url: this.imageUrl1}, function (res) {
+                    $.post('/interviewer/ocr_sfz/', {idCardSide: 'front', url: url}, function (res) {
                         if (res.response === 'ok') {
+                            thsi.imageUrl1 = url
                             thsi.loading = false;
                             thsi.form.ocr_info_front = res.data;
                             thsi.ocr_front = copy(res.data);
+                            let timer = setTimeout(function () {
+                                    window.parent.document.getElementById('iframe').height = 0
+                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                    window.parent.document.getElementById('iframe').height = height
+                                    clearTimeout(timer)
+                                }, 200)
                         } else {
+                            thsi.imageUrl1 = ''
                             thsi.loading = false;
                             msg_fail(res.message)
                         }
@@ -1378,18 +1515,32 @@
                 handleAvatarSuccess2(res) {
                     this.loading2 = true;
                     var thsi = this;
-                    this.imageUrl2 = this.web_file_url + res.data[0].file_url
-                    $.post('/interviewer/ocr_sfz/', {idCardSide: 'back', url: this.imageUrl2}, function (res) {
-                        thsi.loading2 = false;
-                        thsi.form.ocr_info_back = res.data;
-                        thsi.form.ocr_info_back.time = [
-                            new Date(res.data.start_time.substring(0, 4),
-                                parseInt(res.data.start_time.substring(4, 6)) - 1,
-                                res.data.start_time.substring(6, 8)),
-                            new Date(res.data.end_time.substring(0, 4),
-                                parseInt(res.data.end_time.substring(4, 6)) - 1,
-                                res.data.end_time.substring(6, 8))]
-                        thsi.ocr_back = copy(res.data);
+                    let url = this.web_file_url + res.data[0].file_url
+                    $.post('/interviewer/ocr_sfz/', {idCardSide: 'back', url: url}, function (res) {
+                        if (res.response === 'ok') {
+                            thsi.imageUrl2 = url
+                            thsi.loading2 = false;
+                            thsi.form.ocr_info_back = res.data;
+                            thsi.form.ocr_info_back.time = [
+                                new Date(res.data.start_time.substring(0, 4),
+                                    parseInt(res.data.start_time.substring(4, 6)) - 1,
+                                    res.data.start_time.substring(6, 8)),
+                                new Date(res.data.end_time.substring(0, 4),
+                                    parseInt(res.data.end_time.substring(4, 6)) - 1,
+                                    res.data.end_time.substring(6, 8))]
+                            thsi.ocr_back = copy(res.data);
+                            let timer = setTimeout(function () {
+                                    window.parent.document.getElementById('iframe').height = 0
+                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                    window.parent.document.getElementById('iframe').height = height
+                                    clearTimeout(timer)
+                                }, 200)
+                        } else {
+                            thsi.imageUrl2 = ''
+                            thsi.loading2 = false;
+                            msg_fail(res.message)
+                        }
                     })
                 },
 
@@ -1398,11 +1549,12 @@
                 // 上传毕业证\学位证
                 handleAvatarSuccess3(res, i, type) {
                     if (type === 1) {
-
                         this.school_list[i].diploma = this.web_file_url + res.data[0].file_url
                         console.log(i, this.school_list)
                     } else if (type === 2) {
                         this.school_list[i].degree = this.web_file_url + res.data[0].file_url
+                    }  else if (type === 6) {
+                        this.school_list[i].stu_card = this.web_file_url + res.data[0].file_url
                     } else if (type === 3) {
                         this.prove.work = this.web_file_url + res.data[0].file_url
                     } else if (type === 4) {
@@ -1423,6 +1575,7 @@
                             time: [],
                             diploma: "",
                             degree: "",
+                            stu_card: ""
                         })
                     } else {
                         msg_fail("最多添加五个")
