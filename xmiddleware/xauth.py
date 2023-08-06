@@ -79,6 +79,7 @@ class Xauth(MiddlewareMixin):
                 "/cms/",
                 "/webssh/",
             ]
+
             allModels = apps.get_app_config('main').get_models()
             for m in allModels:
                 try:
