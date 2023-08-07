@@ -64,7 +64,7 @@ def create_login_img(request):
         now = int(time.time())
         bank_now = now - 60 * 60 * 12
         if not wechat_login:  # 12小时之前
-            wechat_login = db.default.wechat_login.filter(status=0, add_date__lte=bank_now)
+            wechat_login = db.default.wechat_login.filter(add_date__lte=bank_now)
         if not wechat_login:
             id_ = db.default.wechat_login.create(status=0, add_date=now)
             scene_str = f"1:{id_}"
@@ -85,7 +85,7 @@ def create_login_img(request):
             if db.default.wechat_login.filter(id=id_, status=1):
                 db.default.wechat_login.filter(id=id_).update(status=2)
                 phone = db.default.wechat_login.get(id=id_).phone
-                if phone:
+                if int(phone):
                     user_id = db.default.users.get(username=phone, status=1, type=4).id
                     token = auth_token.create_token('users', user_id)
                 return ajax.ajax_ok({'token': token})

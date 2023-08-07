@@ -214,17 +214,12 @@
                         <a href="javascript:" id="username" class="menumain"></a>
                         <div class="register" style="display: none">
                             <p><a href="/cms/#/index" target="_blank">我的后台管理</a></p>
-                            {#                        <p><a href="javascript:navPage('/interviewer/add/')">完善信息</a></p>#}
-                            {#                        <p><a href="javascript:im()">通信平台</a></p>#}
-
                             <p v-if="open_role.indexOf('2') === -1"><a href="javascript:"
                                                                        @click="checkout_user_type(2, '出题专家', 'users')">申请出题专家</a>
                             </p>
                             <p v-if="open_role.indexOf('3') === -1"><a href="javascript:"
                                                                        @click="checkout_user_type(3, '面试官', 'users')">申请面试专家</a>
                             </p>
-                            {#                        <p v-if="role!=='企业用户'"><a href="javascript:" @click="checkout_user_type(4, '公司', 'gongsi')">企业入驻</a>#}
-                            {#                        </p>#}
                             <p><a href="javascript:navPage('/tea/register_yonghu/?type=3');">修改密码</a></p>
                             <p><a href="javascript:localStorage.clear();location.reload()">退出登录</a></p>
                         </div>
@@ -430,10 +425,8 @@
 
         },
         created() {
-
-            this.city = localStorage.getItem("city")
             this.get_weixin_login_qr();
-
+            this.city = localStorage.getItem("city")
         },
         methods: {
             jump(url) {
@@ -456,8 +449,9 @@
                 });
             },
             login_layer() {
+
                 var thsi = this;
-                this.login_exit = window.setInterval(function () {
+                thsi.login_exit = window.setInterval(function () {
                     thsi.login_count--;
                     if (login_count <= 0) {
                         thsi.login_count = 60 * 30;
@@ -515,6 +509,7 @@
                     title: '',
                     end: function () {
                         layer.closeAll()
+                        window.clearInterval(thsi.login_exit);
                     }
                 });
             },
@@ -529,13 +524,18 @@
             },
             get_weixin_login_qr() {
                 // 获取登录二维码
-                var thsi = this;
-                $.get('/chat/wx/create_login_img/', function (res) {
-                    if (res.response === 'ok') {
-                        thsi.login_id = res.data.id;
-                        thsi.login_img = res.data.img;
-                    }
-                })
+                if (this.login_id){
+                    return
+                }else{
+                    var thsi = this;
+                    $.get('/chat/wx/create_login_img/', function (res) {
+                        if (res.response === 'ok') {
+                            thsi.login_id = res.data.id;
+                            thsi.login_img = res.data.img;
+                        }
+                    })
+                }
+
             },
             checkout_user_type(type, role, tableName) {
                 // 切换身份
