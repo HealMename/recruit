@@ -24,11 +24,14 @@ def parse_xml(xml):
         event = root.findtext(".//Event")
         event_key = root.findtext(".//EventKey")
         log.info(f"{event}--{event_key}")
+        type_, event_key = '', ''
+        if event_key:
+            event_key = event_key.split(':')
+            type_, event_key = event_key[0], event_key[1]
+            """
+            type: 1 扫码登陆 event_key=表wechat_login的id
+            """
 
-        type_, event_key = event_key.split(':')[0] if event_key else '', ''
-        """
-        type: 1 扫码登陆 event_key=表wechat_login的id
-        """
         if event == "subscribe":  # 关注事件
             content = """\
             欢迎关注“云数智学堂”[玫瑰][玫瑰]
