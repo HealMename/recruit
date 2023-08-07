@@ -25,7 +25,7 @@ def parse_xml(xml):
         event_key = root.findtext(".//EventKey")
         log.info(f"{event}--{event_key}")
 
-        type_, event_key = event_key.split(':') if event_key else '', ''
+        type_, event_key = event_key.split(':')[0] if event_key else '', ''
         """
         type: 1 扫码登陆 event_key=表wechat_login的id
         """
