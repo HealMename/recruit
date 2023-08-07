@@ -142,7 +142,7 @@ class WebChatUser(WebChatBase):
                 }
             }
         }
-        print(data)
+        log.info(data)
         res = self.request_api(path, args, body=data, method='post')
         print(res)
         res['img_url'] = f"https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={self.encode_url(res['ticket'])}"
