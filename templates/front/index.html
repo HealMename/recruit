@@ -5,9 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="referrer" content="no-referrer"/>
-    <meta name="description" content="云数智学堂 一家在线基于云计算技术提升云计算、大数据、人工智能等新一代信息技术专业技能提升的学习类门户网站，如云计算openstacke k8s，大数据hadoop，spark，flink，人工智能，chatgpt等。网站由信创云数智(天津)科技有限公司创办，该网站提供的详细功能有:各类IT组件的实操环境和题库、在线云上模拟视频面试、线上修改简历功能、IT培训、技术讨论以及chatGpt等功能，全方位帮助求职者，行业猎头以及招聘公司提高效率，提升技能，人岗匹配，提高黏性。.">
+    <meta name="description"
+          content="云数智学堂 一家在线基于云计算技术提升云计算、大数据、人工智能等新一代信息技术专业技能提升的学习类门户网站，如云计算openstacke k8s，大数据hadoop，spark，flink，人工智能，chatgpt等。网站由信创云数智(天津)科技有限公司创办，该网站提供的详细功能有:各类IT组件的实操环境和题库、在线云上模拟视频面试、线上修改简历功能、IT培训、技术讨论以及chatGpt等功能，全方位帮助求职者，行业猎头以及招聘公司提高效率，提升技能，人岗匹配，提高黏性。.">
     <meta name="keywords" content="云数智学堂，云数学堂，智学堂">
-    <meta name="baidu-site-verification" content="codeva-mKaZInDlQz" />
+    <meta name="baidu-site-verification" content="codeva-mKaZInDlQz"/>
     <title>云数智学堂</title>
     <link rel="shortcut icon" href="/media/img/favicon.ico">
     <link rel="stylesheet" href="/media/layui-v2.7.6/layui/css/layui.css">
@@ -39,11 +40,9 @@
     }
 
 
-
     html, body {
         height: 100%;
     }
-
 
 
     ::v-deep input[type='number'] {
@@ -60,8 +59,6 @@
         margin-top: 00px;
         padding-top: 5px;
     }
-
-
 
 
     #header .navs {
@@ -125,7 +122,6 @@
     }
 
 
-
     #header .navs li:hover {
         color: #fff;
         border-radius: 0;
@@ -151,8 +147,7 @@
 
     .logins p:hover, .register p:hover {
         color: #fff;
-        {#font-size: 14px;#}
-        border-radius: 0;
+    {#font-size: 14px;#} border-radius: 0;
         border-width: 0;
         border-bottom-width: 1px;
         border-style: solid;
@@ -169,199 +164,205 @@
     }
 </style>
 <body>
-<!-- start 顶部导航栏 -->
-<div id="header">
+<div id="main">
 
-    <div class="navs">
-        <div class="title" >云数智学堂</div>
-        <div class="title2" v-text="city" @click="city_list()"></div>
-        <span class="title2" style="margin-right: 20px" @click="city_list()">[切换]</span>
-        <div class="list">
-            <ul>
-                <li class='current'>
-                    <a href="javascript:navPage('./pages/zhaopinxinxi/list.html')" class="menumain">首页</a></li>
-                <li class='current'>
-                    <a href="javascript:navPage('./pages/question/class_detail.html?type=1')" class="menumain">练习平台</a>
-                </li>
-                <li class='current'>
-                    <a href="javascript:navPage('./pages/question/class_detail.html?type=2')" class="menumain">考试平台</a>
-                </li>
-                <li class='current'>
-                    <a href="javascript:" class="menumain">企业</a></li>
-{#                <li class='current'>#}
-{#                    <a href="javascript:" class="menumain">新闻资讯</a></li>#}
-                <li class='current'>
-                    <a href="https://coding.imooc.com/class/335.html?mc_marking=361ff96e77234c73c7b9049d93a959f2&mc_channel=bdocpc2&sem=2&utm_source=baidu-pc&utm_medium=sem2&utm_campaign=coding&utm_content=335&utm_term=coding&bd_vid=9170428280603174657"
-                       target="_blank" class="menumain">培训</a></li>
-                <li class='current'>
-                    <a href="javascript:navPage('./pages/interview/index.html')" class="menumain">模拟面试</a></li>
-{#                <li class='current'>#}
-{#                    <a href="javascript:" class="menumain">直播</a></li>#}
-                <li class='current right'>
-                    <a href="javascript:navPage('/about/')" class="menumain">关于我们</a> <br>
-                </li>
-                <li class='current right' v-if="!username">
-                    <a href="javascript:navPage('/tea/register_role/');layer.closeAll();" id="register"
-                       class="menumain">注册</a>
-                </li>
-                <li class='current right' v-if="!username">
-                    <a href="javascript:" id="login" class="menumain" @click="login_layer()">登录</a> <br>
-                </li>
-                <li class='current right user' style="margin-top: 13px;">
-                    <a href="/admin/#/index" id="userrole" class="menumain" target="_blank"></a> <br>
-                </li>
-                <li class='current right user' style="margin-top: 13px;">
-                    <a href="javascript:" id="username" class="menumain"></a>
-                    <div class="register" style="display: none">
-                        <p><a href="/cms/#/index" target="_blank">我的后台管理</a></p>
-                        {#                        <p><a href="javascript:navPage('/interviewer/add/')">完善信息</a></p>#}
-                        {#                        <p><a href="javascript:im()">通信平台</a></p>#}
 
-                        <p v-if="open_role.indexOf('2') === -1"><a href="javascript:"
-                                                                   @click="checkout_user_type(2, '出题专家', 'users')">申请出题专家</a>
-                        </p>
-                        <p v-if="open_role.indexOf('3') === -1"><a href="javascript:"
-                                                                   @click="checkout_user_type(3, '面试官', 'users')">申请面试专家</a>
-                        </p>
-                        {#                        <p v-if="role!=='企业用户'"><a href="javascript:" @click="checkout_user_type(4, '公司', 'gongsi')">企业入驻</a>#}
-                        {#                        </p>#}
-                        <p><a href="javascript:navPage('/tea/register_yonghu/?type=3');">修改密码</a></p>
-                        <p><a href="javascript:localStorage.clear();location.reload()">退出登录</a></p>
-                    </div>
-                </li>
+    <!-- start 顶部导航栏 -->
+    <div id="header">
 
-            </ul>
+        <div class="navs">
+            <div class="title">云数智学堂</div>
+            <div class="title2" v-text="city" @click="city_list()"></div>
+            <span class="title2" style="margin-right: 20px" @click="city_list()">[切换]</span>
+            <div class="list">
+                <ul>
+                    <li class='current'>
+                        <a href="javascript:navPage('./pages/zhaopinxinxi/list.html')" class="menumain">首页</a></li>
+                    <li class='current'>
+                        <a href="javascript:navPage('./pages/question/class_detail.html?type=1')"
+                           class="menumain">练习平台</a>
+                    </li>
+                    <li class='current'>
+                        <a href="javascript:navPage('./pages/question/class_detail.html?type=2')"
+                           class="menumain">考试平台</a>
+                    </li>
+                    <li class='current'>
+                        <a href="javascript:" class="menumain">企业</a></li>
+                    {#                <li class='current'>#}
+                    {#                    <a href="javascript:" class="menumain">新闻资讯</a></li>#}
+                    <li class='current'>
+                        <a href="https://coding.imooc.com/class/335.html?mc_marking=361ff96e77234c73c7b9049d93a959f2&mc_channel=bdocpc2&sem=2&utm_source=baidu-pc&utm_medium=sem2&utm_campaign=coding&utm_content=335&utm_term=coding&bd_vid=9170428280603174657"
+                           target="_blank" class="menumain">培训</a></li>
+                    <li class='current'>
+                        <a href="javascript:navPage('./pages/interview/index.html')" class="menumain">模拟面试</a></li>
+                    {#                <li class='current'>#}
+                    {#                    <a href="javascript:" class="menumain">直播</a></li>#}
+                    <li class='current right'>
+                        <a href="javascript:navPage('/about/')" class="menumain">关于我们</a> <br>
+                    </li>
+                    <li class='current right' v-if="!username">
+                        <a href="javascript:navPage('/tea/register_role/');layer.closeAll();" id="register"
+                           class="menumain">注册</a>
+                    </li>
+                    <li class='current right' v-if="!username">
+                        <a href="javascript:" id="login" class="menumain" @click="login_layer()">登录</a> <br>
+                    </li>
+                    <li class='current right user' style="margin-top: 13px;">
+                        <a href="/admin/#/index" id="userrole" class="menumain" target="_blank"></a> <br>
+                    </li>
+                    <li class='current right user' style="margin-top: 13px;">
+                        <a href="javascript:" id="username" class="menumain"></a>
+                        <div class="register" style="display: none">
+                            <p><a href="/cms/#/index" target="_blank">我的后台管理</a></p>
+                            {#                        <p><a href="javascript:navPage('/interviewer/add/')">完善信息</a></p>#}
+                            {#                        <p><a href="javascript:im()">通信平台</a></p>#}
+
+                            <p v-if="open_role.indexOf('2') === -1"><a href="javascript:"
+                                                                       @click="checkout_user_type(2, '出题专家', 'users')">申请出题专家</a>
+                            </p>
+                            <p v-if="open_role.indexOf('3') === -1"><a href="javascript:"
+                                                                       @click="checkout_user_type(3, '面试官', 'users')">申请面试专家</a>
+                            </p>
+                            {#                        <p v-if="role!=='企业用户'"><a href="javascript:" @click="checkout_user_type(4, '公司', 'gongsi')">企业入驻</a>#}
+                            {#                        </p>#}
+                            <p><a href="javascript:navPage('/tea/register_yonghu/?type=3');">修改密码</a></p>
+                            <p><a href="javascript:localStorage.clear();location.reload()">退出登录</a></p>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
         </div>
     </div>
-</div>
-<!-- end 顶部导航栏 -->
+    <!-- end 顶部导航栏 -->
 
-<iframe src="" id="iframe" frameborder="0" width="100%" height="100%"
-></iframe>
-<div id="tabbar" class="tabbar"
-     :style='{"borderColor":"rgba(255, 255, 255, 0.3)","backgroundColor":"#009688","borderRadius":"0","borderWidth":"0","borderStyle":"solid"}'
-     style="position: relative;">
-    <div :style='{"padding":"0 5px","boxShadow":"0 0 0px 0","borderColor":"#009688","backgroundColor":"#009688","color":"#fff","textAlign":"center","borderRadius":"0","borderWidth":"0","width":"100%","lineHeight":"22px","fontSize":"13px","borderStyle":"solid"}'
-         class="company">联系人: 杨先生 联系电话: 13161883018 电子邮箱: yp2007@126.com <br> 禁止发布、复制、传播违法信息，一旦发现将移送司法机关处理。<br>
-        ICP备案号: <a href="https://beian.miit.gov.cn/" target="_blank" style="color: white;">津ICP备2023003607号-1</a>
+    <iframe src="" id="iframe" frameborder="0" width="100%" height="100%"
+    ></iframe>
+    <div id="tabbar" class="tabbar"
+         :style='{"borderColor":"rgba(255, 255, 255, 0.3)","backgroundColor":"#009688","borderRadius":"0","borderWidth":"0","borderStyle":"solid"}'
+         style="position: relative;">
+        <div :style='{"padding":"0 5px","boxShadow":"0 0 0px 0","borderColor":"#009688","backgroundColor":"#009688","color":"#fff","textAlign":"center","borderRadius":"0","borderWidth":"0","width":"100%","lineHeight":"22px","fontSize":"13px","borderStyle":"solid"}'
+             class="company">联系人: 杨先生 联系电话: 13161883018 电子邮箱: yp2007@126.com <br> 禁止发布、复制、传播违法信息，一旦发现将移送司法机关处理。<br>
+            ICP备案号: <a href="https://beian.miit.gov.cn/" target="_blank" style="color: white;">津ICP备2023003607号-1</a>
+        </div>
     </div>
-</div>
 
-<div id="city_list" style="display: none;">
-    <table id="city_list">
+    <div id="city_list" style="display: none;">
+        <table id="city_list">
+            <div class="layui-card">
+                <div class="layui-card-header">当前城市</div>
+                <div class="layui-card-body">
+                    <button class="layui-btn layui-btn-primary now_city"></button>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">热门城市</div>
+                <div class="layui-card-body citys">
+
+                </div>
+            </div>
+        </table>
+    </div>
+
+    <div class="link_me" style="display: none;">
         <div class="layui-card">
-            <div class="layui-card-header">当前城市</div>
             <div class="layui-card-body">
-                <button class="layui-btn layui-btn-primary now_city"></button>
+                <img src="/media/img/link_me.png" alt="" style="width: 300px;">
             </div>
         </div>
-        <div class="layui-card">
-            <div class="layui-card-header">热门城市</div>
-            <div class="layui-card-body citys">
 
-            </div>
+    </div>
+
+    <div class="login_layer" style="display: none;">
+        <div id="componseLeft">
+            <img src="https://www.ittest008.com/media/img/%E4%BA%91%E6%95%B0%E6%99%BA%E5%AD%A6%E5%A0%82-logo.png" alt=""
+                 class="pass-form-logo">
+            <br>
+            <img :src="login_img" alt="" class="logo_qr">
+            <p class="left_text">请使用微信扫码登录</p>
         </div>
-    </table>
-</div>
-
-<div class="link_me" style="display: none;">
-    <div class="layui-card">
-        <div class="layui-card-body">
-            <img src="/media/img/link_me.png" alt="" style="width: 300px;">
+        <div id="componseRight">
+            <p class="login-type-tab">
+                <span class="switch-item active" onclick="checkout_login(this, 1)">账号登录</span>
+                <span class="switch-item " onclick="checkout_login(this, 2)">短信登录</span>
+            </p>
+            <form class="layui-form" action="">
+                <!-- 密码登录-->
+                <div class="password_login">
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="number" name="username" lay-verify="title" autocomplete="new-password"
+                                   placeholder="手机号"
+                                   class="layui-input phone" maxlength="11">
+                            <i class="layui-icon pass-clearbtn pass-phone" onclick="empty_input('phone')">&#x1006;</i>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="password" name="password" lay-verify="title" autocomplete="new-password"
+                                   placeholder="密码"
+                                   class="layui-input password" maxlength="12">
+                            <i class="layui-icon pass-clearbtn pass-password"
+                               onclick="empty_input('password')">&#x1006;</i>
+                            <a href="javascript:navPage('/tea/register_role/');layer.closeAll();"
+                               class="pass-register">立即注册</a>
+                            <a href="javascript:navPage('/tea/register_yonghu/?type=2');layer.closeAll();"
+                               class="pass-fgtpwd">忘记密码？</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 验证码登录-->
+                <div class="code_login" style="display: none;">
+                    <p class="code_title">验证即登录，未注册将自动创建帐号</p>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="number" name="username" lay-verify="title" autocomplete="new-password"
+                                   placeholder="手机号"
+                                   class="layui-input phone" maxlength="11">
+                            <i class="layui-icon pass-clearbtn pass-phone" onclick="empty_input('phone')">&#x1006;</i>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="number" name="code" lay-verify="title" autocomplete="new-password"
+                                   placeholder="验证码"
+                                   class="layui-input password" maxlength="6">
+                            <a href="javascript:" class="pass-item-timer" onclick="open_captcha()">发送验证码</a>
+                            <i class="layui-icon pass-clearbtn pass-code" onclick="empty_input('code')">&#x1006;</i>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <a type="button" class="layui-btn layui-btn-normal go_login" onclick="login()">登录</a>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block ">
+                        <p class="tang-pass-sms-agreement">阅读并接受 <a href="javascript:">用户协议</a> 和 <a
+                                href="javascript:">隐私政策</a></p>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-
-</div>
-
-<div class="login_layer" style="display: none;">
-    <div id="componseLeft">
-        <img src="https://www.ittest008.com/media/img/%E4%BA%91%E6%95%B0%E6%99%BA%E5%AD%A6%E5%A0%82-logo.png" alt=""
-             class="pass-form-logo">
-        <br>
-        <img src="https://fileres.m.tbkt.cn/special_qrimg/2023/03/22/jWT2.png" alt="" class="logo_qr">
-        <p class="left_text">请使用微信扫码登录</p>
-    </div>
-    <div id="componseRight">
-        <p class="login-type-tab">
-            <span class="switch-item active" onclick="checkout_login(this, 1)">账号登录</span>
-            <span class="switch-item " onclick="checkout_login(this, 2)">短信登录</span>
-        </p>
-        <form class="layui-form" action="">
-            <!-- 密码登录-->
-            <div class="password_login">
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <input type="number" name="username" lay-verify="title" autocomplete="new-password"
-                               placeholder="手机号"
-                               class="layui-input phone" maxlength="11">
-                        <i class="layui-icon pass-clearbtn pass-phone" onclick="empty_input('phone')">&#x1006;</i>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <input type="password" name="password" lay-verify="title" autocomplete="new-password"
-                               placeholder="密码"
-                               class="layui-input password" maxlength="12">
-                        <i class="layui-icon pass-clearbtn pass-password" onclick="empty_input('password')">&#x1006;</i>
-                        <a href="javascript:navPage('/tea/register_role/');layer.closeAll();"
-                           class="pass-register">立即注册</a>
-                        <a href="javascript:navPage('/tea/register_yonghu/?type=2');layer.closeAll();"
-                           class="pass-fgtpwd">忘记密码？</a>
-                    </div>
-                </div>
-            </div>
-            <!-- 验证码登录-->
-            <div class="code_login" style="display: none;">
-                <p class="code_title">验证即登录，未注册将自动创建帐号</p>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <input type="number" name="username" lay-verify="title" autocomplete="new-password"
-                               placeholder="手机号"
-                               class="layui-input phone" maxlength="11">
-                        <i class="layui-icon pass-clearbtn pass-phone" onclick="empty_input('phone')">&#x1006;</i>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <input type="number" name="code" lay-verify="title" autocomplete="new-password"
-                               placeholder="验证码"
-                               class="layui-input password" maxlength="6">
-                        <a href="javascript:" class="pass-item-timer" onclick="open_captcha()">发送验证码</a>
-                        <i class="layui-icon pass-clearbtn pass-code" onclick="empty_input('code')">&#x1006;</i>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <a type="button" class="layui-btn layui-btn-normal go_login" onclick="login()">登录</a>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block ">
-                    <p class="tang-pass-sms-agreement">阅读并接受 <a href="javascript:">用户协议</a> 和 <a
-                            href="javascript:">隐私政策</a></p>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-<div class="container">
-    <div class="container-fluid">
-        <div class="form-row">
-            <div class="col-12">
-                <div class="slidercaptcha card">
-                    <div class="card-header">
-                        <span>请完成安全验证!</span>
-                    </div>
-                    <div class="card-body">
-                        <div id="captcha"></div>
+    <div class="container">
+        <div class="container-fluid">
+            <div class="form-row">
+                <div class="col-12">
+                    <div class="slidercaptcha card">
+                        <div class="card-header">
+                            <span>请完成安全验证!</span>
+                        </div>
+                        <div class="card-body">
+                            <div id="captcha"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <script src="/media/js/jquery-1.11.3.min.js"></script>
 <script src="/media/layui-v2.7.6/layui/layui.js"></script>
 <script src="/media/js/vue.js"></script>
@@ -378,18 +379,22 @@
 <script src="//whois.pconline.com.cn/ipJson.jsp?callback=ipJson" type="text/javascript"></script>
 <script>
     var captcha_laye;
+    var login_exit;
+    var login_count = 60 * 30
     $(function () {
 
 
     })
 
-
-    var vue1 = new Vue({el: '#tabbar'})
     var login_type = 1;
     var vue = new Vue({
-        el: '#header',
+        el: '#main',
         data: {
             open_role: "",
+            login_count: 60 * 30,
+            login_exit: null,
+            login_id: "",
+            login_img: "",
             username: '',
             role: '',
             city: "",
@@ -399,25 +404,27 @@
             // this.bindClickOnLi();
             var is_wx = navigator.userAgent.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
             var h5 = 0
-            if (is_wx){h5=1}
+            if (is_wx) {
+                h5 = 1
+            }
             var split_url = window.location.href.split('?')
-            if (split_url.length > 1){
+            if (split_url.length > 1) {
                 var cs_arr = split_url[1].split('&');                    //参数字符串分割为数组
-                var get_arr={};
-                for(var i=0;i<cs_arr.length;i++){         //遍历数组，拿到json对象
-                  get_arr[cs_arr[i].split('=')[0]] = cs_arr[i].split('=')[1]
+                var get_arr = {};
+                for (var i = 0; i < cs_arr.length; i++) {         //遍历数组，拿到json对象
+                    get_arr[cs_arr[i].split('=')[0]] = cs_arr[i].split('=')[1]
                 }
                 console.log(get_arr)
 
-                if (get_arr.target === '1'){
-                    if (is_wx){
+                if (get_arr.target === '1') {
+                    if (is_wx) {
                         location.href = `/tea/web/question/detail/?qid=${get_arr.qid}&h5=1`
-                    }else{
+                    } else {
                         navPage(`/tea/web/question/detail/?qid=${get_arr.qid}`)
                     }
 
                 }
-            }else{
+            } else {
                 navPage('./pages/zhaopinxinxi/list.html')
             }
 
@@ -425,7 +432,7 @@
         created() {
 
             this.city = localStorage.getItem("city")
-
+            this.get_weixin_login_qr();
 
         },
         methods: {
@@ -449,6 +456,27 @@
                 });
             },
             login_layer() {
+                var thsi = this;
+                this.login_exit = window.setInterval(function () {
+                    thsi.login_count--;
+                    if (login_count <= 0) {
+                        thsi.login_count = 60 * 30;
+                        window.clearInterval(thsi.login_exit);
+                    } else {
+                        $.post('/chat/wx/create_login_img/', {id: thsi.login_id, type: 1}, function (res) {
+                            if (res.response === 'ok'){
+                                window.clearInterval(thsi.login_exit);
+                                if (res.data.token !== ''){
+                                    localStorage.setItem("Token", res.data.token);
+                                    location.reload()
+                                }else{
+                                    msg_fail('请绑定手机号')
+                                }
+                            }
+                        })
+                    }
+                }, 1000);
+
                 layer.open({
                     type: 1,
                     shade: 0.5,
@@ -499,7 +527,16 @@
                 });
 
             },
-
+            get_weixin_login_qr() {
+                // 获取登录二维码
+                var thsi = this;
+                $.get('/chat/wx/create_login_img/', function (res) {
+                    if (res.response === 'ok') {
+                        thsi.login_id = res.data.id;
+                        thsi.login_img = res.data.img;
+                    }
+                })
+            },
             checkout_user_type(type, role, tableName) {
                 // 切换身份
                 $.get(`/django7681v/checkout_user_type/?type=${type}`, function (res) {
@@ -673,62 +710,62 @@
         if (exit_count === 60) {
 
 
-        var phone = ''
-        var password = ''
-        if (login_type === 1) {
-            phone = $('.phone:eq(2)').val()
-        } else {
-            phone = $('.phone:last').val()
-        }
-
-        if (!phone) {
-            return msg_fail('请输入手机号')
-        }
-        captcha_layer = layer.open({
-            type: 1,
-            shade: 0,
-            skin: 'alert-skin',
-            area: ['314px', '286px'],
-            content: $(".container").html(),
-            title: '',
-            success: function (obj, index) {
-                obj.css({'box-shadow': '', 'height': '', 'width': ''})
-                obj.find('.layui-layer-setwin').css({'display': 'none'})
-                var captcha = sliderCaptcha({
-                    id: obj.find('#captcha')[0],
-                    width: 280,
-                    height: 150,
-                    sliderL: 42,
-                    sliderR: 9,
-                    offset: 5,
-                    loadingText: '正在加载中...',
-                    failedText: '再试一次',
-                    barText: '向右滑动填充拼图',
-                    localImages: function () {
-                        return 'http://127.0.0.1:8087/media/img/1682732567221.jpg';
-                    },
-                    setSrc: function () {
-                        // return 'https://www.ittest008.com/file/number_id_img/2023/07/18/20230718012314522296.png';
-                        return '/file/qr/' + Math.round(Math.random() * 10) + '.jpg';
-                    },
-                    onSuccess: function () {
-                        var handler = setTimeout(function () {
-                            window.clearTimeout(handler);
-                            captcha.reset();
-                        }, 500);
-                        console.log('验证成功')
-                        layer.close(index)
-                        send_code()
-                    },
-                    onFail: function () {
-                        console.log('验证失败')
-                    },
-                    onRefresh: function () {
-
-                    }
-                });
+            var phone = ''
+            var password = ''
+            if (login_type === 1) {
+                phone = $('.phone:eq(2)').val()
+            } else {
+                phone = $('.phone:last').val()
             }
-        });
+
+            if (!phone) {
+                return msg_fail('请输入手机号')
+            }
+            captcha_layer = layer.open({
+                type: 1,
+                shade: 0,
+                skin: 'alert-skin',
+                area: ['314px', '286px'],
+                content: $(".container").html(),
+                title: '',
+                success: function (obj, index) {
+                    obj.css({'box-shadow': '', 'height': '', 'width': ''})
+                    obj.find('.layui-layer-setwin').css({'display': 'none'})
+                    var captcha = sliderCaptcha({
+                        id: obj.find('#captcha')[0],
+                        width: 280,
+                        height: 150,
+                        sliderL: 42,
+                        sliderR: 9,
+                        offset: 5,
+                        loadingText: '正在加载中...',
+                        failedText: '再试一次',
+                        barText: '向右滑动填充拼图',
+                        localImages: function () {
+                            return 'http://127.0.0.1:8087/media/img/1682732567221.jpg';
+                        },
+                        setSrc: function () {
+                            // return 'https://www.ittest008.com/file/number_id_img/2023/07/18/20230718012314522296.png';
+                            return '/file/qr/' + Math.round(Math.random() * 10) + '.jpg';
+                        },
+                        onSuccess: function () {
+                            var handler = setTimeout(function () {
+                                window.clearTimeout(handler);
+                                captcha.reset();
+                            }, 500);
+                            console.log('验证成功')
+                            layer.close(index)
+                            send_code()
+                        },
+                        onFail: function () {
+                            console.log('验证失败')
+                        },
+                        onRefresh: function () {
+
+                        }
+                    });
+                }
+            });
         }
     }
 

@@ -2,6 +2,7 @@
 # 开发平台文档：https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html
 import datetime
 import logging
+import time
 import xml.etree.ElementTree as ET
 
 from libs.utils import db
@@ -18,6 +19,7 @@ def parse_xml(xml):
     create_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     msg_type = root.findtext(".//MsgType")
     content = ""
+    now = int(time.time())
     if msg_type == "text":
         pass
     elif msg_type == "event":
@@ -43,9 +45,10 @@ def parse_xml(xml):
                 phone = ''
                 if user:
                     phone = user.first().phone
+
                 else:
-                    db.default.wechat_user.create(open_id=open_id, status=1, app_id=2)
-                db.default.wechat_login.filter(id=event_key).update(open_id=open_id, phone=phone)
+                    db.default.wechat_user.create(open_id=open_id, status=1, app_id=2, add_date=now)
+                db.default.wechat_login.filter(id=event_key).update(open_id=open_id, status=1, phone=phone)
         elif event == "unsubscribe":  # 取关事件
             pass
         elif event == "SCAN":  # 已关注用户扫码
@@ -56,8 +59,8 @@ def parse_xml(xml):
                 if user:
                     phone = user.first().phone
                 else:
-                    db.default.wechat_user.create(open_id=open_id, status=1, app_id=2)
-                db.default.wechat_login.filter(id=event_key).update(open_id=open_id, phone=phone)
+                    db.default.wechat_user.create(open_id=open_id, status=1, app_id=2, add_date=now)
+                db.default.wechat_login.filter(id=event_key).update(open_id=open_id, status=1, phone=phone)
         elif event == "CLICK":  # 点击菜单事件
             pass
 

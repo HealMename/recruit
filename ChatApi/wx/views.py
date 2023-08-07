@@ -62,21 +62,24 @@ def create_login_img(request):
     if request.method == "GET":
         wechat_login = db.default.wechat_login.filter(status=2)
         now = int(time.time())
+        bank_now = now - 60 * 60 * 12
+        if not wechat_login:  # 12小时之前
+            wechat_login = db.default.wechat_login.filter(status=0, add_date__lte=bank_now)
         if not wechat_login:
             id_ = db.default.wechat_login.create(status=0, add_date=now)
             scene_str = f"1:{id_}"
             res = WebChatUser(2).create_qr(scene_str)
             img_url = res.get('img_url')
             db.default.wechat_login.filter(id=id_).update(img_url=img_url)
-            return ajax.ajax_ok(res.get('img_url'))
+            return ajax.ajax_ok({'id': id_, 'img': res.get('img_url')})
         else:
             id_ = wechat_login.first().id
             db.default.wechat_login.filter(id=id_).update(status=0)
-            return ajax.ajax_ok(wechat_login.first().img_url)
+            return ajax.ajax_ok({'id': id_, 'img': wechat_login.first().img_url})
     else:
         id_ = request.QUERY.get('id')
         type_ = request.QUERY.get('type')
-        if type_ == 1:
+        if type_ == '1':
             # 轮询是否扫码
             token = ''
             if db.default.wechat_login.filter(id=id_, status=1):
