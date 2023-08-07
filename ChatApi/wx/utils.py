@@ -24,7 +24,7 @@ def parse_xml(xml):
         event = root.findtext(".//Event")
         event_key = root.findtext(".//EventKey")
         log.info(f"{event}--{event_key}")
-        type_, event_key = '', ''
+        type_, event_key = '', event_key
         if event_key:
             event_key = event_key.split(':')
             type_, event_key = event_key[0], event_key[1]
