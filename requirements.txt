@@ -12,3 +12,5 @@ baidu-aip
 chardet
 djangorestframework
 xmltodict
+Pillow
+requests_toolbelt

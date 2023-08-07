@@ -223,7 +223,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        'django.request': {
+        '': {
             'handlers': ['default'],
             'level': 'DEBUG',
             'propagate': True,
