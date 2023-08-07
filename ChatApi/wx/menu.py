@@ -68,7 +68,7 @@ lzkx_data = {
                 },
                 {
                     "type": "click",
-                    "name": "获取邀请码",
+                    "name": "获取邀请函",
                     "key": "get_code"
                 }
             ]

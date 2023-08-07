@@ -72,8 +72,8 @@ def parse_xml(xml):
                 pass
             elif event == "SCAN":  # 已关注用户扫码
                 log.info(f"已关注用户扫码：{type_}--{event_key}")
+                content = "扫码成功"
                 if type_ == '1':
-                    content = "扫码成功"
                     db.default.wechat_login.filter(id=event_key).update(open_id=open_id, status=1, phone=phone)
                 elif type_ == '2':
                     if not phone:   # 新用户扫码
