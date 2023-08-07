@@ -49,7 +49,7 @@ def parse_xml(xml):
 
             log.info(f"unionid:{unionid}--{event}--{event_key}")
             type_, event_key = '', event_key
-            if event_key:
+            if ":" in event_key:
                 event_key = event_key.split(':')
                 type_, event_key = event_key[0], event_key[1]
                 """
