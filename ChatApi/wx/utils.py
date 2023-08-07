@@ -34,7 +34,7 @@ def parse_xml(xml):
             欢迎关注“云数智学堂”[玫瑰][玫瑰]
             """
             type_ = type_.replace('qrscene_', '') if 'qrscene_' in type_ else type_
-            log.info(f"未关注用户扫码：{type_, event_key}")
+            log.info(f"未关注用户扫码：{type_}--{event_key}")
             if type_ == '1':
                 user = db.default.wechat_user.filter(open_id=open_id, status=1, app_id=2)
                 phone = ''
@@ -46,7 +46,7 @@ def parse_xml(xml):
         elif event == "unsubscribe":  # 取关事件
             pass
         elif event == "SCAN":  # 已关注用户扫码
-            log.info(f"已关注用户扫码：{type_, event_key}")
+            log.info(f"已关注用户扫码：{type_}--{event_key}")
             if type_ == '1':
                 user = db.default.wechat_user.filter(open_id=open_id, status=1, app_id=2)
                 phone = ''
