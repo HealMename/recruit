@@ -85,7 +85,7 @@ def create_login_img(request):
             if db.default.wechat_login.filter(id=id_, status=1):
                 db.default.wechat_login.filter(id=id_).update(status=2)
                 phone = db.default.wechat_login.get(id=id_).phone
-                if int(phone):
+                if phone and int(phone):
                     user_id = db.default.users.get(username=phone, status=1, type=4).id
                     token = auth_token.create_token('users', user_id)
                 return ajax.ajax_ok({'token': token})

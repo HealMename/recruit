@@ -141,7 +141,6 @@ def index(request):
         rd.user_code.delete(redis_key)
         code = get_random_string(length=6, allowed_chars='0123456789')
         rd.user_code.set(redis_key, code, timeout=60 * 2)  # 设置缓存key 过期时间
-
         print(rd.user_code.get(redis_key))
     now = int(time.time())
     id_ = db.default.mobile_mt.create(

@@ -5,6 +5,7 @@ import logging
 import time
 import xml.etree.ElementTree as ET
 
+from libs.WeChat.user import WebChatUser
 from libs.utils import db
 
 log = logging.getLogger(__name__)
@@ -26,7 +27,21 @@ def parse_xml(xml):
         try:
             event = root.findtext(".//Event")
             event_key = root.findtext(".//EventKey")
-            log.info(f"{event}--{event_key}")
+            wx = WebChatUser(2)
+            res = wx.get_unionid(open_id)
+            unionid = res.get('unionid', '')
+            if unionid:
+                user = db.default.wechat_user.filter(unionid=unionid, status=1)
+            else:
+                user = db.default.wechat_user.filter(open_id=open_id, status=1, app_id=2)
+
+            phone = ''
+            if user:
+                phone = user.first().phone
+            else:
+                db.default.wechat_user.create(open_id=open_id, status=1, unionid=unionid, app_id=2, add_date=now)
+
+            log.info(f"unionid:{unionid}--{event}--{event_key}")
             type_, event_key = '', event_key
             if event_key:
                 event_key = event_key.split(':')
@@ -40,13 +55,6 @@ def parse_xml(xml):
                 type_ = type_.replace('qrscene_', '') if 'qrscene_' in type_ else type_
                 log.info(f"未关注用户扫码：{type_}--{event_key}")
                 if type_ == '1':
-                    user = db.default.wechat_user.filter(open_id=open_id, status=1, app_id=2)
-                    phone = ''
-                    if user:
-                        phone = user.first().phone
-
-                    else:
-                        db.default.wechat_user.create(open_id=open_id, status=1, app_id=2, add_date=now)
                     db.default.wechat_login.filter(id=event_key).update(open_id=open_id, status=1, phone=phone)
             elif event == "unsubscribe":  # 取关事件
                 pass
@@ -54,12 +62,6 @@ def parse_xml(xml):
                 log.info(f"已关注用户扫码：{type_}--{event_key}")
                 if type_ == '1':
                     content = "扫码成功"
-                    user = db.default.wechat_user.filter(open_id=open_id, status=1, app_id=2)
-                    phone = ''
-                    if user:
-                        phone = user.first().phone
-                    else:
-                        db.default.wechat_user.create(open_id=open_id, status=1, app_id=2, add_date=now)
                     db.default.wechat_login.filter(id=event_key).update(open_id=open_id, status=1, phone=phone)
             elif event == "CLICK":  # 点击菜单事件
                 pass
