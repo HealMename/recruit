@@ -21,11 +21,13 @@ def parse_xml(xml):
     elif msg_type == "event":
         event = root.findtext(".//Event")
         event_key = root.findtext(".//EventKey")
+        log.info(f"{event}--{event_key}")
         type_, event_key = event_key.split(':')
         if event == "subscribe":  # 关注事件
             content = """\
             欢迎关注“云数智学堂”[玫瑰][玫瑰]
             """
+            type_ = type_.replace('qrscene_', '')
             log.info(f"未关注用户扫码：{type_, event_key}")
         elif event == "unsubscribe":  # 取关事件
             pass
