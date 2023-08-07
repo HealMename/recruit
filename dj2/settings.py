@@ -206,3 +206,33 @@ BD_APP_ID = '33687130'
 BD_API_KEY = 'HgxU31nWmsqc4eCfg1HAQAe3'
 BD_SECRET_KEY = 'jkpL79OWW6UvMhFAwrkh6ptNEzT7HGTz'
 
+LOGDIR = os.path.join(BASE_DIR, "log")
+if not os.path.exists(LOGDIR):
+    os.makedirs(LOGDIR)  # 创建路径
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOGDIR, 'app_web.log'),
+            'formatter': 'custom',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+    'formatters': {
+        'custom': {
+            'format': '%(asctime)s [%(levelname)s] %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+    },
+}
