@@ -34,7 +34,6 @@ def parse_xml(xml):
                 user = db.default.wechat_user.filter(unionid=unionid, status=1)
             else:
                 user = db.default.wechat_user.filter(open_id=open_id, status=1, app_id=2)
-
             phone = ''
             if user:
                 phone = user.first().phone
