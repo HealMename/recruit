@@ -219,6 +219,8 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': os.path.join(LOGDIR, 'app_web.log'),
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
+            'backupCount': 5,
             'formatter': 'custom',
         },
     },
