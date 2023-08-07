@@ -26,7 +26,7 @@ def parse_xml(xml):
     user_content = root.findtext(".//Content")
     create_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     msg_type = root.findtext(".//MsgType")
-    content = "1"
+    content = "您好有什么可以帮到您？"
     now = int(time.time())
     if msg_type == "text":
         pass
@@ -96,6 +96,7 @@ def parse_xml(xml):
                     else:
                         content = "请先点击下方菜单，注册账号！"
         except Exception as e:
+            content = "服务器开小差，请联系管理员！"
             log.error(f"微信回调异常: {e}")
     else:
         content = "1"
