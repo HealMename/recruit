@@ -91,6 +91,24 @@ class WebChatUser(WebChatBase):
         res = self.request_api(path, args, method='post')
         return res
 
+    def create_qr(self, scene_str):
+        """公众号二维码"""
+        access_token = self.get_access_token()
+        args = f"access_token={access_token}"
+        path = f"cgi-bin/qrcode/create"
+        data = {
+            "action_name": "QR_LIMIT_STR_SCENE",
+            "action_info": {
+                "scene": {
+                    "scene_str": scene_str
+                }
+            }
+        }
+        res = self.request_api(path, args, body=data, method='post')
+        print(res)
+        res['img_url'] = f"https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={self.encode_url(res['ticket'])}"
+        return res
+
     def login_img(self):
         """获取登陆二维码"""
         access_token = self.get_access_token()
