@@ -89,7 +89,7 @@ def parse_xml(xml):
                             media_id = media.first().media_id
                         else:
                             scene_str = f"2:{user_id}"
-                            res = wx.create_share(scene_str)
+                            res = wx.create_qr(scene_str)
                             service_url = detail_qr_img(res['img_url'])
                             media_id = wx.upload_media(service_url, user_id)
                         return img_content % (open_id, from_user, create_time, "image", media_id)
