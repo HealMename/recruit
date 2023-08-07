@@ -83,7 +83,7 @@ def parse_xml(xml):
             elif event == "CLICK":  # 点击菜单事件
                 if event_key == 'get_code':  # 获取邀请码
                     if phone:
-                        user_id = db.default.users.get(username=phone, type=4)
+                        user_id = db.default.users.get(username=phone, type=4).id
                         media = db.default.wechat_user_share.filter(user_id=user_id, app_id=2)
                         if media:
                             media_id = media.first().media_id
