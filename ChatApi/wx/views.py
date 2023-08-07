@@ -73,9 +73,9 @@ def create_login_img(request):
             db.default.wechat_login.filter(id=id_).update(img_url=img_url)
             return ajax.ajax_ok({'id': id_, 'img': res.get('img_url')})
         else:
-            id_ = wechat_login.first().id
-            db.default.wechat_login.filter(id=id_).update(status=0)
-            return ajax.ajax_ok({'id': id_, 'img': wechat_login.first().img_url})
+            weixin_login = wechat_login.first()
+            db.default.wechat_login.filter(id=weixin_login.id).update(status=0)
+            return ajax.ajax_ok({'id': weixin_login.id, 'img': weixin_login.img_url})
     else:
         id_ = request.QUERY.get('id')
         type_ = request.QUERY.get('type')

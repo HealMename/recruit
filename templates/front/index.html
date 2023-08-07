@@ -162,6 +162,36 @@
     .layui-btn.layui-btn {
         margin-left: 10px !important;
     }
+
+    .code_weixin {
+        padding: 21px;
+        font-size: 18px;
+    }
+
+    .code_weixin {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    #login_weixinRight .layui-input {
+        border-radius: 10px;
+        height: 42px
+    }
+
+    #login_weixinRight .pass-clearbtn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        height: 16px;
+        width: 16px;
+        z-index: 100;
+        display: none;
+        cursor: pointer;
+    }
+
+    .code_weixin img.pass-form-logo {
+        margin: 0;
+    }
 </style>
 <body>
 <div id="main">
@@ -341,6 +371,49 @@
             </form>
         </div>
     </div>
+
+    <div class="login_weixin" style="display: none;">
+        <div id="login_weixinRight">
+            <form class="layui-form" action="">
+                <!-- 验证码绑定-->
+                <div class="code_weixin" style="padding-bottom: 0;">
+                    <img src="https://www.ittest008.com/media/img/%E4%BA%91%E6%95%B0%E6%99%BA%E5%AD%A6%E5%A0%82-logo.png"
+                         alt=""
+                         class="pass-form-logo">
+                    <p class="code_weixin" style="margin: 0;    padding: 10px 0;">绑定手机号，验证即登录，未注册将自动创建帐号</p>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="number" name="username" lay-verify="title" autocomplete="new-password"
+                                   placeholder="手机号"
+                                   class="layui-input phone" maxlength="11">
+                            <i class="layui-icon pass-clearbtn pass-phone" onclick="empty_input('phone')">&#x1006;</i>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="number" name="code" lay-verify="title" autocomplete="new-password"
+                                   placeholder="验证码"
+                                   class="layui-input password" maxlength="6">
+                            <a href="javascript:" class="pass-item-timer" onclick="open_captcha()">发送验证码</a>
+                            <i class="layui-icon pass-clearbtn pass-code" onclick="empty_input('code')">&#x1006;</i>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="text-align: center;">
+                        <a type="button" class="layui-btn layui-btn-normal go_login" onclick="login_weixin()">绑定</a>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block ">
+                        <p class="tang-pass-sms-agreement">阅读并接受 <a href="javascript:">用户协议</a> 和 <a
+                                href="javascript:">隐私政策</a></p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="container">
         <div class="container-fluid">
             <div class="form-row">
@@ -376,6 +449,8 @@
     var captcha_laye;
     var login_exit;
     var login_count = 60 * 30
+    var sms_exit;
+    var sms_count = 60;
     $(function () {
 
 
@@ -385,6 +460,7 @@
     var vue = new Vue({
         el: '#main',
         data: {
+            login_phone: false,
             open_role: "",
             login_count: 60 * 30,
             login_exit: null,
@@ -427,6 +503,7 @@
         created() {
             this.get_weixin_login_qr();
             this.city = localStorage.getItem("city")
+
         },
         methods: {
             jump(url) {
@@ -458,13 +535,53 @@
                         window.clearInterval(thsi.login_exit);
                     } else {
                         $.post('/chat/wx/create_login_img/', {id: thsi.login_id, type: 1}, function (res) {
-                            if (res.response === 'ok'){
+                            if (res.response === 'ok') {
+                                login_type = 3
                                 window.clearInterval(thsi.login_exit);
-                                if (res.data.token !== ''){
+                                if (res.data.token !== '') {
                                     localStorage.setItem("Token", res.data.token);
                                     location.reload()
-                                }else{
-                                    msg_fail('请绑定手机号')
+                                } else {
+                                    layer.open({
+                                        type: 1,
+                                        shade: 0,
+                                        area: ['800px', '345px'],
+                                        content: $(".login_weixin").html(),
+                                        success: function () {
+                                            $(".phone").bind("input propertychange", function (e) {
+                                                //获取input输入的值
+                                                if (e.delegateTarget.value) {
+                                                    $('.pass-phone').show()
+                                                } else {
+                                                    $('.pass-phone').hide()
+                                                }
+                                                var mxaL = $(this).attr("maxlength");
+                                                //如果输入的长度超过最大长度
+                                                if ($(this).val().length > mxaL) {
+                                                    $(this).val($(this).val().slice(0, mxaL));
+                                                }
+                                            });
+                                            $(".password").bind("input propertychange", function (e) {
+                                                //获取input输入的值
+                                                if (e.delegateTarget.value) {
+                                                    $('.pass-password').show()
+                                                } else {
+                                                    $('.pass-password').hide()
+                                                }
+                                                var mxaL = $(this).attr("maxlength");
+                                                //如果输入的长度超过最大长度
+                                                if ($(this).val().length > mxaL) {
+                                                    $(this).val($(this).val().slice(0, mxaL));
+                                                }
+
+                                            });
+                                        },
+                                        title: '',
+                                        end: function () {
+                                            layer.closeAll()
+                                            window.clearInterval(thsi.login_exit);
+                                        }
+                                    });
                                 }
                             }
                         })
@@ -524,9 +641,9 @@
             },
             get_weixin_login_qr() {
                 // 获取登录二维码
-                if (this.login_id){
+                if (this.login_id) {
                     return
-                }else{
+                } else {
                     var thsi = this;
                     $.get('/chat/wx/create_login_img/', function (res) {
                         if (res.response === 'ok') {
@@ -537,6 +654,7 @@
                 }
 
             },
+
             checkout_user_type(type, role, tableName) {
                 // 切换身份
                 $.get(`/django7681v/checkout_user_type/?type=${type}`, function (res) {
@@ -587,6 +705,34 @@
         }
     }
 
+    function login_weixin(){
+        var phone = $('.phone:last').val()
+        var password = $('.password:last').val()
+
+        if (!phone) {
+            return msg_fail('请输入手机号')
+        }
+        if (!password) {
+            return msg_fail('请输入验证码')
+        }
+        $.post('/chat/wx/create_login_img/', {
+            id: vue.login_id,
+            type: 2,
+            phone: phone,
+            code: password
+        }, function (res) {
+            if (res.response === 'ok') {
+                if (res.data.token !== '') {
+                    localStorage.setItem("Token", res.data.token);
+                    location.reload()
+                }
+            } else {
+                return msg_fail(res.message)
+            }
+
+        })
+    }
+
     layui.use(['layer', 'element', 'carousel', 'laypage', 'jquery', 'laydate'], function () {
 
         $.get('/user/info/?token=' + localStorage.getItem('Token'), function (res) {
@@ -633,11 +779,11 @@
         var phone = ''
         var password = ''
         if (login_type === 1) {
-            phone = $('.phone:eq(2)').val()
-            password = $('.password:eq(2)').val()
+            phone = $('.phone:eq(3)').val()
+            password = $('.password:eq(3)').val()
         } else {
-            phone = $('.phone:last').val()
-            password = $('.password:last').val()
+            phone = $('.phone:eq(4)').val()
+            password = $('.password:eq(4)').val()
         }
 
         if (!phone) {
@@ -707,15 +853,17 @@
     })
 
     function open_captcha() {
-        if (exit_count === 60) {
+        if (sms_count === 60) {
 
 
             var phone = ''
             var password = ''
             if (login_type === 1) {
-                phone = $('.phone:eq(2)').val()
-            } else {
-                phone = $('.phone:last').val()
+                phone = $('.phone:eq(3)').val()
+            } else if (login_type === 3){
+                phone = $('.phone:eq(5)').val()
+            }else {
+                phone = $('.phone:eq(4)').val()
             }
 
             if (!phone) {
@@ -769,28 +917,34 @@
         }
     }
 
-    var exit_count = 60;
-
     // 发送短信
     function send_code() {
-        var phone = $('.phone:last').val()
-        if (exit_count === 60) {
+        var phone;
+        let code_id;
+        if (login_type === 3){
+            phone = $('.phone:eq(5)').val()
+            code_id = 9
+        }else {
+            phone = $('.phone:eq(4)').val()
+            code_id = 2
+        }
+        if (sms_count === 60) {
             if (!phone) {
                 msg_fail('请输入手机号！')
                 return
             }
-            $.post('/sms/send/', {phone: phone, code_id: 2, type: "用户"}, function (res) {
+            $.post('/sms/send/', {phone: phone, code_id: code_id, type: "用户"}, function (res) {
                 msg_ok("验证码已发送，2分钟内有效。")
             })
 
-            var inter_exit = window.setInterval(function () {
-                exit_count--;
-                if (exit_count <= 0) {
-                    exit_count = 60;
-                    window.clearInterval(inter_exit);
+            sms_exit = window.setInterval(function () {
+                sms_count--;
+                if (sms_count <= 0) {
+                    sms_count = 60;
+                    window.clearInterval(sms_exit);
                     $(".pass-item-timer").text('发送验证码')
                 } else {
-                    $(".pass-item-timer").text(exit_count + 's')
+                    $(".pass-item-timer").text(sms_count + 's')
                 }
             }, 1000);
         }

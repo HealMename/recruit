@@ -136,7 +136,7 @@ def index(request):
         user_id, _ = get_user_id(phone, 4)
         if user_id:
             return ajax.ajax_fail(message='手机号已被注册!')
-    if code_id in [1, 2, 3, 4, 5, 6, 7]:
+    if code_id in [1, 2, 3, 4, 5, 6, 7, 9]:
         # 面试官注册验证码
         rd.user_code.delete(redis_key)
         code = get_random_string(length=6, allowed_chars='0123456789')
