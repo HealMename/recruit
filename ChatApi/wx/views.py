@@ -4,7 +4,7 @@ import time
 import hashlib
 from django.http import HttpResponse
 
-from ChatApi.wx.utils import parse_xml
+from ChatApi.wx.utils import parse_xml, detail_qr_img
 from dj2.settings import GHAT_ID
 from libs.WeChat import config
 from libs.WeChat.base import JsSign
@@ -19,9 +19,12 @@ def r_index(request):
     :param request:
     :return:
     """
-    # path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-    # wx = WebChatUser(GHAT_ID)
-    # wx.upload_media(path + "/site_media/img/auth.png", 1)
+    # wx = WebChatUser(2)
+    # res = wx.create_share("2:1")
+    # service_url = detail_qr_img(res['img_url'])
+    # print(service_url)
+    # media_id = wx.upload_media(service_url, 1)
+    # print(media_id)
     if request.method == "GET":
         args = request.QUERY.casts(signature=str, timestamp=str, nonce=str, echostr=str, openid=str)
         signature = args.signature

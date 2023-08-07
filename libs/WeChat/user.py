@@ -11,6 +11,7 @@ from django.http import HttpResponseRedirect
 
 from libs.WeChat.base import WebChatBase
 from libs.utils import Struct, ajax, db
+from requests_toolbelt import MultipartEncoder
 
 log = logging.getLogger(__name__)
 
@@ -70,6 +71,42 @@ class WebChatUser(WebChatBase):
         res = self.request_api(path, args, body=data, method='post')
         res['img_url'] = f"https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={self.encode_url(res['ticket'])}"
         return res
+
+    def upload_media(self, url, user_id):
+        """
+        上传资源
+        type_ 1联系我 2分享二维码
+        """
+        now = int(time.time())
+        media = db.default.wechat_user_share.filter(user_id=user_id, app_id=2)
+        if media:
+            media = media.first()
+            return media.media_id
+        access_token = self.get_access_token()
+        data = {"access_token": access_token,
+                  "type": "image"}
+        f = open(url, 'rb')
+        m = MultipartEncoder(
+            fields={
+                'type': "image",
+                "title": "filename.png",
+                "introduction": "图片",
+                'data': ('', json.dumps(data), 'application/image'),
+                'media': (
+                    "filename.png",  # 上传的文件名，这里为filename
+                    f,
+                    'application/image'
+                )})
+        post_url = f"https://{self.webChat_domain}/cgi-bin/material/add_material?access_token={access_token}&type=image"
+        res = requests.post(url=post_url, headers={'Content-Type': m.content_type}, data=m)
+        res = res.json()
+        media_id = res['media_id']
+        f.close()
+        os.remove(url)
+        # 分享二维码
+        db.default.wechat_user_share.create(app_id=2, user_id=user_id, media_id=media_id, path=f"|{user_id}|", add_date=now)
+        # 返回素材ID
+        return media_id
 
     def open_wx_app(self):
         """拉起小程序"""

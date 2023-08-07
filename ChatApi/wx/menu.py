@@ -65,8 +65,12 @@ lzkx_data = {
                     "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx494761502aee644d&redirect_uri=https%3A%2F%2Fwww.ittest008.com%2Fchat%2Fwx%2Flogin%2F&response_type=code&scope=snsapi_base&state=3&connect_redirect=1#wechat_redirect",
                     # "appid": "wx8df523611cfc0418",
                     # "pagepath": "pages/index/index"
+                },
+                {
+                    "type": "click",
+                    "name": "获取邀请码",
+                    "key": "get_code"
                 }
-
             ]
         }
     ]
