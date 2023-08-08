@@ -472,12 +472,7 @@
             chengshiOptions: [],
         },
         mounted: function () {
-            // this.bindClickOnLi();
             var is_wx = navigator.userAgent.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
-            var h5 = 0
-            if (is_wx) {
-                h5 = 1
-            }
             var split_url = window.location.href.split('?')
             if (split_url.length > 1) {
                 var cs_arr = split_url[1].split('&');                    //参数字符串分割为数组
@@ -485,8 +480,6 @@
                 for (var i = 0; i < cs_arr.length; i++) {         //遍历数组，拿到json对象
                     get_arr[cs_arr[i].split('=')[0]] = cs_arr[i].split('=')[1]
                 }
-                console.log(get_arr)
-
                 if (get_arr.target === '1') {
                     if (is_wx) {
                         location.href = `/tea/web/question/detail/?qid=${get_arr.qid}&h5=1`
@@ -501,11 +494,51 @@
 
         },
         created() {
-            this.get_weixin_login_qr();
+            this.init_token();
             this.city = localStorage.getItem("city")
 
         },
         methods: {
+            init_token() {
+                var thsi = this;
+                $.get('/user/info/?token=' + localStorage.getItem('Token'), function (res) {
+                    if (!res.data.user) {
+                        $(".user").hide()
+                        console.log("未登录")
+                        localStorage.clear()
+                        thsi.get_weixin_login_qr();
+                    } else {
+                        var res = res.data.user
+                        thsi.username = res.nickname
+                        thsi.role = res.role
+                        thsi.id = res.id
+                        thsi.phone = res.username
+                        $("#username").text(`${vue.phone.replaceAll('"', '').slice(0, 3)}****${vue.phone.replaceAll('"', '').slice(7, 11)}`)
+                        $(".user").show()
+                        $("#userrole").hide()
+                        thsi.open_role = res.open_role
+                        localStorage.setItem("open_role", res.open_role);
+                    }
+                })
+
+
+                $.get(`/django7681v/option/chengshi/chengshi?type=1`, function (res) {
+                    thsi.chengshiOptions = res.data
+                    let html = ''
+                    $.each(thsi.chengshiOptions, function (i) {
+                        html += `<button class="layui-btn layui-btn-primary city" index="${i}">${this}</button>`
+                    })
+                    $(".citys").html(html)
+                });
+                thsi.city = localStorage.getItem("city");
+                $(document).on("click", ".citys .city", function (e) {
+                    localStorage.setItem("city", e.target.innerText)
+                    thsi.city = e.target.innerText
+                    layer.closeAll()
+                    navPage(`./pages/zhaopinxinxi/list.html?city=${e.target.innerText}&swiperIndex=${$(this).attr('index')}`)
+                });
+
+            },
             jump(url) {
                 jump(url)
             },
@@ -705,7 +738,7 @@
         }
     }
 
-    function login_weixin(){
+    function login_weixin() {
         var phone = $('.phone:last').val()
         var password = $('.password:last').val()
 
@@ -734,43 +767,6 @@
     }
 
     layui.use(['layer', 'element', 'carousel', 'laypage', 'jquery', 'laydate'], function () {
-
-        $.get('/user/info/?token=' + localStorage.getItem('Token'), function (res) {
-            if (!res.data.user) {
-                $(".user").hide()
-                console.log("未登录")
-                localStorage.clear()
-            } else {
-                var res = res.data.user
-                vue.username = res.nickname
-                vue.role = res.role
-                vue.id = res.id
-                vue.phone = res.username
-                $("#username").text(`${vue.phone.replaceAll('"', '').slice(0, 3)}****${vue.phone.replaceAll('"', '').slice(7, 11)}`)
-                $(".user").show()
-                $("#userrole").hide()
-                vue.open_role = res.open_role
-                localStorage.setItem("open_role", res.open_role);
-
-            }
-        })
-
-
-        $.get(`/django7681v/option/chengshi/chengshi?type=1`, function (res) {
-            vue.chengshiOptions = res.data
-            let html = ''
-            $.each(vue.chengshiOptions, function (i) {
-                html += `<button class="layui-btn layui-btn-primary city" index="${i}">${this}</button>`
-            })
-            $(".citys").html(html)
-        });
-        vue.city = localStorage.getItem("city");
-        $(document).on("click", ".citys .city", function (e) {
-            localStorage.setItem("city", e.target.innerText)
-            vue.city = e.target.innerText
-            layer.closeAll()
-            navPage(`./pages/zhaopinxinxi/list.html?city=${e.target.innerText}&swiperIndex=${$(this).attr('index')}`)
-        });
 
 
     });
@@ -860,9 +856,9 @@
             var password = ''
             if (login_type === 1) {
                 phone = $('.phone:eq(3)').val()
-            } else if (login_type === 3){
+            } else if (login_type === 3) {
                 phone = $('.phone:eq(5)').val()
-            }else {
+            } else {
                 phone = $('.phone:eq(4)').val()
             }
 
@@ -921,10 +917,10 @@
     function send_code() {
         var phone;
         let code_id;
-        if (login_type === 3){
+        if (login_type === 3) {
             phone = $('.phone:eq(5)').val()
             code_id = 9
-        }else {
+        } else {
             phone = $('.phone:eq(4)').val()
             code_id = 2
         }

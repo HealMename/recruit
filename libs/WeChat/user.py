@@ -213,21 +213,22 @@ class WebChatUser(WebChatBase):
         else:
             return True, "推送成功"
 
-    def send_message(self, user_id, pdf_url=''):
+    def send_message(self, user_id, status):
         """发送模板消息"""
         access_token = self.get_access_token()
         path = "cgi-bin/message/template/send"
         args = f"access_token={access_token}"
-        user = db.base.auth_user.get(id=user_id)
-        phone = db.base.auth_account.get(id=user.account_id).phone
-        bind = db.default.tbkt_bind.get(username=phone, open_type__gte=18, status=1)
+        phone = db.default.users.get(id=user_id).username
+        bind = db.default.wechat_user.get(phone=phone, status=1)
         if not bind:
             return False, "当前用户未绑定"
         openid = bind.open_id
-        name = user.real_name
-        data = self.generate_push_message_data(openid, name, pdf_url)
+        name = db.default.user_tea_det.get(user_id=user_id).name
+        data = self.generate_push_message_data(openid, name, status)
         res = self.request_api(path, args, data=data, method='post')
         if res.get('errcode', 0):
+            log.error(f"推送异常：{res}")
+            print(f"推送异常：{res}")
             return False, "推送异常"
         else:
             return True, "推送成功"
@@ -259,35 +260,37 @@ class WebChatUser(WebChatBase):
         res = self.request_api(path, args, method='get')
         return res.get('subscribe', 0)
 
-    def generate_push_message_data(self, openid, name, pdf_url):
+    def generate_push_message_data(self, openid, name, status):
         """获取模板消息json"""
         now = datetime.datetime.now()
         minute = int(now.minute)
-        time_ = int(time.mktime(datetime.date.today().timetuple()))
-
         if minute < 10:
             minute = f"0{minute}"
-        if not pdf_url:
-            pdf_url = self.redirect_uri + f"template/?time_stamp={time_}&openid={openid}&username={name}"
+        if status == 1:
+            # 通过
+            template_id = "vtmT1Yo84CemZ7se_7wciN8-CxGiL_uKgoqZdRmzZXc"
+        else:
+            # 驳回
+            template_id = "u4YfqO54Jrvb4mFMJMcQ95paYGS6P7u9R5D6Tra-8EA"
         data = {
             "touser": openid,
-            "template_id": self.WECHAT_TMPLATE_ID,
-            "url": pdf_url or "https://www.baidu.com/",
+            "template_id": template_id,
+            # "miniprogram": {
+            #     "appid": "wx8df523611cfc0418",
+            #     "pagepath": "pages/center/login"
+            # },
+            "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx494761502aee644d&redirect_uri=https%3A%2F%2Fwww.ittest008.com%2Fchat%2Fwx%2Flogin%2F&response_type=code&scope=snsapi_base&state=4&connect_redirect=1#wechat_redirect",
             "data": {
-                "first": {
-                    "value": "尊敬的家长，您的孩子的个性化学习报告已经生成",
+                "phrase1": {
+                    "value": f"{name}",
                     "color": "#173177"
                 },
-                "keyword1": {
-                    "value": name,
-                    "color": "#173177",
+                "thing1": {
+                    "value": f"{name}",
+                    "color": "#173177"
                 },
-                "keyword2": {
+                "time2": {
                     "value": "{}月{}日 {}:{}".format(now.month, now.day, now.hour, str(minute)),
-                    "color": "#173177"
-                },
-                "remark": {
-                    "value": '个性化学习报告已生成，您可以点击查看详情。感谢您的使用。',
                     "color": "#173177"
                 },
             }

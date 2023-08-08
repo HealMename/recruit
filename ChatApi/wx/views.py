@@ -20,11 +20,9 @@ def r_index(request):
     :return:
     """
     # wx = WebChatUser(2)
-    # res = wx.create_share("2:1")
-    # service_url = detail_qr_img(res['img_url'])
-    # print(service_url)
-    # media_id = wx.upload_media(service_url, 1)
-    # print(media_id)
+    # res = wx.send_message(24, -1)
+    # print(res)
+
     if request.method == "GET":
         args = request.QUERY.casts(signature=str, timestamp=str, nonce=str, echostr=str, openid=str)
         signature = args.signature

@@ -1,15 +1,7 @@
-import time
 
-from django.http import JsonResponse
-from django.shortcuts import render
-
-from dj2.settings import UPLOAD_URL
-from util.codes import *
-
-from libs.utils import ajax, db, auth_token
-from libs.utils.common import Struct, render_template, num_to_ch
-from main.users_model import users
-from util.auth import Auth
+from libs.WeChat.user import WebChatUser
+from libs.utils import ajax, db
+from libs.utils.common import Struct
 
 
 def index(request):
@@ -67,6 +59,9 @@ def set_status(request):
     status = request.QUERY.get('status')
     feedback = request.QUERY.get('feedback', '')
     db.default.users.filter(id=id_).update(status=status, feedback=feedback)
+    if status in (1, -1):
+        wx = WebChatUser(2)
+        wx.send_message(id_, status)
     return ajax.ajax_ok()
 
 
