@@ -60,8 +60,10 @@ def set_status(request):
     feedback = request.QUERY.get('feedback', '')
     db.default.users.filter(id=id_).update(status=status, feedback=feedback)
     if status in (1, -1):
+        username = db.default.users.get(id=id_).username
+        user_id = db.default.users.get(username=username, type=4, status=1).id
         wx = WebChatUser(2)
-        wx.send_message(id_, status)
+        wx.send_message(user_id, status)
     return ajax.ajax_ok()
 
 
