@@ -37,10 +37,9 @@ def parse_xml(xml):
             wx = WebChatUser(2)
             res = wx.get_unionid(open_id)
             unionid = res.get('unionid', '')
-            if unionid:
+            user = db.default.wechat_user.filter(open_id=open_id, status=1, app_id=2)
+            if not user and unionid:
                 user = db.default.wechat_user.filter(unionid=unionid, status=1)
-            else:
-                user = db.default.wechat_user.filter(open_id=open_id, status=1, app_id=2)
             phone = ''
             if user:
                 phone = user.first().phone
