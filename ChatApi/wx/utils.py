@@ -43,6 +43,7 @@ def parse_xml(xml):
             phone = ''
             if user:
                 phone = user.first().phone
+                user = db.default.users.get(username=phone)
             else:
                 db.default.wechat_user.create(open_id=open_id, status=1, unionid=unionid, app_id=2, add_date=now)
 
@@ -62,6 +63,13 @@ def parse_xml(xml):
                 log.info(f"未关注用户扫码：{type_}--{event_key}")
                 if type_ == '1':
                     db.default.wechat_login.filter(id=event_key).update(open_id=open_id, status=1, phone=phone)
+                    if phone:
+                        ip = db.default.wechat_login.get(id=event_key).ip
+                        wx.send_login_message(user.id, ip)
+                        return ''
+                    else:
+                        content = "请在网页端完成手机号绑定！"
+
                 elif type_ == '2':
                     if not phone:  # 新用户扫码
                         share = db.default.wechat_user_share.get(user_id=event_key, status=1)
@@ -74,6 +82,12 @@ def parse_xml(xml):
                 content = "扫码成功"
                 if type_ == '1':
                     db.default.wechat_login.filter(id=event_key).update(open_id=open_id, status=1, phone=phone)
+                    if phone:
+                        ip = db.default.wechat_login.get(id=event_key).ip
+                        wx.send_login_message(user.id, ip)
+                        return ''
+                    else:
+                        content = "请在网页端完成手机号绑定！"
                 elif type_ == '2':
                     if not phone:   # 新用户扫码
                         share = db.default.wechat_user_share.get(user_id=event_key, status=1)

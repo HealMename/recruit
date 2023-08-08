@@ -20,7 +20,7 @@ def r_index(request):
     :return:
     """
     # wx = WebChatUser(2)
-    # res = wx.send_message(24, -1)
+    # res = wx.send_login_message(1)
     # print(res)
 
     if request.method == "GET":
@@ -61,13 +61,14 @@ def r_oauth(request):
 def create_login_img(request):
     """生成登陆二维码"""
     if request.method == "GET":
+        ip = request.QUERY.get('ip')
         wechat_login = db.default.wechat_login.filter(status=2)
         now = int(time.time())
         bank_now = now - 60 * 60 * 12
         if not wechat_login:  # 12小时之前
             wechat_login = db.default.wechat_login.filter(add_date__lte=bank_now)
         if not wechat_login:
-            id_ = db.default.wechat_login.create(status=0, add_date=now)
+            id_ = db.default.wechat_login.create(status=0, add_date=now, ip=ip)
             scene_str = f"1:{id_}"
             res = WebChatUser(2).create_qr(scene_str)
             img_url = res.get('img_url')
@@ -75,7 +76,7 @@ def create_login_img(request):
             return ajax.ajax_ok({'id': id_, 'img': res.get('img_url')})
         else:
             weixin_login = wechat_login.first()
-            db.default.wechat_login.filter(id=weixin_login.id).update(status=0)
+            db.default.wechat_login.filter(id=weixin_login.id).update(status=0, ip=ip)
             return ajax.ajax_ok({'id': weixin_login.id, 'img': weixin_login.img_url})
     else:
         id_ = request.QUERY.get('id')
@@ -106,6 +107,7 @@ def create_login_img(request):
             else:
                 db.default.wechat_user.create(
                     app_id=2, open_id=open_id, phone=phone, status=1, add_date=now)
+
             user = db.default.users.filter(username=phone, status__in=[0, 1], type=4)
             if user:
                 user = user.first()
@@ -114,6 +116,9 @@ def create_login_img(request):
                 user_id = user.id
             else:
                 user_id = db.default.users.create(username=phone, type=4, status=1, role='用户', password='')
+            ip = db.default.wechat_login.get(id=id_).ip
+            wx = WebChatUser(2)
+            wx.send_login_message(user_id, ip)
             token = auth_token.create_token('users', user_id)
             return ajax.ajax_ok({'token': token})
 

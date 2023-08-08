@@ -251,7 +251,7 @@
                                                                        @click="checkout_user_type(3, '面试官', 'users')">申请面试专家</a>
                             </p>
                             <p><a href="javascript:navPage('/tea/register_yonghu/?type=3');">修改密码</a></p>
-                            <p><a href="javascript:localStorage.clear();location.reload()">退出登录</a></p>
+                            <p><a href="javascript:localStorage.setItem('Token', '');location.reload()">退出登录</a></p>
                         </div>
                     </li>
 
@@ -438,8 +438,9 @@
 <script src="/media/js/common.js"></script>
 <script type="application/javascript">
     function ipJson(ipJson) {
-        if (!localStorage.getItem("city")) {
+        if (!localStorage.getItem("city") || !localStorage.getItem("ip")) {
             localStorage.setItem("city", ipJson.city);
+            localStorage.setItem("ip", ipJson.ip);
         }
     }
 </script>
@@ -505,7 +506,7 @@
                     if (!res.data.user) {
                         $(".user").hide()
                         console.log("未登录")
-                        localStorage.clear()
+                        localStorage.setItem('Token', '')
                         thsi.get_weixin_login_qr();
                     } else {
                         var res = res.data.user
@@ -678,7 +679,8 @@
                     return
                 } else {
                     var thsi = this;
-                    $.get('/chat/wx/create_login_img/', function (res) {
+                    let ip = localStorage.getItem('ip')
+                    $.get('/chat/wx/create_login_img/?ip=' + ip, function (res) {
                         if (res.response === 'ok') {
                             thsi.login_id = res.data.id;
                             thsi.login_img = res.data.img;

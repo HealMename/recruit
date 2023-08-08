@@ -260,6 +260,59 @@ class WebChatUser(WebChatBase):
         res = self.request_api(path, args, method='get')
         return res.get('subscribe', 0)
 
+    def send_login_message(self, user_id, ip):
+        """发送模板消息"""
+        access_token = self.get_access_token()
+        path = "cgi-bin/message/template/send"
+        args = f"access_token={access_token}"
+        phone = db.default.users.get(id=user_id).username
+        bind = db.default.wechat_user.get(phone=phone, status=1)
+        if not bind:
+            return False, "当前用户未绑定"
+        openid = bind.open_id
+        name = db.default.user_tea_det.get(user_id=user_id).name
+        data = self.login_message_data(openid, name, ip)
+        res = self.request_api(path, args, data=data, method='post')
+        if res.get('errcode', 0):
+            log.error(f"推送异常：{res}")
+            print(f"推送异常：{res}")
+            return False, "推送异常"
+        else:
+            return True, "推送成功"
+
+    def login_message_data(self, openid, name, ip):
+        """登陆成功消息"""
+        now = datetime.datetime.now()
+        minute = int(now.minute)
+        if minute < 10:
+            minute = f"0{minute}"
+
+        data = {
+            "touser": openid,
+            "template_id": "aF0h75Dv3S0wUJNnaLtoYOuiUh8f6-a4mHfzRaUJz-8",
+            # "miniprogram": {
+            #     "appid": "wx8df523611cfc0418",
+            #     "pagepath": "pages/center/login"
+            # },
+            # "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx494761502aee644d&redirect_uri=https%3A%2F%2Fwww.ittest008.com%2Fchat%2Fwx%2Flogin%2F&response_type=code&scope=snsapi_base&state=4&connect_redirect=1#wechat_redirect",
+            "data": {
+                "thing1": {
+                    "value": f"{name}",
+                    "color": "#173177"
+                },
+                "character_string2": {
+                    "value": f"{ip}",
+                    "color": "#173177"
+                },
+                "time3": {
+                    "value": "{}月{}日 {}:{}".format(now.month, now.day, now.hour, str(minute)),
+                    "color": "#173177"
+                },
+            }
+        }
+        return json.dumps(data)
+
+
     def generate_push_message_data(self, openid, name, status):
         """获取模板消息json"""
         now = datetime.datetime.now()
