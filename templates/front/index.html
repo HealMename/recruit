@@ -805,7 +805,11 @@
                     localStorage.setItem("role", '用户');
                     localStorage.setItem("sessionTable", 'yonghu');
                     localStorage.setItem("adminName", phone);
-                    window.location.href = `/`
+                    let ip = localStorage.getItem('ip')
+                    $.post('/tea/login_log/',{ token: res.token, ip: ip}, function (res) {
+                         window.location.href = `/`
+                    })
+
                 })
             } else {
                 return msg_fail(res.message)

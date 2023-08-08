@@ -4,6 +4,7 @@ import time
 
 from dj2.common import get_user_id
 from dj2.settings import UPLOAD_URL, web_file_url
+from libs.WeChat.user import WebChatUser
 from libs.utils.auth_token import get_random_string
 from libs.utils.redis_com import rd
 from main.models import yonghu, gongsi
@@ -211,6 +212,15 @@ def login(request):
         else:
             return Auth.authenticate(Auth, gongsi, args)
 
+
+def login_log(request):
+    """登陆成功记录"""
+    user_id = request.user.id
+    ip = request.QUERY.get('ip')
+    wx = WebChatUser(2)
+    print(user_id)
+    wx.send_login_message(user_id, ip)
+    return ajax.ajax_ok()
 
 def register_role(request):
     """角色选择"""

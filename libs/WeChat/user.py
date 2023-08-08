@@ -262,6 +262,7 @@ class WebChatUser(WebChatBase):
 
     def send_login_message(self, user_id, ip):
         """发送模板消息"""
+        now = int(time.time())
         access_token = self.get_access_token()
         path = "cgi-bin/message/template/send"
         args = f"access_token={access_token}"
@@ -278,6 +279,7 @@ class WebChatUser(WebChatBase):
             print(f"推送异常：{res}")
             return False, "推送异常"
         else:
+            db.default.logins.create(ip=ip, phone=phone, user_id=user_id, add_date=now)
             return True, "推送成功"
 
     def login_message_data(self, openid, name, ip):

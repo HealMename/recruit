@@ -19,9 +19,6 @@ def r_index(request):
     :param request:
     :return:
     """
-    # wx = WebChatUser(2)
-    # res = wx.send_login_message(1)
-    # print(res)
 
     if request.method == "GET":
         args = request.QUERY.casts(signature=str, timestamp=str, nonce=str, echostr=str, openid=str)
