@@ -215,11 +215,13 @@
     .is_fa {
         cursor: pointer;
     }
-    .right_btn{
+
+    .right_btn {
         float: right;
         position: relative;
         top: 10px;
         right: 10px;
+        z-index: 999;
     }
 </style>
 <body>
@@ -248,8 +250,13 @@
                                        class="sid_select">{{ item.name }}</a><span
                                         v-if="index+1 !== subjects.length">/</span>
                                 </template>
-                                <el-button class="right_btn" v-if="is_fa === 0" @click="find_is_fa(1)">我的收藏 <i class="layui-icon layui-icon-rate-solid" style="font-size: 15px; color: #1E9FFF;"></i> </el-button>
-                                <el-button class="right_btn" style="background-color: #1E9FFF; color: white;" v-if="is_fa === 1" @click="find_is_fa(0)">我的收藏 <i class="layui-icon layui-icon-rate-solid" style="font-size: 15px;"></i> </el-button>
+                                <el-button class="right_btn" v-if="is_fa === 0" @click="find_is_fa(1)">我的收藏 <i
+                                        class="layui-icon layui-icon-rate-solid"
+                                        style="font-size: 15px; color: #1E9FFF;"></i></el-button>
+                                <el-button class="right_btn" style="background-color: #1E9FFF; color: white;"
+                                           v-if="is_fa === 1" @click="find_is_fa(0)">我的收藏 <i
+                                        class="layui-icon layui-icon-rate-solid" style="font-size: 15px;"></i>
+                                </el-button>
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -259,7 +266,9 @@
                                 <a href="javascript:" class="level_select" @click="sid_select(2, 1)">初级</a>/
                                 <a href="javascript:" class="level_select" @click="sid_select(2, 2)">中级</a>/
                                 <a href="javascript:" class="level_select" @click="sid_select(2, 3)">高级</a>
-                                <el-button class="right_btn" style="top: 20px;" @click="create_question()">我要出题 <i class="layui-icon layui-icon-template-1" style="font-size: 15px; color: #1E9FFF;"></i></el-button>
+                                <el-button class="right_btn" style="top: 20px;" @click="create_question()">我要出题 <i
+                                        class="layui-icon layui-icon-template-1"
+                                        style="font-size: 15px; color: #1E9FFF;"></i></el-button>
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -269,7 +278,9 @@
                                 <a href="javascript:" class="size_select" @click="sid_select(3, 1)">单机</a>/
                                 <a href="javascript:" class="size_select" @click="sid_select(3, 2)">集群</a>/
                                 <a href="javascript:" class="size_select" @click="sid_select(3, 3)">多集群</a>
-                                <el-button class="right_btn" style="top: 30px;" @click="navPage('/tea/user_star/')">我的战报 <i class="layui-icon layui-icon-flag" style="font-size: 15px; color: #1E9FFF;"></i> </el-button>
+                                <el-button class="right_btn" style="top: 30px;" @click="go_user_star()">我的战报 <i
+                                        class="layui-icon layui-icon-flag" style="font-size: 15px; color: #1E9FFF;"></i>
+                                </el-button>
                             </div>
                         </div>
                         <div class="layui-form-item select">
@@ -299,11 +310,13 @@
                     <span class="q_id">{{ item.size_name }}</span>
                     <el-tooltip class="item is_fa" effect="light" content="点击取消收藏" placement="top"
                                 v-if="item.is_fa === 1">
-                        <i class="layui-icon layui-icon-rate-solid" style="font-size: 15px; color: #1E9FFF;" @click="post_is_fan(item.id, index, -1)"><span class="q_id">{{ item.fa_count }}</span></i>
+                        <i class="layui-icon layui-icon-rate-solid" style="font-size: 15px; color: #1E9FFF;"
+                           @click="post_is_fan(item.id, index, -1)"><span class="q_id">{{ item.fa_count }}</span></i>
                     </el-tooltip>
                     <el-tooltip class="item is_fa" effect="light" content="点击收藏" placement="top"
                                 v-if="item.is_fa === -1">
-                        <i class="layui-icon layui-icon-rate" style="font-size: 15px; color: #1E9FFF;" @click="post_is_fan(item.id, index, 1)"><span class="q_id">{{ item.fa_count }}</span></i>
+                        <i class="layui-icon layui-icon-rate" style="font-size: 15px; color: #1E9FFF;"
+                           @click="post_is_fan(item.id, index, 1)"><span class="q_id">{{ item.fa_count }}</span></i>
                     </el-tooltip>
                 </p>
                 <p class="q_count"></p>
@@ -412,42 +425,52 @@
         },
         methods: {
             // 我要出题
-            create_question(){
-                $.get('/user/info/', function (res) {
-                    if (!res.data.user) {
-                        parent_msg_fail("请登录后操作")
+            create_question() {
+                if (!this.user) {
+                    parent_msg_fail("请登录后操作")
+                } else {
+                    if (this.user.open_role.indexOf('2') !== -1) {
+                        window.open('https://www.ittest008.com/cms/#/question')
                     } else {
-                        if (res.data.user.open_role.indexOf('2') !== -1){
-                            window.open('https://www.ittest008.com/cms/#/question')
-                        }else{
-                            parent_msg_fail("请您申请成为出题专家！")
-                        }
-
+                        parent_msg_fail("请您申请成为出题专家！")
                     }
-                })
+                }
+            },
+            // 我的战报
+            go_user_star() {
+                if (!this.user) {
+                    parent_msg_fail("请登录后操作")
+                } else {
+                    this.navPage('/tea/user_star/')
+                }
             },
             // 我的收藏
-            find_is_fa(status){
-                this.is_fa = status;
-                this.page_list();
+            find_is_fa(status) {
+                if (!this.user) {
+                    parent_msg_fail("请登录后操作")
+                } else {
+                    this.is_fa = status;
+                    this.page_list();
+                }
+
             },
             // 收藏/取消收藏
-            post_is_fan(qid, index, status){
+            post_is_fan(qid, index, status) {
                 let param = {
                     qid: qid,
                     status: status
                 }
                 var thsi = this;
                 $.post('/tea/question_favorites/', param, function (res) {
-                    if (res.response === 'ok'){
+                    if (res.response === 'ok') {
                         thsi.dataList[index].is_fa = status
                         thsi.dataList[index].fa_count = thsi.dataList[index].fa_count + status
-                        if (status === 1){
+                        if (status === 1) {
                             parent_msg_ok("已收藏")
-                        }else{
+                        } else {
                             parent_msg_ok("已取消收藏")
                         }
-                    }else{
+                    } else {
                         parent_msg_fail("请登录后操作")
                     }
                 })
@@ -470,7 +493,16 @@
                 window.parent.document.getElementById('iframe').src = url;
             },
             page_list() {
+
                 let thsi = this;
+                $.get('/user/info/', function (res) {
+                    if (!res.data.user) {
+
+                    } else {
+                        thsi.user = res.data.user
+
+                    }
+                })
                 var laypage = layui.laypage;
                 var param = {
                     is_web: 1,
