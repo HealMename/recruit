@@ -76,6 +76,7 @@ class Xauth(MiddlewareMixin):
                 "/chat/wx/jsconfig/",
                 "/django7681v/option/chengshi/chengshi",
                 "/pages/zhaopinxinxi/list.html",
+                "/tea/user_star/"
             ]
 
             allModels = apps.get_app_config('main').get_models()

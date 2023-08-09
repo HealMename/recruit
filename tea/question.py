@@ -7,7 +7,7 @@ from dj2.settings import K8S_URL
 from libs.utils import ajax, db, auth_token
 from libs.utils.auth_token import get_random_string
 from libs.utils.common import Struct, trancate_date, render_template
-from tea.common import all_subjects, get_question, get_q_count
+from tea.common import all_subjects, get_question, get_q_count, get_fa_count
 
 level_name = {'1': "初级", "2": "中级", "3": "高级"}
 size_name = {'1': '单机', "2": "集群", "3": "多集群"}
@@ -94,7 +94,8 @@ def question_list(request):
     sid_name = all_subjects()
     qids = [x.id for x in page_data]
     os_dict = get_os_detail(qids)
-    q_count = get_q_count(qids) if qids else 0
+    q_count = get_q_count(qids) if qids else {}
+    fa_count = get_fa_count(qids) if qids else {}
     user_ids = [x.add_user for x in page_data] + [x.verify_user for x in page_data]
     userdata = db.default.user_tea_det.filter(user_id__in=user_ids)
     username_dict = {x.user_id: x.name for x in userdata}
@@ -113,6 +114,7 @@ def question_list(request):
         q['size_name'] = size_name[str(q['size'])]
         q['os_detail'] = '、'.join(os_dict.get(q.id, []))
         q['q_count'] = q_count.get(q.id, 0)
+        q['fa_count'] = fa_count.get(q.id, 0)
         if q['q_count'] >= 10000:
             q['q_count'] = f"{round(q['q_count'] / 10000, 2)}w"
         if user_id and str(q['id']) in fa_qids:
@@ -395,6 +397,7 @@ def question_detail_web(request):
     data.question = get_question(qid)
     data.question["desc"] = data.question["desc"].replace('\r\n', '<br/>').replace('\n', '<br/>').replace('\s', '&nbsp;')
     data.q_count = get_q_count([qid]).get(int(qid), 0)
+    data.fa_count = get_fa_count([qid]).get(int(qid), 0)
     if h5:
         return render_template(request, 'front/pages/question/question_detail_h5.html', data)
     else:
@@ -414,5 +417,23 @@ def question_favorites(request):
     return ajax.ajax_ok()
 
 
+def user_star(request):
+    """我的战报"""
+    user_id = request.user.id
+    data = Struct()
+    star = {f"{s.sid}:{s.level}": s.img for s in db.default.user_subject_star.filter(user_id=user_id, status=1)}
+    subjects = all_subjects()
+    star_data = []
+    for sid, sname in subjects.items():
+        # 默认图片
+        imgs = ['/media/img/level1.png', '/media/img/level2.png', '/media/img/level3.png', '/media/img/level4.png']
+        for eq, img in enumerate(imgs, 1):
+            key = f"{sid}:{eq}"
+            imgs[eq-1] = star.get(key, imgs[eq-1])
+        star_data.append({
+            'name': sname,
+            'imgs': imgs
+        })
+    data.subjects = star_data
 
-
+    return render_template(request, 'user/user_star.html', data)

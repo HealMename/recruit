@@ -47,6 +47,18 @@ def get_q_count(qids):
         group by question_id;
     """
     data = db.default.fetchall_dict(sql)
-    return {x.question_id: x.num for x in data}
+    q_count = {x.question_id: x.num for x in data}
+    return q_count
 
+
+def get_fa_count(qids):
+    """获取收藏人数"""
+    # 收藏人数
+    sql = f"""
+            select question_id, count(user_id) num from user_question_favorites 
+            where status=1 and question_id in ({','.join(map(str, qids))}) group by question_id;
+        """
+    data = db.default.fetchall_dict(sql)
+    fa_count = {x.question_id: x.num for x in data}
+    return fa_count
 
