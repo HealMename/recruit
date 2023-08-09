@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="/media/layui-v2.7.6/layui/css/layui.css">
     <link rel="stylesheet" href="/media/css/common.css?v=1"/>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.15.13/lib/theme-chalk/index.css"/>
     <link rel="stylesheet" href="/media/css/style.css"/>
     <script type="text/javascript" src="/media/js/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="/media/js/jquery.SuperSlide.2.1.1.js"></script>
@@ -210,6 +211,16 @@
         font-size: 7px;
         color: #909399;
     }
+
+    .is_fa {
+        cursor: pointer;
+    }
+    .right_btn{
+        float: right;
+        position: relative;
+        top: 10px;
+        right: 10px;
+    }
 </style>
 <body>
 <div id="app">
@@ -237,6 +248,8 @@
                                        class="sid_select">{{ item.name }}</a><span
                                         v-if="index+1 !== subjects.length">/</span>
                                 </template>
+                                <el-button class="right_btn" v-if="is_fa === 0" @click="find_is_fa(1)">我的收藏 <i class="layui-icon layui-icon-rate-solid" style="font-size: 15px; color: #1E9FFF;"></i> </el-button>
+                                <el-button class="right_btn" style="background-color: #1E9FFF; color: white;" v-if="is_fa === 1" @click="find_is_fa(0)">我的收藏 <i class="layui-icon layui-icon-rate-solid" style="font-size: 15px;"></i> </el-button>
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -246,6 +259,7 @@
                                 <a href="javascript:" class="level_select" @click="sid_select(2, 1)">初级</a>/
                                 <a href="javascript:" class="level_select" @click="sid_select(2, 2)">中级</a>/
                                 <a href="javascript:" class="level_select" @click="sid_select(2, 3)">高级</a>
+                                <el-button class="right_btn" style="top: 20px;">我要出题 <i class="layui-icon layui-icon-template-1" style="font-size: 15px; color: #1E9FFF;"></i></el-button>
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -255,6 +269,7 @@
                                 <a href="javascript:" class="size_select" @click="sid_select(3, 1)">单机</a>/
                                 <a href="javascript:" class="size_select" @click="sid_select(3, 2)">集群</a>/
                                 <a href="javascript:" class="size_select" @click="sid_select(3, 3)">多集群</a>
+                                <el-button class="right_btn" style="top: 30px;">我的战报 <i class="layui-icon layui-icon-flag" style="font-size: 15px; color: #1E9FFF;"></i> </el-button>
                             </div>
                         </div>
                         <div class="layui-form-item select">
@@ -266,22 +281,34 @@
                                     style="display: inline-block;" @click="page_list()">搜索
                             </button>
                         </div>
+
                     </div>
+
                 </div>
             </div>
 
         </form>
-        <!-- 样式一 -->
-        <div class="list">
-            <div class="station" v-for="(item,index) in dataList"
+        <!-- 题目 -->
+        <div class="list" v-loading="loading">
+            <div class="station layui-anim layui-anim-upbit " v-for="(item,index) in dataList"
                  :key="index">
                 <p class="st_name">
-                <p class="sname">{{ item.title }}</p>
+                <p class="sname">{{ item.title }}
+                    <el-tooltip class="item is_fa" effect="light" content="点击取消收藏" placement="top"
+                                v-if="item.is_fa === 1">
+                        <i class="layui-icon layui-icon-rate-solid" style="font-size: 15px; color: #1E9FFF;" @click="post_is_fan(item.id, index, -1)"></i>
+                    </el-tooltip>
+                    <el-tooltip class="item is_fa" effect="light" content="点击收藏" placement="top"
+                                v-if="item.is_fa === -1">
+                        <i class="layui-icon layui-icon-rate" style="font-size: 15px; color: #1E9FFF;" @click="post_is_fan(item.id, index, 1)"></i>
+                    </el-tooltip>
+                </p>
                 <span class="is_free" v-if="item.is_free == 1">试</span>
                 </p>
                 <p class="st_name">
                     {{ item.sid_name }} （{{ item.level_name }}）
                     <span class="q_id">{{ item.size_name }}</span>
+
                 </p>
                 <p class="q_count"></p>
                 <p class="gs_name">{{ item.desc }}</p>
@@ -295,7 +322,7 @@
                             style="float: right">进入实操环境
                     </button>
                     <a class="layui-btn layui-btn-sm"
-                            style="float: right" :href="`/?target=1&qid=${item.id}`" target="_blank">查看详情
+                       style="float: right" :href="`/?target=1&qid=${item.id}`" target="_blank">查看详情
                     </a>
                     <button class="layui-btn layui-btn-sm" @click="copyUrl(`?target=1&qid=${item.id}`, item.sid_name)"
                             style="float: right">分享题目
@@ -303,7 +330,11 @@
                 </p>
             </div>
             <div class="layui-panel" v-if="!dataList.length">
-                <div style="padding: 50px 30px;text-align: center;font-size: 18px;">暂无资源</div>
+                <div style="padding: 50px 30px;text-align: center;font-size: 18px;">
+
+                    <span v-if="is_fa === 1">暂无收藏</span>
+                    <span v-if="is_fa === 0">暂无资源</span>
+                </div>
             </div>
         </div>
     </div>
@@ -335,7 +366,7 @@
             </div>
         </form>
     </div>
-    <div class="pager" id="pager" ></div>
+    <div class="pager" id="pager"></div>
 </div>
 
 <script src="/media/js/jquery-1.11.3.min.js"></script>
@@ -345,7 +376,7 @@
 <script src="/media/js/common.js?v=1"></script>
 <script src="/media/modules/config.js"></script>
 <script src="/media/js/utils.js"></script>
-
+<script src="/media/js/element-ui@2.15.13.js"></script>
 <script type="text/javascript">
 
     var vue = new Vue({
@@ -360,6 +391,7 @@
             sid: 0,
             level: 0,
             size: 0,
+            is_fa: 0,
             subjects: [],
             swiperIndex: '-1'
         },
@@ -383,16 +415,42 @@
             this.page_list();
         },
         methods: {
+            // 我的收藏
+            find_is_fa(status){
+                this.is_fa = status;
+                this.page_list();
+            },
+            // 收藏/取消收藏
+            post_is_fan(qid, index, status){
+                let param = {
+                    qid: qid,
+                    status: status
+                }
+                var thsi = this;
+                $.post('/tea/question_favorites/', param, function (res) {
+                    if (res.response === 'ok'){
+                        thsi.dataList[index].is_fa = status
+                        console.log(thsi.dataList[index])
+                        if (status === 1){
+                            parent_msg_ok("已收藏")
+                        }else{
+                            parent_msg_ok("已取消收藏")
+                        }
+                    }else{
+                        parent_msg_fail("请登录后操作")
+                    }
+                })
+            },
             // 复制
             copyUrl(url, sname) {
-                 var input = document.createElement("input"); // 创建input对象
-                 let ms = `我正在云数智学堂实操练习${sname}题目，点击 https://${location.host + '/' + url} 查看题目！关注“云数智学”微信公众号获取更多经常内容。邀请用户注册获现金奖励。`
-                 input.value = ms; // 设置复制内容
-                 document.body.appendChild(input); // 添加临时实例
-                 input.select(); // 选择实例内容
-                 document.execCommand("Copy"); // 执行复制
-                 document.body.removeChild(input); // 删除临时实例
-                 parent_msg_ok("链接已复制到剪贴板，快去分享吧！")
+                var input = document.createElement("input"); // 创建input对象
+                let ms = `我正在云数智学堂实操练习${sname}题目，点击 https://${location.host + '/' + url} 查看题目！关注“云数智学”微信公众号获取更多经常内容。邀请用户注册获现金奖励。`
+                input.value = ms; // 设置复制内容
+                document.body.appendChild(input); // 添加临时实例
+                input.select(); // 选择实例内容
+                document.execCommand("Copy"); // 执行复制
+                document.body.removeChild(input); // 删除临时实例
+                parent_msg_ok("链接已复制到剪贴板，快去分享吧！")
 
             },
             navPage(url) {
@@ -410,10 +468,13 @@
                     sid: thsi.sid,
                     level: thsi.level,
                     size: thsi.size,
-                    status: 1
+                    status: 1,
+                    is_fa: thsi.is_fa,
                 }
+                thsi.loading = true;
                 $.get('/tea/question_list/', param, function (res) {
                     thsi.dataList = res.data.page_data
+                    thsi.loading = false;
                     var timer = setTimeout(function () {
                         window.parent.document.getElementById('iframe').height = 0
                         let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 10
@@ -434,9 +495,9 @@
                             param.page_id = obj.curr;
                             //首次不执行
                             if (!first) {
-
+                                thsi.loading = true;
                                 $.get('/tea/question_list/', param, function (res) {
-                                    // thsi.loading = false;
+                                    thsi.loading = false;
                                     thsi.dataList = res.data.page_data
                                     var timer = setTimeout(function () {
                                         window.parent.document.getElementById('iframe').height = 0

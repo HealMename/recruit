@@ -27,7 +27,7 @@ with open(config_file) as f:
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '10086'
-SESSION_COOKIE_AGE = 60 * 60 * 24  # token有效期
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 3  # token有效期
 
 # 本地
 # UPLOAD_URL = "http://127.0.0.1:8087/uploads/"
@@ -41,11 +41,7 @@ web_file_url = "https://www.ittest008.com/file/"  # 文件域名
 K8S_URL = "https://www.ittest008.com/k8workload/terminal_index/"  # 终端项目
 SMS_API = "http://www.ittest008.com:3000/sms/send/"  # 短信接口
 FILE_UPLOAD_URLROOT = "https://www.ittest008.com/uploads/"
-# 华为云
-# UPLOAD_URL = "http://liudeli.top:8087/uploads/"  # 上传地址
-# web_file_url = "http://liudeli.top:8087/file/"  # 文件域名
-# K8S_URL = "http://liudeli.top:8088/workload/terminal_index/"  # 终端项目
-# SMS_API = "http://liudeli.top:3000/sms/send/"  # 短信接口
+
 API_URLROOT = {
     "k8s": "https://www.ittest008.com:8088"
 }

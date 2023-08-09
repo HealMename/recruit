@@ -218,9 +218,9 @@ def login_log(request):
     user_id = request.user.id
     ip = request.QUERY.get('ip')
     wx = WebChatUser(2)
-    print(user_id)
     wx.send_login_message(user_id, ip)
     return ajax.ajax_ok()
+
 
 def register_role(request):
     """角色选择"""

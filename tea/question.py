@@ -47,6 +47,7 @@ def question_list(request):
     """
     id_ = request.QUERY.get('id')
     is_cms = request.QUERY.get('is_cms')
+    is_fa = int(request.QUERY.get('is_fa', 0))  # 1我的收藏
     sid = int(request.QUERY.get('sid', 0) or 0)
     is_web = int(request.QUERY.get('is_web', 0) or 0)
     status = request.QUERY.get('status')
@@ -54,6 +55,10 @@ def question_list(request):
     size = int(request.QUERY.get('size', 0) or 0)
     page_id = int(request.QUERY.get('page_id', 1))
     page_size = int(request.QUERY.get('page_size', 5))
+    user_id = request.user.id
+    fa_qids = []
+    if user_id:
+        fa_qids = [str(x.question_id) for x in db.default.user_question_favorites.filter(user_id=user_id, status=1)]
     where_sql = ""
     if id_:
         if id_.isdigit():
@@ -68,11 +73,16 @@ def question_list(request):
         where_sql += f" and size= {size}"
     if status:
         where_sql += f" and status = {status}"
+    if is_fa:
+        if fa_qids:
+            where_sql += f" and id in ({','.join(fa_qids)})"
+        else:
+            where_sql += f" and id=0"
     order_sql = "order by -id"
     if is_web:
         order_sql = f"order by -is_free,-id"
     if is_cms and '1' not in request.user.open_role:
-        where_sql += f' and add_user={request.user.id}'
+        where_sql += f' and add_user={user_id}'
     sql = f"""
         select * from question 
         where status in (0, 1)
@@ -105,6 +115,10 @@ def question_list(request):
         q['q_count'] = q_count.get(q.id, 0)
         if q['q_count'] >= 10000:
             q['q_count'] = f"{round(q['q_count'] / 10000, 2)}w"
+        if user_id and str(q['id']) in fa_qids:
+            q['is_fa'] = 1  # 是否收藏
+        else:
+            q['is_fa'] = -1
     data = Struct()
     data.page_data = page_data
     data.sum_len = get_page_len('question', where_sql)
@@ -385,4 +399,20 @@ def question_detail_web(request):
         return render_template(request, 'front/pages/question/question_detail_h5.html', data)
     else:
         return render_template(request, 'front/pages/question/question_detail.html', data)
+
+
+def question_favorites(request):
+    """收藏题目"""
+    qid = request.QUERY.get('qid')
+    status = request.QUERY.get('status')  # 1收藏 -1取消收藏
+    now = int(time.time())
+    user_id = request.user.id
+    if db.default.user_question_favorites.filter(question_id=qid, user_id=user_id):
+        db.default.user_question_favorites.filter(question_id=qid, user_id=user_id).update(status=status, update_date=now)
+    else:
+        db.default.user_question_favorites.create(question_id=qid, user_id=user_id, status=status, add_date=now)
+    return ajax.ajax_ok()
+
+
+
 
