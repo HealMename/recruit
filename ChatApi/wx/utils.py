@@ -41,8 +41,10 @@ def parse_xml(xml):
             if not user and unionid:
                 user = db.default.wechat_user.filter(unionid=unionid, status=1)
             phone = ''
+            qr_img = ''
             if user:
                 phone = user.first().phone
+                qr_img = user.img
                 user = db.default.users.get(username=phone)
             else:
                 db.default.wechat_user.create(open_id=open_id, status=1, unionid=unionid, app_id=2, add_date=now)
@@ -101,9 +103,13 @@ def parse_xml(xml):
                         if media:
                             media_id = media.first().media_id
                         else:
-                            scene_str = f"2:{user_id}"
-                            res = wx.create_qr(scene_str)
-                            service_url = detail_qr_img(res['img_url'])
+                            if not qr_img:
+                                scene_str = f"2:{user_id}"
+                                res = wx.create_qr(scene_str)
+                                service_url = detail_qr_img(res['img_url'])
+                                db.default.wechat_user.filter(unionid=unionid).update(img=res['img_url'])
+                            else:
+                                service_url = detail_qr_img(qr_img)
                             media_id = wx.upload_media(service_url, user_id)
                         return img_content % (open_id, from_user, create_time, "image", media_id)
                     else:

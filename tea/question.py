@@ -4,10 +4,11 @@ import random
 from collections import defaultdict
 
 from dj2.settings import K8S_URL
+from libs.WeChat.user import WebChatUser
 from libs.utils import ajax, db, auth_token
 from libs.utils.auth_token import get_random_string
 from libs.utils.common import Struct, trancate_date, render_template
-from tea.common import all_subjects, get_question, get_q_count, get_fa_count
+from tea.common import all_subjects, get_question, get_q_count, get_fa_count, detail_img_subject
 
 level_name = {'1': "初级", "2": "中级", "3": "高级"}
 size_name = {'1': '单机', "2": "集群", "3": "多集群"}
@@ -421,19 +422,72 @@ def user_star(request):
     """我的战报"""
     user_id = request.user.id
     data = Struct()
-    star = {f"{s.sid}:{s.level}": s.img for s in db.default.user_subject_star.filter(user_id=user_id, status=1)}
-    subjects = all_subjects()
-    star_data = []
-    for sid, sname in subjects.items():
-        # 默认图片
-        imgs = ['/media/img/level1.png', '/media/img/level2.png', '/media/img/level3.png', '/media/img/level4.png']
-        for eq, img in enumerate(imgs, 1):
-            key = f"{sid}:{eq}"
-            imgs[eq-1] = star.get(key, imgs[eq-1])
-        star_data.append({
-            'name': sname,
-            'imgs': imgs
-        })
-    data.subjects = star_data
+    now = int(time.time())
+    if request.method == "POST":
+        name = request.user.detail.name
+        sid = request.QUERY.get('sid')
+        subject = request.QUERY.get('subject')
+        level = int(request.QUERY.get('level'))
+        level_name = {1: '初级专家', 2: "中级专家", 3: "高级专家", 4: "资深专家"}[level]
 
-    return render_template(request, 'user/user_star.html', data)
+        # 生成带参数二维码
+        qr_img = create_qr_img(request.user.username, user_id)
+        star = db.default.user_subject_star.get(sid=sid, user_id=user_id, status__ne=-1, level=level)
+        star_status = get_subject_level_status(sid, user_id, level)
+        if not star:  # 生成战报
+            img = detail_img_subject(name, subject, level_name, qr_img, star_status)
+            db.default.user_subject_star.create(
+                sid=sid, user_id=user_id, status=star_status, level=level, img=img, update_date=now)
+        else:
+            img = star.img
+            if star_status != star.status:
+                img = detail_img_subject(name, subject, level_name, qr_img, star_status)
+                db.default.user_subject_star.filter(sid=sid, user_id=user_id, status__ne=-1, level=level).update(
+                    img=img, status=star_status, update_date=now)
+        return ajax.ajax_ok(img)
+    else:
+        subjects = all_subjects()
+        star_data = []
+        for sid, sname in subjects.items():
+            # 默认
+            star_data.append({
+                'name': sname,
+                'id': sid,
+                'imgs': [
+                    {'status': 0, 'url': ''},
+                    {'status': 0, 'url': ''},
+                    {'status': 0, 'url': ''},
+                    {'status': 0, 'url': ''}
+                ]
+            })
+        data.subjects = star_data
+        return render_template(request, 'user/user_star.html', data)
+
+
+def create_qr_img(username, user_id):
+    wechat = db.default.wechat_user.get(phone=username, status=1)
+    if wechat and wechat.img:
+        qr_img = wechat.img
+    else:
+        wx = WebChatUser(2)
+        scene_str = f"2:{user_id}"
+        res = wx.create_qr(scene_str)
+        qr_img = res['img_url']
+        db.default.wechat_user.filter(phone=username).update(img=qr_img)
+    return qr_img
+
+
+def get_subject_level_status(sid, user_id, level):
+    """获取学科做题数量"""
+    sql = f"""
+        select count(det.id) num from question q 
+            join user_test_det_content det on det.question_id =q.id 
+            join user_test_det d on d.id =det.det_id 
+            and q.sid={sid} and d.add_user={user_id}
+    """
+    subject_list = db.default.fetchone_dict(sql)
+    if subject_list:
+        return 1 if 20 * level <= subject_list.num else 0
+    else:
+        return 0
+

@@ -79,13 +79,13 @@
 
             <div id="main2">
                 <template v-for="(item,index) in imgs">
-                    <div class="sub2">
-                        <img :src="item" alt="" style="width: 100%;" v-if="item">
+                    <div class="sub2" v-loading="!item.status" element-loading-text="战报生成中" element-loading-background="rgba(0, 0, 0, 0.6)">
+                        <img @load="item.status=1" :src="item.url" alt="" style="width: 100%;" v-if="item.url">
+                        <img src="/media/img/not_img.png" alt="" style="width: 100%;" v-if="!item.url" >
                     </div>
                 </template>
                 <el-button @click="tag=1" style="float: right;margin-right: 47px;">返回</el-button>
             </div>
-
         </template>
 
     </div>
@@ -117,6 +117,19 @@
                 subject_star(row) {
                     this.imgs = row.imgs
                     this.tag = 2
+                    var thsi = this;
+                    this.imgs.forEach(function (item, index) {
+
+                        let data = {
+                            sid: row.id,
+                            level: index + 1,
+                            subject: row.name,
+                        }
+                        $.post('/tea/user_star/', data, function (res) {
+                            thsi.imgs[index].url = res.data
+                            thsi.$forceUpdate();
+                        })
+                    })
                 },
                 navPage(url) {
                     localStorage.setItem('iframeUrl', url);

@@ -1,3 +1,13 @@
+import datetime
+import hashlib
+import os
+import uuid
+from io import BytesIO
+
+import requests
+from PIL import ImageFont, ImageDraw, Image
+
+from dj2.settings import UPLOAD_URL, web_file_url
 from libs.utils import db
 
 
@@ -61,4 +71,56 @@ def get_fa_count(qids):
     data = db.default.fetchall_dict(sql)
     fa_count = {x.question_id: x.num for x in data}
     return fa_count
+
+
+def detail_img_subject(name, subject, level, img_url, star_status):
+    """
+    生成战报
+    """
+    code_info_id = str(uuid.uuid4())
+    path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    data = requests.get(img_url)
+    qr_code_image = Image.open(BytesIO(data.content))
+    qr_code_image.convert("RGBA")
+    qr_bk_image = Image.open(path + f"/recruit/media/img/subject_{star_status}.png")
+    box = (445, 1726, 802, 2072)
+    region = qr_code_image.resize((box[2] - box[0], box[3] - box[1]))
+    qr_bk_image.paste(region, box)
+    draw_table = ImageDraw.Draw(im=qr_bk_image)
+    # 姓名
+    position = (574, 1000)
+    draw_table.text(position, name, (255, 231, 195), font=ImageFont.truetype(path + "/recruit/media/img/msyh.ttc", 65))
+    # 学科
+    position = (421, 1225)
+    draw_table.text(position, subject, (255, 231, 195), font=ImageFont.truetype(path + "/recruit/media/img/msyh.ttc", 66))
+    # 级别
+    position = (411, 1319)
+    draw_table.text(position, level, (255, 231, 195), font=ImageFont.truetype(path + "/recruit/media/img/msyh.ttc", 82))
+
+    qr_bk_image.save(path + "/recruit/media/img/qr_image_{}.png".format(code_info_id))
+    path = path + "/recruit/media/img/qr_image_{}.png".format(code_info_id)
+    file = upload_service(path)
+    os.remove(path)
+    return file
+
+
+def get_upload_key():
+    """
+    功能:生成上传key
+    """
+    # 上传key
+    now = datetime.datetime.now()
+    m = hashlib.md5()
+    key_var = '%s%s' % ('bannei_upload', now.strftime("%Y%m%d"))
+    m.update(key_var.encode())
+    return m.hexdigest()
+
+
+def upload_service(new_url):
+    """文件上传服务器"""
+    url = f"{UPLOAD_URL}?upcheck={get_upload_key()}&up_type=subjects"
+    files = {"file": open(new_url, 'rb')}
+    response = requests.post(url, files=files)
+    file_name = f"{web_file_url}{response.json()['data'][0]['file_url']}"
+    return file_name
 

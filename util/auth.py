@@ -59,6 +59,7 @@ class Auth(object):
                         username=request.user.username, status=1)])
                 request.user = Struct(datas[0])
                 request.user.shouji = request.user.username
+                request.user.detail = db.default.user_tea_det.get(user_id=request.user.id, status=1)
                 request.session['tablename'] = 'users'
                 msg['msg'] = '身份验证通过。'
                 msg['user'] = Struct(datas[0])
