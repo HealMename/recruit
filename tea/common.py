@@ -82,19 +82,19 @@ def detail_img_subject(name, subject, level, img_url, star_status):
     qr_code_image = Image.open(BytesIO(data.content))
     qr_code_image.convert("RGBA")
     qr_bk_image = Image.open(MEDIA_SITE + f"/img/subject_{star_status}.png")
-    box = (445, 1726, 802, 2072)
+    box = (124, 475, 221, 571)
     region = qr_code_image.resize((box[2] - box[0], box[3] - box[1]))
     qr_bk_image.paste(region, box)
     draw_table = ImageDraw.Draw(im=qr_bk_image)
     # 姓名
-    position = (574, 1000)
-    draw_table.text(position, name, (255, 231, 195), font=ImageFont.truetype(MEDIA_SITE + "/img/msyh.ttc", 65))
+    position = (159, 277)
+    draw_table.text(position, name, (255, 231, 195), font=ImageFont.truetype(MEDIA_SITE + "/img/msyh.ttc", 17))
     # 学科
-    position = (421, 1225)
-    draw_table.text(position, subject, (255, 231, 195), font=ImageFont.truetype(MEDIA_SITE + "/img/msyh.ttc", 66))
+    position = (100, 335)
+    draw_table.text(position, subject, (255, 231, 195), font=ImageFont.truetype(MEDIA_SITE + "/img/msyh.ttc", 18))
     # 级别
-    position = (411, 1319)
-    draw_table.text(position, level, (255, 231, 195), font=ImageFont.truetype(MEDIA_SITE + "/img/msyh.ttc", 82))
+    position = (100, 362)
+    draw_table.text(position, level, (255, 231, 195), font=ImageFont.truetype(MEDIA_SITE + "/img/msyh.ttc", 22))
 
     qr_bk_image.save(MEDIA_SITE + "/img/qr_image_{}.png".format(code_info_id))
     path = MEDIA_SITE + "/img/qr_image_{}.png".format(code_info_id)
