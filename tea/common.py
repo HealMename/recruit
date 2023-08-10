@@ -132,4 +132,5 @@ def upload_service(new_url):
         file_name = f"{web_file_url}{response.json()['data'][0]['file_url']}"
         return file_name
     else:
-        return base_upload_file(open(new_url, 'rb'), "subjects")['file_url']
+        file_url = base_upload_file(open(new_url, 'rb'), "subjects")['file_url']
+        return f"{web_file_url}{file_url}"
