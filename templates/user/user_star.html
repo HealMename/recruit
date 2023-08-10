@@ -2,36 +2,92 @@
 
 {% block body %}
     <style>
-        .img_data{
+        .img_data {
             width: 90%;
             margin: 0 auto;
         }
-        .img_data .el-image{
-            margin-right: 20px;
+
+        .sub {
+            margin: 20px;
             width: 186px;
             height: 331px;
             cursor: pointer;
-            border: 1px solid rgba(0, 0, 0, 0);
+            border: 2px solid rgba(255, 255, 255, 0);
+            display: inline-block;
+            background-image: url("/media/img/subject_bj.png");
+            background-size: cover;
+            border-radius: 4px;
         }
-        .img_data .el-image:hover{
-            border: 1px solid rgba(0, 0, 0, 0.8);
+
+        .sub:hover {
+            border: 2px solid rgba(254, 254, 254, 0.8);
+        }
+
+        .sub p {
+            text-align: center;
+            position: relative;
+            top: 45%;
+            font-size: 25px;
+            color: rgba(254, 254, 254, 1);
+        }
+
+        #main {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        #main2 {
+            width: 941px;
+            margin: 0 auto;
+        }
+
+        .sub2 {
+            margin: 20px;
+            width: 186px;
+            height: 331px;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0);
+            display: inline-block;
+            border-radius: 4px;
+        }
+
+        .sub2 img {
+            border-radius: 4px;
+        }
+
+        .sub2:hover {
+            border: 2px solid rgba(225, 49, 49, 0.8);
         }
     </style>
 
     <div id="app">
-        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-            <legend>我的战报 <span style="font-size: 3px;">点击战报分享，邀请好友注册，领现金红包</span></legend>
-        </fieldset>
-        <template v-for="(item,index) in subjects">
+        <template v-if="tag === 1">
             <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-                <legend><span v-text="item.name+ '科目'"></span></legend>
+                <legend>我的战报 <span style="font-size: 3px;">选择学科</span></legend>
             </fieldset>
-            <div class="img_data">
-                <template v-for="img_item in item.imgs">
-                    <el-image :src="img_item"> </el-image>
+            <div id="main">
+                <template v-for="(item,index) in subjects">
+                    <div class="sub" @click="subject_star(item)"><p v-text="item.name"></p></div>
                 </template>
             </div>
         </template>
+
+        <template v-if="tag === 2">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>我的战报 <span style="font-size: 3px;">点击战报分享，邀请好友注册，领现金红包</span> </legend>
+            </fieldset>
+
+            <div id="main2">
+                <template v-for="(item,index) in imgs">
+                    <div class="sub2">
+                        <img :src="item" alt="" style="width: 100%;" v-if="item">
+                    </div>
+                </template>
+                <el-button @click="tag=1" style="float: right;margin-right: 47px;">返回</el-button>
+            </div>
+
+        </template>
+
     </div>
 {% endblock %}
 {% block js %}
@@ -41,21 +97,27 @@
         var vue = new Vue({
             el: "#app",
             data: {
+                tag: 1,
                 loading_post: false,
                 subjects: [],
+                imgs: [],
             },
             created() {
                 this.subjects = {{ subjects|safe }};
                 var timer = setTimeout(function () {
-                        window.parent.document.getElementById('iframe').height = 0
-                        let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 60
-                        height = window.parent.innerHeight > height ? window.parent.innerHeight : height
-                        window.parent.document.getElementById('iframe').height = height
-                        clearTimeout(timer)
-                    }, 200)
+                    window.parent.document.getElementById('iframe').height = 0
+                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 20
+                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                    window.parent.document.getElementById('iframe').height = height
+                    clearTimeout(timer)
+                }, 200)
             },
             methods: {
-
+                // 查看详情
+                subject_star(row) {
+                    this.imgs = row.imgs
+                    this.tag = 2
+                },
                 navPage(url) {
                     localStorage.setItem('iframeUrl', url);
                     window.parent.document.getElementById('iframe').src = url;
