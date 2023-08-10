@@ -491,3 +491,17 @@ def get_subject_level_status(sid, user_id, level):
     else:
         return 0
 
+
+def get_subject_level_all(sid, user_id, level):
+    """获取学科做题数量"""
+    sql = f"""
+        select q.sid, count(det.id) num from question q 
+            join user_test_det_content det on det.question_id =q.id 
+            join user_test_det d on d.id =det.det_id 
+            and q.sid={sid} and d.add_user={user_id}
+    """
+    subject_list = db.default.fetchall_dict(sql)
+    if subject_list:
+        return 1 if 20 * level <= subject_list.num else 0
+    else:
+        return 0
