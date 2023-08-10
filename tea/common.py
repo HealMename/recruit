@@ -8,8 +8,9 @@ from io import BytesIO
 import requests
 from PIL import ImageFont, ImageDraw, Image
 
-from dj2.settings import UPLOAD_URL, web_file_url, MEDIA_SITE
+from dj2.settings import UPLOAD_URL, web_file_url, MEDIA_SITE, SERVE
 from libs.utils import db
+from upload.views import base_upload_file
 
 log = logging.getLogger(__name__)
 level_name = {'1': "初级", "2": "中级", "3": "高级"}
@@ -124,9 +125,11 @@ def get_upload_key():
 
 def upload_service(new_url):
     """文件上传服务器"""
-    url = f"{UPLOAD_URL}?upcheck={get_upload_key()}&up_type=subjects"
-    files = {"file": open(new_url, 'rb')}
-    response = requests.post(url, files=files)
-    file_name = f"{web_file_url}{response.json()['data'][0]['file_url']}"
-    return file_name
-
+    if SERVE:
+        url = f"{UPLOAD_URL}?upcheck={get_upload_key()}&up_type=subjects"
+        files = {"file": open(new_url, 'rb')}
+        response = requests.post(url, files=files)
+        file_name = f"{web_file_url}{response.json()['data'][0]['file_url']}"
+        return file_name
+    else:
+        return base_upload_file(open(new_url, 'rb'), "subjects")['file_url']

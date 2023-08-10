@@ -56,7 +56,7 @@ APIDOC_DIR = os.path.join(BASE_DIR, './apidoc/')
 ROOT_URL = "https://www.ittest008.com"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+SERVE = True if DATABASES_CONFIG.get('DEBUG', '') == 'True' else False
 ALLOWED_HOSTS = ["*"]
 import logging
 
@@ -89,6 +89,10 @@ MIDDLEWARE = [
 
 ]
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 524288000
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 524288000
+
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 MEDIA_SITE = os.path.join(BASE_DIR, 'media/')
 DB_WAIT_TIMEOUT = 20  # 单个连接最长维持时间
@@ -119,16 +123,8 @@ TEMPLATES = [
         },
     },
 ]
-
 WSGI_APPLICATION = 'dj2.wsgi.application'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
-EMAIL_HOST = 'smtp.qq.com'
-EMAIL_PORT = 465
-EMAIL_HOST_USER = 'yclw9@qq.com'
-EMAIL_HOST_PASSWORD = 'mhbrkuayvkkgbijd'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases

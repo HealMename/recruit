@@ -103,3 +103,31 @@ def D_BASE64(origStr):
         origStr += "="
     temp = base64.b64decode(origStr)
     return temp
+
+
+
+def base_upload_file(raw_file, up_type):
+
+    if raw_file:
+
+        raw_file_name = raw_file.name.replace("'", "")
+        print(raw_file_name)
+        file_size = 0
+
+        now = datetime.datetime.now()
+        new_file_dir = '%s/%s' % (up_type, now.strftime("%Y/%m/%d"))
+        # 重命名文件
+        new_file_name = fileutil.reset_file_name(raw_file_name)
+        # 新文件相对路径
+        new_file_path = '%s/%s' % (new_file_dir, new_file_name)
+        # 新文件绝对路径
+        new_absolute_file_path = fileutil.get_absolute_file_path('%s/%s' % (new_file_dir, new_file_name))
+        if fileutil.save_upload_file(new_absolute_file_path, raw_file):
+            return {'file_name': raw_file_name,'file_size': file_size,'file_url': new_file_path,'status':1}
+        else:
+            log.info("[{'file_name':'%s','file_size':%s,'file_url':'%s','status':1}]" % (
+                raw_file_name, file_size, new_file_path))
+            return {'file_name': raw_file_name,'file_size': file_size,'file_url': new_file_path,'status':1}
+    else:
+        log.info("[{'file_name':'','file_size':0,'status':0}]")
+        return {'file_name':'','file_size':0,'status':0}
