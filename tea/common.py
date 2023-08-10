@@ -1,5 +1,6 @@
 import datetime
 import hashlib
+import logging
 import os
 import uuid
 from io import BytesIO
@@ -10,7 +11,7 @@ from PIL import ImageFont, ImageDraw, Image
 from dj2.settings import UPLOAD_URL, web_file_url, MEDIA_SITE
 from libs.utils import db
 
-
+log = logging.getLogger(__name__)
 level_name = {'1': "初级", "2": "中级", "3": "高级"}
 size_name = {'1': '单机', "2": "集群", "3": "多集群"}
 
@@ -80,11 +81,15 @@ def detail_img_subject(name, subject, level, img_url, star_status):
     code_info_id = str(uuid.uuid4())
     data = requests.get(img_url)
     qr_code_image = Image.open(BytesIO(data.content))
+    log.info(1)
     qr_code_image.convert("RGBA")
+    log.info(2)
     qr_bk_image = Image.open(MEDIA_SITE + f"/img/subject_{star_status}.png")
+    log.info(3)
     box = (124, 475, 221, 571)
     region = qr_code_image.resize((box[2] - box[0], box[3] - box[1]))
     qr_bk_image.paste(region, box)
+    log.info(4)
     draw_table = ImageDraw.Draw(im=qr_bk_image)
     # 姓名
     position = (159, 277)
@@ -98,7 +103,9 @@ def detail_img_subject(name, subject, level, img_url, star_status):
 
     qr_bk_image.save(MEDIA_SITE + "/img/qr_image_{}.png".format(code_info_id))
     path = MEDIA_SITE + "/img/qr_image_{}.png".format(code_info_id)
+    log.info(5)
     file = upload_service(path)
+    log.info(6)
     os.remove(path)
     return file
 
