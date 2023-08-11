@@ -35,6 +35,7 @@ class WebChatBase(object):
         now = int(time.time())
         if now > token_timeout:
             """如果token已过期"""
+            print(1111)
             result = self.get_remote_token()
             token = result.get('access_token')
             token_timeout = now + 7200

@@ -44,7 +44,7 @@ def parse_xml(xml):
             qr_img = ''
             if user:
                 phone = user.first().phone
-                qr_img = user.img
+                qr_img = user.first().img
                 user = db.default.users.get(username=phone)
             else:
                 db.default.wechat_user.create(open_id=open_id, status=1, unionid=unionid, app_id=2, add_date=now)

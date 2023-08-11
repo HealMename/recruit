@@ -37,34 +37,20 @@ lzkx_data = {
     "button": [
         {
             "name": "题库浏览",
-            "type": "view",
-            "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx494761502aee644d&redirect_uri=https%3A%2F%2Fwww.ittest008.com%2Fchat%2Fwx%2Flogin%2F&response_type=code&scope=snsapi_base&state=4&connect_redirect=1#wechat_redirect",
-            # "appid": "wx8df523611cfc0418",
-            # "pagepath": "pages/index/index"
+            "type": "miniprogram",
+            # "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx494761502aee644d&redirect_uri=https%3A%2F%2Fwww.ittest008.com%2Fchat%2Fwx%2Flogin%2F&response_type=code&scope=snsapi_base&state=4&connect_redirect=1#wechat_redirect",
+            "appid": "wx8df523611cfc0418",
+            "pagepath": "/pages/question/index"
         },
         {
             "name": "个人中心",
             "sub_button": [
                 {
                     "name": "个人中心",
-                    "type": "view",
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx494761502aee644d&redirect_uri=https%3A%2F%2Fwww.ittest008.com%2Fchat%2Fwx%2Flogin%2F&response_type=code&scope=snsapi_base&state=1&connect_redirect=1#wechat_redirect",
-                    # "appid": "wx8df523611cfc0418",
-                    # "pagepath": "pages/index/index"
-                },
-                {
-                    "name": "联系客服",
-                    "type": "view",
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx494761502aee644d&redirect_uri=https%3A%2F%2Fwww.ittest008.com%2Fchat%2Fwx%2Flogin%2F&response_type=code&scope=snsapi_base&state=2&connect_redirect=1#wechat_redirect",
-                    # "appid": "wx8df523611cfc0418",
-                    # "pagepath": "pages/index/index"
-                },
-                {
-                    "name": "投诉建议",
-                    "type": "view",
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx494761502aee644d&redirect_uri=https%3A%2F%2Fwww.ittest008.com%2Fchat%2Fwx%2Flogin%2F&response_type=code&scope=snsapi_base&state=3&connect_redirect=1#wechat_redirect",
-                    # "appid": "wx8df523611cfc0418",
-                    # "pagepath": "pages/index/index"
+                    "type": "miniprogram",
+                    # "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx494761502aee644d&redirect_uri=https%3A%2F%2Fwww.ittest008.com%2Fchat%2Fwx%2Flogin%2F&response_type=code&scope=snsapi_base&state=1&connect_redirect=1#wechat_redirect",
+                    "appid": "wx8df523611cfc0418",
+                    "pagepath": "pages/center/login"
                 },
                 {
                     "type": "click",
@@ -79,8 +65,7 @@ lzkx_data = {
 
 def menu(request):
     token = WebChatBase(2).get_access_token()
-    print(token)
     data = json.dumps(lzkx_data, ensure_ascii=False)
-    Client(token).create_menu(data.encode('utf-8'))
-    return ajax.ajax_ok()
+    res = Client(token).create_menu(data.encode('utf-8'))
+    return ajax.ajax_ok(res)
 
