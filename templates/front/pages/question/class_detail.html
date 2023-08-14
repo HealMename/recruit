@@ -328,9 +328,9 @@
                            @click="post_is_fan(item.id, index, -1)"><span class="q_id">{{ item.fa_count }}</span></i>
                     </el-tooltip>
                     <el-tooltip class="item is_fa" effect="light" content="点击收藏" placement="top"
-                                v-if="item.is_fa === -1">
-                        <i class="layui-icon layui-icon-rate" style="font-size: 15px; color: #1E9FFF;"
-                           @click="post_is_fan(item.id, index, 1)"><span class="q_id">{{ item.fa_count }}</span></i>
+                                v-if="item.is_fa !== 1">
+                        <i class="layui-icon " style="font-size: 15px; color: #1E9FFF;"
+                           @click="post_is_fan(item.id, index, 1)">&#xe67b;<span class="q_id">{{ item.fa_count }}</span></i>
                     </el-tooltip>
                 </p>
                 <p class="q_count"></p>

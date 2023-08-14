@@ -23,12 +23,18 @@
             border: 2px solid rgba(243, 175, 175, 0.8);
         }
 
-        .sub p {
+        .sub .name {
             text-align: center;
             position: relative;
             top: 10%;
             font-size: 34px;
             color: #ffe7c3;
+        }
+
+        .sub .sub_det {
+            float: right;
+            position: relative;
+            top: -15px;
         }
 
         #main {
@@ -67,27 +73,32 @@
             </fieldset>
             <div id="main">
                 <template v-for="(item,index) in subjects">
-                    <div class="sub" @click="subject_star(item)"><p v-text="item.name"></p></div>
+                    <div class="sub" @click="subject_star(item)"><span class="sub_det">已获得(<span
+                            v-text="item.level"></span>/4)</span>
+                        <p class="name" v-text="item.name"></p></div>
                 </template>
             </div>
         </template>
 
         <template v-if="tag === 2">
             <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-                <legend>我的战报 <span style="font-size: 3px;">点击战报分享，邀请好友注册，领现金红包</span> </legend>
+                <legend>我的战报 <span style="font-size: 3px;">分享战报，邀请好友注册，领现金红包</span></legend>
             </fieldset>
 
             <div id="main2">
                 <template v-for="(item,index) in imgs">
-                    <div class="sub2" v-loading="!item.status" element-loading-text="战报生成中" element-loading-background="rgba(0, 0, 0, 0.6)">
-                        <img @load="item.status=1" :src="item.url" alt="" style="width: 100%;" v-if="item.url">
-                        <img src="/media/img/not_img.png" alt="" style="width: 100%;" v-if="!item.url" >
+                    <div class="sub2" v-loading="!item.status" element-loading-text="战报生成中"
+                         element-loading-background="rgba(0, 0, 0, 0.6)">
+                        <img @load="item.status=1" :src="item.url" alt="" style="width: 100%;" v-if="item.url"
+                             @click="clipboardImg(index)" :id="index">
+                        <img src="/media/img/not_img.png" alt="" style="width: 100%;" v-if="!item.url">
+                        <p style="text-align: center;" v-if="num >= (index + 1) * 10">已获得</p>
+                        <p style="text-align: center;" v-else>在做<span v-text="(index+1)*10-num"></span>道题可获得</p>
                     </div>
                 </template>
                 <el-button @click="tag=1" style="float: right;margin-right: 47px;">返回</el-button>
             </div>
         </template>
-
     </div>
 {% endblock %}
 {% block js %}
@@ -98,6 +109,7 @@
                 tag: 1,
                 loading_post: false,
                 subjects: [],
+                num: 0,
                 imgs: [],
             },
             created() {
@@ -114,6 +126,7 @@
                 // 查看详情
                 subject_star(row) {
                     this.imgs = row.imgs
+                    this.num = row.num;
                     this.tag = 2
                     var thsi = this;
                     this.imgs.forEach(function (item, index) {
@@ -124,7 +137,7 @@
                             subject: row.name,
                         }
                         $.post('/tea/user_star/', data, function (res) {
-                            thsi.imgs[index].url = res.data
+                            thsi.imgs[index].url = res.data.img
                             thsi.$forceUpdate();
                         })
                     })
@@ -133,6 +146,31 @@
                     localStorage.setItem('iframeUrl', url);
                     window.parent.document.getElementById('iframe').src = url;
                 },
+                clipboardImg(id_) {
+
+                    console.log(id_)
+                    const image = document.getElementById(id_)
+                    image.setAttribute("crossOrigin",'Anonymous')
+                    // 创建一个 Canvas 元素，并在上面绘制图片
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.width = 186;
+                    canvas.height = 330;
+                    context.drawImage(image, 0, 0);
+
+                    // 获取图片数据的 URL
+                    const imageURL = canvas.toDataURL('image/png');
+                    console.log(canvas)
+                    console.log(imageURL.split(',')[1])
+                    // 将图片数据放入剪贴板中
+                    navigator.clipboard.write([
+                        new ClipboardItem({'image/png': imageURL.split(',')[1]})
+                    ]).then(() => {
+                        console.log('图片已复制到剪贴板');
+                    }).catch((error) => {
+                        console.error('复制图片失败:', error);
+                    });
+                }
             },
         })
 

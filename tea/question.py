@@ -433,7 +433,8 @@ def user_star(request):
         # 生成带参数二维码
         qr_img = create_qr_img(request.user.username, user_id)
         star = db.default.user_subject_star.get(sid=sid, user_id=user_id, status__ne=-1, level=level)
-        star_status = get_subject_level_status(sid, user_id, level)
+        star_num = get_subject_level_status(sid, user_id, level)
+        star_status = 1 if 20 * level <= star_num else 0
         if not star:  # 生成战报
             img = detail_img_subject(name, subject, level_name, qr_img, star_status)
             db.default.user_subject_star.create(
@@ -444,15 +445,20 @@ def user_star(request):
                 img = detail_img_subject(name, subject, level_name, qr_img, star_status)
                 db.default.user_subject_star.filter(sid=sid, user_id=user_id, status__ne=-1, level=level).update(
                     img=img, status=star_status, update_date=now)
-        return ajax.ajax_ok(img)
+        data.star_num = star_num
+        data.img = img
+        return ajax.ajax_ok(data)
     else:
         subjects = all_subjects()
         star_data = []
+        subject_level = get_subject_level_all(user_id)
         for sid, sname in subjects.items():
             # 默认
             star_data.append({
                 'name': sname,
                 'id': sid,
+                "num": subject_level.get(sid, 0),
+                'level': int(subject_level.get(sid, 0) / 20),
                 'imgs': [
                     {'status': 0, 'url': ''},
                     {'status': 0, 'url': ''},
@@ -487,19 +493,22 @@ def get_subject_level_status(sid, user_id, level):
     """
     subject_list = db.default.fetchone_dict(sql)
     if subject_list:
-        return 1 if 20 * level <= subject_list.num else 0
+        return subject_list.num
     else:
         return 0
 
 
-def get_subject_level_all(sid, user_id):
+def get_subject_level_all(user_id):
     """获取学科做题数量"""
     sql = f"""
         select q.sid, count(det.id) num from question q 
             join user_test_det_content det on det.question_id =q.id 
             join user_test_det d on d.id =det.det_id 
-            and q.sid={sid} and d.add_user={user_id}
+            and d.add_user={user_id}
+            group by q.sid
     """
     subject_list = db.default.fetchall_dict(sql)
-    return subject_list
+    data = {x.sid: x.num for x in subject_list}
+    print(data)
+    return data
 
