@@ -25,7 +25,9 @@ def save_info(request):
     now = int(time.time())
     data = Struct()
     user_id = request.user.id or 0
+
     if request.method == 'POST':
+        is_stop = request.QUERY.get('is_stop')
         # 保存个人信息
         if step_id == 1:
             password = request.QUERY.get('password1')
@@ -93,7 +95,6 @@ def save_info(request):
                 obj['add_time'] = now
                 objs.append(obj)
             db.default.user_school_list.bulk_create(objs)
-            db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
         elif step_id == 3:
             # 步骤 3
             data = json.loads(request.QUERY.get('data'))
@@ -109,7 +110,6 @@ def save_info(request):
 
                 objs.append(obj)
             db.default.user_work_list.bulk_create(objs)
-            db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
         elif step_id == 4:
             # 步骤 4
             prove = json.loads(request.QUERY.get('prove'))
@@ -118,7 +118,6 @@ def save_info(request):
 
             db.default.user_prove_list.filter(user_id=user_id).update(status=-1)
             db.default.user_prove_list.create(user_id=user_id, add_time=now, **prove)
-            db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
         elif step_id == 5:
             # 步骤 5
             data = json.loads(request.QUERY.get('data'))
@@ -133,11 +132,10 @@ def save_info(request):
                 obj['add_time'] = now
                 objs.append(obj)
             db.default.user_knowledge_list.bulk_create(objs)
-            db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
-        elif step_id == 6:
-            # 步骤 5 确定审核
-            db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
 
+        old_step_id = db.default.user_tea_det.get(user_id=user_id).step_id
+        if step_id > old_step_id:
+            db.default.user_tea_det.filter(user_id=user_id).update(step_id=step_id)
         username = db.default.users.get(id=user_id).username
         db.default.users.filter(username=username, type__in=[2, 3]).update(status=0, addtime=datetime.datetime.now())
         return ajax.ajax_ok(data)
@@ -254,8 +252,8 @@ def ocr_sfz(request):
             data.nation = res_url['words_result']['民族']['words']
             data.address = res_url['words_result']['住址']['words']
             data.number_id = res_url['words_result']['公民身份号码']['words']
-            if db.default.user_tea_det.filter(number_id=data.number_id):
-                return ajax.ajax_fail(message='身份证已注册！')
+            # if db.default.user_tea_det.filter(number_id=data.number_id):
+            #     return ajax.ajax_fail(message='身份证已注册！')
             data.birthday = res_url['words_result']['出生']['words']
             data.sex = res_url['words_result']['性别']['words']
         else:

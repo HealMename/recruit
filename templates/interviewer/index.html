@@ -211,11 +211,12 @@
                         </el-form>
                     </el-card>
                     <div class="next2">
-                        <el-button type="primary" size="small" @click="next(-1)" v-if="active > 1 && active <= 5">上一步
-                        </el-button>
-                        <el-button type="primary" size="small" @click="next(1, 'form', 'ocr_info')" v-if="active < 5"
+                        <el-button type="primary" size="small" @click="next(1, 'form')" v-if="active < 5"
                                    style="float: right">下一步
                         </el-button>
+                        <el-button type="primary" size="small" @click="next(1, 'form', 1)" style="float: right">暂 存
+                        </el-button>
+
                     </div>
 
                 </div>
@@ -321,6 +322,10 @@
                         <el-button type="primary" size="small" @click="next(-1)">上一步</el-button>
                         <el-button type="primary" size="small" @click="next(1, 'school_ref')" style="float: right">下一步
                         </el-button>
+                        <el-button type="primary" size="small" @click="next(1, 'school_ref', 1)" style="float: right">暂
+                            存
+                        </el-button>
+
                     </div>
                 </div>
             </transition>
@@ -390,6 +395,10 @@
                         <el-button type="primary" @click="next(-1)" size="small">上一步</el-button>
                         <el-button type="primary" @click="next(1, 'work_rules')" size="small" style="float: right">下一步
                         </el-button>
+                        <el-button type="primary" @click="next(1, 'work_rules', 1)" size="small" style="float: right">暂
+                            存
+                        </el-button>
+
                     </div>
                 </div>
             </transition>
@@ -451,6 +460,10 @@
                         <el-button type="primary" @click="next(1, 'prove_rules')" style="float: right" size="small">
                             下一步
                         </el-button>
+                        <el-button type="primary" @click="next(1, 'prove_rules', 1)" size="small" style="float: right">暂
+                            存
+                        </el-button>
+                        <el-button type="warning" @click="skip_next()" size="small" style="float: right">跳 过</el-button>
 
                     </div>
                 </div>
@@ -515,6 +528,10 @@
                         <el-button type="primary" @click="next(1, 'knowledge_rules')" size="small" style="float: right">
                             下一步
                         </el-button>
+                        <el-button type="primary" @click="next(1, 'knowledge_rules', 1)" size="small"
+                                   style="float: right">暂 存
+                        </el-button>
+
                     </div>
                 </div>
             </transition>
@@ -693,7 +710,6 @@
                         <el-button type="primary" @click="next(-1)" size="small">上一步</el-button>
                         <el-button type="primary" @click="next(1, 'form')" size="small" style="float: right;">提交审核
                         </el-button>
-
                     </div>
                 </div>
             </transition>
@@ -776,7 +792,7 @@
                         {required: true, message: '请上传毕业证', trigger: 'blur'},
                     ],
                     stu_card: [
-                      {required: true, message: '请上传学生证', trigger: 'blur'},
+                        {required: true, message: '请上传学生证', trigger: 'blur'},
                     ],
                     time: [
                         {required: true, message: '请填写上学时间', trigger: 'blur'},
@@ -1092,6 +1108,24 @@
                         });
                     }
                 },
+                // 跳过
+                skip_next() {
+                    var thsi = this;
+                    this.$confirm('确认跳过此步骤？提交更多信息可提高审核通过率！', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        thsi.active++
+                        let timer = setTimeout(function () {
+                            window.parent.document.getElementById('iframe').height = 0
+                            let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                            height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                            window.parent.document.getElementById('iframe').height = height
+                            clearTimeout(timer)
+                        }, 200)
+                    })
+                },
                 // 发送短信
                 send_code() {
                     if (this.exit_count === 60) {
@@ -1127,7 +1161,7 @@
                     }
                 },
                 // 下一步
-                next(num, formName) {
+                next(num, formName, is_stop) {
                     var thsi = this;
                     var is_val = true
                     if (num === 1) {
@@ -1136,7 +1170,7 @@
                                 this.$refs[formName].validate((valid) => {
                                     if (valid) {
                                         // 第一步
-                                        thsi.save_step1()
+                                        thsi.save_step1(is_stop)
                                         let timer = setTimeout(function () {
                                             window.parent.document.getElementById('iframe').height = 0
                                             let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
@@ -1161,7 +1195,7 @@
                                 })
                                 if (is_val) {
                                     // 第二步
-                                    this.save_step2()
+                                    this.save_step2(is_stop)
                                     let timer = setTimeout(function () {
                                         window.parent.document.getElementById('iframe').height = 0
                                         let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
@@ -1182,7 +1216,7 @@
                                 })
                                 if (is_val) {
                                     // 第3步
-                                    this.save_step3()
+                                    this.save_step3(is_stop)
                                     let timer = setTimeout(function () {
                                         window.parent.document.getElementById('iframe').height = 0
                                         let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
@@ -1196,7 +1230,7 @@
                                 this.$refs[formName].validate((valid) => {
                                     if (valid) {
                                         // 第4步
-                                        this.save_step4()
+                                        this.save_step4(is_stop)
                                         let timer = setTimeout(function () {
                                             window.parent.document.getElementById('iframe').height = 0
                                             let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
@@ -1221,7 +1255,7 @@
                                 })
                                 if (is_val) {
                                     // 第3步
-                                    this.save_step5()
+                                    this.save_step5(is_stop)
                                     let timer = setTimeout(function () {
                                         window.parent.document.getElementById('iframe').height = 0
                                         let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
@@ -1319,7 +1353,7 @@
                     return [start_time, end_time]
                 },
                 // 第一步保存
-                save_step1() {
+                save_step1(is_stop) {
                     if (!this.imageUrl1) {
                         this.$message.error("请上传身份证(正面)");
                         return false
@@ -1339,6 +1373,7 @@
                         code: this.form.code,
                         front: this.imageUrl1,
                         back: this.imageUrl2,
+                        is_stop: is_stop,
                         info_front: JSON.stringify(this.form.ocr_info_front),
                         info_back: JSON.stringify(this.form.ocr_info_back),
                         ocr_info_front: JSON.stringify(this.ocr_front),
@@ -1350,18 +1385,22 @@
                         if (res.response === 'ok') {
                             localStorage.setItem("Token", res.data.token);
                             thsi.token = res.data.token
-                            thsi.active++
+                            if (is_stop) {
+                                thsi.$message.success("暂存成功");
+                            } else {
+                                thsi.active++
+                            }
                             localStorage.setItem("userId", res.data.user_id);
                             localStorage.setItem("role", '用户');
                             localStorage.setItem("sessionTable", 'yonghu');
                             localStorage.setItem("adminName", thsi.form.phone);
                             let timer = setTimeout(function () {
-                                    window.parent.document.getElementById('iframe').height = 0
-                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
-                                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
-                                    window.parent.document.getElementById('iframe').height = height
-                                    clearTimeout(timer)
-                                }, 200)
+                                window.parent.document.getElementById('iframe').height = 0
+                                let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                window.parent.document.getElementById('iframe').height = height
+                                clearTimeout(timer)
+                            }, 200)
                         } else {
                             thsi.$message.error(res.message);
                         }
@@ -1369,30 +1408,34 @@
                 },
 
                 // 第二步保存
-                save_step2() {
+                save_step2(is_stop) {
                     var thsi = this;
                     $.each(this.school_list, function (i) {
                         var time = thsi.handle_times(this.time)
                         this.start_time = time[0]
                         this.end_time = time[1]
                     })
-                    console.log(this.school_list)
                     var post_data = {
                         token: this.token || localStorage.getItem("Token"),
                         step_id: this.active + 1,
+                        is_stop: is_stop,
                         data: JSON.stringify(this.school_list)
                     }
                     $.post("/interviewer/save/?role_id=" + thsi.role_id, post_data, function (res) {
                         thsi.loading_post = false;
                         if (res.response === 'ok') {
-                            thsi.active++
+                            if (is_stop) {
+                                thsi.$message.success("暂存成功");
+                            } else {
+                                thsi.active++
+                            }
                             let timer = setTimeout(function () {
-                                    window.parent.document.getElementById('iframe').height = 0
-                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
-                                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
-                                    window.parent.document.getElementById('iframe').height = height
-                                    clearTimeout(timer)
-                                }, 200)
+                                window.parent.document.getElementById('iframe').height = 0
+                                let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                window.parent.document.getElementById('iframe').height = height
+                                clearTimeout(timer)
+                            }, 200)
                         } else {
 
                             thsi.$message.error(res.message);
@@ -1401,7 +1444,7 @@
 
                 },
                 // 第三步
-                save_step3() {
+                save_step3(is_stop) {
                     var thsi = this;
                     $.each(this.work_list, function (i) {
                         var time = thsi.handle_times(this.time)
@@ -1414,19 +1457,24 @@
                     var post_data = {
                         token: this.token || localStorage.getItem("Token"),
                         step_id: this.active + 1,
+                        is_stop: is_stop,
                         data: JSON.stringify(this.work_list)
                     }
                     $.post("/interviewer/save/?role_id=" + thsi.role_id, post_data, function (res) {
                         thsi.loading_post = false;
                         if (res.response === 'ok') {
-                            thsi.active++
+                            if (is_stop) {
+                                thsi.$message.success("暂存成功");
+                            } else {
+                                thsi.active++
+                            }
                             let timer = setTimeout(function () {
-                                    window.parent.document.getElementById('iframe').height = 0
-                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
-                                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
-                                    window.parent.document.getElementById('iframe').height = height
-                                    clearTimeout(timer)
-                                }, 200)
+                                window.parent.document.getElementById('iframe').height = 0
+                                let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                window.parent.document.getElementById('iframe').height = height
+                                clearTimeout(timer)
+                            }, 200)
                         } else {
 
                             thsi.$message.error(res.message);
@@ -1435,25 +1483,30 @@
 
                 },
                 // save_step5
-                save_step5() {
+                save_step5(is_stop) {
                     var thsi = this;
 
                     var post_data = {
                         token: this.token || localStorage.getItem("Token"),
                         step_id: this.active + 1,
+                        is_stop: is_stop,
                         data: JSON.stringify(this.knowledge_list)
                     }
                     $.post("/interviewer/save/?role_id=" + thsi.role_id, post_data, function (res) {
                         thsi.loading_post = false;
                         if (res.response === 'ok') {
-                            thsi.active++
+                            if (is_stop) {
+                                thsi.$message.success("暂存成功");
+                            } else {
+                                thsi.active++
+                            }
                             let timer = setTimeout(function () {
-                                    window.parent.document.getElementById('iframe').height = 0
-                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
-                                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
-                                    window.parent.document.getElementById('iframe').height = height
-                                    clearTimeout(timer)
-                                }, 200)
+                                window.parent.document.getElementById('iframe').height = 0
+                                let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                window.parent.document.getElementById('iframe').height = height
+                                clearTimeout(timer)
+                            }, 200)
                         } else {
                             thsi.$message.error(res.message);
                         }
@@ -1461,22 +1514,26 @@
 
                 },
                 // 第4步
-                save_step4() {
+                save_step4(is_stop) {
                     var thsi = this;
                     $.post("/interviewer/save/?role_id=" + thsi.role_id, {
-                        token: this.token || localStorage.getItem("Token"),
+                        token: this.token || localStorage.getItem("Token"), is_stop: is_stop,
                         step_id: this.active + 1, prove: JSON.stringify(this.prove)
                     }, function (res) {
                         thsi.loading_post = false;
                         if (res.response === 'ok') {
-                            thsi.active++
+                            if (is_stop) {
+                                thsi.$message.success("暂存成功");
+                            } else {
+                                thsi.active++
+                            }
                             let timer = setTimeout(function () {
-                                    window.parent.document.getElementById('iframe').height = 0
-                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
-                                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
-                                    window.parent.document.getElementById('iframe').height = height
-                                    clearTimeout(timer)
-                                }, 200)
+                                window.parent.document.getElementById('iframe').height = 0
+                                let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                window.parent.document.getElementById('iframe').height = height
+                                clearTimeout(timer)
+                            }, 200)
                         } else {
 
                             thsi.$message.error(res.message);
@@ -1496,12 +1553,12 @@
                             thsi.form.ocr_info_front = res.data;
                             thsi.ocr_front = copy(res.data);
                             let timer = setTimeout(function () {
-                                    window.parent.document.getElementById('iframe').height = 0
-                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
-                                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
-                                    window.parent.document.getElementById('iframe').height = height
-                                    clearTimeout(timer)
-                                }, 200)
+                                window.parent.document.getElementById('iframe').height = 0
+                                let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                window.parent.document.getElementById('iframe').height = height
+                                clearTimeout(timer)
+                            }, 200)
                         } else {
                             thsi.imageUrl1 = ''
                             thsi.loading = false;
@@ -1530,12 +1587,12 @@
                                     res.data.end_time.substring(6, 8))]
                             thsi.ocr_back = copy(res.data);
                             let timer = setTimeout(function () {
-                                    window.parent.document.getElementById('iframe').height = 0
-                                    let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
-                                    height = window.parent.innerHeight > height ? window.parent.innerHeight : height
-                                    window.parent.document.getElementById('iframe').height = height
-                                    clearTimeout(timer)
-                                }, 200)
+                                window.parent.document.getElementById('iframe').height = 0
+                                let height = window.parent.document.getElementById('iframe').contentDocument.body.scrollHeight + 100
+                                height = window.parent.innerHeight > height ? window.parent.innerHeight : height
+                                window.parent.document.getElementById('iframe').height = height
+                                clearTimeout(timer)
+                            }, 200)
                         } else {
                             thsi.imageUrl2 = ''
                             thsi.loading2 = false;
@@ -1552,7 +1609,7 @@
                         this.school_list[i].diploma = this.web_file_url + res.data[0].file_url
                     } else if (type === 2) {
                         this.school_list[i].degree = this.web_file_url + res.data[0].file_url
-                    }  else if (type === 6) {
+                    } else if (type === 6) {
                         this.school_list[i].stu_card = this.web_file_url + res.data[0].file_url
                     } else if (type === 3) {
                         this.prove.work = this.web_file_url + res.data[0].file_url
