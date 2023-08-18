@@ -434,7 +434,7 @@ def user_star(request):
         qr_img = create_qr_img(request.user.username, user_id)
         star = db.default.user_subject_star.get(sid=sid, user_id=user_id, status__ne=-1, level=level)
         star_num = get_subject_level_status(sid, user_id, level)
-        star_status = 1 if 20 * level <= star_num else 0
+        star_status = 1 if 10 * level <= star_num else 0
         if not star:  # 生成战报
             img = detail_img_subject(name, subject, level_name, qr_img, star_status)
             db.default.user_subject_star.create(
